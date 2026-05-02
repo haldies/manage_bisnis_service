@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
-  Search, Plus, X, ArrowRight, Save, Check, ChevronsUpDown,
-  CreditCard, Wallet, Banknote, Printer, Share2, Edit
+  Search, Plus, X, ArrowRight, Check,
+  CreditCard, Wallet, Banknote, Printer, Share2
 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter
@@ -32,11 +32,12 @@ interface ServiceDetailDialogProps {
 
 export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: ServiceDetailDialogProps) {
   const {
-    inventory, stocks, serviceTypes, updateServiceTicket, services, users,
-    currentUser, currentBranch, transactions
+    serviceTypes, updateServiceTicket, services, users,
+    currentUser, transactions, inventory
   } = usePosStore();
 
   const [localTicket, setLocalTicket] = useState<ServiceTicket | null>(null);
+  const [spareparts, setSpareparts] = useState<any[]>([]);
 
   const [openSparepart, setOpenSparepart] = useState(false);
   const [openServiceType, setOpenServiceType] = useState(false);
@@ -44,14 +45,32 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'Cash' | 'QRIS' | 'Transfer'>('Cash');
   const [amountPaid, setAmountPaid] = useState<number>(0);
 
+  // Fetch spareparts from dedicated API endpoint
+  const fetchSpareparts = useCallback(async (branchId: string) => {
+    try {
+      const res = await fetch(`/api/inventory/spareparts?branchId=${branchId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setSpareparts(data.map((item: any) => ({
+          ...item,
+          stock: item.stocks?.[0]?.quantity || 0,
+        })));
+      }
+    } catch (err) {
+      console.error('[Spareparts] Failed to fetch:', err);
+    }
+  }, []);
+
 
   useEffect(() => {
     if (ticket) {
       setLocalTicket({ ...ticket });
+      fetchSpareparts(ticket.branchId);
     } else {
       setLocalTicket(null);
+      setSpareparts([]);
     }
-  }, [ticket]);
+  }, [ticket, fetchSpareparts]);
 
   if (!localTicket) return null;
 
@@ -77,19 +96,6 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
     setLocalTicket({ ...localTicket, serviceFee: type.price });
   };
 
-  const availableInventory = inventory.map(item => {
-    const stock = stocks.find(s => s.itemId === item.id && s.branchId === localTicket.branchId);
-    return { ...item, stock: stock?.quantity || 0 };
-  }).filter(item => {
-    const catName = item.category?.name?.toLowerCase() || "";
-    // Only show items categorized as spareparts
-    return catName.includes("sparepart") ||
-      catName.includes("suku cadang") ||
-      catName.includes("part") ||
-      catName.includes("lcd") ||
-      catName.includes("baterai") ||
-      catName.includes("battery");
-  });
 
 
   const dayOfTicket = new Date(localTicket.dateOpened).setHours(0, 0, 0, 0);
@@ -111,9 +117,10 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
   const statusOptions = [
     { id: 'Pending', label: 'Antrian', color: 'bg-amber-500' },
     { id: 'InProgress', label: 'Mengerjakan', color: 'bg-blue-500' },
-    { id: 'ReadyToPay', label: 'Menunggu Pembayaran', color: 'bg-emerald-400' },
+    { id: 'ReadyToPay', label: 'Menunggu Bayar', color: 'bg-emerald-400' },
     { id: 'Paid', label: 'Siap Diambil', color: 'bg-emerald-600' },
-    { id: 'Completed', label: 'Sudah Diambil', color: 'bg-slate-400' },
+    { id: 'Completed', label: 'Sudah Diambil', color: 'bg-violet-500' },
+    { id: 'Delivered', label: 'Selesai', color: 'bg-slate-400' },
     { id: 'Cancelled', label: 'Batal', color: 'bg-red-500' }
   ];
 
@@ -122,8 +129,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
   const handleNextAction = async () => {
     if (localTicket.status === 'Pending') {
       const nextStatus = 'InProgress' as ServiceStatus;
-      setLocalTicket(prev => prev ? { ...prev, status: nextStatus } : null);
-      await performSave({ ...localTicket, status: nextStatus });
+      performSave({ ...localTicket, status: nextStatus });
     } else if (localTicket.status === 'InProgress') {
       if (!localTicket.diagnosis || localTicket.diagnosis.length < 5) {
         alert("Wajib mengisi Hasil Pengecekan (Diagnosa) minimal 5 karakter.");
@@ -134,35 +140,39 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
         return;
       }
       const nextStatus = 'ReadyToPay' as ServiceStatus;
-      setLocalTicket(prev => prev ? { ...prev, status: nextStatus } : null);
-      await performSave({ ...localTicket, status: nextStatus });
+      performSave({ ...localTicket, status: nextStatus });
     } else if (localTicket.status === 'ReadyToPay') {
       setAmountPaid(totalCost);
       setIsPaymentOpen(true);
     } else if (localTicket.status === 'Paid') {
-      const nextStatus = 'Completed' as ServiceStatus;
-      setLocalTicket(prev => prev ? { ...prev, status: nextStatus } : null);
-      await performSave({ ...localTicket, status: nextStatus });
+      // Paid = sudah bayar, sekarang serahkan unit → Completed
+      performSave({ ...localTicket, status: 'Completed' as ServiceStatus });
+    } else if (localTicket.status === 'Completed') {
+      // Completed = sudah diambil pelanggan → Delivered (final)
+      performSave({ ...localTicket, status: 'Delivered' as ServiceStatus });
     }
   };
 
   const handleConfirmPayment = async () => {
-    const nextStatus = 'Paid' as ServiceStatus;
-    setLocalTicket(prev => prev ? { ...prev, status: nextStatus } : null);
-    await performSave({ ...localTicket, status: nextStatus }, selectedPaymentMethod, amountPaid);
     setIsPaymentOpen(false);
+    performSave({ ...localTicket, status: 'Paid' as ServiceStatus }, selectedPaymentMethod, amountPaid);
   };
 
   const performSave = async (ticketToSave: ServiceTicket, paymentMethod: string = 'Cash', paid: number = 0) => {
-    await updateServiceTicket(ticketToSave.id, {
+    // Close dialog immediately — no waiting
+    onUpdate(ticketToSave);
+    onClose();
+
+    // Process in background
+    updateServiceTicket(ticketToSave.id, {
       status: ticketToSave.status,
       diagnosis: ticketToSave.diagnosis,
       serviceFee: ticketToSave.serviceFee,
       spareparts: ticketToSave.spareparts
-    });
+    }).catch(console.error);
 
     // Auto-create transaction when service is Paid
-    const wasAlreadyPaid = ticket?.status === 'Paid' || ticket?.status === 'Completed';
+    const wasAlreadyPaid = ticket?.status === 'Paid' || ticket?.status === 'Completed' || ticket?.status === 'Delivered';
     if (ticketToSave.status === 'Paid' && !wasAlreadyPaid) {
       const existingTx = transactions.find(t => t.notes === `service:${ticketToSave.id}`);
       if (!existingTx) {
@@ -194,46 +204,43 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
         const total = allItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
         const changeValue = Math.max(0, paid - total);
 
-        try {
-          const res = await fetch('/api/transactions', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              branchId: ticketToSave.branchId,
-              cashierId: currentUser?.id,
-              source: 'Service',
-              items: allItems,
-              total,
-              paymentMethod,
-              amountPaid: paymentMethod === 'Cash' ? paid : total,
-              customerName: ticketToSave.customerName,
-              customerPhone: ticketToSave.customerPhone,
-              customerAddress: ticketToSave.customerAddress || null,
-              change: paymentMethod === 'Cash' ? changeValue : 0,
-              tax: 0,
-              discount: 0,
-              status: 'Paid',
-              notes: `service:${ticketToSave.id}`,
-            }),
-          });
-          if (res.ok) {
-            const newTx = await res.json();
+        fetch('/api/transactions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            branchId: ticketToSave.branchId,
+            cashierId: currentUser?.id,
+            source: 'Service',
+            items: allItems,
+            total,
+            paymentMethod,
+            amountPaid: paymentMethod === 'Cash' ? paid : total,
+            customerName: ticketToSave.customerName,
+            customerPhone: ticketToSave.customerPhone,
+            customerAddress: ticketToSave.customerAddress || null,
+            change: paymentMethod === 'Cash' ? changeValue : 0,
+            tax: 0,
+            discount: 0,
+            status: 'Paid',
+            notes: `service:${ticketToSave.id}`,
+          }),
+        }).then(res => {
+          if (res.ok) return res.json();
+        }).then(newTx => {
+          if (newTx) {
             usePosStore.setState((state) => ({
               transactions: [newTx, ...state.transactions]
             }));
           }
-        } catch (err) {
+        }).catch(err => {
           console.error('Failed to create service transaction:', err);
-        }
+        });
       }
     }
-
-    onUpdate(ticketToSave);
-    onClose();
   };
 
-  const handleSaveOnly = async () => {
-    await performSave(localTicket);
+  const handleSaveOnly = () => {
+    performSave(localTicket);
   };
 
 
@@ -286,7 +293,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
               <div className="absolute left-0 right-0 top-4 h-px bg-muted z-0" />
 
               {statusOptions
-                .filter(s => s.id !== 'Cancelled' && s.id !== 'Completed')
+                .filter(s => s.id !== 'Cancelled' && s.id !== 'Delivered')
                 .map((st, idx) => {
                   const currentIndex = statusOptions.findIndex(s => s.id === localTicket.status);
                   const stepIndex = statusOptions.findIndex(s => s.id === st.id);
@@ -306,6 +313,8 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
 
                           isCurrent && (st.id === 'ReadyToPay' || st.id === 'Paid')
                             ? "bg-emerald-500 border-emerald-500 text-white scale-110 shadow-md"
+                            : isCurrent && st.id === 'Completed'
+                              ? "bg-violet-500 border-violet-500 text-white scale-110 shadow-md"
                             : isCurrent
                               ? "bg-primary border-primary text-primary-foreground scale-110 shadow-md"
                               : isPast
@@ -324,11 +333,13 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                       <span
                         className={cn(
                           "text-[8px] font-bold uppercase tracking-wider text-center whitespace-nowrap",
-                          isCurrent
-                            ? "text-primary"
-                            : isPast
-                              ? "text-emerald-600"
-                              : "text-muted-foreground"
+                          isCurrent && st.id === 'Completed'
+                            ? "text-violet-600"
+                            : isCurrent
+                              ? "text-primary"
+                              : isPast
+                                ? "text-emerald-600"
+                                : "text-muted-foreground"
                         )}
                       >
                         {st.label}
@@ -376,7 +387,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                   <div>
                     <p className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest mb-1">Hasil Pengecekan & Diagnosa</p>
                     <textarea
-                      className="w-full min-h-[80px] p-3 text-xs bg-muted/20 border-none rounded-xl focus:ring-1 focus:ring-primary/20 transition-all no-scrollbar"
+                      className="w-full border-solid border-2 min-h-[80px] p-3 text-xs bg-muted/20 border-none rounded-xl focus:ring-1 focus:ring-primary/20 transition-all no-scrollbar"
                       placeholder="Tulis hasil pengecekan teknisi di sini..."
                       value={localTicket.diagnosis || ""}
                       onChange={(e) => setLocalTicket({ ...localTicket, diagnosis: e.target.value })}
@@ -420,7 +431,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                             <CommandList>
                               <CommandEmpty className="text-[10px] p-4">Item tidak ditemukan.</CommandEmpty>
                               <CommandGroup>
-                                {availableInventory.map((item) => (
+                                {spareparts.map((item) => (
                                   <CommandItem
                                     key={item.id}
                                     onSelect={() => {
@@ -442,52 +453,64 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                       </Popover>
                     )}
 
-                    <div className="p-3 flex items-center justify-between group">
-                      <div className="flex-1">
-                        <p className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest mb-0.5">Biaya Jasa Terpilih:</p>
-                        <p className="text-xs font-bold text-foreground">
-                          {localTicket.serviceFee > 0
-                            ? serviceTypes.find(t => t.price === localTicket.serviceFee)?.name || "Jasa Custom"
-                            : "Pilih Jenis Jasa..."}
-                        </p>
+                    {/* Biaya Jasa */}
+                    {localTicket.serviceFee > 0 && (
+                      <div className="flex justify-between items-center p-2 rounded-lg bg-muted/10 border border-border/10 group">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold text-foreground">
+                            {serviceTypes.find(t => t.price === localTicket.serviceFee)?.name || "Jasa Custom"}
+                          </span>
+                          <span className="text-[9px] text-muted-foreground">1x</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-[10px] font-bold text-foreground">{formatCurrency(localTicket.serviceFee)}</span>
+                          {localTicket.status === 'InProgress' && (
+                            <button
+                              onClick={() => setLocalTicket({ ...localTicket, serviceFee: 0 })}
+                              className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-red-500"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs font-black text-primary">{formatCurrency(localTicket.serviceFee)}</span>
-                        {localTicket.status === 'InProgress' && (
-                          <Popover open={openServiceType} onOpenChange={setOpenServiceType}>
-                            <PopoverTrigger asChild>
-                              <Button variant="ghost" size="sm" className="h-7 w-7 p-0 rounded-full hover:bg-primary/5">
-                                <Edit className="h-3.5 w-3.5" />
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="p-0 w-[240px]" align="end">
-                              <Command>
-                                <CommandInput placeholder="Pilih jasa..." className="h-8 text-xs" />
-                                <CommandList>
-                                  <CommandGroup>
-                                    {serviceTypes.map((type) => (
-                                      <CommandItem
-                                        key={type.id}
-                                        onSelect={() => {
-                                          handleApplyServiceType(type);
-                                          setOpenServiceType(false);
-                                        }}
-                                        className="text-[10px] py-1.5"
-                                      >
-                                        <div className="flex justify-between w-full">
-                                          <span>{type.name}</span>
-                                          <span className="font-bold">{formatCurrency(type.price)}</span>
-                                        </div>
-                                      </CommandItem>
-                                    ))}
-                                  </CommandGroup>
-                                </CommandList>
-                              </Command>
-                            </PopoverContent>
-                          </Popover>
-                        )}
-                      </div>
-                    </div>
+                    )}
+
+                    {localTicket.status === 'InProgress' && (
+                      <Popover open={openServiceType} onOpenChange={setOpenServiceType}>
+                        <PopoverTrigger asChild>
+                          <Button variant="outline" className="w-full h-8 border-dashed text-[10px] gap-2">
+                            <Plus className="h-3 w-3" />
+                            {localTicket.serviceFee > 0 ? "Ganti Jenis Jasa" : "Tambah Jasa"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="p-0 w-[280px]" align="start">
+                          <Command>
+                            <CommandInput placeholder="Cari jenis jasa..." className="h-8 text-xs" />
+                            <CommandList>
+                              <CommandEmpty className="text-[10px] p-4">Jasa tidak ditemukan.</CommandEmpty>
+                              <CommandGroup>
+                                {serviceTypes.map((type) => (
+                                  <CommandItem
+                                    key={type.id}
+                                    onSelect={() => {
+                                      handleApplyServiceType(type);
+                                      setOpenServiceType(false);
+                                    }}
+                                    className="text-[10px] py-1.5"
+                                  >
+                                    <div className="flex justify-between w-full">
+                                      <span>{type.name}</span>
+                                      <span className="font-bold">{formatCurrency(type.price)}</span>
+                                    </div>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    )}
                   </div>
                 </div>
               )}
@@ -560,16 +583,26 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                       className="w-full sm:w-auto h-9 px-6 text-xs font-semibold uppercase flex items-center justify-center gap-2 rounded-lg"
                       onClick={handleNextAction}
                     >
-                      Serahkan Unit
+                      Serahkan Unit ke Pelanggan
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   )}
 
                   {localTicket.status === 'Completed' && (
+                    <Button
+                      className="w-full sm:w-auto h-9 px-6 text-xs font-semibold uppercase flex items-center justify-center gap-2 rounded-lg bg-violet-600 hover:bg-violet-700"
+                      onClick={handleNextAction}
+                    >
+                      Konfirmasi Sudah Diambil
+                      <Check className="h-4 w-4" />
+                    </Button>
+                  )}
+
+                  {localTicket.status === 'Delivered' && (
                     <div className="flex items-center justify-center gap-2 bg-muted text-muted-foreground px-4 py-2 rounded-lg border w-full">
                       <Check className="h-4 w-4" />
                       <span className="text-xs font-semibold uppercase">
-                        Unit Sudah Diambil
+                        Servis Selesai
                       </span>
                     </div>
                   )}

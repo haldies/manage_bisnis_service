@@ -28,6 +28,7 @@ import { PayrollSettings } from "@/components/staff/PayrollSettings";
 import { OperationalTab } from "@/components/staff/OperationalTab";
 import { RolePermissionTable } from "@/components/staff/RolePermissionTable";
 import { StaffDialog } from "@/components/staff/StaffDialog";
+import { DragScroll } from "@/components/ui/drag-scroll";
 
 export default function StaffManagementPage() {
   const { 
@@ -370,7 +371,6 @@ export default function StaffManagementPage() {
           <div className="space-y-1">
             <h2 className="text-xl font-bold tracking-tight">Ketenagakerjaan</h2>
             <div className="flex items-center gap-2">
-              <div className={cn("h-2 w-2 rounded-full", currentBranch ? "bg-emerald-500" : "bg-amber-500")} />
               <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
                 {currentBranch ? `Cabang: ${currentBranch.name}` : "Semua Cabang (Global)"}
               </p>
@@ -418,8 +418,8 @@ export default function StaffManagementPage() {
         </div>
 
         <Tabs value={activeTab} className="w-full" onValueChange={setActiveTab}>
-          <div className="mb-8 overflow-x-auto no-scrollbar touch-pan-x py-1">
-            <TabsList className="bg-transparent p-0 gap-1 flex-nowrap w-max">
+          <DragScroll className="-mx-4 px-4 mb-8 py-1">
+            <TabsList className="bg-muted/10 p-1 h-11 rounded-lg inline-flex flex-nowrap min-w-max gap-0">
               {[
                 { id: 'roster', label: 'Pegawai' },
                 { id: 'attendance', label: 'Presensi' },
@@ -431,13 +431,13 @@ export default function StaffManagementPage() {
                 <TabsTrigger 
                   key={tab.id}
                   value={tab.id} 
-                  className="rounded-full px-6 py-2.5 ui-label data-[state=active]:bg-foreground data-[state=active]:text-background border border-transparent data-[state=active]:border-foreground/10 transition-all shrink-0 whitespace-nowrap"
+                  className="rounded-md px-5 ui-label data-[state=active]:bg-foreground data-[state=active]:text-background shrink-0 whitespace-nowrap"
                 >
                   {tab.label}
                 </TabsTrigger>
               ))}
             </TabsList>
-          </div>
+          </DragScroll>
 
               <TabsContent value="roster" className="m-0">
                 <StaffRoster 

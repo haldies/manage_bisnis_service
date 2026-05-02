@@ -17,10 +17,10 @@ export default function ServiceTable({ services, onSelect }: ServiceTableProps) 
   const { currentUser, deleteServiceTicket } = usePosStore();
 
   return (
-    <div className="bg-card rounded-lg border shadow-sm">
+    <div className="rounded-lg overflow-hidden">
       <Table>
-        <TableHeader className="bg-muted/50">
-          <TableRow>
+        <TableHeader>
+          <TableRow className="border-b border-border/40">
             <TableHead className="px-4 py-3 text-xs font-bold uppercase text-muted-foreground">ID & Tanggal</TableHead>
             <TableHead className="px-4 py-3 text-xs font-bold uppercase text-muted-foreground">Pelanggan</TableHead>
             <TableHead className="px-4 py-3 text-xs font-bold uppercase text-muted-foreground">Device</TableHead>
@@ -41,7 +41,7 @@ export default function ServiceTable({ services, onSelect }: ServiceTableProps) 
             services.map(ticket => (
               <TableRow 
                 key={ticket.id} 
-                className="border-b border-border/20 transition-colors cursor-pointer group"
+                className="border-b border-border/10 transition-colors cursor-pointer hover:bg-muted/30"
               >
                 <TableCell className="px-4 py-3" onClick={() => onSelect(ticket)}>
                   <p className="text-xs font-bold">#{ticket.id.slice(-6).toUpperCase()}</p>
@@ -61,12 +61,13 @@ export default function ServiceTable({ services, onSelect }: ServiceTableProps) 
                   <p className="text-[10px] truncate max-w-[150px] italic text-primary/80">{ticket.diagnosis || "Belum ada diagnosa"}</p>
                 </TableCell>
                 <TableCell className="px-4 py-3" onClick={() => onSelect(ticket)}>
-                  {ticket.status === 'Pending' && <span className="text-[10px] font-bold uppercase text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">Antrian</span>}
-                  {ticket.status === 'InProgress' && <span className="text-[10px] font-bold uppercase text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">Mengerjakan</span>}
-                  {ticket.status === 'ReadyToPay' && <span className="text-[10px] font-bold uppercase text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Menunggu Pembayaran</span>}
-                  {ticket.status === 'Paid' && <span className="text-[10px] font-bold uppercase text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">Siap Diambil</span>}
-                  {ticket.status === 'Completed' && <span className="text-[10px] font-bold uppercase text-slate-600 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">Sudah Diambil</span>}
-                  {ticket.status === 'Cancelled' && <span className="text-[10px] font-bold uppercase text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-200">Batal</span>}
+                  {ticket.status === 'Pending' && <span className="text-[10px] font-semibold text-muted-foreground">Antrian</span>}
+                  {ticket.status === 'InProgress' && <span className="text-[10px] font-semibold text-foreground">Mengerjakan</span>}
+                  {ticket.status === 'ReadyToPay' && <span className="text-[10px] font-semibold text-foreground">Menunggu Bayar</span>}
+                  {ticket.status === 'Paid' && <span className="text-[10px] font-semibold text-foreground">Siap Diambil</span>}
+                  {ticket.status === 'Completed' && <span className="text-[10px] font-semibold text-foreground">Sudah Diambil</span>}
+                  {ticket.status === 'Delivered' && <span className="text-[10px] font-semibold text-muted-foreground">Selesai</span>}
+                  {ticket.status === 'Cancelled' && <span className="text-[10px] font-semibold text-muted-foreground line-through">Batal</span>}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-1">

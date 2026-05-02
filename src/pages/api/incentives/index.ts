@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { MOCK_TRANSACTIONS, MOCK_USERS } from "@/lib/mock-data";
+import { prisma } from "@/lib/prisma";
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,55 +11,74 @@ export default async function handler(
 
   const { technicianId, month } = req.query; // month format: YYYY-MM
 
-  if (!technicianId) {
-    return res.status(400).json({ error: "technicianId is required" });
-  }
-
-  const user = MOCK_USERS.find(u => u.id === technicianId);
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-
-  // Base incentive per unit (from config or employee profile)
-  const incentivePerUnit = 25000; 
-
-  // Filter transactions for this technician
-  const techTransactions = MOCK_TRANSACTIONS.filter(trx => {
-    if (trx.status !== 'Paid') return false;
-    
-    // Check if any item was handled by this technician
-    const hasTechItem = trx.items.some(item => item.technicianId === technicianId);
-    
-    if (month && typeof month === 'string') {
-      const trxMonth = new Date(trx.date).toISOString().substring(0, 7);
-      return hasTechItem && trxMonth === month;
-    }
-    
-    return hasTechItem;
-  });
-
-  // Calculate stats
-  let totalUnits = 0;
-  let totalRevenue = 0;
-
-  techTransactions.forEach(trx => {
-    trx.items.forEach(item => {
-      if (item.technicianId === technicianId) {
-        totalUnits += item.quantity;
-        totalRevenue += (item.price * item.quantity);
+  try {
+    // Jika ada technicianId, hitung insentif untuk teknisi tertentu
+    if (technicianId && typeof technicianId === "string") {
+      const user = await prisma.user.findUnique({ where: { id: technicianId } });
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
       }
+
+      // Ambil semua transaction items yang dikerjakan teknisi ini
+      const whereClause: any = {
+        technicianId,
+        transaction: { status: "Paid" },
+      };
+
+      if (month && typeof month === "string") {
+        const [year, mon] = month.split("-").map(Number);
+        const startDate = new Date(year, mon - 1, 1);
+        const endDate = new Date(year, mon, 1);
+        whereClause.transaction = {
+          ...whereClause.transaction,
+          createdAt: { gte: startDate, lt: endDate },
+        };
+      }
+
+      const items = await prisma.transactionItem.findMany({
+        where: whereClause,
+        include: { transaction: true },
+      });
+
+      const incentiveRate = user.incentiveRate || 0;
+      const incentiveType = user.incentiveType || "None";
+
+      let totalUnits = 0;
+      let totalRevenue = 0;
+
+      items.forEach((item) => {
+        totalUnits += item.quantity;
+        totalRevenue += item.price * item.quantity;
+      });
+
+      // Hitung insentif berdasarkan tipe
+      let totalIncentive = 0;
+      if (incentiveType === "PerUnit") {
+        totalIncentive = totalUnits * incentiveRate;
+      } else if (incentiveType === "Percentage") {
+        totalIncentive = (totalRevenue * incentiveRate) / 100;
+      }
+
+      return res.status(200).json({
+        technicianId,
+        name: user.name,
+        totalUnits,
+        totalRevenue,
+        totalIncentive,
+        incentiveRate,
+        incentiveType,
+        transactions: new Set(items.map((i) => i.transactionId)).size,
+      });
+    }
+
+    // Tanpa technicianId: kembalikan ringkasan semua teknisi
+    const technicians = await prisma.user.findMany({
+      where: { role: "Technician" },
     });
-  });
 
-  const totalIncentive = totalUnits * incentivePerUnit;
-
-  return res.status(200).json({
-    technicianId,
-    name: user.name,
-    totalUnits,
-    totalRevenue,
-    totalIncentive,
-    incentivePerUnit,
-    transactions: techTransactions.length,
-  });
+    return res.status(200).json({ technicians, total: technicians.length });
+  } catch (error) {
+    console.error("Incentives error:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 }

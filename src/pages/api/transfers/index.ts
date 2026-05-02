@@ -3,15 +3,19 @@ import { prisma } from '@/lib/prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const transfers = await prisma.stockTransfer.findMany({
-      include: {
-        fromBranch: true,
-        toBranch: true,
-        items: { include: { item: true } }
-      },
-      orderBy: { createdAt: 'desc' }
-    });
-    return res.status(200).json(transfers);
+    try {
+      const transfers = await prisma.stockTransfer.findMany({
+        include: {
+          fromBranch: true,
+          toBranch: true,
+          items: { include: { item: true } }
+        },
+        orderBy: { createdAt: 'desc' }
+      });
+      return res.status(200).json(transfers);
+    } catch (e: any) {
+      return res.status(500).json({ message: e.message });
+    }
   }
 
   if (req.method === 'POST') {

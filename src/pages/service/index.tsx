@@ -35,7 +35,7 @@ export default function ServiceManagementPage() {
       const matchesSearch = t.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         t.deviceModel.toLowerCase().includes(searchQuery.toLowerCase()) ||
         t.id.toLowerCase().includes(searchQuery.toLowerCase());
-      const isNotCancelled = t.status !== 'Cancelled';
+      const isNotCancelled = t.status !== 'Cancelled' && t.status !== 'Delivered';
       const matchesStatus = statusFilter === 'All' ? isNotCancelled : t.status === statusFilter;
       return matchesSearch && matchesStatus;
     }).sort((a, b) => b.dateOpened - a.dateOpened);
@@ -84,6 +84,7 @@ export default function ServiceManagementPage() {
                       <SelectItem value="ReadyToPay">Menunggu Pembayaran</SelectItem>
                       <SelectItem value="Paid">Siap Diambil</SelectItem>
                       <SelectItem value="Completed">Sudah Diambil</SelectItem>
+                      <SelectItem value="Delivered">Selesai</SelectItem>
                       <SelectItem value="Cancelled">Dibatalkan</SelectItem>
                     </SelectContent>
                   </Select>

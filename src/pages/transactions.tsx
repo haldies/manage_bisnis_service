@@ -300,10 +300,10 @@ export default function TransactionsPage() {
 
       {/* ── View Detail Dialog ── */}
       <Dialog open={!!selectedTx} onOpenChange={() => setSelectedTx(null)}>
-        <DialogContent className="max-w-lg bg-card border-none rounded-lg p-0 overflow-hidden shadow-2xl">
+        <DialogContent className="max-w-lg w-[95vw] bg-card border-none rounded-2xl p-0 overflow-hidden shadow-2xl max-h-[90vh] flex flex-col">
           {selectedTx && (
-            <div className="flex flex-col">
-              <div className="p-8 bg-primary text-primary-foreground">
+            <div className="flex flex-col min-h-0">
+              <div className="p-8 bg-primary text-primary-foreground shrink-0">
                 <div className="flex justify-between items-start mb-8">
                    <div>
                      <p className="text-[10px] font-bold uppercase tracking-widest text-primary-foreground/70 mb-1">ID Transaksi</p>
@@ -329,7 +329,7 @@ export default function TransactionsPage() {
                 </div>
               </div>
 
-              <div className="p-8 space-y-8 max-h-[60vh] overflow-y-auto no-scrollbar">
+              <div className="p-8 space-y-8 overflow-y-auto flex-1 min-h-0 no-scrollbar">
                 <div className="space-y-4">
                   <p className="ui-label font-bold text-primary">Informasi Pelanggan</p>
                   <div className="space-y-3">
