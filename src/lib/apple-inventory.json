@@ -1,0 +1,85 @@
+[
+  {
+    "id": "i-ip15pm",
+    "sku": "IP15-PM-256",
+    "name": "iPhone 15 Pro Max 256GB",
+    "category": "iPhone",
+    "costPrice": 20000000,
+    "basePrice": 24999000,
+    "unit": "pcs",
+    "rack": "A-01",
+    "supplierId": "sup1",
+    "image": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=400&auto=format&fit=crop",
+    "dateAdded": 1695200000000,
+    "stocks": [
+      { "id": "s-ip15pm-b1", "branchId": "b1", "quantity": 10, "reservedQty": 0, "minStock": 2 },
+      { "id": "s-ip15pm-b2", "branchId": "b2", "quantity": 5, "reservedQty": 0, "minStock": 2 }
+    ]
+  },
+  {
+    "id": "i-mbpm3",
+    "sku": "MAC-PRO-M3-14",
+    "name": "MacBook Pro M3 14-inch",
+    "category": "MacBook",
+    "costPrice": 25000000,
+    "basePrice": 28999000,
+    "unit": "pcs",
+    "rack": "A-02",
+    "supplierId": "sup1",
+    "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=400&auto=format&fit=crop",
+    "dateAdded": 1700000000000,
+    "stocks": [
+      { "id": "s-mbpm3-b1", "branchId": "b1", "quantity": 3, "reservedQty": 0, "minStock": 1 }
+    ]
+  },
+  {
+    "id": "i-ipad5",
+    "sku": "IPAD-AIR-5-64",
+    "name": "iPad Air Gen 5 64GB",
+    "category": "iPad",
+    "costPrice": 9000000,
+    "basePrice": 10499000,
+    "unit": "pcs",
+    "rack": "A-03",
+    "supplierId": "sup1",
+    "image": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?q=80&w=400&auto=format&fit=crop",
+    "dateAdded": 1680000000000,
+    "stocks": [
+      { "id": "s-ipad5-b1", "branchId": "b1", "quantity": 8, "reservedQty": 0, "minStock": 2 },
+      { "id": "s-ipad5-b2", "branchId": "b2", "quantity": 4, "reservedQty": 0, "minStock": 2 }
+    ]
+  },
+  {
+    "id": "i-lcd13",
+    "sku": "LCD-IP13-ORI",
+    "name": "LCD iPhone 13 Original",
+    "category": "Sparepart",
+    "costPrice": 1500000,
+    "basePrice": 2200000,
+    "unit": "pcs",
+    "rack": "B-01",
+    "supplierId": "sup1",
+    "image": "https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?q=80&w=400&auto=format&fit=crop",
+    "dateAdded": 1710000000000,
+    "stocks": [
+      { "id": "s-lcd13-b1", "branchId": "b1", "quantity": 15, "reservedQty": 2, "minStock": 5 }
+    ]
+  },
+  {
+    "id": "i-batt11",
+    "sku": "BATT-IP11-ORI",
+    "name": "Battery iPhone 11 Original",
+    "category": "Sparepart",
+    "costPrice": 250000,
+    "basePrice": 450000,
+    "unit": "pcs",
+    "rack": "B-02",
+    "supplierId": "sup1",
+    "image": "https://images.unsplash.com/photo-1601784551446-20c9e07cdbab?q=80&w=400&auto=format&fit=crop",
+    "dateAdded": 1710000000000,
+    "stocks": [
+      { "id": "s-batt11-b1", "branchId": "b1", "quantity": 30, "reservedQty": 1, "minStock": 10 },
+      { "id": "s-batt11-b2", "branchId": "b2", "quantity": 10, "reservedQty": 0, "minStock": 5 }
+    ]
+  }
+]

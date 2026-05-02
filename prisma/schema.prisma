@@ -1,0 +1,323 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Branch {
+  id             String          @id @default(cuid())
+  name           String
+  address        String
+  phone          String
+  latitude       Float
+  longitude      Float
+  radiusMeters   Int            @default(50)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  serviceTickets ServiceTicket[]
+  shifts         Shift[]
+  stocks         Stock[]
+  transactions   Transaction[]
+  users          User[]
+  transfersFrom  StockTransfer[] @relation("FromBranch")
+  transfersTo    StockTransfer[] @relation("ToBranch")
+  units          InventoryUnit[]
+}
+
+
+
+model User {
+  id             String          @id @default(cuid())
+  name           String?
+  email          String          @unique
+  password       String?
+  role           String          @default("USER")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  branchId       String?
+  wageType       String?         @default("Monthly")
+  wageRate       Float?          @default(0)
+  allowance      Float?          @default(0)
+  insuranceDed   Float?          @default(0)
+  shiftId        String?
+  baseSalary     Float?          @default(0)
+  leaveQuota     Int?            @default(12)
+  phone          String?
+  address        String?
+  incentiveRate  Float?          @default(0)
+  incentiveType  String?         @default("None") // None, Service, Retail, All
+  cashAdvances   CashAdvance[]
+  leaveRequests  LeaveRequest[]
+  serviceTickets ServiceTicket[]
+  transactions   Transaction[]
+  attendances     Attendance[]
+  overtimes      Overtime[]
+  branch         Branch?         @relation(fields: [branchId], references: [id])
+}
+
+model Shift {
+  id        String @id @default(cuid())
+  name      String
+  startTime String
+  endTime   String
+  branchId  String
+  branch    Branch @relation(fields: [branchId], references: [id])
+}
+
+model CashAdvance {
+  id         String   @id @default(cuid())
+  employeeId String
+  date       DateTime @default(now())
+  amount     Float
+  reason     String
+  status     String   @default("Pending")
+  createdAt  DateTime @default(now())
+  employee   User     @relation(fields: [employeeId], references: [id])
+}
+
+model LeaveRequest {
+  id         String   @id @default(cuid())
+  employeeId String
+  startDate  DateTime
+  endDate    DateTime
+  type       String
+  reason     String
+  status     String   @default("Pending")
+  createdAt  DateTime @default(now())
+  employee   User     @relation(fields: [employeeId], references: [id])
+}
+
+model Category {
+  id             String          @id @default(cuid())
+  name           String          @unique
+  inventoryItems InventoryItem[]
+}
+
+model InventoryItem {
+  id                String             @id @default(cuid())
+  name              String
+  sku               String             @unique
+  categoryId        String
+  category          Category           @relation(fields: [categoryId], references: [id])
+  costPrice         Float
+  basePrice         Float
+  unit              String
+  rack              String?
+  image             String?
+  showInPos         Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+
+  updatedAt         DateTime           @updatedAt
+  serviceSpareparts ServiceSparepart[]
+  stocks            Stock[]
+  transactionItems  TransactionItem[]
+  transferItems     StockTransferItem[]
+  units             InventoryUnit[]
+}
+
+
+
+model Stock {
+  id          String        @id @default(cuid())
+  itemId      String
+  branchId    String
+  quantity    Int           @default(0)
+  reservedQty Int           @default(0)
+  minStock    Int           @default(0)
+  branch      Branch        @relation(fields: [branchId], references: [id])
+  item        InventoryItem @relation(fields: [itemId], references: [id])
+
+  @@unique([itemId, branchId])
+}
+
+model Transaction {
+  id              String            @id @default(cuid())
+  date            DateTime          @default(now())
+  branchId        String
+  cashierId       String
+  source          String
+  serviceTicketId String?
+  total           Float
+  paymentMethod   String
+  amountPaid      Float
+  customerName    String?
+  customerPhone   String?
+  customerAddress String?
+  change          Float
+  tax             Float
+  discount        Float
+  status          String
+  notes           String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  branch          Branch            @relation(fields: [branchId], references: [id])
+  cashier         User              @relation(fields: [cashierId], references: [id])
+  items           TransactionItem[]
+}
+
+model TransactionItem {
+  id            String         @id @default(cuid())
+  transactionId String
+  itemId        String?
+  name          String
+  category      String
+  price         Float
+  costPrice     Float
+  quantity      Int
+  discount      Float          @default(0)
+  technicianId  String?
+  item          InventoryItem? @relation(fields: [itemId], references: [id])
+  transaction   Transaction    @relation(fields: [transactionId], references: [id])
+}
+
+enum ServiceStatus {
+  Pending           // Antrian
+  InProgress        // Mengerjakan
+  ReadyToPay        // Menunggu Pembayaran
+  Paid              // Siap Diambil
+  Completed         // Sudah Diambil
+  Cancelled         // Batal
+}
+
+model ServiceTicket {
+  id            String             @id @default(cuid())
+  dateOpened    DateTime           @default(now())
+  dateClosed    DateTime?
+  customerName  String
+  customerPhone String
+  customerAddress String?
+  deviceModel   String
+  deviceSerial  String
+  issue         String
+  diagnosis     String?
+  estimatedCost Float
+  serviceFee    Float
+  status        ServiceStatus      @default(Pending)
+  technicianId  String?
+  branchId      String
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  spareparts    ServiceSparepart[]
+  branch        Branch             @relation(fields: [branchId], references: [id])
+  technician    User?              @relation(fields: [technicianId], references: [id])
+}
+
+model ServiceSparepart {
+  id       String        @id @default(cuid())
+  ticketId String
+  itemId   String
+  quantity Int
+  price    Float
+  item     InventoryItem @relation(fields: [itemId], references: [id])
+  ticket   ServiceTicket @relation(fields: [ticketId], references: [id])
+}
+model Attendance {
+  id                  String   @id @default(cuid())
+  employeeId          String
+  employeeName        String
+  branchId            String
+  date                String
+  checkInTime         BigInt
+  checkOutTime        BigInt?
+  status              String
+  isInRadius          Boolean
+  isMockGPS           Boolean
+  latitude            Float?
+  longitude           Float?
+  photoUrl            String?
+  checkOutPhotoUrl    String?
+  checkOutLatitude    Float?
+  checkOutLongitude   Float?
+  workDurationMinutes Int?
+  createdAt           DateTime @default(now())
+  employee            User     @relation(fields: [employeeId], references: [id])
+}
+
+model StoreProfile {
+  id                         String   @id @default("default")
+  name                       String   @default("Kasirai POS")
+  address                    String   @default("")
+  phone                      String   @default("")
+  taxPercentage              Float    @default(0)
+  enableTax                  Boolean  @default(false)
+  serviceIncentivePercentage Float    @default(10)
+  startTime                  String   @default("09:00")
+  endTime                    String   @default("18:00")
+  attendanceRate             Float    @default(0)
+  latePenalty                Float    @default(0)
+  absentPenalty              Float    @default(0)
+  totalWorkDays              Int      @default(26)
+  baseSalary                 Float    @default(0)
+  overtimeRate               Float    @default(0)
+  serviceIncentive           Float    @default(10)
+  updatedAt                  DateTime @updatedAt
+}
+
+model ServiceType {
+  id          String   @id @default(cuid())
+  name        String
+  price       Float
+  category    String?  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Overtime {
+  id          String   @id @default(cuid())
+  employeeId  String
+  hours       Float    @default(0)
+  date        DateTime @default(now())
+  reason      String   @default("")
+  status      String   @default("Pending") // Pending, Approved, Rejected
+  createdAt   DateTime @default(now())
+  employee    User     @relation(fields: [employeeId], references: [id])
+}
+
+
+model DeviceModel {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  brand     String   @default("Apple")
+  type      String   // Smartphone, Laptop, Tablet
+  createdAt DateTime @default(now())
+}
+
+model StockTransfer {
+  id            String              @id @default(cuid())
+  fromBranchId  String
+  toBranchId    String
+  status        String              @default("Pending") // Pending, Approved, Completed, Rejected, Cancelled
+  notes         String?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  fromBranch    Branch              @relation("FromBranch", fields: [fromBranchId], references: [id])
+  toBranch      Branch              @relation("ToBranch", fields: [toBranchId], references: [id])
+  items         StockTransferItem[]
+}
+
+model StockTransferItem {
+  id         String        @id @default(cuid())
+  transferId String
+  itemId     String
+  quantity   Int
+  item       InventoryItem @relation(fields: [itemId], references: [id])
+  transfer   StockTransfer @relation(fields: [transferId], references: [id])
+}
+
+model InventoryUnit {
+  id           String        @id @default(cuid())
+  itemId       String
+  branchId     String
+  serialNumber String?       @unique // IMEI / SN
+  status       String        @default("Available") // Available, Sold, Defective
+  costPrice    Float?        // In case cost changes per batch
+  entryDate    DateTime      @default(now())
+  soldDate     DateTime?
+  item         InventoryItem @relation(fields: [itemId], references: [id])
+  branch       Branch        @relation(fields: [branchId], references: [id])
+}
+
+

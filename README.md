@@ -1,40 +1,20 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+Ran command: `npx prisma db push
+`
+Ran command: `npx prisma db push
+`
 
-## Getting Started
+Mantap! Sudah berhasil ter-sinkronisasi ya dalam 4 detik. 🚀
 
-First, run the development server:
+Alasan teknis kenapa sebelumnya **stuck** di port **6543** tapi lancar di port **5432** adalah:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Transaction Mode (Port 6543)**: Ini adalah port untuk **PgBouncer** (Pooler). Port ini didesain untuk aplikasi yang sudah jalan (runtime) agar hemat koneksi. Namun, port ini **tidak mendukung** perintah-perintah perubahan struktur database (seperti membuat tabel baru atau mengubah kolom) yang bersifat "berat". Prisma akan mencoba melakukan "locking" pada database, tapi PgBouncer sering kali menolaknya atau membuatnya menunggu selamanya (stuck).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Direct Connection (Port 5432)**: Ini adalah jalur langsung ke mesin database Postgres kamu tanpa perantara. Di jalur ini, Prisma punya izin penuh untuk melakukan modifikasi struktur tabel secara instan. Itulah kenapa prosesnya langsung selesai dengan cepat.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+**Saran penggunaan ke depannya:**
+*   **Gunakan port 5432 (Direct)**: Khusus untuk urusan pengerjaan lokal, `db push`, atau `migrate`.
+*   **Gunakan port 6543 (Pooler)**: Nanti kalau aplikasimu sudah di-deploy ke Vercel/Cloud agar koneksi database-nya tidak cepat penuh (terutama jika user-nya sudah banyak).
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Sistem autentikasi (Login & Register) kamu juga sekarang sudah punya tabel `User` yang nyata di Supabase. Kamu sudah bisa mulai mencoba membuat akun di halaman `/register` tadi!
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+Ada lagi yang ingin dibantu atau dikoneksikan?
