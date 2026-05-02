@@ -1,6 +1,5 @@
-"use client";
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,7 +16,7 @@ import {
 } from "@/components/ui/table";
 import { usePosStore } from "@/lib/store";
 import {
-  Search, Pencil, Trash2, MapPin, Package
+  Search, Pencil, Trash2, MapPin, Package, Plus
 
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -36,15 +35,15 @@ export default function LogisticsDashboard() {
     inventoryUnits, addInventoryUnit, deleteInventoryUnit
   } = usePosStore();
 
-  const searchParams = useSearchParams();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("items");
 
   useEffect(() => {
-    const tab = searchParams.get('tab');
+    const tab = router.query.tab;
     if (tab === 'mutasi') {
       setActiveTab('mutasi');
     }
-  }, [searchParams]);
+  }, [router.query]);
 
   const hasFullAccess = currentUser && rolePermissions[currentUser.role]?.Inventory === 'Full';
 
@@ -132,53 +131,67 @@ export default function LogisticsDashboard() {
           <div className="space-y-8">
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <div className="flex flex-col md:flex-row gap-6 items-center justify-between mb-8">
-                <TabsList className="bg-muted/10 p-1 h-11 rounded-lg">
-                  <TabsTrigger value="items" className="rounded-md px-8 ui-label data-[state=active]:bg-foreground data-[state=active]:text-background">Produk</TabsTrigger>
-                  <TabsTrigger value="categories" className="rounded-md px-8 ui-label data-[state=active]:bg-foreground data-[state=active]:text-background">Kategori</TabsTrigger>
-                  <TabsTrigger value="mutasi" className="rounded-md px-8 ui-label data-[state=active]:bg-foreground data-[state=active]:text-background">Mutasi</TabsTrigger>
-                </TabsList>
+              <div className="flex flex-col gap-6 mb-8">
+                {/* Header Row: Tabs + Add Button */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <TabsList className="bg-muted/10 p-1 h-10 rounded-xl">
+                    <TabsTrigger value="items" className="rounded-lg px-6 h-8 ui-label data-[state=active]:bg-foreground data-[state=active]:text-background">Produk</TabsTrigger>
+                    <TabsTrigger value="categories" className="rounded-lg px-6 h-8 ui-label data-[state=active]:bg-foreground data-[state=active]:text-background">Kategori</TabsTrigger>
+                    <TabsTrigger value="mutasi" className="rounded-lg px-6 h-8 ui-label data-[state=active]:bg-foreground data-[state=active]:text-background">Mutasi</TabsTrigger>
+                  </TabsList>
 
-
-                {activeTab === 'items' && (
-                  <div className="flex flex-wrap items-center gap-3 w-full md:w-auto animate-in slide-in-from-right-4 duration-300">
-                    <Select
-                      value={currentBranch?.id || 'all'}
-                      onValueChange={(val) => setCurrentBranch(val === 'all' ? null : val)}
+                  {activeTab === 'items' && hasFullAccess && (
+                    <Button 
+                      className="h-10 px-6 bg-foreground text-background hover:bg-foreground/90 rounded-xl font-bold text-xs uppercase tracking-widest shadow-sm active:scale-95 transition-all" 
+                      onClick={() => setAddOpen(true)}
                     >
-                      <SelectTrigger className="h-10 w-[160px] rounded-lg bg-card border border-border/40 ui-label uppercase tracking-widest focus:ring-0">
-                        <MapPin className="h-4 w-4 mr-2 text-primary" />
-                        <SelectValue placeholder="Semua Cabang" />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-xl border-border/40 shadow-2xl">
-                        <SelectItem value="all" className="ui-label uppercase py-3">Semua Cabang</SelectItem>
-                        {branches.map(b => <SelectItem key={b.id} value={b.id} className="ui-label uppercase py-3">{b.name}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Tambah Unit
+                    </Button>
+                  )}
+                </div>
 
-                    <Select value={sortByStock} onValueChange={setSortByStock}>
-                      <SelectTrigger className="h-10 w-32"><SelectValue placeholder="Urutkan" /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="none">Default</SelectItem>
-                        <SelectItem value="most">Stok Terbanyak</SelectItem>
-                        <SelectItem value="least">Stok Terendah</SelectItem>
-                      </SelectContent>
-                    </Select>
-
-                    <div className="relative flex-1 md:w-64">
-                      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/30" />
+                {/* Filter Row: Search + Selects */}
+                {activeTab === 'items' && (
+                  <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 animate-in slide-in-from-top-2 duration-300">
+                    <div className="relative flex-1 md:max-w-xs">
+                      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40" />
                       <Input
-                        placeholder="Cari..."
-                        className="pl-10 h-10"
+                        placeholder="Cari produk..."
+                        className="pl-10 h-10 rounded-xl border-border/40 bg-card focus:ring-2 focus:ring-foreground/5"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                       />
                     </div>
-                    {hasFullAccess && (
-                      <Button className="h-10 px-6 bg-foreground text-background hover:bg-foreground/90 rounded-lg" onClick={() => setAddOpen(true)}>
-                        Tambah Unit
-                      </Button>
-                    )}
+
+                    <div className="flex items-center gap-2">
+                      <Select
+                        value={currentBranch?.id || 'all'}
+                        onValueChange={(val) => setCurrentBranch(val === 'all' ? null : val)}
+                      >
+                        <SelectTrigger className="h-10 min-w-[180px] rounded-xl bg-card border border-border/40 ui-label uppercase tracking-widest focus:ring-0">
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-3.5 w-3.5 text-primary" />
+                            <SelectValue placeholder="Semua Cabang" />
+                          </div>
+                        </SelectTrigger>
+                        <SelectContent className="rounded-xl border-border/40 shadow-2xl">
+                          <SelectItem value="all" className="ui-label uppercase py-3">Semua Cabang</SelectItem>
+                          {branches.map(b => <SelectItem key={b.id} value={b.id} className="ui-label uppercase py-3">{b.name}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+
+                      <Select value={sortByStock} onValueChange={setSortByStock}>
+                        <SelectTrigger className="h-10 w-40 rounded-xl bg-card border border-border/40 ui-label uppercase tracking-widest focus:ring-0">
+                          <SelectValue placeholder="Urutkan" />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-xl border-border/40 shadow-2xl">
+                          <SelectItem value="none" className="ui-label uppercase py-3">Default</SelectItem>
+                          <SelectItem value="most" className="ui-label uppercase py-3">Stok Terbanyak</SelectItem>
+                          <SelectItem value="least" className="ui-label uppercase py-3">Stok Terendah</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 )}
               </div>

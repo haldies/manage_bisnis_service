@@ -96,7 +96,9 @@ export default function LaporanDashboard() {
     filteredTransactions.forEach(tx => {
       if (tx.status !== 'Paid') return;
       tx.items.forEach(item => {
-        data[item.category] = (data[item.category] || 0) + (item.price * item.quantity);
+        const cat = item.category?.trim();
+        if (!cat) return; // skip item tanpa kategori
+        data[cat] = (data[cat] || 0) + (item.price * item.quantity);
       });
     });
     return Object.entries(data)
@@ -104,7 +106,16 @@ export default function LaporanDashboard() {
       .sort((a, b) => b.value - a.value);
   }, [filteredTransactions]);
 
-  const COLORS = ['#18181b', '#3f3f46', '#71717a', '#a1a1aa', '#d4d4d8'];
+  const COLORS = [
+    '#18181b', // hitam — slot 1 (dominan)
+    '#6366f1', // indigo
+    '#f59e0b', // amber
+    '#10b981', // emerald
+    '#ef4444', // red
+    '#3b82f6', // blue
+    '#8b5cf6', // violet
+    '#f97316', // orange
+  ];
 
   return (
     <Layout title="Laporan & Keuangan" requiredModule="Finance" requiredLevel="Read">
@@ -254,8 +265,14 @@ export default function LaporanDashboard() {
              <div className="px-6 pb-6 space-y-2">
                 {categoryChartData.slice(0, 4).map((cat, idx) => (
                   <div key={cat.name} className="flex items-center justify-between border-b border-border/5 pb-1 last:border-0">
-                     <span className="text-[10px] font-bold text-muted-foreground uppercase">{cat.name}</span>
-                     <span className="text-[11px] font-bold text-foreground">{((cat.value / (stats.revenue || 1)) * 100).toFixed(1)}%</span>
+                     <div className="flex items-center gap-2">
+                        <span
+                          className="h-2.5 w-2.5 rounded-full shrink-0"
+                          style={{ backgroundColor: COLORS[idx % COLORS.length] }}
+                        />
+                        <span className="text-xs font-medium text-muted-foreground">{cat.name}</span>
+                     </div>
+                     <span className="text-xs font-bold text-foreground">{((cat.value / (stats.revenue || 1)) * 100).toFixed(1)}%</span>
                   </div>
                 ))}
              </div>

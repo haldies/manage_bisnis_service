@@ -12,16 +12,16 @@
   /* === Font Sizes (all in rem, base = 16px) ===
      Naming: --text-{role}
   */
-  --text-label:   0.625rem;   /* 10px  – Column headers, badges, meta labels  */
-  --text-caption: 0.6875rem;  /* 11px  – Secondary captions, sub-labels        */
-  --text-body:    0.75rem;    /* 12px  – Default table cell body text           */
-  --text-default: 0.8125rem;  /* 13px  – Primary body text (base font size)     */
-  --text-sub:     0.875rem;   /* 14px  – Sub-headings, product names            */
+  --text-label:   0.6875rem;  /* 11px  – Column headers, badges, meta labels  */
+  --text-caption: 0.75rem;    /* 12px  – Secondary captions, sub-labels        */
+  --text-body:    0.8125rem;  /* 13px  – Default table cell body text           */
+  --text-default: 0.875rem;   /* 14px  – Primary body text (base font size)     */
+  --text-sub:     0.9375rem;  /* 15px  – Sub-headings, product names            */
   --text-md:      1rem;       /* 16px  – Card titles, section headings          */
   --text-lg:      1.125rem;   /* 18px  – Page section headers                  */
-  --text-xl:      1.125rem;   /* 18px  – Dialog titles, feature headers         */
-  --text-2xl:     1.25rem;    /* 20px  – Stat numbers                          */
-  --text-3xl:     1.5rem;     /* 24px  – Large stat displays                   */
+  --text-xl:      1.25rem;    /* 20px  – Dialog titles, feature headers         */
+  --text-2xl:     1.5rem;     /* 24px  – Stat numbers                          */
+  --text-3xl:     1.875rem;   /* 30px  – Large stat displays                   */
 
   /* === Font Weights ===
      Naming: --weight-{role}
@@ -29,8 +29,8 @@
   --weight-normal:    400;
   --weight-medium:    500;
   --weight-semibold:  600;
-  --weight-bold:      600;
-  --weight-black:     600; 
+  --weight-bold:      700;
+  --weight-black:     800;
 
   /* === Letter Spacing ===
      Naming: --tracking-{role}
@@ -84,7 +84,16 @@
   --chart-4: hsl(250, 10%, 70%);
   --chart-5: hsl(250, 10%, 90%);
 
-  --radius: 0.5rem;
+  --radius: clamp(0.5rem, 1vw, 0.875rem); /* scales 8px→14px with viewport */
+
+  /* All levels use the same base — consistency over hierarchy */
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-3xl: calc(var(--radius) * 2.5);
+  --radius-4xl: 9999px; /* full pill */
 
   --sidebar: hsl(250, 10%, 98%);
   --sidebar-foreground: hsl(250, 10%, 15%);
@@ -134,44 +143,60 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+  --radius-3xl: var(--radius-3xl);
+  --radius-4xl: var(--radius-4xl);
 }
 
 /* ──────────────────────────────────────────────
    4. DARK MODE TOKENS
    ────────────────────────────────────────────── */
 .dark {
-  --muted-foreground: oklch(0.65 0.02 250);
+  --background: hsl(250, 10%, 8%);
+  --foreground: hsl(250, 5%, 92%);
 
-  --accent: oklch(0.97 0.01 250);
-  --accent-foreground: oklch(0.13 0.02 250);
+  --card: hsl(250, 10%, 11%);
+  --card-foreground: hsl(250, 5%, 92%);
 
-  --destructive: oklch(0.6 0.02 25);
+  --popover: hsl(250, 10%, 11%);
+  --popover-foreground: hsl(250, 5%, 92%);
 
-  --border: oklch(0.25 0.02 250);
-  --input: oklch(0.25 0.02 250);
-  --ring: oklch(0.65 0.02 250);
+  --primary: hsl(250, 5%, 90%);
+  --primary-foreground: hsl(250, 10%, 10%);
 
-  --chart-1: oklch(0.97 0.01 250);
-  --chart-2: oklch(0.8 0.02 250);
-  --chart-3: oklch(0.6 0.02 250);
-  --chart-4: oklch(0.4 0.02 250);
-  --chart-5: oklch(0.2 0.02 250);
+  --secondary: hsl(250, 10%, 16%);
+  --secondary-foreground: hsl(250, 5%, 92%);
 
-  --sidebar: oklch(0.15 0.02 250);
-  --sidebar-foreground: oklch(0.97 0.01 250);
-  --sidebar-primary: oklch(0.97 0.01 250);
-  --sidebar-primary-foreground: oklch(0.13 0.02 250);
-  --sidebar-accent: oklch(0.22 0.02 250);
-  --sidebar-accent-foreground: oklch(0.97 0.01 250);
-  --sidebar-border: oklch(0.25 0.02 250);
-  --sidebar-ring: oklch(0.65 0.02 250);
+  --muted: hsl(250, 10%, 16%);
+  --muted-foreground: hsl(250, 5%, 55%);
+
+  --accent: hsl(250, 10%, 18%);
+  --accent-foreground: hsl(250, 5%, 92%);
+
+  --destructive: hsl(25, 70%, 55%);
+
+  --border: hsl(250, 10%, 20%);
+  --input: hsl(250, 10%, 18%);
+  --ring: hsl(250, 5%, 60%);
+
+  --chart-1: hsl(250, 5%, 90%);
+  --chart-2: hsl(250, 5%, 70%);
+  --chart-3: hsl(250, 5%, 50%);
+  --chart-4: hsl(250, 5%, 35%);
+  --chart-5: hsl(250, 5%, 20%);
+
+  --sidebar: hsl(250, 10%, 9%);
+  --sidebar-foreground: hsl(250, 5%, 92%);
+  --sidebar-primary: hsl(250, 5%, 90%);
+  --sidebar-primary-foreground: hsl(250, 10%, 10%);
+  --sidebar-accent: hsl(250, 10%, 16%);
+  --sidebar-accent-foreground: hsl(250, 5%, 92%);
+  --sidebar-border: hsl(250, 10%, 18%);
+  --sidebar-ring: hsl(250, 5%, 60%);
 }
 
 /* ──────────────────────────────────────────────
@@ -184,9 +209,12 @@
 
   html {
     font-family: var(--font-app);
-    font-size: var(--text-default); /* 13px base — all rem units are relative to this */
+    font-size: 16px; /* Standard base — prevents iOS zoom on inputs */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Prevent text size adjustment on orientation change */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
@@ -228,15 +256,17 @@
     font-weight: var(--weight-semibold);
   }
 
-  /* Form elements */
+  /* Form elements — min 16px font-size prevents iOS zoom */
   input, select, textarea {
     font-family: var(--font-app);
-    font-size: var(--text-default);
+    font-size: max(16px, var(--text-default)); /* iOS won't zoom if >= 16px */
+    border-radius: var(--radius-md);
     @apply focus:ring-1 focus:ring-foreground/30 focus:border-foreground/30 outline-none transition-all duration-200;
   }
 
   button {
     font-family: var(--font-app);
+    border-radius: var(--radius-md);
     @apply transition-all duration-200 active:scale-[0.98];
   }
 
@@ -424,4 +454,33 @@
   .status-dot {
     @apply h-1.5 w-1.5 rounded-full;
   }
+}
+
+/* ──────────────────────────────────────────────
+   8. FONT SIZE FLOOR — remap hardcoded tiny sizes
+   Tailwind arbitrary values like text-[8px] generate
+   inline font-size. We override them globally so no
+   text ever renders below 11px regardless of what
+   the component hardcodes.
+   ────────────────────────────────────────────── */
+@layer utilities {
+  /* Anything hardcoded at 8px or 9px → 11px (label floor) */
+  .text-\[8px\]  { font-size: var(--text-label) !important; }
+  .text-\[9px\]  { font-size: var(--text-label) !important; }
+
+  /* 10px → 11px */
+  .text-\[10px\] { font-size: var(--text-label) !important; }
+
+  /* 11px → keep at label size */
+  .text-\[11px\] { font-size: var(--text-label) !important; }
+
+  /* 12px → caption */
+  .text-\[12px\] { font-size: var(--text-caption) !important; }
+
+  /* 13px → body */
+  .text-\[13px\] { font-size: var(--text-body) !important; }
+
+  /* Tailwind named sizes — bump xs and sm slightly */
+  /* text-xs = 12px → 12px (already ok, just ensure min) */
+  /* text-sm = 14px → keep */
 }

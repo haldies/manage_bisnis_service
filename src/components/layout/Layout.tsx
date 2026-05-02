@@ -1,6 +1,5 @@
-"use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 import { AppSidebar } from "./AppSidebar";
 import { Header } from "./Header";
@@ -133,12 +132,12 @@ export function Layout({ children, title, requiredModule, requiredLevel = 'Read'
                    <Package className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <div className="flex-1">
-                   <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-50">Notifikasi Baru</p>
+                   <p className="text-xs font-black uppercase tracking-widest opacity-50">Notifikasi Baru</p>
                    <p className="text-sm font-bold">{toast.message}</p>
                    <div className="flex gap-2 mt-3">
                       <Button 
                         size="sm" 
-                        className="h-8 bg-primary text-primary-foreground text-[10px] font-black uppercase px-4 rounded-lg"
+                        className="h-8 bg-primary text-primary-foreground text-xs font-bold uppercase px-4 rounded-lg"
                         onClick={() => {
                           router.push('/inventory?tab=mutasi');
                           setToast(null);
@@ -149,7 +148,7 @@ export function Layout({ children, title, requiredModule, requiredLevel = 'Read'
                       <Button 
                         variant="ghost" 
                         size="sm" 
-                        className="h-8 text-background/50 hover:text-background hover:bg-white/10 text-[10px] font-black uppercase px-4 rounded-lg"
+                        className="h-8 text-background/50 hover:text-background hover:bg-white/10 text-xs font-bold uppercase px-4 rounded-lg"
                         onClick={() => setToast(null)}
                       >
                          Batal
@@ -162,7 +161,6 @@ export function Layout({ children, title, requiredModule, requiredLevel = 'Read'
 
         <SidebarInset className="flex flex-col flex-1 overflow-hidden min-w-0">
           <Header title={title} />
-
           <main className="flex-1 overflow-y-auto no-scrollbar p-4 lg:p-6 bg-muted/10">
             <div className="max-w-[1600px] mx-auto h-full">
               {children}

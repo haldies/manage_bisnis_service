@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             create: items.map((item: any) => ({
               itemId: (item.id?.startsWith('svc-') || !item.id) ? null : item.id,
               name: item.name,
-              category: item.categoryName || item.category || 'Uncategorized',
+              category: item.categoryName || item.category || '',
               price: item.price,
               costPrice: item.costPrice || 0,
               quantity: item.quantity,

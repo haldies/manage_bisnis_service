@@ -147,7 +147,7 @@ export default function BranchesPage() {
          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogContent className="max-w-md p-0 overflow-hidden rounded-3xl border-none shadow-2xl">
                <div className="bg-foreground p-8 text-background shrink-0">
-                  <DialogTitle className="ui-heading text-2xl tracking-tighter">
+                  <DialogTitle className="text-2xl tracking-tighter">
                      {editingBranch ? 'Update Cabang' : 'Cabang Baru'}
                   </DialogTitle>
                   <DialogDescription className="text-background/60 text-xs mt-1">

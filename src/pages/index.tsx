@@ -1,7 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
-import { ChartAreaInteractive } from "@/components/dashboard/ChartAreaInteractive";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -20,21 +19,17 @@ import {
   Wrench,
   SearchX,
   Clock,
-  ArrowRight,
-  PieChart,
   X,
   Check,
   Printer,
   Share2,
-  Send,
 } from "lucide-react";
 import { usePosStore } from "@/lib/store";
 import { PrinterService } from "@/lib/printerService";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { cn, formatCurrency } from "@/lib/utils";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function UnifiedAppleCashierPage() {
   const { 
@@ -55,26 +50,9 @@ export default function UnifiedAppleCashierPage() {
     selectedPrinter,
     storeProfile,
     receiptSettings,
-    transactions,
     categories,
-    rolePermissions,
   } = usePosStore();
   const router = useRouter();
-
-  const searchParams = useSearchParams();
-  const view = searchParams.get('view');
-  
-  // Managers and Admins can see the report
-  const canSeeReport = currentUser?.role === 'Admin' || (currentUser && rolePermissions[currentUser.role]?.Finance !== 'None');
-  const [showReport, setShowReport] = useState(canSeeReport && view !== 'cashier');
-
-  useEffect(() => {
-    if (view === 'cashier') {
-      setShowReport(false);
-    } else if (canSeeReport && !view) {
-      setShowReport(true);
-    }
-  }, [view, currentUser, canSeeReport]);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
@@ -125,7 +103,8 @@ export default function UnifiedAppleCashierPage() {
         id: item.id,
         name: item.name,
         categoryId: item.categoryId,
-        categoryName: item.category?.name || "Uncategorized",
+        categoryName: item.category?.name || "",
+        category: item.category?.name || "",  // field yang dibaca API saat checkout
         price: item.basePrice,
         costPrice: item.costPrice,
         stock: totalStock,
@@ -228,115 +207,8 @@ export default function UnifiedAppleCashierPage() {
     }
   };
 
-  const stats = useMemo(() => {
-    const branchTransactions = currentBranch 
-      ? transactions.filter(tx => tx.branchId === currentBranch.id)
-      : transactions;
-
-    const revenue = branchTransactions.reduce((sum, tx) => sum + tx.total, 0);
-    let totalCost = 0;
-    branchTransactions.forEach(tx => {
-      tx.items.forEach(item => {
-        const invItem = inventory.find(i => i.id === (item.itemId || item.id));
-        totalCost += (invItem?.costPrice || 0) * item.quantity;
-      });
-    });
-    const profit = revenue - totalCost;
-    return { revenue, profit, totalOrders: branchTransactions.length };
-  }, [transactions, inventory, currentBranch]);
-
-  const categoryStats = useMemo(() => {
-    const catData: Record<string, number> = {};
-    transactions.forEach(tx => {
-      tx.items.forEach(item => {
-        const catName = item.category || 'Uncategorized';
-        catData[catName] = (catData[catName] || 0) + (item.price * item.quantity);
-      });
-    });
-    return Object.entries(catData).sort((a, b) => b[1] - a[1]);
-  }, [transactions]);
-
-  if (canSeeReport && showReport) {
-    return (
-      <Layout title="Laporan & Analisis" requiredModule="Finance" requiredLevel="Read">
-        <div className="space-y-6 animate-in fade-in duration-700 pb-20">
-          <div className="flex justify-between items-center">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-              <Card className="overflow-hidden border border-border/40">
-                <CardContent>
-                  <p className="ui-label mb-1">Total Pendapatan</p>
-                  <h2 className="ui-stat-lg">{formatCurrency(stats.revenue)}</h2>
-                </CardContent>
-              </Card>
-              <Card className="overflow-hidden bg-foreground text-background border-none">
-                <CardContent>
-                  <p className="ui-label text-background/60 mb-1">Estimasi Laba</p>
-                  <h2 className="ui-stat-lg">{formatCurrency(stats.profit)}</h2>
-                </CardContent>
-              </Card>
-              <Card className="overflow-hidden border border-border/40">
-                <CardContent>
-                  <p className="ui-label mb-1">Total Transaksi</p>
-                  <h2 className="ui-stat-lg">{stats.totalOrders} <span className="ui-caption not-">Transaksi</span></h2>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* Interactive Area Chart */}
-          <div className="w-full">
-            <ChartAreaInteractive />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-             <Card className="overflow-hidden">
-               <CardHeader className="flex flex-row items-center justify-between">
-                 <CardTitle className="text-base font-black uppercase  flex items-center gap-3">
-                   <PieChart className="h-5 w-5 text-foreground" /> Penjualan Per Kategori
-                 </CardTitle>
-               </CardHeader>
-               <CardContent className="px-8 pb-8 pt-4">
-                  <div className="space-y-6">
-                    {categoryStats.map(([cat, revenue]) => {
-                      const percentage = (revenue / stats.revenue) * 100;
-                      return (
-                        <div key={cat} className="space-y-2">
-                          <div className="flex justify-between items-end">
-                             <p className="ui-body-bold">{cat}</p>
-                             <p className="ui-label">{formatCurrency(revenue)}</p>
-                          </div>
-                          <div className="h-2 w-full bg-muted/40 rounded-full overflow-hidden">
-                             <div className="h-full bg-foreground rounded-full" style={{ width: `${percentage}%` }}></div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-               </CardContent>
-             </Card>
-
-             <Card className="overflow-hidden">
-                <CardContent className="flex flex-col items-center justify-center text-center space-y-6 h-full py-12">
-                   <div className="h-16 w-16 rounded-2xl bg-muted/20 flex items-center justify-center">
-                      <ShoppingCart className="h-8 w-8 text-foreground/20" />
-                   </div>
-                   <div>
-                      <h3 className="ui-title">Mode Kasir (POS)</h3>
-                      <p className="ui-caption mt-1 max-w-xs">Anda sedang melihat laporan. Gunakan tombol di bawah untuk beralih ke mode transaksi.</p>
-                   </div>
-                   <Button onClick={() => setShowReport(false)} className="rounded-xl px-8 font-medium text-sm h-11">
-                      Buka Kasir <ArrowRight className="ml-2 h-4 w-4" />
-                   </Button>
-                </CardContent>
-             </Card>
-          </div>
-        </div>
-      </Layout>
-    );
-  }
-
   return (
-    <Layout title="Kasir Terpadu" requiredModule="Cashier" requiredLevel="Read">
+    <Layout title="Kasir" requiredModule="Cashier" requiredLevel="Read">
       <div className="flex flex-col lg:flex-row gap-6 animate-in fade-in duration-500">
         
         {/* Main Content Area */}
@@ -369,8 +241,8 @@ export default function UnifiedAppleCashierPage() {
             </div>
           </div>
 
-          {/* Category Tabs - Minimalist Style */}
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar border-b border-border/5 px-2 py-1">
+          {/* Category Tabs */}
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar px-2 pb-1">
             {categories.map((cat: any) => {
               const isActive = selectedCategoryId === cat.id;
               return (
@@ -378,10 +250,10 @@ export default function UnifiedAppleCashierPage() {
                   key={cat.id}
                   onClick={() => setSelectedCategoryId(cat.id)}
                   className={cn(
-                    "px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-200 whitespace-nowrap",
-                    isActive 
-                      ? "bg-foreground text-background shadow-lg shadow-foreground/10" 
-                      : "bg-muted/30 text-muted-foreground/60 hover:bg-muted/50 hover:text-foreground/80"
+                    "px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide transition-all duration-200 whitespace-nowrap shrink-0",
+                    isActive
+                      ? "bg-foreground text-background shadow-sm"
+                      : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
                   )}
                 >
                   {cat.name}
@@ -434,54 +306,52 @@ export default function UnifiedAppleCashierPage() {
 
           {!(categories as any[]).find((c: any) => c.id === selectedCategoryId)?.name?.toLowerCase().includes('service') && (
             filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3 pb-10">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 pb-10">
                 {filteredProducts.map((product) => (
-                  <Card 
-                    key={product.id} 
-                    className="group relative overflow-hidden border border-border/20 bg-card rounded-xl shadow-sm active:scale-[0.98] cursor-pointer transition-all duration-300 hover:border-primary/20 hover:bg-muted/5"
+                  <Card
+                    key={product.id}
+                    className="group relative overflow-hidden border border-border/20 bg-card rounded-xl shadow-sm active:scale-[0.98] cursor-pointer transition-all duration-200 hover:border-border/60 hover:shadow-md"
                     onClick={() => addToCart(product as any)}
                   >
-                    <div className="aspect-square bg-[#fbfbfb] flex items-center justify-center relative overflow-hidden group">
+                    <div className="aspect-square bg-muted/20 flex items-center justify-center relative overflow-hidden">
                        {product.image ? (
-                         <img 
-                           src={product.image} 
-                           alt={product.name} 
-                           className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                         <img
+                           src={product.image}
+                           alt={product.name}
+                           className="w-full h-full object-contain p-3 transition-transform duration-300 group-hover:scale-105"
                          />
                        ) : (
-                         <div className="opacity-10 scale-100">
-                           {product.categoryName === 'iPhone' && <Smartphone className="h-10 w-10" />}
-                           {product.categoryName === 'MacBook' && <Laptop className="h-10 w-10" />}
-                           {product.categoryName === 'iPad' && <Tablet className="h-10 w-10" />}
-                           {product.categoryName === 'Sparepart' && <Wrench className="h-10 w-10" />}
-                           {!['iPhone', 'MacBook', 'iPad', 'Sparepart'].includes(product.categoryName) && <Plus className="h-10 w-10" />}
+                         <div className="opacity-10">
+                           {product.categoryName === 'iPhone' && <Smartphone className="h-12 w-12" />}
+                           {product.categoryName === 'MacBook' && <Laptop className="h-12 w-12" />}
+                           {product.categoryName === 'iPad' && <Tablet className="h-12 w-12" />}
+                           {product.categoryName === 'Sparepart' && <Wrench className="h-12 w-12" />}
+                           {!['iPhone', 'MacBook', 'iPad', 'Sparepart'].includes(product.categoryName) && <Plus className="h-12 w-12" />}
                          </div>
                        )}
-                       
+
                        {/* Stock Badge */}
                        <div className={cn(
-                         "absolute top-2 left-2 px-1.5 py-0.5 rounded-md text-[7px] font-black uppercase tracking-widest backdrop-blur-md z-10",
-                         product.stock > 5 ? "bg-background/90 text-muted-foreground border border-border/10" : 
-                         product.stock > 0 ? "bg-warning text-warning-foreground" : 
-                         "bg-destructive text-destructive-foreground"
+                         "absolute top-2 left-2 px-2 py-0.5 rounded-md text-[10px] font-bold backdrop-blur-md z-10",
+                         product.stock > 5 ? "bg-background/80 text-muted-foreground border border-border/20" :
+                         product.stock > 0 ? "bg-amber-100 text-amber-700 border border-amber-200" :
+                         "bg-red-100 text-red-600 border border-red-200"
                        )}>
-                         {product.stock > 0 ? `Stock: ${product.stock}` : "Habis"}
+                         {product.stock > 0 ? `Stok: ${product.stock}` : "Habis"}
                        </div>
 
-                        {cart.some((i: any) => i.id === product.id) && (
-                         <div className="absolute top-2 right-2 bg-foreground text-background p-1 rounded-full shadow-lg animate-in zoom-in spin-in z-10">
-                           <Check className="h-2.5 w-2.5" />
+                       {cart.some((i: any) => i.id === product.id) && (
+                         <div className="absolute top-2 right-2 bg-foreground text-background p-1 rounded-full shadow-md z-10">
+                           <Check className="h-3 w-3" />
                          </div>
                        )}
                     </div>
-                    <CardContent className="p-3 space-y-2">
-                      <div className="min-h-[2.8rem]">
-                        <p className="text-[8px] font-bold text-primary/60 uppercase tracking-widest mb-0.5">{product.categoryName}</p>
-                        <h4 className="font-bold text-[11px] line-clamp-2 leading-snug text-foreground/80">{product.name}</h4>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <p className="text-foreground text-[11px] font-black tracking-tight">{formatCurrency(product.price)}</p>
-                        <div className="h-7 w-7 rounded-lg bg-foreground text-background flex items-center justify-center shadow-sm active:scale-90 transition-all duration-300 group-hover:bg-primary">
+                    <CardContent className="p-3 space-y-1.5">
+                      <p className="text-xs font-medium text-muted-foreground truncate">{product.categoryName}</p>
+                      <h4 className="font-semibold text-sm leading-snug line-clamp-2 text-foreground">{product.name}</h4>
+                      <div className="flex items-center justify-between pt-1">
+                        <p className="text-sm font-bold text-foreground">{formatCurrency(product.price)}</p>
+                        <div className="h-7 w-7 rounded-lg bg-foreground text-background flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
                           <Plus className="h-3.5 w-3.5" />
                         </div>
                       </div>
@@ -645,32 +515,38 @@ function CartContentSection({
           ) : (
              cart.map((item: any) => (
                <div key={item.id} className="flex gap-3 animate-in slide-in-from-right-2">
-                 <div className="h-16 w-16 rounded-[18px] bg-muted/40 border border-border/10 overflow-hidden shrink-0 flex items-center justify-center p-2">
+                 <div className="h-14 w-14 rounded-xl bg-muted/30 border border-border/10 overflow-hidden shrink-0 flex items-center justify-center">
                     {item.image ? (
-                      <img src={item.image} className="max-w-full max-h-full object-contain drop-shadow-md" />
+                      <img src={item.image} className="w-full h-full object-contain p-1.5" alt={item.name} />
                     ) : (
-                      <Smartphone className="h-full w-full p-2 opacity-20" />
+                      <Smartphone className="h-6 w-6 opacity-20" />
                     )}
                  </div>
-                 <div className="flex-1 min-w-0 flex flex-col justify-between">
-                    <div className="flex justify-between items-start">
-                       <h5 className="text-[11px] font-bold leading-tight truncate pr-2">{item.name}</h5>
-                       <button onClick={() => removeFromCart(item.id)}>
-                         <X className="h-3 w-3 text-muted-foreground/30 hover:text-destructive transition-colors" />
+                 <div className="flex-1 min-w-0 flex flex-col justify-between gap-1.5">
+                    <div className="flex justify-between items-start gap-2">
+                       <h5 className="text-sm font-semibold leading-tight line-clamp-2 flex-1">{item.name}</h5>
+                       <button onClick={() => removeFromCart(item.id)} className="shrink-0 mt-0.5">
+                         <X className="h-3.5 w-3.5 text-muted-foreground/40 hover:text-destructive transition-colors" />
                        </button>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
-                       <div className="flex items-center gap-2 bg-muted/30 rounded-lg p-0.5">
-                          <button className="h-5 w-5 flex items-center justify-center hover:bg-white rounded-md transition-all shadow-sm" onClick={() => updateCartQuantity(item.id, item.quantity - 1)}>
-                            <Minus className="h-2 w-2" />
+                       <div className="flex items-center gap-1 bg-muted/40 rounded-lg p-0.5">
+                          <button
+                            className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-background transition-colors"
+                            onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
+                          >
+                            <Minus className="h-3 w-3" />
                           </button>
-                          <span className="text-[10px] font-bold min-w-[12px] text-center">{item.quantity}</span>
-                          <button className="h-5 w-5 flex items-center justify-center hover:bg-white rounded-md transition-all shadow-sm text-primary" onClick={() => updateCartQuantity(item.id, item.quantity + 1)}>
-                            <Plus className="h-2 w-2" />
+                          <span className="text-sm font-bold min-w-[20px] text-center">{item.quantity}</span>
+                          <button
+                            className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-background transition-colors"
+                            onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
+                          >
+                            <Plus className="h-3 w-3" />
                           </button>
                        </div>
-                       <p className="text-[11px] font-bold text-foreground/80">{formatCurrency(item.price * item.quantity)}</p>
+                       <p className="text-sm font-bold">{formatCurrency(item.price * item.quantity)}</p>
                     </div>
                  </div>
                </div>

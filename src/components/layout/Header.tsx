@@ -51,15 +51,15 @@ export function Header({
                  <User className="h-4 w-4 text-foreground" />
               </div>
               <div className="flex flex-col items-start leading-none hidden md:flex">
-                 <span className="text-[10px] font-black uppercase tracking-tight">{currentUser?.name || 'User'}</span>
-                 <span className="text-[8px] font-bold opacity-40 uppercase">{currentUser?.role || 'Guest'}</span>
+                 <span className="text-xs font-bold">{currentUser?.name || 'User'}</span>
+                 <span className="text-[10px] font-medium opacity-40">{currentUser?.role || 'Guest'}</span>
               </div>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2 shadow-2xl border-border/40">
             <DropdownMenuLabel className="px-3 py-2">
-               <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Akun Saya</p>
-               <p className="text-xs font-bold mt-1">{currentUser?.email || 'No Email'}</p>
+               <p className="text-xs font-bold uppercase tracking-widest opacity-40">Akun Saya</p>
+               <p className="text-sm font-bold mt-1">{currentUser?.email || 'No Email'}</p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="my-2 opacity-50" />
             <DropdownMenuItem 
