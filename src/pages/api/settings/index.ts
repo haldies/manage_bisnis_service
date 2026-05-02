@@ -60,11 +60,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(200).json(settings);
     } catch (error: any) {
       console.error('Save Settings Error:', error);
-      // Log to a file for debugging in this environment
-      const fs = require('fs');
-      const logEntry = `[${new Date().toISOString()}] SAVE ERROR: ${error.message}\nSTACK: ${error.stack}\nBODY: ${JSON.stringify(req.body)}\n\n`;
-      fs.appendFileSync('api-error.log', logEntry);
-      
       return res.status(500).json({ 
         message: 'Error saving settings', 
         detail: error.message,

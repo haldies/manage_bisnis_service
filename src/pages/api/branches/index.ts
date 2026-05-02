@@ -9,8 +9,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const decoded: any = verifyToken(token);
   if (!decoded) return res.status(401).json({ error: 'Invalid token' });
 
-  // Only Admin should manage branches
-  if (decoded.role !== 'Admin') {
+  // GET: semua role boleh baca branches
+  // POST/PUT/DELETE: hanya Admin
+  if (req.method !== 'GET' && decoded.role !== 'Admin') {
     return res.status(403).json({ error: 'Forbidden. Only Admin can manage branches.' });
   }
 
