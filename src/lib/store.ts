@@ -573,9 +573,12 @@ export const usePosStore = create<PosState>()(
           const res = await fetch('/api/inventory', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...item, initialStock: 0 })
+            body: JSON.stringify(item)
           });
-          if (!res.ok) throw new Error("Add item failed");
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.message || "Add item failed");
+          }
           const newItem = await res.json();
           set((state) => ({
             inventory: [...state.inventory, newItem],

@@ -23,8 +23,9 @@ import { Plus, Package, DollarSign, Tag, Layers, Box } from "lucide-react";
 import { usePosStore } from "@/lib/store";
 
 export function AddProductDialog() {
-  const { addInventoryItem, addStock, currentBranch, branches } = usePosStore();
+  const { addInventoryItem, currentBranch, branches, categories } = usePosStore();
   const [isOpen, setIsOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Form State
   const [newItem, setNewItem] = useState({
@@ -38,10 +39,15 @@ export function AddProductDialog() {
   });
 
   const handleAddItem = async () => {
-    if (!newItem.name || !newItem.sku) return;
+    setError(null);
+    if (!newItem.name || !newItem.sku || !newItem.categoryId) {
+      setError("Nama, SKU, dan Kategori wajib diisi.");
+      return;
+    }
 
     try {
-      const itemId = await addInventoryItem({
+      const branchId = currentBranch?.id || branches[0]?.id || null;
+      await addInventoryItem({
         name: newItem.name,
         sku: newItem.sku,
         categoryId: newItem.categoryId,
@@ -49,19 +55,9 @@ export function AddProductDialog() {
         costPrice: Number(newItem.costPrice),
         basePrice: Number(newItem.basePrice),
         unit: "pcs",
-        dateAdded: Date.now()
-      });
-
-      if (Number(newItem.initialStock) > 0) {
-        const targetBranchId = currentBranch?.id || branches[0]?.id || "b1";
-        addStock({
-          itemId,
-          branchId: targetBranchId,
-          quantity: Number(newItem.initialStock),
-          reservedQty: 0,
-          minStock: 5
-        });
-      }
+        branchId,
+        initialStock: Number(newItem.initialStock),
+      } as any);
 
       setNewItem({ 
         name: "", 
@@ -73,8 +69,9 @@ export function AddProductDialog() {
         initialStock: "0" 
       });
       setIsOpen(false);
-    } catch (error) {
-      console.error("Failed to add product:", error);
+    } catch (err: any) {
+      console.error("Failed to add product:", err);
+      setError(err?.message || "Gagal menambahkan produk. Coba lagi.");
     }
   };
 
@@ -130,14 +127,18 @@ export function AddProductDialog() {
               </Label>
               <Select value={newItem.categoryId} onValueChange={(val) => setNewItem({...newItem, categoryId: val})}>
                 <SelectTrigger className="h-12 bg-muted/30 border-none rounded-xl font-bold uppercase text-[10px]">
-                  <SelectValue />
+                  <SelectValue placeholder="Pilih kategori" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl">
-                  <SelectItem value="iPhone">iPhone</SelectItem>
-                  <SelectItem value="MacBook">MacBook</SelectItem>
-                  <SelectItem value="iPad">iPad</SelectItem>
-                  <SelectItem value="Sparepart">Sparepart</SelectItem>
-                  <SelectItem value="Service">Service</SelectItem>
+                  {categories.length > 0 ? (
+                    categories.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="" disabled>Tidak ada kategori</SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -192,6 +193,9 @@ export function AddProductDialog() {
           </div>
 
           <DialogFooter className="pt-4 gap-3 sm:gap-0">
+             {error && (
+               <p className="text-xs text-red-500 font-semibold w-full text-center mb-2">{error}</p>
+             )}
              <Button variant="ghost" className="h-12 flex-1 rounded-2xl font-black uppercase tracking-widest text-[10px]" onClick={() => setIsOpen(false)}>
                Batal
              </Button>
