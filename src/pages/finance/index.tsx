@@ -132,7 +132,7 @@ export default function LaporanDashboard() {
         {/* Filter Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card/30 p-4 rounded-2xl border border-border/10">
           <div className="flex items-center gap-3">
-             { (currentUser?.role?.name === 'Admin' || currentUser?.role?.name === 'Owner') && (
+             { (currentUser?.role?.name === 'Owner') && (
                 <Select 
                   value={currentBranch?.id || 'global'} 
                   onValueChange={(value) => setBranch(value === 'global' ? null : value)}

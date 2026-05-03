@@ -8,6 +8,50 @@ import {
   InventoryUnit, StockTransferStatus, BonusPool
 } from './types';
 
+/**
+ * Resolve a user's access level for a given module.
+ * Checks store rolePermissions first, then falls back to the granular
+ * permissions embedded in the user's role object (from login response).
+ */
+export function getUserAccessLevel(
+  user: User | null,
+  module: ModuleName,
+  rolePermissions: Record<string, Record<ModuleName, AccessLevel>>
+): AccessLevel {
+  if (!user) return 'None';
+  if (user.role?.name === 'Owner') return 'Full';
+
+  // 1. Store rolePermissions (populated after fetchRoles)
+  const storePerms = rolePermissions[user.role?.name || ''];
+  if (storePerms?.[module]) return storePerms[module];
+
+  // 2. Granular permissions on the user object (from login API response)
+  const rolePerm = (user.role as any)?.permissions;
+  if (Array.isArray(rolePerm)) {
+    const p = rolePerm.find((p: any) => p.module === module);
+    if (p) {
+      if (p.canCreate || p.canUpdate || p.canDelete) return 'Full';
+      if (p.canRead) return 'Read';
+    }
+  }
+
+  return 'None';
+}
+
+/**
+ * Returns true if the user has at least the required access level for a module.
+ */
+export function hasModuleAccess(
+  user: User | null,
+  module: ModuleName,
+  requiredLevel: AccessLevel,
+  rolePermissions: Record<string, Record<ModuleName, AccessLevel>>
+): boolean {
+  const levels: AccessLevel[] = ['None', 'Read', 'Full'];
+  const userLevel = getUserAccessLevel(user, module, rolePermissions);
+  return levels.indexOf(userLevel) >= levels.indexOf(requiredLevel);
+}
+
 
 export type Product = {
   id: string;
@@ -148,10 +192,10 @@ interface PosState {
   updateLeaveRequest: (id: string, updates: any) => Promise<void>;
   addOvertime: (overtime: any) => Promise<void>;
   updateOvertime: (id: string, updates: any) => Promise<void>;
-  updateRolePermission: (roleName: string, module: ModuleName, level: AccessLevel) => void;
-  addRole: (role: string) => void;
-  deleteRole: (role: string) => void;
-  renameRole: (oldRole: string, newRole: string) => void;
+  updateRolePermission: (roleName: string, module: ModuleName, level: AccessLevel) => Promise<void>;
+  addRole: (role: string) => Promise<void>;
+  deleteRole: (role: string) => Promise<void>;
+  renameRole: (oldRole: string, newRole: string) => Promise<void>;
   
   addServiceType: (type: Omit<ServiceType, 'id'>) => Promise<void>;
   updateServiceType: (id: string, updates: Partial<ServiceType>) => Promise<void>;
@@ -236,9 +280,9 @@ export const usePosStore = create<PosState>()(
       deviceModels: [],
       roles: [],
       rolePermissions: {
-        'Owner': { 'Cashier': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Full', 'Staff': 'Full', 'Transactions': 'Full', 'Printers': 'Full' },
-        'Editor': { 'Cashier': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Read', 'Staff': 'Read', 'Transactions': 'Full', 'Printers': 'Full' },
-        'Viewer': { 'Cashier': 'Read', 'Service': 'Read', 'Inventory': 'Read', 'Finance': 'Read', 'Staff': 'Read', 'Transactions': 'Read', 'Printers': 'Read' }
+        'Owner':  { 'Cashier': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Full', 'Staff': 'Full', 'Transactions': 'Full', 'Printers': 'Full' },
+        'Editor': { 'Cashier': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Read', 'Staff': 'Full', 'Transactions': 'Full', 'Printers': 'Full' },
+        'Viewer': { 'Cashier': 'Read', 'Service': 'Read', 'Inventory': 'Read', 'Finance': 'Read', 'Staff': 'Read', 'Transactions': 'Read', 'Printers': 'None' }
       },
 
       // --- GENERAL ACTIONS ---
@@ -277,6 +321,34 @@ export const usePosStore = create<PosState>()(
           if (res.ok) {
             const data = await res.json();
             set({ roles: data });
+
+            // Build rolePermissions from DB data so any role (Cashier, Technician, etc.)
+            // is automatically registered — no more hardcoded role names needed.
+            const MODULES: ModuleName[] = ['Cashier', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Printers'];
+            const built: Record<string, Record<ModuleName, AccessLevel>> = {};
+
+            for (const role of data) {
+              const perms: Record<ModuleName, AccessLevel> = {} as any;
+              for (const mod of MODULES) {
+                const p = role.permissions?.find((p: any) => p.module === mod);
+                if (!p) {
+                  perms[mod] = 'None';
+                } else if (p.canCreate || p.canUpdate || p.canDelete) {
+                  perms[mod] = 'Full';
+                } else if (p.canRead) {
+                  perms[mod] = 'Read';
+                } else {
+                  perms[mod] = 'None';
+                }
+              }
+              built[role.name] = perms;
+            }
+
+            // Merge: DB roles take priority, keep hardcoded defaults as fallback
+            // for roles that exist in store but not yet in DB
+            set((state) => ({
+              rolePermissions: { ...state.rolePermissions, ...built }
+            }));
           }
         } catch (error) {
           console.error("Failed to fetch roles", error);
@@ -407,8 +479,9 @@ export const usePosStore = create<PosState>()(
             const branch = data.user.branchId 
               ? get().branches.find(b => b.id === data.user.branchId) || null 
               : null;
-              
-            set({ currentUser: data.user, currentBranch: branch });
+            
+            // Reset lastFetched so _app.tsx triggers a fresh fetchInitialData after login
+            set({ currentUser: data.user, currentBranch: branch, lastFetched: null });
             return true;
           }
           return false;
@@ -418,7 +491,7 @@ export const usePosStore = create<PosState>()(
         }
       },
 
-      logout: () => set({ currentUser: null, currentBranch: null }),
+      logout: () => set({ currentUser: null, currentBranch: null, lastFetched: null }),
 
       setBranch: (branchId: string | null) => {
 
@@ -882,7 +955,8 @@ export const usePosStore = create<PosState>()(
         }
       },
 
-      updateRolePermission: (roleName: string, module: ModuleName, level: AccessLevel) => {
+      updateRolePermission: async (roleName: string, module: ModuleName, level: AccessLevel) => {
+        // Optimistic local update
         set((state) => ({
           rolePermissions: {
             ...state.rolePermissions,
@@ -892,38 +966,96 @@ export const usePosStore = create<PosState>()(
             }
           }
         }));
+
+        // Persist to DB
+        try {
+          const role = get().roles.find((r: any) => r.name === roleName);
+          if (!role) return;
+          await fetch(`/api/roles/${role.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ permissions: [{ module, level }] }),
+          });
+        } catch (error) {
+          console.error('Error saving permission to DB:', error);
+        }
       },
 
-      addRole: (roleName: string) => {
-        set((state) => ({
-          rolePermissions: {
-            ...state.rolePermissions,
-            [roleName]: {
-              'Cashier': 'None', 'Service': 'None', 'Inventory': 'None', 'Finance': 'None', 'Staff': 'None', 'Transactions': 'None', 'Printers': 'None'
-            }
+      addRole: async (roleName: string) => {
+        try {
+          const res = await fetch('/api/roles', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: roleName }),
+          });
+          if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.message || 'Failed to create role');
           }
-        }));
+          const newRole = await res.json();
+          // Add to roles list and build empty rolePermissions entry
+          set((state) => ({
+            roles: [...state.roles, newRole],
+            rolePermissions: {
+              ...state.rolePermissions,
+              [roleName]: {
+                'Cashier': 'None', 'Service': 'None', 'Inventory': 'None',
+                'Finance': 'None', 'Staff': 'None', 'Transactions': 'None', 'Printers': 'None'
+              }
+            }
+          }));
+        } catch (error) {
+          console.error('Error adding role:', error);
+          throw error;
+        }
       },
 
-      deleteRole: (roleName: string) => {
-        set((state) => {
-          const { [roleName]: deleted, ...rest } = state.rolePermissions;
-          return { rolePermissions: rest };
-        });
+      deleteRole: async (roleName: string) => {
+        try {
+          const role = get().roles.find((r: any) => r.name === roleName);
+          if (!role) return;
+          const res = await fetch(`/api/roles/${role.id}`, { method: 'DELETE' });
+          if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.message || 'Failed to delete role');
+          }
+          set((state) => {
+            const { [roleName]: deleted, ...rest } = state.rolePermissions;
+            return {
+              roles: state.roles.filter((r: any) => r.id !== role.id),
+              rolePermissions: rest,
+            };
+          });
+        } catch (error) {
+          console.error('Error deleting role:', error);
+          throw error;
+        }
       },
 
-      renameRole: (oldName: string, newName: string) => {
+      renameRole: async (oldName: string, newName: string) => {
+        // Optimistic local update
         set((state) => {
           const permissions = state.rolePermissions[oldName];
           if (!permissions) return state;
           const { [oldName]: removed, ...rest } = state.rolePermissions;
           return {
-            rolePermissions: {
-              ...rest,
-              [newName]: permissions
-            }
+            roles: state.roles.map((r: any) => r.name === oldName ? { ...r, name: newName } : r),
+            rolePermissions: { ...rest, [newName]: permissions },
           };
         });
+
+        // Persist to DB
+        try {
+          const role = get().roles.find((r: any) => r.name === newName); // already renamed in state
+          if (!role) return;
+          await fetch(`/api/roles/${role.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: newName }),
+          });
+        } catch (error) {
+          console.error('Error renaming role in DB:', error);
+        }
       },
 
       addStock: async (stock) => {
@@ -1278,8 +1410,16 @@ export const usePosStore = create<PosState>()(
       name: 'kasirai-pos-storage',
       storage: createJSONStorage(() => localStorage),
       version: 2,
-      onRehydrateStorage: (state) => {
-        return () => state.setHasHydrated(true);
+      onRehydrateStorage: () => {
+        return (state, error) => {
+          if (error) {
+            console.error('Zustand rehydration error:', error);
+          }
+          // state can be undefined if rehydration fails — always mark hydrated
+          if (state) {
+            state.setHasHydrated(true);
+          }
+        };
       }
     }
 

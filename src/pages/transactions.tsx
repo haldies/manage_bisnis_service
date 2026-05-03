@@ -14,7 +14,7 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { usePosStore } from "@/lib/store";
+import { usePosStore, hasModuleAccess } from "@/lib/store";
 import { formatCurrency, formatDate, cn } from "@/lib/utils";
 import { 
   Search, ReceiptText, Calendar, Eye, User, MapPin, Phone, ShoppingCart, Wrench,
@@ -30,7 +30,7 @@ import { startOfMonth, endOfMonth, isWithinInterval, startOfDay, endOfDay } from
 
 export default function TransactionsPage() {
   const { transactions, users, currentUser, currentBranch, updateTransaction, deleteTransaction, rolePermissions } = usePosStore();
-  const hasFullAccess = currentUser?.role?.name ? rolePermissions[currentUser.role.name]?.Transactions === 'Full' : false;
+  const hasFullAccess = hasModuleAccess(currentUser, 'Transactions', 'Full', rolePermissions);
   const [search, setSearch] = useState("");
   const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
   const [editTx, setEditTx] = useState<Transaction | null>(null);
@@ -47,7 +47,7 @@ export default function TransactionsPage() {
     notes: "",
   });
 
-  const isAdmin = currentUser?.role?.name === 'Owner' || currentUser?.role?.name === 'Admin' || currentUser?.roleId === 'owner-role-id';
+  const isAdmin = currentUser?.role?.name === 'Owner';
 
   const filtered = useMemo(() => {
     let list = transactions;

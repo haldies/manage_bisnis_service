@@ -35,9 +35,9 @@ const NAV_GROUPS: {
     items: [
       { label: "Inventori", href: "/inventory", icon: Package, module: "Inventory", requiredLevel: "Read" },
       { label: "Staf & Payroll", href: "/staff", icon: Users, module: "Staff", requiredLevel: "Read" },
-      { label: "Cabang", href: "/branches", icon: MapPin, module: "Finance", requiredLevel: "Full" },
+      { label: "Cabang", href: "/branches", icon: MapPin, module: "Staff", requiredLevel: "Full" },
       { label: "Laporan", href: "/finance", icon: LineChart, module: "Finance", requiredLevel: "Read" },
-      { label: "Printer", href: "/manage-printers", icon: Printer, module: "Printers", requiredLevel: "Read" },
+      { label: "Printer", href: "/manage-printers", icon: Printer, module: "Printers", requiredLevel: "Full" },
     ],
   },
 ];
@@ -50,10 +50,29 @@ export function AppSidebar() {
   const isModuleAllowed = (module: ModuleName, requiredLevel: AccessLevel = "Read") => {
     if (!currentUser) return false;
     if (currentUser.role?.name === "Owner") return true;
-    const permissions = rolePermissions[currentUser.role?.name || ""];
-    const userLevel = permissions?.[module] || "None";
-    const levels: AccessLevel[] = ["None", "Read", "Full"];
-    return levels.indexOf(userLevel) >= levels.indexOf(requiredLevel);
+
+    // 1. Check store rolePermissions (populated after fetchRoles)
+    const storePerms = rolePermissions[currentUser.role?.name || ""];
+    if (storePerms?.[module]) {
+      const userLevel = storePerms[module];
+      const levels: AccessLevel[] = ["None", "Read", "Full"];
+      return levels.indexOf(userLevel) >= levels.indexOf(requiredLevel);
+    }
+
+    // 2. Fallback: derive from granular permissions on the user object
+    const rolePerm = (currentUser.role as any)?.permissions;
+    if (Array.isArray(rolePerm) && rolePerm.length > 0) {
+      const p = rolePerm.find((p: any) => p.module === module);
+      if (p) {
+        let userLevel: AccessLevel = "None";
+        if (p.canCreate || p.canUpdate || p.canDelete) userLevel = "Full";
+        else if (p.canRead) userLevel = "Read";
+        const levels: AccessLevel[] = ["None", "Read", "Full"];
+        return levels.indexOf(userLevel) >= levels.indexOf(requiredLevel);
+      }
+    }
+
+    return false;
   };
 
   // Determine current effective open state

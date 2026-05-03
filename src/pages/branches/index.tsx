@@ -85,7 +85,7 @@ export default function BranchesPage() {
    };
 
    return (
-      <Layout title="Manajemen Cabang" requiredModule="Finance" requiredLevel="Full">
+      <Layout title="Manajemen Cabang" requiredModule="Staff" requiredLevel="Full">
          <div className="space-y-6 animate-in fade-in duration-500">
             <div className="flex justify-between items-center">
                <div>

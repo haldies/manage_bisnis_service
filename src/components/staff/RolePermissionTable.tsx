@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Role, ModuleName, AccessLevel } from "@/lib/types";
 import { useState } from "react";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, Loader2 } from "lucide-react";
 import { usePosStore } from "@/lib/store";
 
 interface RolePermissionTableProps {
@@ -17,24 +17,38 @@ const MODULES: ModuleName[] = ['Cashier', 'Service', 'Inventory', 'Finance', 'St
 
 export function RolePermissionTable({ rolePermissions, updateRolePermission }: RolePermissionTableProps) {
   const { addRole, deleteRole, renameRole } = usePosStore();
-  
+
   const [newRoleName, setNewRoleName] = useState("");
   const [editingRole, setEditingRole] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
+  const [savingCell, setSavingCell] = useState<string | null>(null); // "roleName:module"
+  const [error, setError] = useState<string | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
 
-  // Daftar role dinamis diambil langsung dari store, kecuali Admin yang sifatnya absolut
   const allRoles = Object.keys(rolePermissions || {}).filter(roleName => roleName !== 'Admin');
 
-  const handleAddRole = () => {
+  const handleAddRole = async () => {
     const trimmed = newRoleName.trim();
     if (!trimmed || allRoles.includes(trimmed) || trimmed === 'Admin') return;
-    addRole(trimmed);
-    setNewRoleName("");
+    setIsAdding(true);
+    setError(null);
+    try {
+      await addRole(trimmed);
+      setNewRoleName("");
+    } catch (e: any) {
+      setError(e.message || 'Gagal menambahkan role');
+    } finally {
+      setIsAdding(false);
+    }
   };
 
-  const handleDeleteRole = (role: string) => {
-    if (confirm(`Apakah Anda yakin ingin menghapus role "${role}"?`)) {
-      deleteRole(role);
+  const handleDeleteRole = async (role: string) => {
+    if (!confirm(`Apakah Anda yakin ingin menghapus role "${role}"?`)) return;
+    setError(null);
+    try {
+      await deleteRole(role);
+    } catch (e: any) {
+      setError(e.message || 'Gagal menghapus role');
     }
   };
 
@@ -43,13 +57,31 @@ export function RolePermissionTable({ rolePermissions, updateRolePermission }: R
     setEditingName(role);
   };
 
-  const handleFinishEdit = () => {
+  const handleFinishEdit = async () => {
     const trimmed = editingName.trim();
     if (trimmed && trimmed !== editingRole && !allRoles.includes(trimmed) && trimmed !== 'Admin') {
-      renameRole(editingRole!, trimmed);
+      setError(null);
+      try {
+        await renameRole(editingRole!, trimmed);
+      } catch (e: any) {
+        setError(e.message || 'Gagal mengubah nama role');
+      }
     }
     setEditingRole(null);
     setEditingName("");
+  };
+
+  const handlePermissionChange = async (role: string, module: ModuleName, level: AccessLevel) => {
+    const key = `${role}:${module}`;
+    setSavingCell(key);
+    setError(null);
+    try {
+      await updateRolePermission(role, module, level);
+    } catch (e: any) {
+      setError(e.message || 'Gagal menyimpan perubahan');
+    } finally {
+      setSavingCell(null);
+    }
   };
 
   const levelColor = (level: string) => {
@@ -68,11 +100,18 @@ export function RolePermissionTable({ rolePermissions, updateRolePermission }: R
           value={newRoleName}
           onChange={(e) => setNewRoleName(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleAddRole()}
+          disabled={isAdding}
         />
-        <Button onClick={handleAddRole} size="sm" className="h-9 gap-1.5 rounded-lg text-xs">
-          <Plus className="h-3.5 w-3.5" /> Tambah Role
+        <Button onClick={handleAddRole} size="sm" className="h-9 gap-1.5 rounded-lg text-xs" disabled={isAdding}>
+          {isAdding ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
+          Tambah Role
         </Button>
       </div>
+
+      {/* Error message */}
+      {error && (
+        <p className="text-xs text-red-500 font-semibold px-1">{error}</p>
+      )}
 
       {/* Permission Table */}
       <div className="rounded-xl border border-border/40 bg-card overflow-x-auto">
@@ -85,7 +124,6 @@ export function RolePermissionTable({ rolePermissions, updateRolePermission }: R
               {allRoles.map((role) => (
                 <TableHead key={role} className="ui-label py-4 text-center uppercase tracking-widest text-foreground font-bold whitespace-nowrap">
                   {editingRole === role ? (
-                    // Inline rename input
                     <input
                       autoFocus
                       value={editingName}
@@ -132,28 +170,35 @@ export function RolePermissionTable({ rolePermissions, updateRolePermission }: R
                 </TableCell>
                 {allRoles.map((role) => {
                   const level = rolePermissions[role]?.[module] || "None";
+                  const key = `${role}:${module}`;
+                  const isSaving = savingCell === key;
                   return (
                     <TableCell key={role} className="py-4 text-center">
-                      <Select
-                        value={level}
-                        onValueChange={(v: AccessLevel) =>
-                          updateRolePermission(role, module, v)
-                        }
-                      >
-                        <SelectTrigger
-                          className={cn(
-                            "h-8 mx-auto w-28 border-border/40 text-xs font-medium",
-                            levelColor(level)
-                          )}
+                      <div className="relative inline-flex items-center justify-center">
+                        {isSaving && (
+                          <Loader2 className="absolute h-3 w-3 animate-spin text-muted-foreground z-10" />
+                        )}
+                        <Select
+                          value={level}
+                          onValueChange={(v: AccessLevel) => handlePermissionChange(role, module, v)}
+                          disabled={isSaving}
                         >
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="None">Tidak Ada</SelectItem>
-                          <SelectItem value="Read">Baca Saja</SelectItem>
-                          <SelectItem value="Full">Penuh</SelectItem>
-                        </SelectContent>
-                      </Select>
+                          <SelectTrigger
+                            className={cn(
+                              "h-8 mx-auto w-28 border-border/40 text-xs font-medium",
+                              levelColor(level),
+                              isSaving && "opacity-50"
+                            )}
+                          >
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="None">Tidak Ada</SelectItem>
+                            <SelectItem value="Read">Baca Saja</SelectItem>
+                            <SelectItem value="Full">Penuh</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </TableCell>
                   );
                 })}
@@ -165,7 +210,7 @@ export function RolePermissionTable({ rolePermissions, updateRolePermission }: R
       </div>
 
       <p className="text-[11px] text-muted-foreground px-1">
-        * Role <strong>Admin</strong> secara otomatis memiliki akses <strong>Penuh</strong> ke seluruh modul dan tidak ditampilkan di atas. Anda dapat mengubah nama dan hak akses semua role lainnya sesuai kebutuhan perusahaan Anda.
+        * Role <strong>Owner</strong> secara otomatis memiliki akses <strong>Penuh</strong> ke seluruh modul. Perubahan hak akses langsung tersimpan ke database.
       </p>
     </div>
   );

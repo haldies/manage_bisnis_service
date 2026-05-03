@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { usePosStore } from "@/lib/store";
+import { usePosStore, hasModuleAccess } from "@/lib/store";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   MapPin, Search
@@ -550,6 +550,7 @@ export default function StaffManagementPage() {
             <Button 
               className="h-11 px-8 rounded-xl bg-foreground text-background hover:bg-foreground/90 font-bold uppercase tracking-widest text-[10px]" 
               onClick={() => { setEditingUser(null); setIsDialogOpen(true); }}
+              disabled={!hasModuleAccess(currentUser, 'Staff', 'Full', rolePermissions)}
             >
               Tambah Staf
             </Button>

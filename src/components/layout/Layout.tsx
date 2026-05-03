@@ -89,9 +89,30 @@ export function Layout({ children, title, requiredModule, requiredLevel = 'Read'
 
   // Permission Check
   if (requiredModule && currentUser.role?.name !== 'Owner') {
-    const permissions = rolePermissions[currentUser.role?.name || ''];
-    const userLevel = permissions?.[requiredModule] || 'None';
-    
+    // Derive access level directly from the user's role permissions object
+    // (included in login response) — no dependency on async fetchRoles
+    const getLevel = (): AccessLevel => {
+      // 1. Check store rolePermissions (populated after fetchRoles)
+      const storePerms = rolePermissions[currentUser.role?.name || ''];
+      if (storePerms?.[requiredModule]) {
+        return storePerms[requiredModule];
+      }
+
+      // 2. Fallback: derive from granular permissions on the user object itself
+      const rolePerm = (currentUser.role as any)?.permissions;
+      if (Array.isArray(rolePerm) && rolePerm.length > 0) {
+        const p = rolePerm.find((p: any) => p.module === requiredModule);
+        if (p) {
+          if (p.canCreate || p.canUpdate || p.canDelete) return 'Full';
+          if (p.canRead) return 'Read';
+          return 'None';
+        }
+      }
+
+      return 'None';
+    };
+
+    const userLevel = getLevel();
     const levels: AccessLevel[] = ['None', 'Read', 'Full'];
     if (levels.indexOf(userLevel) < levels.indexOf(requiredLevel)) {
       return (

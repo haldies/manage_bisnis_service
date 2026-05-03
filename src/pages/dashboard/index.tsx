@@ -152,7 +152,7 @@ export default function AdminMonitoringDashboard() {
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-2">
-          {(currentUser?.role?.name === 'Admin' || currentUser?.role?.name === 'Owner') && (
+          {(currentUser?.role?.name === 'Owner') && (
             <Select value={currentBranch?.id || "all"} onValueChange={(v) => setBranch(v === "all" ? null : v)}>
               <SelectTrigger className="w-full sm:w-48 h-10">
                 <SelectValue placeholder="Semua Cabang" />

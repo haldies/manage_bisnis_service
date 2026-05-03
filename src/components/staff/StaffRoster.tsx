@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { MapPin, Pencil, Trash2 } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
+import { usePosStore, hasModuleAccess } from "@/lib/store";
 
 interface StaffRosterProps {
   users: any[];
@@ -12,6 +13,8 @@ interface StaffRosterProps {
 }
 
 export function StaffRoster({ users, branches, storeProfile, onEdit, onDelete }: StaffRosterProps) {
+  const { currentUser, rolePermissions } = usePosStore();
+  const hasFullAccess = hasModuleAccess(currentUser, 'Staff', 'Full', rolePermissions);
   return (
     <div className="rounded-xl border border-border/40 bg-card overflow-hidden">
       <Table>
@@ -62,14 +65,16 @@ export function StaffRoster({ users, branches, storeProfile, onEdit, onDelete }:
                   </span>
                 </TableCell>
                 <TableCell className="py-4 text-right pr-6">
-                  <div className="flex items-center justify-end gap-1">
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-md hover:bg-muted" onClick={() => onEdit(user)}>
-                      <Pencil className="h-3.5 w-3.5" />
-                    </Button>
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-md hover:bg-muted" onClick={() => onDelete(user.id)}>
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </Button>
-                  </div>
+                  {hasFullAccess && (
+                    <div className="flex items-center justify-end gap-1">
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-md hover:bg-muted" onClick={() => onEdit(user)}>
+                        <Pencil className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-md hover:bg-muted" onClick={() => onDelete(user.id)}>
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  )}
                 </TableCell>
               </TableRow>
             ))

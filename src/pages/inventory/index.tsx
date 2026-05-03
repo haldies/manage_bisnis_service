@@ -15,7 +15,7 @@ import {
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
-import { usePosStore } from "@/lib/store";
+import { usePosStore, hasModuleAccess } from "@/lib/store";
 import {
   Search, Pencil, Trash2, MapPin, Package, Plus
 
@@ -46,7 +46,7 @@ export default function LogisticsDashboard() {
     }
   }, [router.query]);
 
-  const hasFullAccess = currentUser?.role?.name ? rolePermissions[currentUser.role.name]['Inventory'] === 'Full' : false;
+  const hasFullAccess = hasModuleAccess(currentUser, 'Inventory', 'Full', rolePermissions);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [addOpen, setAddOpen] = useState(false);
