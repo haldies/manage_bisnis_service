@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const settings = await prisma.storeProfile.upsert({
         where: { id: 'default' },
         update: {},
-        create: { id: 'default' },
+        create: { id: 'default', tenantId: 'default' },
       });
       return res.status(200).json(settings);
     } catch (error) {
@@ -46,6 +46,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         baseSalary: parseNum(data.baseSalary, 0),
         overtimeRate: parseNum(data.overtimeRate, 0),
         serviceIncentive: parseNum(data.serviceIncentive, 10),
+        // New Payroll Fields
+        payDay: parseNum(data.payDay, 1),
+        thrMonth: data.thrMonth === null ? null : parseNum(data.thrMonth, 0),
+        thrMinWorkMonths: parseNum(data.thrMinWorkMonths, 12),
+        thrMultiplier: parseNum(data.thrMultiplier, 1.0),
       };
 
       const settings = await prisma.storeProfile.upsert({
@@ -53,6 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         update: profileData,
         create: {
           id: 'default',
+          tenantId: 'default',
           ...profileData
         },
       });

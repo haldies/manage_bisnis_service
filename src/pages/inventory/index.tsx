@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
@@ -45,7 +46,7 @@ export default function LogisticsDashboard() {
     }
   }, [router.query]);
 
-  const hasFullAccess = currentUser && rolePermissions[currentUser.role]?.Inventory === 'Full';
+  const hasFullAccess = currentUser?.role?.name ? rolePermissions[currentUser.role.name]['Inventory'] === 'Full' : false;
 
   const [searchQuery, setSearchQuery] = useState("");
   const [addOpen, setAddOpen] = useState(false);
@@ -140,15 +141,6 @@ export default function LogisticsDashboard() {
                     <TabsTrigger value="mutasi" className="rounded-lg px-6 h-8 ui-label data-[state=active]:bg-foreground data-[state=active]:text-background">Mutasi</TabsTrigger>
                   </TabsList>
 
-                  {activeTab === 'items' && hasFullAccess && (
-                    <Button 
-                      className="h-10 px-6 bg-foreground text-background hover:bg-foreground/90 rounded-xl font-bold text-xs uppercase tracking-widest shadow-sm active:scale-95 transition-all" 
-                      onClick={() => setAddOpen(true)}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Tambah Unit
-                    </Button>
-                  )}
                 </div>
 
                 {/* Filter Row: Search + Selects */}
@@ -162,24 +154,36 @@ export default function LogisticsDashboard() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                       />
-                    </div>
 
-                    <div className="flex items-center gap-2">
-                      <Select
-                        value={currentBranch?.id || 'all'}
-                        onValueChange={(val) => setCurrentBranch(val === 'all' ? null : val)}
+
+                    </div>
+                    {activeTab === 'items' && hasFullAccess && (
+                      <Button
+                        className="h-10 px-6 bg-foreground text-background hover:bg-foreground/90 rounded-xl font-bold text-xs uppercase tracking-widest shadow-sm active:scale-95 transition-all"
+                        onClick={() => setAddOpen(true)}
                       >
-                        <SelectTrigger className="h-10 min-w-[180px] rounded-xl bg-card border border-border/40 ui-label uppercase tracking-widest focus:ring-0">
-                          <div className="flex items-center gap-2">
-                            <MapPin className="h-3.5 w-3.5 text-primary" />
-                            <SelectValue placeholder="Semua Cabang" />
-                          </div>
-                        </SelectTrigger>
-                        <SelectContent className="rounded-xl border-border/40 shadow-2xl">
-                          <SelectItem value="all" className="ui-label uppercase py-3">Semua Cabang</SelectItem>
-                          {branches.map(b => <SelectItem key={b.id} value={b.id} className="ui-label uppercase py-3">{b.name}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
+                        <Plus className="h-4 w-4 mr-2" />
+                        Tambah Unit
+                      </Button>
+                    )}
+                    <div className="flex items-center gap-2">
+                      {currentUser?.role?.name === 'Owner' && (
+                        <Select
+                          value={currentBranch?.id || 'all'}
+                          onValueChange={(val) => setCurrentBranch(val === 'all' ? null : val)}
+                        >
+                          <SelectTrigger className="h-10 min-w-[180px] rounded-xl bg-card border border-border/40 ui-label uppercase tracking-widest focus:ring-0">
+                            <div className="flex items-center gap-2">
+                              <MapPin className="h-3.5 w-3.5 text-primary" />
+                              <SelectValue placeholder="Semua Cabang" />
+                            </div>
+                          </SelectTrigger>
+                          <SelectContent className="rounded-xl border-border/40 shadow-2xl">
+                            <SelectItem value="all" className="ui-label uppercase py-3">Semua Cabang</SelectItem>
+                            {branches.map(b => <SelectItem key={b.id} value={b.id} className="ui-label uppercase py-3">{b.name}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      )}
 
                       <Select value={sortByStock} onValueChange={setSortByStock}>
                         <SelectTrigger className="h-10 w-40 rounded-xl bg-card border border-border/40 ui-label uppercase tracking-widest focus:ring-0">
@@ -272,19 +276,47 @@ export default function LogisticsDashboard() {
                             </TableCell>
 
                             <TableCell className="py-6 text-center">
-                              <Button
-                                variant="ghost"
-                                onClick={() => {
-                                  const branchId = currentBranch?.id || branches[0]?.id;
-                                  if (!branchId) return;
-                                  setEditStockRow({ ...row, branchId, branchName: branches.find(b => b.id === branchId)?.name });
-                                  setStockQty(String(row.stockMap[branchId] || 0));
-                                }}
-                                className="flex flex-col items-center justify-center h-auto py-2 px-4 rounded-xl hover:bg-muted/10 transition-all group"
-                              >
-                                <span className="text-[14px] font-black group-hover:text-primary transition-colors">{row.totalStock}</span>
-                                <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest">{currentBranch ? "Cabang" : "Total"}</span>
-                              </Button>
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    className="flex flex-col items-center justify-center h-auto py-2 px-4 rounded-xl hover:bg-muted/10 transition-all group"
+                                  >
+                                    <span className="text-[14px] font-black group-hover:text-primary transition-colors">{row.totalStock}</span>
+                                    <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest">{currentBranch ? "Cabang" : "Total"}</span>
+                                  </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-64 p-4 rounded-2xl border-none shadow-2xl bg-card">
+                                  <div className="space-y-4">
+                                    <div className="flex justify-between items-center border-b border-border/5 pb-2">
+                                      <span className="text-[10px] font-black uppercase tracking-widest text-primary">Rincian Stok Cabang</span>
+                                      {hasFullAccess && (
+                                        <Button 
+                                          variant="ghost" 
+                                          size="sm" 
+                                          className="h-6 px-2 text-[8px] font-bold uppercase"
+                                          onClick={() => {
+                                            const branchId = currentBranch?.id || branches[0]?.id;
+                                            if (!branchId) return;
+                                            setEditStockRow({ ...row, branchId, branchName: branches.find(b => b.id === branchId)?.name });
+                                            setStockQty(String(row.stockMap[branchId] || 0));
+                                          }}
+                                        >
+                                          Edit
+                                        </Button>
+                                      )}
+                                    </div>
+                                    <div className="space-y-2">
+                                      {branches.map(b => (
+                                        <div key={b.id} className="flex justify-between items-center">
+                                          <span className="text-[10px] font-bold text-muted-foreground uppercase">{b.name}</span>
+                                          <span className="text-xs font-black text-foreground">{row.stockMap[b.id] || 0} PCS</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </PopoverContent>
+                              </Popover>
                             </TableCell>
 
 

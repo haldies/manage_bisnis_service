@@ -36,7 +36,8 @@ export default function StaffManagementPage() {
     cashAdvances, leaveRequests, overtimes, addCashAdvance, updateCashAdvance,
     addLeaveRequest, updateLeaveRequest, addOvertime, updateOvertime,
     rolePermissions, updateRolePermission, updateUser, attendances, 
-    setBranch, storeProfile, updateStoreProfile, services, transactions
+    setBranch, storeProfile, updateStoreProfile, services, transactions,
+    roles, bonusPools, addBonusPool, removeBonusPool
   } = usePosStore();
 
   const [activeTab, setActiveTab] = useState("roster");
@@ -44,14 +45,14 @@ export default function StaffManagementPage() {
   const [editingUser, setEditingUser] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const defaultRole = Object.keys(rolePermissions).filter(r => r !== 'Admin')[0] || 'Admin';
+  const defaultRole = roles.find((r: Role) => r.name !== 'Owner')?.id || roles[0]?.id || "";
 
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
     phone: "",
     address: "",
-    role: defaultRole as Role,
+    roleId: defaultRole,
     branchId: "all",
     password: "",
     baseSalary: "" as any,
@@ -71,7 +72,7 @@ export default function StaffManagementPage() {
       email: user.email || "",
       phone: user.phone || "",
       address: user.address || "",
-      role: user.role,
+      roleId: user.roleId || "",
       branchId: user.branchId || "all",
       password: user.password || "",
       baseSalary: user.baseSalary?.toString() || "",
@@ -107,7 +108,7 @@ export default function StaffManagementPage() {
       } else {
         await addUser(userToSave);
       }
-      setNewUser({ name: "", email: "", phone: "", address: "", role: defaultRole, branchId: "all", password: "", baseSalary: "" as any, leaveQuota: "12", allowance: "" as any, wageType: "Monthly", wageRate: "" as any, insuranceDed: "" as any, incentiveRate: "" as any, incentiveType: "None" });
+      setNewUser({ name: "", email: "", phone: "", address: "", roleId: defaultRole, branchId: "all", password: "", baseSalary: "" as any, leaveQuota: "12", allowance: "" as any, wageType: "Monthly", wageRate: "" as any, insuranceDed: "" as any, incentiveRate: "" as any, incentiveType: "None" });
       setEditingUser(null);
       setIsDialogOpen(false);
     } catch (e) {
@@ -117,82 +118,186 @@ export default function StaffManagementPage() {
 
   const calculateTHP = (user: any) => {
     const now = new Date();
-    const currentMonth = now.getMonth();
-    const currentYear = now.getFullYear();
+    const payDay = storeProfile.payDay || 1;
+    let startDate: Date;
+    let endDate: Date;
 
-    const isCurrentMonth = (dateStr: any) => {
-      const d = new Date(dateStr);
-      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+    if (payDay === 1) {
+      startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+    } else {
+      if (now.getDate() >= payDay) {
+        startDate = new Date(now.getFullYear(), now.getMonth(), payDay);
+        endDate = new Date(now.getFullYear(), now.getMonth() + 1, payDay - 1, 23, 59, 59);
+      } else {
+        startDate = new Date(now.getFullYear(), now.getMonth() - 1, payDay);
+        endDate = new Date(now.getFullYear(), now.getMonth(), payDay - 1, 23, 59, 59);
+      }
+    }
+
+    const isInPeriod = (dateVal: any) => {
+      const d = new Date(dateVal);
+      return d >= startDate && d <= endDate;
     };
 
-    const logs = attendances.filter(a => a.employeeId === user.id && isCurrentMonth(a.createdAt));
-    const presentCount = logs.filter(l => l.status === 'hadir' || l.status === 'terlambat').length;
+    const logs = attendances.filter(a => a.employeeId === user.id && isInPeriod(a.date));
+    const presentCount = logs.filter(l => l.status === 'PRESENT' || l.status === 'LATE').length;
     
     const wageType = user.wageType || 'Monthly';
-    const wageRate = user.wageRate || 0;
-    const baseSalary = user.baseSalary || storeProfile.baseSalary || 0;
+    const wageRate = Number(user.wageRate || 0);
+    const baseSalary = Number(user.baseSalary || storeProfile.baseSalary || 0);
 
     let base = 0;
     if (wageType === 'Monthly') base = baseSalary;
     else if (wageType === 'Daily') base = wageRate * presentCount;
     else if (wageType === 'Hourly') base = wageRate * (presentCount * 8);
 
-    const totalAttendanceBonus = (storeProfile.attendanceRate || 0) * presentCount;
-
     let totalIncentive = 0;
-    let incentiveType = user.incentiveType || 'None';
-    
-    // Auto-detect for technicians
-    if (user.role === 'Technician' && (incentiveType === 'None' || !incentiveType)) {
-      incentiveType = 'Service';
-    }
+    const userIncentiveSource = user.incentiveType || 'None'; // This is the source in schema
+    const userIncentiveMode = user.incentiveMode || 'Percentage';
+    const userIncentiveRate = Number(user.incentiveRate || 0);
 
-    const userIncentivePercent = (user.incentiveRate !== undefined && user.incentiveRate !== null && !isNaN(user.incentiveRate) && user.incentiveRate > 0) 
-      ? user.incentiveRate 
-      : (storeProfile.serviceIncentive || 10);
-
-    if (incentiveType === 'Service' || incentiveType === 'All') {
-      const techTickets = services.filter(s => 
-        s.technicianId === user.id && 
-        (s.status === 'Paid' || s.status === 'Completed') &&
-        isCurrentMonth(s.updatedAt || s.dateOpened)
-      );
-      totalIncentive += techTickets.reduce((sum, t) => sum + ((t.serviceFee || 0) * userIncentivePercent / 100), 0);
-    }
-
-    if (incentiveType === 'Retail' || incentiveType === 'All') {
-      const userTransactions = transactions.filter(t => t.cashierId === user.id && isCurrentMonth(t.date));
-      totalIncentive += userTransactions.reduce((sum, t) => sum + (t.total * userIncentivePercent / 100), 0);
-    }
-
-    const lateLogs = logs.filter(l => l.status === 'terlambat');
-    const totalLatePenalty = lateLogs.length * (storeProfile.latePenalty || 0);
-
-    const userAdvances = cashAdvances.filter(c => c.employeeId === user.id && c.status === 'Approved' && isCurrentMonth(c.date));
-    const totalAdvance = userAdvances.reduce((sum, c) => sum + c.amount, 0);
-    const insurance = user.insuranceDed || 0;
-    
-    // Automatic Alpha Detection
-    const totalWorkDays = storeProfile.totalWorkDays || 26;
-    const approvedLeaves = leaveRequests.filter(l => l.employeeId === user.id && l.status === 'Approved' && isCurrentMonth(l.startDate));
+    const totalWorkDays = Number(storeProfile.totalWorkDays || 26);
+    const approvedLeaves = leaveRequests.filter(l => l.employeeId === user.id && l.status === 'Approved' && isInPeriod(l.startDate));
     const leaveDays = approvedLeaves.length;
-    
-    // Alpha is days not present and not on leave
-    const alphaDays = Math.max(0, totalWorkDays - (presentCount + leaveDays));
-    const totalAbsentPenalty = alphaDays * (storeProfile.absentPenalty || 0);
 
-    const userOvertimes = overtimes.filter(o => o.employeeId === user.id && o.status === 'Approved' && isCurrentMonth(o.date));
-    const totalOvertimeHours = userOvertimes.reduce((sum, o) => sum + o.hours, 0);
-    const totalOvertimePay = totalOvertimeHours * (storeProfile.overtimeRate || 0);
+    if (userIncentiveSource === 'Service' || userIncentiveSource === 'All') {
+      const techTickets = (services || []).filter(s => 
+        s.technicianId === user.id && 
+        (s.status === 'Paid' || s.status === 'Completed' || s.status === 'Delivered') &&
+        isInPeriod(s.updatedAt || s.dateOpened)
+      );
+      
+      totalIncentive += techTickets.reduce((sum, t) => {
+        const fee = Number(t.serviceFee || 0);
+        // Priority: Ticket Custom > Global/User settings
+        const tType = t.incentiveType || 'Percentage';
+        const tValue = Number(t.incentiveValue || 0);
+
+        if (tValue > 0) {
+          if (tType === 'Flat') return sum + tValue;
+          return sum + (fee * tValue / 100);
+        }
+
+        // Use User/Global settings if ticket is 0
+        if (userIncentiveMode === 'Flat') return sum + userIncentiveRate;
+        return sum + (fee * userIncentiveRate / 100);
+      }, 0);
+    }
+
+    if (userIncentiveSource === 'Retail' || userIncentiveSource === 'All') {
+      const userTransactions = (transactions || []).filter(t => t.cashierId === user.id && t.status === 'SUCCESS' && isInPeriod(t.date));
+      if (userIncentiveMode === 'Flat') {
+        totalIncentive += userTransactions.length * userIncentiveRate;
+      } else {
+        totalIncentive += userTransactions.reduce((sum, t) => sum + (Number(t.total) * userIncentiveRate / 100), 0);
+      }
+    }
+
+    if (userIncentiveSource === 'Profit' || userIncentiveSource === 'All') {
+      // Calculate Branch Profit for current period
+      const branchTransactions = transactions.filter(t => t.branchId === user.branchId && t.status === 'SUCCESS' && isInPeriod(t.date));
+      const totalRevenue = branchTransactions.reduce((sum, t) => sum + Number(t.total), 0);
+      const totalCost = branchTransactions.reduce((sum, t) => {
+        const itemCost = t.items.reduce((iSum, item) => iSum + (Number(item.costPrice || 0) * item.quantity), 0);
+        return sum + itemCost;
+      }, 0);
+      // Finance logs expenses
+      const { financeLogs } = usePosStore.getState(); // Get directly from store
+      const branchExpenses = (financeLogs || []).filter(l => l.branchId === user.branchId && l.type === 'Expense' && isInPeriod(l.date));
+      const totalExpenses = branchExpenses.reduce((sum, l) => sum + Number(l.amount), 0);
+      
+      const netProfit = Math.max(0, totalRevenue - totalCost - totalExpenses);
+      
+      if (userIncentiveMode === 'Flat') {
+        if (netProfit > 0) totalIncentive += userIncentiveRate;
+      } else {
+        totalIncentive += (netProfit * userIncentiveRate / 100);
+      }
+    }
+
+    // Shared Bonus Pool Logic (Granular Targeting)
+    let totalSharedBonus = 0;
+    const currentMonth = startDate.getMonth() + 1;
+    const currentYear = startDate.getFullYear();
+
+    const activePools = (bonusPools || []).filter(p => p.month === currentMonth && p.year === currentYear);
+
+    activePools.forEach(p => {
+      // 1. Direct Employee Target
+      if (p.employeeId) {
+        if (p.employeeId === user.id) {
+          totalSharedBonus += Number(p.amount);
+        }
+        return;
+      }
+
+      // 2. Group Targets (All, Branch, or Role)
+      const isBranchMatch = !p.branchId || p.branchId === user.branchId;
+      const isRoleMatch = !p.roleId || p.roleId === user.roleId;
+
+      if (isBranchMatch && isRoleMatch) {
+        // Calculate how many people share this pool
+        const eligibleUsers = users.filter(u => {
+          const branchOk = !p.branchId || u.branchId === p.branchId;
+          const roleOk = !p.roleId || u.roleId === p.roleId;
+          return branchOk && roleOk;
+        });
+
+        if (eligibleUsers.length > 0) {
+          totalSharedBonus += Number(p.amount) / eligibleUsers.length;
+        }
+      }
+    });
+
+    // THR Logic
+    let thrBonus = 0;
+    const thrMonth = storeProfile.thrMonth;
+    const thrMinMonths = storeProfile.thrMinWorkMonths ?? 12;
+    
+    if (thrMonth && (startDate.getMonth() + 1) === thrMonth) {
+      const joinDate = new Date(user.joinDate || user.createdAt);
+      const diffTime = Math.abs(now.getTime() - joinDate.getTime());
+      const diffMonths = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 30.44)); // Average month length
+      
+      if (diffMonths >= thrMinMonths) {
+        thrBonus = baseSalary * (storeProfile.thrMultiplier || 1); 
+      }
+    }
+
+    const userAdvances = cashAdvances.filter(c => c.employeeId === user.id && c.status === 'Approved' && isInPeriod(c.date));
+    const totalAdvance = userAdvances.reduce((sum, c) => sum + Number(c.amount), 0);
+    const insurance = Number(user.insuranceDed || 0);
+    
+    // Proportional Alpha Deduction: Only count Alpha for days that have already passed
+    const dailyRate = totalWorkDays > 0 ? baseSalary / totalWorkDays : 0;
+    
+    const periodEnd = new Date(endDate);
+    const today = new Date();
+    const effectiveEnd = periodEnd > today ? today : periodEnd;
+    const daysPassedInPeriod = Math.max(1, Math.ceil((effectiveEnd.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)));
+    
+    // Alpha is (Days Passed) - (Days Present + Approved Leaves)
+    const alphaDays = Math.max(0, daysPassedInPeriod - (presentCount + leaveDays));
+    const totalAbsentPenalty = alphaDays * dailyRate;
+    
+    // Fixed late penalty removed as per user request (no more manual input)
+    const totalLatePenalty = 0; 
+
+
+    const userOvertimes = overtimes.filter(o => o.employeeId === user.id && o.status === 'Approved' && isInPeriod(o.date));
+    const totalOvertimeHours = userOvertimes.reduce((sum, o) => sum + Number(o.hours), 0);
+    const totalOvertimePay = totalOvertimeHours * Number(storeProfile.overtimeRate || 0);
 
     const totalDeductions = totalAdvance + insurance + totalLatePenalty + totalAbsentPenalty;
 
     return {
       base, 
-      attendanceBonus: totalAttendanceBonus,
+      attendanceBonus: totalSharedBonus, // Using this slot for Shared Bonus
       incentive: totalIncentive,
+      thr: thrBonus,
       deductions: totalDeductions,
-      thp: base + totalAttendanceBonus + totalIncentive + totalOvertimePay - totalDeductions,
+      thp: base + totalSharedBonus + totalIncentive + thrBonus + totalOvertimePay - totalDeductions,
       advances: totalAdvance, 
       insurance,
       latePenalty: totalLatePenalty,
@@ -250,7 +355,7 @@ export default function StaffManagementPage() {
     
     y += 6;
     pdf.text("Jabatan", margin, y);
-    pdf.text(`: ${user.role}`, margin + 30, y);
+    pdf.text(`: ${user.role?.name || '-'}`, margin + 30, y);
     
     y += 6;
     pdf.text("Cabang", margin, y);
@@ -268,13 +373,31 @@ export default function StaffManagementPage() {
     pdf.text("Gaji Pokok", margin, y);
     pdf.text(formatCurrency(data.base), 190, y, { align: "right" });
 
-    y += 6;
-    pdf.text("Uang Kehadiran & Lembur", margin, y);
-    pdf.text(`+ ${formatCurrency(data.attendanceBonus + data.overtimePay)}`, 190, y, { align: "right" });
+    if (data.incentive > 0) {
+      y += 6;
+      pdf.text("Komisi Penjualan / Jasa", margin, y);
+      pdf.text(`+ ${formatCurrency(data.incentive)}`, 190, y, { align: "right" });
+    }
 
-    y += 6;
-    pdf.text("Insentif & Bonus lainnya", margin, y);
-    pdf.text(`+ ${formatCurrency(data.incentive)}`, 190, y, { align: "right" });
+    if (data.attendanceBonus > 0) {
+      y += 6;
+      pdf.text("Bonus Sharing (Tim)", margin, y);
+      pdf.text(`+ ${formatCurrency(data.attendanceBonus)}`, 190, y, { align: "right" });
+    }
+
+    if (data.thr > 0) {
+      y += 6;
+      pdf.setFont("helvetica", "bold");
+      pdf.text("THR (Tunjangan Hari Raya)", margin, y);
+      pdf.text(`+ ${formatCurrency(data.thr)}`, 190, y, { align: "right" });
+      pdf.setFont("helvetica", "normal");
+    }
+
+    if (data.overtimePay > 0) {
+      y += 6;
+      pdf.text(`Lembur (${data.overtimeHours} Jam)`, margin, y);
+      pdf.text(`+ ${formatCurrency(data.overtimePay)}`, 190, y, { align: "right" });
+    }
 
     // Deductions
     y += 15;
@@ -284,16 +407,29 @@ export default function StaffManagementPage() {
 
     y += 10;
     pdf.setFont("helvetica", "normal");
-    pdf.text("Kasbon / Pinjaman", margin, y);
-    pdf.text(`- ${formatCurrency(data.advances)}`, 190, y, { align: "right" });
+    if (data.advances > 0) {
+      pdf.text("Kasbon / Pinjaman", margin, y);
+      pdf.text(`- ${formatCurrency(data.advances)}`, 190, y, { align: "right" });
+      y += 6;
+    }
 
-    y += 6;
-    pdf.text("Potongan Telat / Alpha", margin, y);
-    pdf.text(`- ${formatCurrency(data.latePenalty + data.absentPenalty)}`, 190, y, { align: "right" });
+    if (data.absentPenalty > 0) {
+      pdf.text(`Potongan Alpha (${data.alphaDays} Hari)`, margin, y);
+      pdf.text(`- ${formatCurrency(data.absentPenalty)}`, 190, y, { align: "right" });
+      y += 6;
+    }
 
-    y += 6;
-    pdf.text("Asuransi & Lainnya", margin, y);
-    pdf.text(`- ${formatCurrency(data.insurance)}`, 190, y, { align: "right" });
+    if (data.insurance > 0) {
+      pdf.text("BPJS / Asuransi", margin, y);
+      pdf.text(`- ${formatCurrency(data.insurance)}`, 190, y, { align: "right" });
+      y += 6;
+    }
+
+    if (data.advances === 0 && data.absentPenalty === 0 && data.insurance === 0) {
+      pdf.setFont("helvetica", "italic");
+      pdf.text("Tidak ada potongan (Disiplin)", margin, y);
+      pdf.setFont("helvetica", "normal");
+    }
 
     // Total
     y += 20;
@@ -316,7 +452,10 @@ export default function StaffManagementPage() {
     pdf.text(user.name, margin + 20, y);
     pdf.text("Authorized Signature", 140, y);
     
-    pdf.save(`Slip_Gaji_${user.name.replace(/\s+/g, '_')}.pdf`);
+    // Preview in new tab instead of direct download
+    const blob = pdf.output("blob");
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
   };
 
   const filteredUsers = useMemo(() => {
@@ -378,7 +517,7 @@ export default function StaffManagementPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-            {currentUser?.role === 'Admin' && (
+            {currentUser?.role?.name === 'Owner' && (
               <Select 
                 value={currentBranch?.id || 'global'} 
                 onValueChange={(value) => setBranch(value === 'global' ? null : value)}
@@ -427,7 +566,7 @@ export default function StaffManagementPage() {
                 { id: 'payroll', label: 'Laporan Gaji' },
                 { id: 'payroll-settings', label: 'Pengaturan Gaji' },
                 { id: 'access', label: 'Hak Akses', adminOnly: true }
-              ].filter(t => !t.adminOnly || currentUser?.role === 'Admin').map(tab => (
+              ].filter(t => !t.adminOnly || currentUser?.role?.name === 'Owner').map(tab => (
                 <TabsTrigger 
                   key={tab.id}
                   value={tab.id} 
@@ -480,13 +619,18 @@ export default function StaffManagementPage() {
                   updateLeaveRequest={updateLeaveRequest}
                   addOvertime={addOvertime}
                   updateOvertime={updateOvertime}
+                  bonusPools={bonusPools}
+                  addBonusPool={addBonusPool}
+                  removeBonusPool={removeBonusPool}
+                  roles={roles}
+                  branches={branches}
                 />
               </TabsContent>
 
               <TabsContent value="access" className="m-0">
                 <RolePermissionTable 
                   rolePermissions={rolePermissions} 
-                  updateRolePermission={updateRolePermission} 
+                  updateRolePermission={(role: any, module, level) => updateRolePermission(typeof role === 'string' ? role : role.name, module, level)} 
                 />
               </TabsContent>
             </Tabs>

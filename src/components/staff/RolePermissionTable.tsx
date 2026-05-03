@@ -10,7 +10,7 @@ import { usePosStore } from "@/lib/store";
 
 interface RolePermissionTableProps {
   rolePermissions: any;
-  updateRolePermission: (role: Role, module: ModuleName, level: AccessLevel) => void;
+  updateRolePermission: (role: Role | string, module: ModuleName, level: AccessLevel) => void;
 }
 
 const MODULES: ModuleName[] = ['Cashier', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Printers'];
@@ -23,7 +23,7 @@ export function RolePermissionTable({ rolePermissions, updateRolePermission }: R
   const [editingName, setEditingName] = useState("");
 
   // Daftar role dinamis diambil langsung dari store, kecuali Admin yang sifatnya absolut
-  const allRoles = Object.keys(rolePermissions || {}).filter(role => role !== 'Admin');
+  const allRoles = Object.keys(rolePermissions || {}).filter(roleName => roleName !== 'Admin');
 
   const handleAddRole = () => {
     const trimmed = newRoleName.trim();
@@ -137,7 +137,7 @@ export function RolePermissionTable({ rolePermissions, updateRolePermission }: R
                       <Select
                         value={level}
                         onValueChange={(v: AccessLevel) =>
-                          updateRolePermission(role as Role, module, v)
+                          updateRolePermission(role, module, v)
                         }
                       >
                         <SelectTrigger

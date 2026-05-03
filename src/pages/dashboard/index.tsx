@@ -16,7 +16,7 @@ import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { startOfMonth, endOfMonth, isWithinInterval, startOfDay, endOfDay } from "date-fns";
 
 export default function AdminMonitoringDashboard() {
-  const { transactions, inventory, users, branches, attendances, currentBranch, setBranch } = usePosStore();
+  const { transactions, inventory, users, branches, attendances, currentBranch, setBranch, currentUser } = usePosStore();
 
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
     from: startOfMonth(new Date()),
@@ -28,12 +28,12 @@ export default function AdminMonitoringDashboard() {
       ? transactions.filter(tx => tx.branchId === currentBranch.id)
       : transactions;
 
-    return list.filter(tx =>
-      isWithinInterval(new Date(tx.date), {
-        start: startOfDay(dateRange.from),
-        end: endOfDay(dateRange.to),
-      })
-    );
+    return list.filter(tx => {
+      const txDate = new Date(tx.date).toLocaleDateString('en-CA'); // YYYY-MM-DD
+      const from = dateRange.from.toLocaleDateString('en-CA');
+      const to = dateRange.to.toLocaleDateString('en-CA');
+      return txDate >= from && txDate <= to;
+    });
   }, [transactions, currentBranch, dateRange]);
 
   const filteredAttendances = useMemo(() => {
@@ -47,27 +47,39 @@ export default function AdminMonitoringDashboard() {
   }, [users, currentBranch]);
 
   const attendanceStats = useMemo(() => {
-    const today = new Date().toISOString().split('T')[0];
-    const todayAttendances = filteredAttendances.filter(a => a.date === today);
+    const from = dateRange.from.toLocaleDateString('en-CA');
+    const to = dateRange.to.toLocaleDateString('en-CA');
+    
+    const rangeAttendances = filteredAttendances.filter(a => {
+      const aDate = new Date(a.date).toLocaleDateString('en-CA');
+      return aDate >= from && aDate <= to;
+    });
+
+    // Count total attendance records in the range
+    const totalCheckedIn = rangeAttendances.filter(a => a.checkInTime).length;
+    const totalCheckedOut = rangeAttendances.filter(a => a.checkOutTime).length;
+
     return {
-      checkIn: todayAttendances.filter(a => a.checkInTime).length,
-      checkOut: todayAttendances.filter(a => !!a.checkOutTime).length,
+      label: from === to ? "Hari Ini" : "Periode Ini",
+      checkIn: totalCheckedIn,
+      checkOut: totalCheckedOut,
     };
-  }, [filteredAttendances]);
+  }, [filteredAttendances, dateRange]);
 
   const stats = useMemo(() => {
-    const revenue = filteredTransactions.reduce((sum, tx) => sum + tx.total, 0);
+    const successTransactions = filteredTransactions.filter(tx => tx.status === 'SUCCESS');
+    const revenue = successTransactions.reduce((sum, tx) => sum + Number(tx.total), 0);
     let totalCost = 0;
-    filteredTransactions.forEach(tx => {
+    successTransactions.forEach(tx => {
       tx.items.forEach(item => {
         const invItem = inventory.find(i => i.id === (item.itemId || item.id));
-        totalCost += (invItem?.costPrice || 0) * item.quantity;
+        totalCost += Number(invItem?.costPrice || 0) * item.quantity;
       });
     });
     return {
       revenue,
       profit: revenue - totalCost,
-      totalOrders: filteredTransactions.length,
+      totalOrders: successTransactions.length,
       staffCount: filteredUsers.length,
     };
   }, [filteredTransactions, inventory, filteredUsers]);
@@ -75,10 +87,11 @@ export default function AdminMonitoringDashboard() {
   const topCategories = useMemo(() => {
     const catData: Record<string, number> = {};
     filteredTransactions.forEach(tx => {
+      if (tx.status !== 'SUCCESS') return;
       tx.items.forEach(item => {
         const catName = item.category?.trim();
         if (!catName) return;
-        catData[catName] = (catData[catName] || 0) + (item.price * item.quantity);
+        catData[catName] = (catData[catName] || 0) + (Number(item.price) * item.quantity);
       });
     });
     return Object.entries(catData)
@@ -90,8 +103,9 @@ export default function AdminMonitoringDashboard() {
   const topProducts = useMemo(() => {
     const prodData: Record<string, number> = {};
     filteredTransactions.forEach(tx => {
+      if (tx.status !== 'SUCCESS') return;
       tx.items.forEach(item => {
-        prodData[item.name] = (prodData[item.name] || 0) + (item.price * item.quantity);
+        prodData[item.name] = (prodData[item.name] || 0) + (Number(item.price) * item.quantity);
       });
     });
     return Object.entries(prodData)
@@ -105,17 +119,18 @@ export default function AdminMonitoringDashboard() {
     const history: Record<string, number> = {};
     const from = startOfDay(dateRange.from);
     const to = endOfDay(dateRange.to);
-    const diffDays = Math.round((to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24));
-    // Cap at 31 days for readability
-    const days = Math.min(diffDays + 1, 31);
-    for (let i = 0; i < days; i++) {
-      const d = new Date(from);
-      d.setDate(d.getDate() + i);
-      history[d.toISOString().split('T')[0]] = 0;
+    
+    // Fill all days in range
+    let curr = new Date(from);
+    while (curr <= to) {
+      history[curr.toISOString().split('T')[0]] = 0;
+      curr.setDate(curr.getDate() + 1);
     }
+
     filteredTransactions.forEach(tx => {
+      if (tx.status !== 'SUCCESS') return;
       const date = new Date(tx.date).toISOString().split('T')[0];
-      if (history[date] !== undefined) history[date] += tx.total;
+      if (history[date] !== undefined) history[date] += Number(tx.total);
     });
     return Object.entries(history).map(([date, revenue]) => ({
       date: new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
@@ -137,17 +152,19 @@ export default function AdminMonitoringDashboard() {
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-2">
-          <Select value={currentBranch?.id || "all"} onValueChange={(v) => setBranch(v === "all" ? null : v)}>
-            <SelectTrigger className="w-full sm:w-48 h-10">
-              <SelectValue placeholder="Semua Cabang" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Semua Cabang</SelectItem>
-              {branches.map(b => (
-                <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {(currentUser?.role?.name === 'Admin' || currentUser?.role?.name === 'Owner') && (
+            <Select value={currentBranch?.id || "all"} onValueChange={(v) => setBranch(v === "all" ? null : v)}>
+              <SelectTrigger className="w-full sm:w-48 h-10">
+                <SelectValue placeholder="Semua Cabang" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Semua Cabang</SelectItem>
+                {branches.map(b => (
+                  <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
 
           <DateRangePicker
             className="w-full sm:w-auto"
@@ -190,7 +207,7 @@ export default function AdminMonitoringDashboard() {
               <UserCheck className="h-5 w-5 text-emerald-600" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-medium">Masuk Hari Ini</p>
+              <p className="text-xs text-muted-foreground font-medium">Masuk ({attendanceStats.label})</p>
               <p className="text-2xl font-black leading-tight">{attendanceStats.checkIn}
                 <span className="text-sm font-medium text-muted-foreground ml-1">staf</span>
               </p>
@@ -201,7 +218,7 @@ export default function AdminMonitoringDashboard() {
               <UserMinus className="h-5 w-5 text-muted-foreground" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-medium">Pulang Hari Ini</p>
+              <p className="text-xs text-muted-foreground font-medium">Pulang ({attendanceStats.label})</p>
               <p className="text-2xl font-black leading-tight">{attendanceStats.checkOut}
                 <span className="text-sm font-medium text-muted-foreground ml-1">staf</span>
               </p>

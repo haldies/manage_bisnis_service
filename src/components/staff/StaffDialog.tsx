@@ -3,8 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Banknote } from "lucide-react";
+import { Banknote, CalendarIcon } from "lucide-react";
 import { Role } from "@/lib/types";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface StaffDialogProps {
   isOpen: boolean;
@@ -21,7 +25,7 @@ import { usePosStore } from "@/lib/store";
 export function StaffDialog({ 
   isOpen, onOpenChange, editingUser, newUser, setNewUser, onSave, branches 
 }: StaffDialogProps) {
-  const { rolePermissions } = usePosStore();
+  const { roles } = usePosStore();
   
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -60,14 +64,11 @@ export function StaffDialog({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label className="ui-meta text-muted-foreground ml-1">Jabatan</Label>
-              <Select value={newUser.role} onValueChange={(val) => setNewUser({...newUser, role: val as Role})}>
-                <SelectTrigger className="h-12 rounded-xl"><SelectValue /></SelectTrigger>
+              <Select value={newUser.roleId} onValueChange={(val) => setNewUser({...newUser, roleId: val})}>
+                <SelectTrigger className="h-12 rounded-xl"><SelectValue placeholder="Pilih Jabatan" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Admin">Admin</SelectItem>
-                  {Object.keys(rolePermissions || {})
-                    .filter(role => role !== 'Admin')
-                    .map(role => (
-                      <SelectItem key={role} value={role}>{role}</SelectItem>
+                  {roles.map(role => (
+                    <SelectItem key={role.id} value={role.id}>{role.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -111,29 +112,68 @@ export function StaffDialog({
                     placeholder="12"
                   />
                 </div>
+                <div className="space-y-1.5 flex flex-col">
+                  <Label className="ui-meta text-muted-foreground ml-1">Tanggal Bergabung</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full h-12 rounded-xl justify-start text-left font-bold",
+                          !newUser.joinDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
+                        {newUser.joinDate ? format(new Date(newUser.joinDate), "PPP") : <span>Pilih Tanggal</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={newUser.joinDate ? new Date(newUser.joinDate) : new Date()}
+                        onSelect={(date) => setNewUser({...newUser, joinDate: date})}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mt-4">
                 <div className="space-y-1.5">
-                  <Label className="ui-meta text-muted-foreground ml-1">Tipe Bonus/Incentive</Label>
+                  <Label className="ui-meta text-muted-foreground ml-1">Sumber Bonus</Label>
                   <Select value={newUser.incentiveType || "None"} onValueChange={(val) => setNewUser({...newUser, incentiveType: val})}>
                     <SelectTrigger className="h-12 rounded-xl"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="None">Tidak Ada</SelectItem>
-                      <SelectItem value="Service">Hanya Servis</SelectItem>
-                      <SelectItem value="Retail">Hanya Penjualan</SelectItem>
-                      <SelectItem value="All">Semua (Servis & Jual)</SelectItem>
+                      <SelectItem value="Service">Jasa Servis</SelectItem>
+                      <SelectItem value="Retail">Penjualan Retail</SelectItem>
+                      <SelectItem value="Profit">Laba Bersih Cabang</SelectItem>
+                      <SelectItem value="All">Semua Sumber</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="ui-meta text-muted-foreground ml-1">Nilai Bonus (%)</Label>
+                  <Label className="ui-meta text-muted-foreground ml-1">Metode Bonus</Label>
+                  <Select value={newUser.incentiveMode || "Percentage"} onValueChange={(val) => setNewUser({...newUser, incentiveMode: val})}>
+                    <SelectTrigger className="h-12 rounded-xl text-primary font-bold"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Percentage">Persentase (%)</SelectItem>
+                      <SelectItem value="Flat">Angka Tetap (Rp)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 mt-4">
+                <div className="space-y-1.5">
+                  <Label className="ui-meta text-muted-foreground ml-1">Nilai Bonus (Rp / %)</Label>
                   <Input 
                     type="number" 
                     value={newUser.incentiveRate} 
                     onChange={(e) => setNewUser({...newUser, incentiveRate: e.target.value})} 
                     className="h-12 font-bold rounded-xl text-primary" 
-                    placeholder="Contoh: 10"
+                    placeholder="Contoh: 10 atau 50000"
                   />
                 </div>
               </div>

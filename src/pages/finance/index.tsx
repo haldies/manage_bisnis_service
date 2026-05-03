@@ -39,26 +39,34 @@ export default function LaporanDashboard() {
 
     if (!dateRange) return result;
     return result.filter(tx => {
-      const txDate = new Date(tx.date);
-      return isWithinInterval(txDate, { 
-        start: startOfDay(dateRange.from), 
-        end: endOfDay(dateRange.to) 
-      });
+      const txDate = new Date(tx.date).toLocaleDateString('en-CA');
+      const from = dateRange.from.toLocaleDateString('en-CA');
+      const to = dateRange.to.toLocaleDateString('en-CA');
+      return txDate >= from && txDate <= to;
     });
   }, [transactions, dateRange, currentBranch]);
 
   const stats = useMemo(() => {
-    const revenue = filteredTransactions.reduce((sum, tx) => sum + tx.total, 0);
+    const revenue = filteredTransactions.reduce((sum, tx) => sum + Number(tx.total), 0);
     let totalCost = 0;
     filteredTransactions.forEach(tx => {
-      if (tx.status !== 'Paid') return;
+      if (tx.status !== 'SUCCESS') return;
       tx.items.forEach(item => {
         const invItem = inventory.find(i => i.id === (item.itemId || item.id));
-        totalCost += (invItem?.costPrice || 0) * item.quantity;
+        totalCost += Number(invItem?.costPrice || 0) * item.quantity;
       });
     });
     const profit = revenue - totalCost;
-    return { revenue, profit, totalOrders: filteredTransactions.filter(t => t.status === 'Paid').length };
+    const roi = totalCost > 0 ? (profit / totalCost) : 0;
+    const efficiency = revenue > 0 ? (profit / revenue) * 100 : 0;
+    
+    return { 
+      revenue, 
+      profit, 
+      roi,
+      efficiency,
+      totalOrders: filteredTransactions.filter(t => t.status === 'SUCCESS').length 
+    };
   }, [filteredTransactions, inventory]);
 
   // Chart Data: Revenue Trend based on filtered transactions
@@ -77,10 +85,10 @@ export default function LaporanDashboard() {
     }
     
     filteredTransactions.forEach(tx => {
-      if (tx.status !== 'Paid') return;
+      if (tx.status !== 'SUCCESS') return;
       const day = new Date(tx.date).toISOString().split('T')[0];
       if (days[day] !== undefined) {
-        days[day] += tx.total;
+        days[day] += Number(tx.total);
       }
     });
 
@@ -94,11 +102,11 @@ export default function LaporanDashboard() {
   const categoryChartData = useMemo(() => {
     const data: Record<string, number> = {};
     filteredTransactions.forEach(tx => {
-      if (tx.status !== 'Paid') return;
+      if (tx.status !== 'SUCCESS') return;
       tx.items.forEach(item => {
         const cat = item.category?.trim();
         if (!cat) return; // skip item tanpa kategori
-        data[cat] = (data[cat] || 0) + (item.price * item.quantity);
+        data[cat] = (data[cat] || 0) + (Number(item.price) * item.quantity);
       });
     });
     return Object.entries(data)
@@ -107,7 +115,7 @@ export default function LaporanDashboard() {
   }, [filteredTransactions]);
 
   const COLORS = [
-    '#18181b', // hitam — slot 1 (dominan)
+    '#06b6d4', // cyan/teal
     '#6366f1', // indigo
     '#f59e0b', // amber
     '#10b981', // emerald
@@ -124,7 +132,7 @@ export default function LaporanDashboard() {
         {/* Filter Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card/30 p-4 rounded-2xl border border-border/10">
           <div className="flex items-center gap-3">
-             {currentUser?.role === 'Admin' && (
+             { (currentUser?.role?.name === 'Admin' || currentUser?.role?.name === 'Owner') && (
                 <Select 
                   value={currentBranch?.id || 'global'} 
                   onValueChange={(value) => setBranch(value === 'global' ? null : value)}
@@ -310,19 +318,23 @@ export default function LaporanDashboard() {
               <div className="grid grid-cols-2 gap-4">
                  <div className="p-4 rounded-xl bg-muted/5 border border-border/10 text-center">
                     <p className="text-[9px] font-bold uppercase text-muted-foreground mb-1">Efisiensi</p>
-                    <p className="text-xl font-bold tracking-tight">94.2%</p>
+                    <p className="text-xl font-bold tracking-tight">{stats.efficiency.toFixed(1)}%</p>
                  </div>
                  <div className="p-4 rounded-xl bg-muted/5 border border-border/10 text-center">
-                    <p className="text-[9px] font-bold uppercase text-muted-foreground mb-1">Pertumbuhan</p>
-                    <p className="text-xl font-bold tracking-tight ">+18.4%</p>
+                    <p className="text-[9px] font-bold uppercase text-muted-foreground mb-1">Laba / Transaksi</p>
+                    <p className="text-xl font-bold tracking-tight ">
+                       {formatCurrency(stats.profit / (stats.totalOrders || 1))}
+                    </p>
                  </div>
                  <div className="p-4 rounded-xl bg-muted/5 border border-border/10 text-center">
-                    <p className="text-[9px] font-bold uppercase text-muted-foreground mb-1">Target</p>
-                    <p className="text-xl font-bold tracking-tight opacity-40">Rp 1M</p>
+                    <p className="text-[9px] font-bold uppercase text-muted-foreground mb-1">Pencapaian Target</p>
+                    <p className="text-xl font-bold tracking-tight">
+                       {((stats.revenue / 50000000) * 100).toFixed(1)}%
+                    </p>
                  </div>
                  <div className="p-4 rounded-xl bg-muted/5 border border-border/10 text-center">
-                    <p className="text-[9px] font-bold uppercase text-muted-foreground mb-1">ROI</p>
-                    <p className="text-xl font-bold tracking-tight">3.2x</p>
+                    <p className="text-[9px] font-bold uppercase text-muted-foreground mb-1">ROI (Return)</p>
+                    <p className="text-xl font-bold tracking-tight">{stats.roi.toFixed(2)}x</p>
                  </div>
               </div>
            </Card>

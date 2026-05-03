@@ -40,7 +40,7 @@ export default async function handler(
         include: { transaction: true },
       });
 
-      const incentiveRate = user.incentiveRate || 0;
+      const incentiveRate = Number(user.incentiveRate) || 0;
       const incentiveType = user.incentiveType || "None";
 
       let totalUnits = 0;
@@ -48,7 +48,7 @@ export default async function handler(
 
       items.forEach((item) => {
         totalUnits += item.quantity;
-        totalRevenue += item.price * item.quantity;
+        totalRevenue += Number(item.price) * item.quantity;
       });
 
       // Hitung insentif berdasarkan tipe
@@ -73,7 +73,7 @@ export default async function handler(
 
     // Tanpa technicianId: kembalikan ringkasan semua teknisi
     const technicians = await prisma.user.findMany({
-      where: { role: "Technician" },
+      where: { role: { name: "Technician" } },
     });
 
     return res.status(200).json({ technicians, total: technicians.length });

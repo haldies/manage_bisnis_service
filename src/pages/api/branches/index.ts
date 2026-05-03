@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // GET: semua role boleh baca branches
   // POST/PUT/DELETE: hanya Admin
-  if (req.method !== 'GET' && decoded.role !== 'Admin') {
+  if (req.method !== 'GET' && decoded.role !== 'Admin' && decoded.role !== 'Owner') {
     return res.status(403).json({ error: 'Forbidden. Only Admin can manage branches.' });
   }
 

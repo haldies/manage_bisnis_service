@@ -14,6 +14,16 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
+ * Model Role
+ * 
+ */
+export type Role = $Result.DefaultSelection<Prisma.$RolePayload>
+/**
+ * Model Permission
+ * 
+ */
+export type Permission = $Result.DefaultSelection<Prisma.$PermissionPayload>
+/**
  * Model Branch
  * 
  */
@@ -113,6 +123,137 @@ export type StockTransferItem = $Result.DefaultSelection<Prisma.$StockTransferIt
  * 
  */
 export type InventoryUnit = $Result.DefaultSelection<Prisma.$InventoryUnitPayload>
+/**
+ * Model BonusPool
+ * 
+ */
+export type BonusPool = $Result.DefaultSelection<Prisma.$BonusPoolPayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const RequestStatus: {
+  Pending: 'Pending',
+  Approved: 'Approved',
+  Rejected: 'Rejected'
+};
+
+export type RequestStatus = (typeof RequestStatus)[keyof typeof RequestStatus]
+
+
+export const PaymentMethod: {
+  CASH: 'CASH',
+  QRIS: 'QRIS',
+  TRANSFER: 'TRANSFER',
+  E_WALLET: 'E_WALLET'
+};
+
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
+
+
+export const AttendanceStatus: {
+  PRESENT: 'PRESENT',
+  LATE: 'LATE',
+  ABSENT: 'ABSENT',
+  LEAVE: 'LEAVE',
+  hadir: 'hadir',
+  terlambat: 'terlambat',
+  izin: 'izin',
+  sakit: 'sakit'
+};
+
+export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus]
+
+
+export const StockTransferStatus: {
+  Pending: 'Pending',
+  Approved: 'Approved',
+  Completed: 'Completed',
+  Rejected: 'Rejected',
+  Cancelled: 'Cancelled'
+};
+
+export type StockTransferStatus = (typeof StockTransferStatus)[keyof typeof StockTransferStatus]
+
+
+export const InventoryUnitStatus: {
+  Available: 'Available',
+  Sold: 'Sold',
+  Defective: 'Defective'
+};
+
+export type InventoryUnitStatus = (typeof InventoryUnitStatus)[keyof typeof InventoryUnitStatus]
+
+
+export const TransactionSource: {
+  POS: 'POS',
+  SERVICE: 'SERVICE'
+};
+
+export type TransactionSource = (typeof TransactionSource)[keyof typeof TransactionSource]
+
+
+export const TransactionStatus: {
+  SUCCESS: 'SUCCESS',
+  CANCELLED: 'CANCELLED',
+  PENDING: 'PENDING',
+  Paid: 'Paid',
+  Unpaid: 'Unpaid',
+  Canceled: 'Canceled'
+};
+
+export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
+
+
+export const ServiceStatus: {
+  Pending: 'Pending',
+  Diagnosed: 'Diagnosed',
+  WaitingApproval: 'WaitingApproval',
+  Approved: 'Approved',
+  InProgress: 'InProgress',
+  ReadyToPay: 'ReadyToPay',
+  Paid: 'Paid',
+  Completed: 'Completed',
+  Delivered: 'Delivered',
+  Cancelled: 'Cancelled'
+};
+
+export type ServiceStatus = (typeof ServiceStatus)[keyof typeof ServiceStatus]
+
+}
+
+export type RequestStatus = $Enums.RequestStatus
+
+export const RequestStatus: typeof $Enums.RequestStatus
+
+export type PaymentMethod = $Enums.PaymentMethod
+
+export const PaymentMethod: typeof $Enums.PaymentMethod
+
+export type AttendanceStatus = $Enums.AttendanceStatus
+
+export const AttendanceStatus: typeof $Enums.AttendanceStatus
+
+export type StockTransferStatus = $Enums.StockTransferStatus
+
+export const StockTransferStatus: typeof $Enums.StockTransferStatus
+
+export type InventoryUnitStatus = $Enums.InventoryUnitStatus
+
+export const InventoryUnitStatus: typeof $Enums.InventoryUnitStatus
+
+export type TransactionSource = $Enums.TransactionSource
+
+export const TransactionSource: typeof $Enums.TransactionSource
+
+export type TransactionStatus = $Enums.TransactionStatus
+
+export const TransactionStatus: typeof $Enums.TransactionStatus
+
+export type ServiceStatus = $Enums.ServiceStatus
+
+export const ServiceStatus: typeof $Enums.ServiceStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -123,8 +264,8 @@ export type InventoryUnit = $Result.DefaultSelection<Prisma.$InventoryUnitPayloa
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Branches
- * const branches = await prisma.branch.findMany()
+ * // Fetch zero or more Roles
+ * const roles = await prisma.role.findMany()
  * ```
  *
  *
@@ -146,8 +287,8 @@ export class PrismaClient<
    * const prisma = new PrismaClient({
    *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
    * })
-   * // Fetch zero or more Branches
-   * const branches = await prisma.branch.findMany()
+   * // Fetch zero or more Roles
+   * const roles = await prisma.role.findMany()
    * ```
    *
    *
@@ -236,6 +377,26 @@ export class PrismaClient<
   }>>
 
       /**
+   * `prisma.role`: Exposes CRUD operations for the **Role** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Roles
+    * const roles = await prisma.role.findMany()
+    * ```
+    */
+  get role(): Prisma.RoleDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.permission`: Exposes CRUD operations for the **Permission** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Permissions
+    * const permissions = await prisma.permission.findMany()
+    * ```
+    */
+  get permission(): Prisma.PermissionDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.branch`: Exposes CRUD operations for the **Branch** model.
     * Example usage:
     * ```ts
@@ -434,6 +595,16 @@ export class PrismaClient<
     * ```
     */
   get inventoryUnit(): Prisma.InventoryUnitDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.bonusPool`: Exposes CRUD operations for the **BonusPool** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BonusPools
+    * const bonusPools = await prisma.bonusPool.findMany()
+    * ```
+    */
+  get bonusPool(): Prisma.BonusPoolDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -868,6 +1039,8 @@ export namespace Prisma {
 
 
   export const ModelName: {
+    Role: 'Role',
+    Permission: 'Permission',
     Branch: 'Branch',
     User: 'User',
     Shift: 'Shift',
@@ -887,7 +1060,8 @@ export namespace Prisma {
     DeviceModel: 'DeviceModel',
     StockTransfer: 'StockTransfer',
     StockTransferItem: 'StockTransferItem',
-    InventoryUnit: 'InventoryUnit'
+    InventoryUnit: 'InventoryUnit',
+    BonusPool: 'BonusPool'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -903,10 +1077,158 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "branch" | "user" | "shift" | "cashAdvance" | "leaveRequest" | "category" | "inventoryItem" | "stock" | "transaction" | "transactionItem" | "serviceTicket" | "serviceSparepart" | "attendance" | "storeProfile" | "serviceType" | "overtime" | "deviceModel" | "stockTransfer" | "stockTransferItem" | "inventoryUnit"
+      modelProps: "role" | "permission" | "branch" | "user" | "shift" | "cashAdvance" | "leaveRequest" | "category" | "inventoryItem" | "stock" | "transaction" | "transactionItem" | "serviceTicket" | "serviceSparepart" | "attendance" | "storeProfile" | "serviceType" | "overtime" | "deviceModel" | "stockTransfer" | "stockTransferItem" | "inventoryUnit" | "bonusPool"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
+      Role: {
+        payload: Prisma.$RolePayload<ExtArgs>
+        fields: Prisma.RoleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RoleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RoleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>
+          }
+          findFirst: {
+            args: Prisma.RoleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RoleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>
+          }
+          findMany: {
+            args: Prisma.RoleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>[]
+          }
+          create: {
+            args: Prisma.RoleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>
+          }
+          createMany: {
+            args: Prisma.RoleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RoleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>[]
+          }
+          delete: {
+            args: Prisma.RoleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>
+          }
+          update: {
+            args: Prisma.RoleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>
+          }
+          deleteMany: {
+            args: Prisma.RoleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RoleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RoleUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>[]
+          }
+          upsert: {
+            args: Prisma.RoleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>
+          }
+          aggregate: {
+            args: Prisma.RoleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRole>
+          }
+          groupBy: {
+            args: Prisma.RoleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RoleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RoleCountArgs<ExtArgs>
+            result: $Utils.Optional<RoleCountAggregateOutputType> | number
+          }
+        }
+      }
+      Permission: {
+        payload: Prisma.$PermissionPayload<ExtArgs>
+        fields: Prisma.PermissionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PermissionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PermissionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PermissionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PermissionPayload>
+          }
+          findFirst: {
+            args: Prisma.PermissionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PermissionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PermissionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PermissionPayload>
+          }
+          findMany: {
+            args: Prisma.PermissionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PermissionPayload>[]
+          }
+          create: {
+            args: Prisma.PermissionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PermissionPayload>
+          }
+          createMany: {
+            args: Prisma.PermissionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PermissionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PermissionPayload>[]
+          }
+          delete: {
+            args: Prisma.PermissionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PermissionPayload>
+          }
+          update: {
+            args: Prisma.PermissionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PermissionPayload>
+          }
+          deleteMany: {
+            args: Prisma.PermissionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PermissionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PermissionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PermissionPayload>[]
+          }
+          upsert: {
+            args: Prisma.PermissionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PermissionPayload>
+          }
+          aggregate: {
+            args: Prisma.PermissionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePermission>
+          }
+          groupBy: {
+            args: Prisma.PermissionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PermissionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PermissionCountArgs<ExtArgs>
+            result: $Utils.Optional<PermissionCountAggregateOutputType> | number
+          }
+        }
+      }
       Branch: {
         payload: Prisma.$BranchPayload<ExtArgs>
         fields: Prisma.BranchFieldRefs
@@ -2387,6 +2709,80 @@ export namespace Prisma {
           }
         }
       }
+      BonusPool: {
+        payload: Prisma.$BonusPoolPayload<ExtArgs>
+        fields: Prisma.BonusPoolFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BonusPoolFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusPoolPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BonusPoolFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusPoolPayload>
+          }
+          findFirst: {
+            args: Prisma.BonusPoolFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusPoolPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BonusPoolFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusPoolPayload>
+          }
+          findMany: {
+            args: Prisma.BonusPoolFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusPoolPayload>[]
+          }
+          create: {
+            args: Prisma.BonusPoolCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusPoolPayload>
+          }
+          createMany: {
+            args: Prisma.BonusPoolCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BonusPoolCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusPoolPayload>[]
+          }
+          delete: {
+            args: Prisma.BonusPoolDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusPoolPayload>
+          }
+          update: {
+            args: Prisma.BonusPoolUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusPoolPayload>
+          }
+          deleteMany: {
+            args: Prisma.BonusPoolDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BonusPoolUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BonusPoolUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusPoolPayload>[]
+          }
+          upsert: {
+            args: Prisma.BonusPoolUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusPoolPayload>
+          }
+          aggregate: {
+            args: Prisma.BonusPoolAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBonusPool>
+          }
+          groupBy: {
+            args: Prisma.BonusPoolGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BonusPoolGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BonusPoolCountArgs<ExtArgs>
+            result: $Utils.Optional<BonusPoolCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2495,6 +2891,8 @@ export namespace Prisma {
     comments?: runtime.SqlCommenterPlugin[]
   }
   export type GlobalOmitConfig = {
+    role?: RoleOmit
+    permission?: PermissionOmit
     branch?: BranchOmit
     user?: UserOmit
     shift?: ShiftOmit
@@ -2515,6 +2913,7 @@ export namespace Prisma {
     stockTransfer?: StockTransferOmit
     stockTransferItem?: StockTransferItemOmit
     inventoryUnit?: InventoryUnitOmit
+    bonusPool?: BonusPoolOmit
   }
 
   /* Types for Logging */
@@ -2588,6 +2987,55 @@ export namespace Prisma {
   /**
    * Count Types
    */
+
+
+  /**
+   * Count Type RoleCountOutputType
+   */
+
+  export type RoleCountOutputType = {
+    permissions: number
+    users: number
+    bonusPools: number
+  }
+
+  export type RoleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    permissions?: boolean | RoleCountOutputTypeCountPermissionsArgs
+    users?: boolean | RoleCountOutputTypeCountUsersArgs
+    bonusPools?: boolean | RoleCountOutputTypeCountBonusPoolsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * RoleCountOutputType without action
+   */
+  export type RoleCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoleCountOutputType
+     */
+    select?: RoleCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RoleCountOutputType without action
+   */
+  export type RoleCountOutputTypeCountPermissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PermissionWhereInput
+  }
+
+  /**
+   * RoleCountOutputType without action
+   */
+  export type RoleCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
+  }
+
+  /**
+   * RoleCountOutputType without action
+   */
+  export type RoleCountOutputTypeCountBonusPoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BonusPoolWhereInput
+  }
 
 
   /**
@@ -2956,6 +3404,2239 @@ export namespace Prisma {
    */
 
   /**
+   * Model Role
+   */
+
+  export type AggregateRole = {
+    _count: RoleCountAggregateOutputType | null
+    _min: RoleMinAggregateOutputType | null
+    _max: RoleMaxAggregateOutputType | null
+  }
+
+  export type RoleMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    name: string | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RoleMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    name: string | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RoleCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    name: number
+    description: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RoleMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RoleMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RoleCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RoleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Role to aggregate.
+     */
+    where?: RoleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Roles to fetch.
+     */
+    orderBy?: RoleOrderByWithRelationInput | RoleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RoleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Roles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Roles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Roles
+    **/
+    _count?: true | RoleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RoleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RoleMaxAggregateInputType
+  }
+
+  export type GetRoleAggregateType<T extends RoleAggregateArgs> = {
+        [P in keyof T & keyof AggregateRole]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRole[P]>
+      : GetScalarType<T[P], AggregateRole[P]>
+  }
+
+
+
+
+  export type RoleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoleWhereInput
+    orderBy?: RoleOrderByWithAggregationInput | RoleOrderByWithAggregationInput[]
+    by: RoleScalarFieldEnum[] | RoleScalarFieldEnum
+    having?: RoleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RoleCountAggregateInputType | true
+    _min?: RoleMinAggregateInputType
+    _max?: RoleMaxAggregateInputType
+  }
+
+  export type RoleGroupByOutputType = {
+    id: string
+    tenantId: string
+    name: string
+    description: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: RoleCountAggregateOutputType | null
+    _min: RoleMinAggregateOutputType | null
+    _max: RoleMaxAggregateOutputType | null
+  }
+
+  type GetRoleGroupByPayload<T extends RoleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RoleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RoleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RoleGroupByOutputType[P]>
+            : GetScalarType<T[P], RoleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RoleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    permissions?: boolean | Role$permissionsArgs<ExtArgs>
+    users?: boolean | Role$usersArgs<ExtArgs>
+    bonusPools?: boolean | Role$bonusPoolsArgs<ExtArgs>
+    _count?: boolean | RoleCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["role"]>
+
+  export type RoleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["role"]>
+
+  export type RoleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["role"]>
+
+  export type RoleSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RoleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["role"]>
+  export type RoleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    permissions?: boolean | Role$permissionsArgs<ExtArgs>
+    users?: boolean | Role$usersArgs<ExtArgs>
+    bonusPools?: boolean | Role$bonusPoolsArgs<ExtArgs>
+    _count?: boolean | RoleCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type RoleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type RoleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $RolePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Role"
+    objects: {
+      permissions: Prisma.$PermissionPayload<ExtArgs>[]
+      users: Prisma.$UserPayload<ExtArgs>[]
+      bonusPools: Prisma.$BonusPoolPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      name: string
+      description: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["role"]>
+    composites: {}
+  }
+
+  type RoleGetPayload<S extends boolean | null | undefined | RoleDefaultArgs> = $Result.GetResult<Prisma.$RolePayload, S>
+
+  type RoleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RoleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RoleCountAggregateInputType | true
+    }
+
+  export interface RoleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Role'], meta: { name: 'Role' } }
+    /**
+     * Find zero or one Role that matches the filter.
+     * @param {RoleFindUniqueArgs} args - Arguments to find a Role
+     * @example
+     * // Get one Role
+     * const role = await prisma.role.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RoleFindUniqueArgs>(args: SelectSubset<T, RoleFindUniqueArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Role that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RoleFindUniqueOrThrowArgs} args - Arguments to find a Role
+     * @example
+     * // Get one Role
+     * const role = await prisma.role.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RoleFindUniqueOrThrowArgs>(args: SelectSubset<T, RoleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Role that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleFindFirstArgs} args - Arguments to find a Role
+     * @example
+     * // Get one Role
+     * const role = await prisma.role.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RoleFindFirstArgs>(args?: SelectSubset<T, RoleFindFirstArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Role that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleFindFirstOrThrowArgs} args - Arguments to find a Role
+     * @example
+     * // Get one Role
+     * const role = await prisma.role.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RoleFindFirstOrThrowArgs>(args?: SelectSubset<T, RoleFindFirstOrThrowArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Roles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Roles
+     * const roles = await prisma.role.findMany()
+     * 
+     * // Get first 10 Roles
+     * const roles = await prisma.role.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const roleWithIdOnly = await prisma.role.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RoleFindManyArgs>(args?: SelectSubset<T, RoleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Role.
+     * @param {RoleCreateArgs} args - Arguments to create a Role.
+     * @example
+     * // Create one Role
+     * const Role = await prisma.role.create({
+     *   data: {
+     *     // ... data to create a Role
+     *   }
+     * })
+     * 
+     */
+    create<T extends RoleCreateArgs>(args: SelectSubset<T, RoleCreateArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Roles.
+     * @param {RoleCreateManyArgs} args - Arguments to create many Roles.
+     * @example
+     * // Create many Roles
+     * const role = await prisma.role.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RoleCreateManyArgs>(args?: SelectSubset<T, RoleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Roles and returns the data saved in the database.
+     * @param {RoleCreateManyAndReturnArgs} args - Arguments to create many Roles.
+     * @example
+     * // Create many Roles
+     * const role = await prisma.role.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Roles and only return the `id`
+     * const roleWithIdOnly = await prisma.role.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RoleCreateManyAndReturnArgs>(args?: SelectSubset<T, RoleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Role.
+     * @param {RoleDeleteArgs} args - Arguments to delete one Role.
+     * @example
+     * // Delete one Role
+     * const Role = await prisma.role.delete({
+     *   where: {
+     *     // ... filter to delete one Role
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RoleDeleteArgs>(args: SelectSubset<T, RoleDeleteArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Role.
+     * @param {RoleUpdateArgs} args - Arguments to update one Role.
+     * @example
+     * // Update one Role
+     * const role = await prisma.role.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RoleUpdateArgs>(args: SelectSubset<T, RoleUpdateArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Roles.
+     * @param {RoleDeleteManyArgs} args - Arguments to filter Roles to delete.
+     * @example
+     * // Delete a few Roles
+     * const { count } = await prisma.role.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RoleDeleteManyArgs>(args?: SelectSubset<T, RoleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Roles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Roles
+     * const role = await prisma.role.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RoleUpdateManyArgs>(args: SelectSubset<T, RoleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Roles and returns the data updated in the database.
+     * @param {RoleUpdateManyAndReturnArgs} args - Arguments to update many Roles.
+     * @example
+     * // Update many Roles
+     * const role = await prisma.role.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Roles and only return the `id`
+     * const roleWithIdOnly = await prisma.role.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RoleUpdateManyAndReturnArgs>(args: SelectSubset<T, RoleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Role.
+     * @param {RoleUpsertArgs} args - Arguments to update or create a Role.
+     * @example
+     * // Update or create a Role
+     * const role = await prisma.role.upsert({
+     *   create: {
+     *     // ... data to create a Role
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Role we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RoleUpsertArgs>(args: SelectSubset<T, RoleUpsertArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Roles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleCountArgs} args - Arguments to filter Roles to count.
+     * @example
+     * // Count the number of Roles
+     * const count = await prisma.role.count({
+     *   where: {
+     *     // ... the filter for the Roles we want to count
+     *   }
+     * })
+    **/
+    count<T extends RoleCountArgs>(
+      args?: Subset<T, RoleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RoleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Role.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RoleAggregateArgs>(args: Subset<T, RoleAggregateArgs>): Prisma.PrismaPromise<GetRoleAggregateType<T>>
+
+    /**
+     * Group by Role.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RoleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RoleGroupByArgs['orderBy'] }
+        : { orderBy?: RoleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RoleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRoleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Role model
+   */
+  readonly fields: RoleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Role.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RoleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    permissions<T extends Role$permissionsArgs<ExtArgs> = {}>(args?: Subset<T, Role$permissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    users<T extends Role$usersArgs<ExtArgs> = {}>(args?: Subset<T, Role$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bonusPools<T extends Role$bonusPoolsArgs<ExtArgs> = {}>(args?: Subset<T, Role$bonusPoolsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BonusPoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Role model
+   */
+  interface RoleFieldRefs {
+    readonly id: FieldRef<"Role", 'String'>
+    readonly tenantId: FieldRef<"Role", 'String'>
+    readonly name: FieldRef<"Role", 'String'>
+    readonly description: FieldRef<"Role", 'String'>
+    readonly createdAt: FieldRef<"Role", 'DateTime'>
+    readonly updatedAt: FieldRef<"Role", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Role findUnique
+   */
+  export type RoleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoleInclude<ExtArgs> | null
+    /**
+     * Filter, which Role to fetch.
+     */
+    where: RoleWhereUniqueInput
+  }
+
+  /**
+   * Role findUniqueOrThrow
+   */
+  export type RoleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoleInclude<ExtArgs> | null
+    /**
+     * Filter, which Role to fetch.
+     */
+    where: RoleWhereUniqueInput
+  }
+
+  /**
+   * Role findFirst
+   */
+  export type RoleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoleInclude<ExtArgs> | null
+    /**
+     * Filter, which Role to fetch.
+     */
+    where?: RoleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Roles to fetch.
+     */
+    orderBy?: RoleOrderByWithRelationInput | RoleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Roles.
+     */
+    cursor?: RoleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Roles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Roles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Roles.
+     */
+    distinct?: RoleScalarFieldEnum | RoleScalarFieldEnum[]
+  }
+
+  /**
+   * Role findFirstOrThrow
+   */
+  export type RoleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoleInclude<ExtArgs> | null
+    /**
+     * Filter, which Role to fetch.
+     */
+    where?: RoleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Roles to fetch.
+     */
+    orderBy?: RoleOrderByWithRelationInput | RoleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Roles.
+     */
+    cursor?: RoleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Roles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Roles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Roles.
+     */
+    distinct?: RoleScalarFieldEnum | RoleScalarFieldEnum[]
+  }
+
+  /**
+   * Role findMany
+   */
+  export type RoleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoleInclude<ExtArgs> | null
+    /**
+     * Filter, which Roles to fetch.
+     */
+    where?: RoleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Roles to fetch.
+     */
+    orderBy?: RoleOrderByWithRelationInput | RoleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Roles.
+     */
+    cursor?: RoleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Roles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Roles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Roles.
+     */
+    distinct?: RoleScalarFieldEnum | RoleScalarFieldEnum[]
+  }
+
+  /**
+   * Role create
+   */
+  export type RoleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Role.
+     */
+    data: XOR<RoleCreateInput, RoleUncheckedCreateInput>
+  }
+
+  /**
+   * Role createMany
+   */
+  export type RoleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Roles.
+     */
+    data: RoleCreateManyInput | RoleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Role createManyAndReturn
+   */
+  export type RoleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * The data used to create many Roles.
+     */
+    data: RoleCreateManyInput | RoleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Role update
+   */
+  export type RoleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Role.
+     */
+    data: XOR<RoleUpdateInput, RoleUncheckedUpdateInput>
+    /**
+     * Choose, which Role to update.
+     */
+    where: RoleWhereUniqueInput
+  }
+
+  /**
+   * Role updateMany
+   */
+  export type RoleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Roles.
+     */
+    data: XOR<RoleUpdateManyMutationInput, RoleUncheckedUpdateManyInput>
+    /**
+     * Filter which Roles to update
+     */
+    where?: RoleWhereInput
+    /**
+     * Limit how many Roles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Role updateManyAndReturn
+   */
+  export type RoleUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * The data used to update Roles.
+     */
+    data: XOR<RoleUpdateManyMutationInput, RoleUncheckedUpdateManyInput>
+    /**
+     * Filter which Roles to update
+     */
+    where?: RoleWhereInput
+    /**
+     * Limit how many Roles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Role upsert
+   */
+  export type RoleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Role to update in case it exists.
+     */
+    where: RoleWhereUniqueInput
+    /**
+     * In case the Role found by the `where` argument doesn't exist, create a new Role with this data.
+     */
+    create: XOR<RoleCreateInput, RoleUncheckedCreateInput>
+    /**
+     * In case the Role was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RoleUpdateInput, RoleUncheckedUpdateInput>
+  }
+
+  /**
+   * Role delete
+   */
+  export type RoleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoleInclude<ExtArgs> | null
+    /**
+     * Filter which Role to delete.
+     */
+    where: RoleWhereUniqueInput
+  }
+
+  /**
+   * Role deleteMany
+   */
+  export type RoleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Roles to delete
+     */
+    where?: RoleWhereInput
+    /**
+     * Limit how many Roles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Role.permissions
+   */
+  export type Role$permissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permission
+     */
+    select?: PermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permission
+     */
+    omit?: PermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionInclude<ExtArgs> | null
+    where?: PermissionWhereInput
+    orderBy?: PermissionOrderByWithRelationInput | PermissionOrderByWithRelationInput[]
+    cursor?: PermissionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PermissionScalarFieldEnum | PermissionScalarFieldEnum[]
+  }
+
+  /**
+   * Role.users
+   */
+  export type Role$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
+   * Role.bonusPools
+   */
+  export type Role$bonusPoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusPool
+     */
+    select?: BonusPoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusPool
+     */
+    omit?: BonusPoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusPoolInclude<ExtArgs> | null
+    where?: BonusPoolWhereInput
+    orderBy?: BonusPoolOrderByWithRelationInput | BonusPoolOrderByWithRelationInput[]
+    cursor?: BonusPoolWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BonusPoolScalarFieldEnum | BonusPoolScalarFieldEnum[]
+  }
+
+  /**
+   * Role without action
+   */
+  export type RoleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoleInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Permission
+   */
+
+  export type AggregatePermission = {
+    _count: PermissionCountAggregateOutputType | null
+    _min: PermissionMinAggregateOutputType | null
+    _max: PermissionMaxAggregateOutputType | null
+  }
+
+  export type PermissionMinAggregateOutputType = {
+    id: string | null
+    roleId: string | null
+    module: string | null
+    canRead: boolean | null
+    canCreate: boolean | null
+    canUpdate: boolean | null
+    canDelete: boolean | null
+  }
+
+  export type PermissionMaxAggregateOutputType = {
+    id: string | null
+    roleId: string | null
+    module: string | null
+    canRead: boolean | null
+    canCreate: boolean | null
+    canUpdate: boolean | null
+    canDelete: boolean | null
+  }
+
+  export type PermissionCountAggregateOutputType = {
+    id: number
+    roleId: number
+    module: number
+    canRead: number
+    canCreate: number
+    canUpdate: number
+    canDelete: number
+    _all: number
+  }
+
+
+  export type PermissionMinAggregateInputType = {
+    id?: true
+    roleId?: true
+    module?: true
+    canRead?: true
+    canCreate?: true
+    canUpdate?: true
+    canDelete?: true
+  }
+
+  export type PermissionMaxAggregateInputType = {
+    id?: true
+    roleId?: true
+    module?: true
+    canRead?: true
+    canCreate?: true
+    canUpdate?: true
+    canDelete?: true
+  }
+
+  export type PermissionCountAggregateInputType = {
+    id?: true
+    roleId?: true
+    module?: true
+    canRead?: true
+    canCreate?: true
+    canUpdate?: true
+    canDelete?: true
+    _all?: true
+  }
+
+  export type PermissionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Permission to aggregate.
+     */
+    where?: PermissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Permissions to fetch.
+     */
+    orderBy?: PermissionOrderByWithRelationInput | PermissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PermissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Permissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Permissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Permissions
+    **/
+    _count?: true | PermissionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PermissionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PermissionMaxAggregateInputType
+  }
+
+  export type GetPermissionAggregateType<T extends PermissionAggregateArgs> = {
+        [P in keyof T & keyof AggregatePermission]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePermission[P]>
+      : GetScalarType<T[P], AggregatePermission[P]>
+  }
+
+
+
+
+  export type PermissionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PermissionWhereInput
+    orderBy?: PermissionOrderByWithAggregationInput | PermissionOrderByWithAggregationInput[]
+    by: PermissionScalarFieldEnum[] | PermissionScalarFieldEnum
+    having?: PermissionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PermissionCountAggregateInputType | true
+    _min?: PermissionMinAggregateInputType
+    _max?: PermissionMaxAggregateInputType
+  }
+
+  export type PermissionGroupByOutputType = {
+    id: string
+    roleId: string
+    module: string
+    canRead: boolean
+    canCreate: boolean
+    canUpdate: boolean
+    canDelete: boolean
+    _count: PermissionCountAggregateOutputType | null
+    _min: PermissionMinAggregateOutputType | null
+    _max: PermissionMaxAggregateOutputType | null
+  }
+
+  type GetPermissionGroupByPayload<T extends PermissionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PermissionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PermissionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PermissionGroupByOutputType[P]>
+            : GetScalarType<T[P], PermissionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PermissionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    roleId?: boolean
+    module?: boolean
+    canRead?: boolean
+    canCreate?: boolean
+    canUpdate?: boolean
+    canDelete?: boolean
+    role?: boolean | RoleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["permission"]>
+
+  export type PermissionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    roleId?: boolean
+    module?: boolean
+    canRead?: boolean
+    canCreate?: boolean
+    canUpdate?: boolean
+    canDelete?: boolean
+    role?: boolean | RoleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["permission"]>
+
+  export type PermissionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    roleId?: boolean
+    module?: boolean
+    canRead?: boolean
+    canCreate?: boolean
+    canUpdate?: boolean
+    canDelete?: boolean
+    role?: boolean | RoleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["permission"]>
+
+  export type PermissionSelectScalar = {
+    id?: boolean
+    roleId?: boolean
+    module?: boolean
+    canRead?: boolean
+    canCreate?: boolean
+    canUpdate?: boolean
+    canDelete?: boolean
+  }
+
+  export type PermissionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "roleId" | "module" | "canRead" | "canCreate" | "canUpdate" | "canDelete", ExtArgs["result"]["permission"]>
+  export type PermissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    role?: boolean | RoleDefaultArgs<ExtArgs>
+  }
+  export type PermissionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    role?: boolean | RoleDefaultArgs<ExtArgs>
+  }
+  export type PermissionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    role?: boolean | RoleDefaultArgs<ExtArgs>
+  }
+
+  export type $PermissionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Permission"
+    objects: {
+      role: Prisma.$RolePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      roleId: string
+      module: string
+      canRead: boolean
+      canCreate: boolean
+      canUpdate: boolean
+      canDelete: boolean
+    }, ExtArgs["result"]["permission"]>
+    composites: {}
+  }
+
+  type PermissionGetPayload<S extends boolean | null | undefined | PermissionDefaultArgs> = $Result.GetResult<Prisma.$PermissionPayload, S>
+
+  type PermissionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PermissionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PermissionCountAggregateInputType | true
+    }
+
+  export interface PermissionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Permission'], meta: { name: 'Permission' } }
+    /**
+     * Find zero or one Permission that matches the filter.
+     * @param {PermissionFindUniqueArgs} args - Arguments to find a Permission
+     * @example
+     * // Get one Permission
+     * const permission = await prisma.permission.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PermissionFindUniqueArgs>(args: SelectSubset<T, PermissionFindUniqueArgs<ExtArgs>>): Prisma__PermissionClient<$Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Permission that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PermissionFindUniqueOrThrowArgs} args - Arguments to find a Permission
+     * @example
+     * // Get one Permission
+     * const permission = await prisma.permission.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PermissionFindUniqueOrThrowArgs>(args: SelectSubset<T, PermissionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PermissionClient<$Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Permission that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PermissionFindFirstArgs} args - Arguments to find a Permission
+     * @example
+     * // Get one Permission
+     * const permission = await prisma.permission.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PermissionFindFirstArgs>(args?: SelectSubset<T, PermissionFindFirstArgs<ExtArgs>>): Prisma__PermissionClient<$Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Permission that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PermissionFindFirstOrThrowArgs} args - Arguments to find a Permission
+     * @example
+     * // Get one Permission
+     * const permission = await prisma.permission.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PermissionFindFirstOrThrowArgs>(args?: SelectSubset<T, PermissionFindFirstOrThrowArgs<ExtArgs>>): Prisma__PermissionClient<$Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Permissions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PermissionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Permissions
+     * const permissions = await prisma.permission.findMany()
+     * 
+     * // Get first 10 Permissions
+     * const permissions = await prisma.permission.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const permissionWithIdOnly = await prisma.permission.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PermissionFindManyArgs>(args?: SelectSubset<T, PermissionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Permission.
+     * @param {PermissionCreateArgs} args - Arguments to create a Permission.
+     * @example
+     * // Create one Permission
+     * const Permission = await prisma.permission.create({
+     *   data: {
+     *     // ... data to create a Permission
+     *   }
+     * })
+     * 
+     */
+    create<T extends PermissionCreateArgs>(args: SelectSubset<T, PermissionCreateArgs<ExtArgs>>): Prisma__PermissionClient<$Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Permissions.
+     * @param {PermissionCreateManyArgs} args - Arguments to create many Permissions.
+     * @example
+     * // Create many Permissions
+     * const permission = await prisma.permission.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PermissionCreateManyArgs>(args?: SelectSubset<T, PermissionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Permissions and returns the data saved in the database.
+     * @param {PermissionCreateManyAndReturnArgs} args - Arguments to create many Permissions.
+     * @example
+     * // Create many Permissions
+     * const permission = await prisma.permission.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Permissions and only return the `id`
+     * const permissionWithIdOnly = await prisma.permission.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PermissionCreateManyAndReturnArgs>(args?: SelectSubset<T, PermissionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Permission.
+     * @param {PermissionDeleteArgs} args - Arguments to delete one Permission.
+     * @example
+     * // Delete one Permission
+     * const Permission = await prisma.permission.delete({
+     *   where: {
+     *     // ... filter to delete one Permission
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PermissionDeleteArgs>(args: SelectSubset<T, PermissionDeleteArgs<ExtArgs>>): Prisma__PermissionClient<$Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Permission.
+     * @param {PermissionUpdateArgs} args - Arguments to update one Permission.
+     * @example
+     * // Update one Permission
+     * const permission = await prisma.permission.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PermissionUpdateArgs>(args: SelectSubset<T, PermissionUpdateArgs<ExtArgs>>): Prisma__PermissionClient<$Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Permissions.
+     * @param {PermissionDeleteManyArgs} args - Arguments to filter Permissions to delete.
+     * @example
+     * // Delete a few Permissions
+     * const { count } = await prisma.permission.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PermissionDeleteManyArgs>(args?: SelectSubset<T, PermissionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Permissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PermissionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Permissions
+     * const permission = await prisma.permission.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PermissionUpdateManyArgs>(args: SelectSubset<T, PermissionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Permissions and returns the data updated in the database.
+     * @param {PermissionUpdateManyAndReturnArgs} args - Arguments to update many Permissions.
+     * @example
+     * // Update many Permissions
+     * const permission = await prisma.permission.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Permissions and only return the `id`
+     * const permissionWithIdOnly = await prisma.permission.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PermissionUpdateManyAndReturnArgs>(args: SelectSubset<T, PermissionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Permission.
+     * @param {PermissionUpsertArgs} args - Arguments to update or create a Permission.
+     * @example
+     * // Update or create a Permission
+     * const permission = await prisma.permission.upsert({
+     *   create: {
+     *     // ... data to create a Permission
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Permission we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PermissionUpsertArgs>(args: SelectSubset<T, PermissionUpsertArgs<ExtArgs>>): Prisma__PermissionClient<$Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Permissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PermissionCountArgs} args - Arguments to filter Permissions to count.
+     * @example
+     * // Count the number of Permissions
+     * const count = await prisma.permission.count({
+     *   where: {
+     *     // ... the filter for the Permissions we want to count
+     *   }
+     * })
+    **/
+    count<T extends PermissionCountArgs>(
+      args?: Subset<T, PermissionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PermissionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Permission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PermissionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PermissionAggregateArgs>(args: Subset<T, PermissionAggregateArgs>): Prisma.PrismaPromise<GetPermissionAggregateType<T>>
+
+    /**
+     * Group by Permission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PermissionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PermissionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PermissionGroupByArgs['orderBy'] }
+        : { orderBy?: PermissionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PermissionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPermissionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Permission model
+   */
+  readonly fields: PermissionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Permission.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PermissionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    role<T extends RoleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoleDefaultArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Permission model
+   */
+  interface PermissionFieldRefs {
+    readonly id: FieldRef<"Permission", 'String'>
+    readonly roleId: FieldRef<"Permission", 'String'>
+    readonly module: FieldRef<"Permission", 'String'>
+    readonly canRead: FieldRef<"Permission", 'Boolean'>
+    readonly canCreate: FieldRef<"Permission", 'Boolean'>
+    readonly canUpdate: FieldRef<"Permission", 'Boolean'>
+    readonly canDelete: FieldRef<"Permission", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Permission findUnique
+   */
+  export type PermissionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permission
+     */
+    select?: PermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permission
+     */
+    omit?: PermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which Permission to fetch.
+     */
+    where: PermissionWhereUniqueInput
+  }
+
+  /**
+   * Permission findUniqueOrThrow
+   */
+  export type PermissionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permission
+     */
+    select?: PermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permission
+     */
+    omit?: PermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which Permission to fetch.
+     */
+    where: PermissionWhereUniqueInput
+  }
+
+  /**
+   * Permission findFirst
+   */
+  export type PermissionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permission
+     */
+    select?: PermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permission
+     */
+    omit?: PermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which Permission to fetch.
+     */
+    where?: PermissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Permissions to fetch.
+     */
+    orderBy?: PermissionOrderByWithRelationInput | PermissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Permissions.
+     */
+    cursor?: PermissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Permissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Permissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Permissions.
+     */
+    distinct?: PermissionScalarFieldEnum | PermissionScalarFieldEnum[]
+  }
+
+  /**
+   * Permission findFirstOrThrow
+   */
+  export type PermissionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permission
+     */
+    select?: PermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permission
+     */
+    omit?: PermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which Permission to fetch.
+     */
+    where?: PermissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Permissions to fetch.
+     */
+    orderBy?: PermissionOrderByWithRelationInput | PermissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Permissions.
+     */
+    cursor?: PermissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Permissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Permissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Permissions.
+     */
+    distinct?: PermissionScalarFieldEnum | PermissionScalarFieldEnum[]
+  }
+
+  /**
+   * Permission findMany
+   */
+  export type PermissionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permission
+     */
+    select?: PermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permission
+     */
+    omit?: PermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which Permissions to fetch.
+     */
+    where?: PermissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Permissions to fetch.
+     */
+    orderBy?: PermissionOrderByWithRelationInput | PermissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Permissions.
+     */
+    cursor?: PermissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Permissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Permissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Permissions.
+     */
+    distinct?: PermissionScalarFieldEnum | PermissionScalarFieldEnum[]
+  }
+
+  /**
+   * Permission create
+   */
+  export type PermissionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permission
+     */
+    select?: PermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permission
+     */
+    omit?: PermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Permission.
+     */
+    data: XOR<PermissionCreateInput, PermissionUncheckedCreateInput>
+  }
+
+  /**
+   * Permission createMany
+   */
+  export type PermissionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Permissions.
+     */
+    data: PermissionCreateManyInput | PermissionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Permission createManyAndReturn
+   */
+  export type PermissionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permission
+     */
+    select?: PermissionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permission
+     */
+    omit?: PermissionOmit<ExtArgs> | null
+    /**
+     * The data used to create many Permissions.
+     */
+    data: PermissionCreateManyInput | PermissionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Permission update
+   */
+  export type PermissionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permission
+     */
+    select?: PermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permission
+     */
+    omit?: PermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Permission.
+     */
+    data: XOR<PermissionUpdateInput, PermissionUncheckedUpdateInput>
+    /**
+     * Choose, which Permission to update.
+     */
+    where: PermissionWhereUniqueInput
+  }
+
+  /**
+   * Permission updateMany
+   */
+  export type PermissionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Permissions.
+     */
+    data: XOR<PermissionUpdateManyMutationInput, PermissionUncheckedUpdateManyInput>
+    /**
+     * Filter which Permissions to update
+     */
+    where?: PermissionWhereInput
+    /**
+     * Limit how many Permissions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Permission updateManyAndReturn
+   */
+  export type PermissionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permission
+     */
+    select?: PermissionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permission
+     */
+    omit?: PermissionOmit<ExtArgs> | null
+    /**
+     * The data used to update Permissions.
+     */
+    data: XOR<PermissionUpdateManyMutationInput, PermissionUncheckedUpdateManyInput>
+    /**
+     * Filter which Permissions to update
+     */
+    where?: PermissionWhereInput
+    /**
+     * Limit how many Permissions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Permission upsert
+   */
+  export type PermissionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permission
+     */
+    select?: PermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permission
+     */
+    omit?: PermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Permission to update in case it exists.
+     */
+    where: PermissionWhereUniqueInput
+    /**
+     * In case the Permission found by the `where` argument doesn't exist, create a new Permission with this data.
+     */
+    create: XOR<PermissionCreateInput, PermissionUncheckedCreateInput>
+    /**
+     * In case the Permission was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PermissionUpdateInput, PermissionUncheckedUpdateInput>
+  }
+
+  /**
+   * Permission delete
+   */
+  export type PermissionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permission
+     */
+    select?: PermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permission
+     */
+    omit?: PermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionInclude<ExtArgs> | null
+    /**
+     * Filter which Permission to delete.
+     */
+    where: PermissionWhereUniqueInput
+  }
+
+  /**
+   * Permission deleteMany
+   */
+  export type PermissionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Permissions to delete
+     */
+    where?: PermissionWhereInput
+    /**
+     * Limit how many Permissions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Permission without action
+   */
+  export type PermissionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permission
+     */
+    select?: PermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permission
+     */
+    omit?: PermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Branch
    */
 
@@ -2981,6 +5662,7 @@ export namespace Prisma {
 
   export type BranchMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
     address: string | null
     phone: string | null
@@ -2989,10 +5671,13 @@ export namespace Prisma {
     radiusMeters: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type BranchMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
     address: string | null
     phone: string | null
@@ -3001,10 +5686,13 @@ export namespace Prisma {
     radiusMeters: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type BranchCountAggregateOutputType = {
     id: number
+    tenantId: number
     name: number
     address: number
     phone: number
@@ -3013,6 +5701,8 @@ export namespace Prisma {
     radiusMeters: number
     createdAt: number
     updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
@@ -3031,6 +5721,7 @@ export namespace Prisma {
 
   export type BranchMinAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     address?: true
     phone?: true
@@ -3039,10 +5730,13 @@ export namespace Prisma {
     radiusMeters?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type BranchMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     address?: true
     phone?: true
@@ -3051,10 +5745,13 @@ export namespace Prisma {
     radiusMeters?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type BranchCountAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     address?: true
     phone?: true
@@ -3063,6 +5760,8 @@ export namespace Prisma {
     radiusMeters?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -3154,6 +5853,7 @@ export namespace Prisma {
 
   export type BranchGroupByOutputType = {
     id: string
+    tenantId: string
     name: string
     address: string
     phone: string
@@ -3162,6 +5862,8 @@ export namespace Prisma {
     radiusMeters: number
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: BranchCountAggregateOutputType | null
     _avg: BranchAvgAggregateOutputType | null
     _sum: BranchSumAggregateOutputType | null
@@ -3185,6 +5887,7 @@ export namespace Prisma {
 
   export type BranchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     address?: boolean
     phone?: boolean
@@ -3193,6 +5896,8 @@ export namespace Prisma {
     radiusMeters?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     serviceTickets?: boolean | Branch$serviceTicketsArgs<ExtArgs>
     shifts?: boolean | Branch$shiftsArgs<ExtArgs>
     stocks?: boolean | Branch$stocksArgs<ExtArgs>
@@ -3206,6 +5911,7 @@ export namespace Prisma {
 
   export type BranchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     address?: boolean
     phone?: boolean
@@ -3214,10 +5920,13 @@ export namespace Prisma {
     radiusMeters?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }, ExtArgs["result"]["branch"]>
 
   export type BranchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     address?: boolean
     phone?: boolean
@@ -3226,10 +5935,13 @@ export namespace Prisma {
     radiusMeters?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }, ExtArgs["result"]["branch"]>
 
   export type BranchSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     address?: boolean
     phone?: boolean
@@ -3238,9 +5950,11 @@ export namespace Prisma {
     radiusMeters?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type BranchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "phone" | "latitude" | "longitude" | "radiusMeters" | "createdAt" | "updatedAt", ExtArgs["result"]["branch"]>
+  export type BranchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "address" | "phone" | "latitude" | "longitude" | "radiusMeters" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["branch"]>
   export type BranchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     serviceTickets?: boolean | Branch$serviceTicketsArgs<ExtArgs>
     shifts?: boolean | Branch$shiftsArgs<ExtArgs>
@@ -3269,6 +5983,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       name: string
       address: string
       phone: string
@@ -3277,6 +5992,8 @@ export namespace Prisma {
       radiusMeters: number
       createdAt: Date
       updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["branch"]>
     composites: {}
   }
@@ -3709,6 +6426,7 @@ export namespace Prisma {
    */
   interface BranchFieldRefs {
     readonly id: FieldRef<"Branch", 'String'>
+    readonly tenantId: FieldRef<"Branch", 'String'>
     readonly name: FieldRef<"Branch", 'String'>
     readonly address: FieldRef<"Branch", 'String'>
     readonly phone: FieldRef<"Branch", 'String'>
@@ -3717,6 +6435,8 @@ export namespace Prisma {
     readonly radiusMeters: FieldRef<"Branch", 'Int'>
     readonly createdAt: FieldRef<"Branch", 'DateTime'>
     readonly updatedAt: FieldRef<"Branch", 'DateTime'>
+    readonly deletedAt: FieldRef<"Branch", 'DateTime'>
+    readonly updatedBy: FieldRef<"Branch", 'String'>
   }
     
 
@@ -4333,75 +7053,89 @@ export namespace Prisma {
   }
 
   export type UserAvgAggregateOutputType = {
-    wageRate: number | null
-    allowance: number | null
-    insuranceDed: number | null
-    baseSalary: number | null
+    wageRate: Decimal | null
+    allowance: Decimal | null
+    insuranceDed: Decimal | null
+    baseSalary: Decimal | null
     leaveQuota: number | null
-    incentiveRate: number | null
+    incentiveRate: Decimal | null
   }
 
   export type UserSumAggregateOutputType = {
-    wageRate: number | null
-    allowance: number | null
-    insuranceDed: number | null
-    baseSalary: number | null
+    wageRate: Decimal | null
+    allowance: Decimal | null
+    insuranceDed: Decimal | null
+    baseSalary: Decimal | null
     leaveQuota: number | null
-    incentiveRate: number | null
+    incentiveRate: Decimal | null
   }
 
   export type UserMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
     email: string | null
     password: string | null
-    role: string | null
+    roleId: string | null
     createdAt: Date | null
+    joinDate: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
     branchId: string | null
     wageType: string | null
-    wageRate: number | null
-    allowance: number | null
-    insuranceDed: number | null
+    wageRate: Decimal | null
+    allowance: Decimal | null
+    insuranceDed: Decimal | null
     shiftId: string | null
-    baseSalary: number | null
+    baseSalary: Decimal | null
     leaveQuota: number | null
     phone: string | null
     address: string | null
-    incentiveRate: number | null
+    incentiveRate: Decimal | null
     incentiveType: string | null
+    incentiveMode: string | null
   }
 
   export type UserMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
     email: string | null
     password: string | null
-    role: string | null
+    roleId: string | null
     createdAt: Date | null
+    joinDate: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
     branchId: string | null
     wageType: string | null
-    wageRate: number | null
-    allowance: number | null
-    insuranceDed: number | null
+    wageRate: Decimal | null
+    allowance: Decimal | null
+    insuranceDed: Decimal | null
     shiftId: string | null
-    baseSalary: number | null
+    baseSalary: Decimal | null
     leaveQuota: number | null
     phone: string | null
     address: string | null
-    incentiveRate: number | null
+    incentiveRate: Decimal | null
     incentiveType: string | null
+    incentiveMode: string | null
   }
 
   export type UserCountAggregateOutputType = {
     id: number
+    tenantId: number
     name: number
     email: number
     password: number
-    role: number
+    roleId: number
     createdAt: number
+    joinDate: number
     updatedAt: number
+    deletedAt: number
+    updatedBy: number
     branchId: number
     wageType: number
     wageRate: number
@@ -4414,6 +7148,7 @@ export namespace Prisma {
     address: number
     incentiveRate: number
     incentiveType: number
+    incentiveMode: number
     _all: number
   }
 
@@ -4438,12 +7173,16 @@ export namespace Prisma {
 
   export type UserMinAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     email?: true
     password?: true
-    role?: true
+    roleId?: true
     createdAt?: true
+    joinDate?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     branchId?: true
     wageType?: true
     wageRate?: true
@@ -4456,16 +7195,21 @@ export namespace Prisma {
     address?: true
     incentiveRate?: true
     incentiveType?: true
+    incentiveMode?: true
   }
 
   export type UserMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     email?: true
     password?: true
-    role?: true
+    roleId?: true
     createdAt?: true
+    joinDate?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     branchId?: true
     wageType?: true
     wageRate?: true
@@ -4478,16 +7222,21 @@ export namespace Prisma {
     address?: true
     incentiveRate?: true
     incentiveType?: true
+    incentiveMode?: true
   }
 
   export type UserCountAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     email?: true
     password?: true
-    role?: true
+    roleId?: true
     createdAt?: true
+    joinDate?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     branchId?: true
     wageType?: true
     wageRate?: true
@@ -4500,6 +7249,7 @@ export namespace Prisma {
     address?: true
     incentiveRate?: true
     incentiveType?: true
+    incentiveMode?: true
     _all?: true
   }
 
@@ -4591,24 +7341,29 @@ export namespace Prisma {
 
   export type UserGroupByOutputType = {
     id: string
+    tenantId: string
     name: string | null
     email: string
     password: string | null
-    role: string
+    roleId: string
     createdAt: Date
+    joinDate: Date
     updatedAt: Date
-    branchId: string | null
+    deletedAt: Date | null
+    updatedBy: string | null
+    branchId: string
     wageType: string | null
-    wageRate: number | null
-    allowance: number | null
-    insuranceDed: number | null
+    wageRate: Decimal | null
+    allowance: Decimal | null
+    insuranceDed: Decimal | null
     shiftId: string | null
-    baseSalary: number | null
+    baseSalary: Decimal | null
     leaveQuota: number | null
     phone: string | null
     address: string | null
-    incentiveRate: number | null
+    incentiveRate: Decimal | null
     incentiveType: string | null
+    incentiveMode: string | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -4632,12 +7387,16 @@ export namespace Prisma {
 
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     email?: boolean
     password?: boolean
-    role?: boolean
+    roleId?: boolean
     createdAt?: boolean
+    joinDate?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branchId?: boolean
     wageType?: boolean
     wageRate?: boolean
@@ -4650,24 +7409,30 @@ export namespace Prisma {
     address?: boolean
     incentiveRate?: boolean
     incentiveType?: boolean
+    incentiveMode?: boolean
+    role?: boolean | RoleDefaultArgs<ExtArgs>
     cashAdvances?: boolean | User$cashAdvancesArgs<ExtArgs>
     leaveRequests?: boolean | User$leaveRequestsArgs<ExtArgs>
     serviceTickets?: boolean | User$serviceTicketsArgs<ExtArgs>
     transactions?: boolean | User$transactionsArgs<ExtArgs>
     attendances?: boolean | User$attendancesArgs<ExtArgs>
     overtimes?: boolean | User$overtimesArgs<ExtArgs>
-    branch?: boolean | User$branchArgs<ExtArgs>
+    branch?: boolean | BranchDefaultArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     email?: boolean
     password?: boolean
-    role?: boolean
+    roleId?: boolean
     createdAt?: boolean
+    joinDate?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branchId?: boolean
     wageType?: boolean
     wageRate?: boolean
@@ -4680,17 +7445,23 @@ export namespace Prisma {
     address?: boolean
     incentiveRate?: boolean
     incentiveType?: boolean
-    branch?: boolean | User$branchArgs<ExtArgs>
+    incentiveMode?: boolean
+    role?: boolean | RoleDefaultArgs<ExtArgs>
+    branch?: boolean | BranchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     email?: boolean
     password?: boolean
-    role?: boolean
+    roleId?: boolean
     createdAt?: boolean
+    joinDate?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branchId?: boolean
     wageType?: boolean
     wageRate?: boolean
@@ -4703,17 +7474,23 @@ export namespace Prisma {
     address?: boolean
     incentiveRate?: boolean
     incentiveType?: boolean
-    branch?: boolean | User$branchArgs<ExtArgs>
+    incentiveMode?: boolean
+    role?: boolean | RoleDefaultArgs<ExtArgs>
+    branch?: boolean | BranchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     email?: boolean
     password?: boolean
-    role?: boolean
+    roleId?: boolean
     createdAt?: boolean
+    joinDate?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branchId?: boolean
     wageType?: boolean
     wageRate?: boolean
@@ -4726,57 +7503,67 @@ export namespace Prisma {
     address?: boolean
     incentiveRate?: boolean
     incentiveType?: boolean
+    incentiveMode?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "createdAt" | "updatedAt" | "branchId" | "wageType" | "wageRate" | "allowance" | "insuranceDed" | "shiftId" | "baseSalary" | "leaveQuota" | "phone" | "address" | "incentiveRate" | "incentiveType", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "email" | "password" | "roleId" | "createdAt" | "joinDate" | "updatedAt" | "deletedAt" | "updatedBy" | "branchId" | "wageType" | "wageRate" | "allowance" | "insuranceDed" | "shiftId" | "baseSalary" | "leaveQuota" | "phone" | "address" | "incentiveRate" | "incentiveType" | "incentiveMode", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    role?: boolean | RoleDefaultArgs<ExtArgs>
     cashAdvances?: boolean | User$cashAdvancesArgs<ExtArgs>
     leaveRequests?: boolean | User$leaveRequestsArgs<ExtArgs>
     serviceTickets?: boolean | User$serviceTicketsArgs<ExtArgs>
     transactions?: boolean | User$transactionsArgs<ExtArgs>
     attendances?: boolean | User$attendancesArgs<ExtArgs>
     overtimes?: boolean | User$overtimesArgs<ExtArgs>
-    branch?: boolean | User$branchArgs<ExtArgs>
+    branch?: boolean | BranchDefaultArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    branch?: boolean | User$branchArgs<ExtArgs>
+    role?: boolean | RoleDefaultArgs<ExtArgs>
+    branch?: boolean | BranchDefaultArgs<ExtArgs>
   }
   export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    branch?: boolean | User$branchArgs<ExtArgs>
+    role?: boolean | RoleDefaultArgs<ExtArgs>
+    branch?: boolean | BranchDefaultArgs<ExtArgs>
   }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
+      role: Prisma.$RolePayload<ExtArgs>
       cashAdvances: Prisma.$CashAdvancePayload<ExtArgs>[]
       leaveRequests: Prisma.$LeaveRequestPayload<ExtArgs>[]
       serviceTickets: Prisma.$ServiceTicketPayload<ExtArgs>[]
       transactions: Prisma.$TransactionPayload<ExtArgs>[]
       attendances: Prisma.$AttendancePayload<ExtArgs>[]
       overtimes: Prisma.$OvertimePayload<ExtArgs>[]
-      branch: Prisma.$BranchPayload<ExtArgs> | null
+      branch: Prisma.$BranchPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       name: string | null
       email: string
       password: string | null
-      role: string
+      roleId: string
       createdAt: Date
+      joinDate: Date
       updatedAt: Date
-      branchId: string | null
+      deletedAt: Date | null
+      updatedBy: string | null
+      branchId: string
       wageType: string | null
-      wageRate: number | null
-      allowance: number | null
-      insuranceDed: number | null
+      wageRate: Prisma.Decimal | null
+      allowance: Prisma.Decimal | null
+      insuranceDed: Prisma.Decimal | null
       shiftId: string | null
-      baseSalary: number | null
+      baseSalary: Prisma.Decimal | null
       leaveQuota: number | null
       phone: string | null
       address: string | null
-      incentiveRate: number | null
+      incentiveRate: Prisma.Decimal | null
       incentiveType: string | null
+      incentiveMode: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -5171,13 +7958,14 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    role<T extends RoleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoleDefaultArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     cashAdvances<T extends User$cashAdvancesArgs<ExtArgs> = {}>(args?: Subset<T, User$cashAdvancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CashAdvancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     leaveRequests<T extends User$leaveRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$leaveRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     serviceTickets<T extends User$serviceTicketsArgs<ExtArgs> = {}>(args?: Subset<T, User$serviceTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transactions<T extends User$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendances<T extends User$attendancesArgs<ExtArgs> = {}>(args?: Subset<T, User$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     overtimes<T extends User$overtimesArgs<ExtArgs> = {}>(args?: Subset<T, User$overtimesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OvertimePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    branch<T extends User$branchArgs<ExtArgs> = {}>(args?: Subset<T, User$branchArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    branch<T extends BranchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BranchDefaultArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5208,24 +7996,29 @@ export namespace Prisma {
    */
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'String'>
+    readonly tenantId: FieldRef<"User", 'String'>
     readonly name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
-    readonly role: FieldRef<"User", 'String'>
+    readonly roleId: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
+    readonly joinDate: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly deletedAt: FieldRef<"User", 'DateTime'>
+    readonly updatedBy: FieldRef<"User", 'String'>
     readonly branchId: FieldRef<"User", 'String'>
     readonly wageType: FieldRef<"User", 'String'>
-    readonly wageRate: FieldRef<"User", 'Float'>
-    readonly allowance: FieldRef<"User", 'Float'>
-    readonly insuranceDed: FieldRef<"User", 'Float'>
+    readonly wageRate: FieldRef<"User", 'Decimal'>
+    readonly allowance: FieldRef<"User", 'Decimal'>
+    readonly insuranceDed: FieldRef<"User", 'Decimal'>
     readonly shiftId: FieldRef<"User", 'String'>
-    readonly baseSalary: FieldRef<"User", 'Float'>
+    readonly baseSalary: FieldRef<"User", 'Decimal'>
     readonly leaveQuota: FieldRef<"User", 'Int'>
     readonly phone: FieldRef<"User", 'String'>
     readonly address: FieldRef<"User", 'String'>
-    readonly incentiveRate: FieldRef<"User", 'Float'>
+    readonly incentiveRate: FieldRef<"User", 'Decimal'>
     readonly incentiveType: FieldRef<"User", 'String'>
+    readonly incentiveMode: FieldRef<"User", 'String'>
   }
     
 
@@ -5771,25 +8564,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.branch
-   */
-  export type User$branchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Branch
-     */
-    select?: BranchSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Branch
-     */
-    omit?: BranchOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: BranchInclude<ExtArgs> | null
-    where?: BranchWhereInput
-  }
-
-  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5820,52 +8594,82 @@ export namespace Prisma {
 
   export type ShiftMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
-    startTime: string | null
-    endTime: string | null
+    startTime: Date | null
+    endTime: Date | null
     branchId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type ShiftMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
-    startTime: string | null
-    endTime: string | null
+    startTime: Date | null
+    endTime: Date | null
     branchId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type ShiftCountAggregateOutputType = {
     id: number
+    tenantId: number
     name: number
     startTime: number
     endTime: number
     branchId: number
+    createdAt: number
+    updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
 
   export type ShiftMinAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     startTime?: true
     endTime?: true
     branchId?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type ShiftMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     startTime?: true
     endTime?: true
     branchId?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type ShiftCountAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     startTime?: true
     endTime?: true
     branchId?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -5943,10 +8747,15 @@ export namespace Prisma {
 
   export type ShiftGroupByOutputType = {
     id: string
+    tenantId: string
     name: string
-    startTime: string
-    endTime: string
+    startTime: Date
+    endTime: Date
     branchId: string
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: ShiftCountAggregateOutputType | null
     _min: ShiftMinAggregateOutputType | null
     _max: ShiftMaxAggregateOutputType | null
@@ -5968,40 +8777,60 @@ export namespace Prisma {
 
   export type ShiftSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     startTime?: boolean
     endTime?: boolean
     branchId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shift"]>
 
   export type ShiftSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     startTime?: boolean
     endTime?: boolean
     branchId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shift"]>
 
   export type ShiftSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     startTime?: boolean
     endTime?: boolean
     branchId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shift"]>
 
   export type ShiftSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     startTime?: boolean
     endTime?: boolean
     branchId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type ShiftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "startTime" | "endTime" | "branchId", ExtArgs["result"]["shift"]>
+  export type ShiftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "startTime" | "endTime" | "branchId" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["shift"]>
   export type ShiftInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     branch?: boolean | BranchDefaultArgs<ExtArgs>
   }
@@ -6019,10 +8848,15 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       name: string
-      startTime: string
-      endTime: string
+      startTime: Date
+      endTime: Date
       branchId: string
+      createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["shift"]>
     composites: {}
   }
@@ -6448,10 +9282,15 @@ export namespace Prisma {
    */
   interface ShiftFieldRefs {
     readonly id: FieldRef<"Shift", 'String'>
+    readonly tenantId: FieldRef<"Shift", 'String'>
     readonly name: FieldRef<"Shift", 'String'>
-    readonly startTime: FieldRef<"Shift", 'String'>
-    readonly endTime: FieldRef<"Shift", 'String'>
+    readonly startTime: FieldRef<"Shift", 'DateTime'>
+    readonly endTime: FieldRef<"Shift", 'DateTime'>
     readonly branchId: FieldRef<"Shift", 'String'>
+    readonly createdAt: FieldRef<"Shift", 'DateTime'>
+    readonly updatedAt: FieldRef<"Shift", 'DateTime'>
+    readonly deletedAt: FieldRef<"Shift", 'DateTime'>
+    readonly updatedBy: FieldRef<"Shift", 'String'>
   }
     
 
@@ -6884,41 +9723,53 @@ export namespace Prisma {
   }
 
   export type CashAdvanceAvgAggregateOutputType = {
-    amount: number | null
+    amount: Decimal | null
   }
 
   export type CashAdvanceSumAggregateOutputType = {
-    amount: number | null
+    amount: Decimal | null
   }
 
   export type CashAdvanceMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     employeeId: string | null
     date: Date | null
-    amount: number | null
+    amount: Decimal | null
     reason: string | null
-    status: string | null
+    status: $Enums.RequestStatus | null
     createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type CashAdvanceMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     employeeId: string | null
     date: Date | null
-    amount: number | null
+    amount: Decimal | null
     reason: string | null
-    status: string | null
+    status: $Enums.RequestStatus | null
     createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type CashAdvanceCountAggregateOutputType = {
     id: number
+    tenantId: number
     employeeId: number
     date: number
     amount: number
     reason: number
     status: number
     createdAt: number
+    updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
@@ -6933,32 +9784,44 @@ export namespace Prisma {
 
   export type CashAdvanceMinAggregateInputType = {
     id?: true
+    tenantId?: true
     employeeId?: true
     date?: true
     amount?: true
     reason?: true
     status?: true
     createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type CashAdvanceMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     employeeId?: true
     date?: true
     amount?: true
     reason?: true
     status?: true
     createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type CashAdvanceCountAggregateInputType = {
     id?: true
+    tenantId?: true
     employeeId?: true
     date?: true
     amount?: true
     reason?: true
     status?: true
     createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -7050,12 +9913,16 @@ export namespace Prisma {
 
   export type CashAdvanceGroupByOutputType = {
     id: string
+    tenantId: string
     employeeId: string
     date: Date
-    amount: number
+    amount: Decimal
     reason: string
-    status: string
+    status: $Enums.RequestStatus
     createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: CashAdvanceCountAggregateOutputType | null
     _avg: CashAdvanceAvgAggregateOutputType | null
     _sum: CashAdvanceSumAggregateOutputType | null
@@ -7079,48 +9946,64 @@ export namespace Prisma {
 
   export type CashAdvanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     date?: boolean
     amount?: boolean
     reason?: boolean
     status?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cashAdvance"]>
 
   export type CashAdvanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     date?: boolean
     amount?: boolean
     reason?: boolean
     status?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cashAdvance"]>
 
   export type CashAdvanceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     date?: boolean
     amount?: boolean
     reason?: boolean
     status?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cashAdvance"]>
 
   export type CashAdvanceSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     date?: boolean
     amount?: boolean
     reason?: boolean
     status?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type CashAdvanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "date" | "amount" | "reason" | "status" | "createdAt", ExtArgs["result"]["cashAdvance"]>
+  export type CashAdvanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "employeeId" | "date" | "amount" | "reason" | "status" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["cashAdvance"]>
   export type CashAdvanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -7138,12 +10021,16 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       employeeId: string
       date: Date
-      amount: number
+      amount: Prisma.Decimal
       reason: string
-      status: string
+      status: $Enums.RequestStatus
       createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["cashAdvance"]>
     composites: {}
   }
@@ -7569,12 +10456,16 @@ export namespace Prisma {
    */
   interface CashAdvanceFieldRefs {
     readonly id: FieldRef<"CashAdvance", 'String'>
+    readonly tenantId: FieldRef<"CashAdvance", 'String'>
     readonly employeeId: FieldRef<"CashAdvance", 'String'>
     readonly date: FieldRef<"CashAdvance", 'DateTime'>
-    readonly amount: FieldRef<"CashAdvance", 'Float'>
+    readonly amount: FieldRef<"CashAdvance", 'Decimal'>
     readonly reason: FieldRef<"CashAdvance", 'String'>
-    readonly status: FieldRef<"CashAdvance", 'String'>
+    readonly status: FieldRef<"CashAdvance", 'RequestStatus'>
     readonly createdAt: FieldRef<"CashAdvance", 'DateTime'>
+    readonly updatedAt: FieldRef<"CashAdvance", 'DateTime'>
+    readonly deletedAt: FieldRef<"CashAdvance", 'DateTime'>
+    readonly updatedBy: FieldRef<"CashAdvance", 'String'>
   }
     
 
@@ -8006,28 +10897,37 @@ export namespace Prisma {
 
   export type LeaveRequestMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     employeeId: string | null
     startDate: Date | null
     endDate: Date | null
     type: string | null
     reason: string | null
-    status: string | null
+    status: $Enums.RequestStatus | null
     createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type LeaveRequestMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     employeeId: string | null
     startDate: Date | null
     endDate: Date | null
     type: string | null
     reason: string | null
-    status: string | null
+    status: $Enums.RequestStatus | null
     createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type LeaveRequestCountAggregateOutputType = {
     id: number
+    tenantId: number
     employeeId: number
     startDate: number
     endDate: number
@@ -8035,12 +10935,16 @@ export namespace Prisma {
     reason: number
     status: number
     createdAt: number
+    updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
 
   export type LeaveRequestMinAggregateInputType = {
     id?: true
+    tenantId?: true
     employeeId?: true
     startDate?: true
     endDate?: true
@@ -8048,10 +10952,14 @@ export namespace Prisma {
     reason?: true
     status?: true
     createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type LeaveRequestMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     employeeId?: true
     startDate?: true
     endDate?: true
@@ -8059,10 +10967,14 @@ export namespace Prisma {
     reason?: true
     status?: true
     createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type LeaveRequestCountAggregateInputType = {
     id?: true
+    tenantId?: true
     employeeId?: true
     startDate?: true
     endDate?: true
@@ -8070,6 +10982,9 @@ export namespace Prisma {
     reason?: true
     status?: true
     createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -8147,13 +11062,17 @@ export namespace Prisma {
 
   export type LeaveRequestGroupByOutputType = {
     id: string
+    tenantId: string
     employeeId: string
     startDate: Date
     endDate: Date
     type: string
     reason: string
-    status: string
+    status: $Enums.RequestStatus
     createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: LeaveRequestCountAggregateOutputType | null
     _min: LeaveRequestMinAggregateOutputType | null
     _max: LeaveRequestMaxAggregateOutputType | null
@@ -8175,6 +11094,7 @@ export namespace Prisma {
 
   export type LeaveRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     startDate?: boolean
     endDate?: boolean
@@ -8182,11 +11102,15 @@ export namespace Prisma {
     reason?: boolean
     status?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["leaveRequest"]>
 
   export type LeaveRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     startDate?: boolean
     endDate?: boolean
@@ -8194,11 +11118,15 @@ export namespace Prisma {
     reason?: boolean
     status?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["leaveRequest"]>
 
   export type LeaveRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     startDate?: boolean
     endDate?: boolean
@@ -8206,11 +11134,15 @@ export namespace Prisma {
     reason?: boolean
     status?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["leaveRequest"]>
 
   export type LeaveRequestSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     startDate?: boolean
     endDate?: boolean
@@ -8218,9 +11150,12 @@ export namespace Prisma {
     reason?: boolean
     status?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type LeaveRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "startDate" | "endDate" | "type" | "reason" | "status" | "createdAt", ExtArgs["result"]["leaveRequest"]>
+  export type LeaveRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "employeeId" | "startDate" | "endDate" | "type" | "reason" | "status" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["leaveRequest"]>
   export type LeaveRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -8238,13 +11173,17 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       employeeId: string
       startDate: Date
       endDate: Date
       type: string
       reason: string
-      status: string
+      status: $Enums.RequestStatus
       createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["leaveRequest"]>
     composites: {}
   }
@@ -8670,13 +11609,17 @@ export namespace Prisma {
    */
   interface LeaveRequestFieldRefs {
     readonly id: FieldRef<"LeaveRequest", 'String'>
+    readonly tenantId: FieldRef<"LeaveRequest", 'String'>
     readonly employeeId: FieldRef<"LeaveRequest", 'String'>
     readonly startDate: FieldRef<"LeaveRequest", 'DateTime'>
     readonly endDate: FieldRef<"LeaveRequest", 'DateTime'>
     readonly type: FieldRef<"LeaveRequest", 'String'>
     readonly reason: FieldRef<"LeaveRequest", 'String'>
-    readonly status: FieldRef<"LeaveRequest", 'String'>
+    readonly status: FieldRef<"LeaveRequest", 'RequestStatus'>
     readonly createdAt: FieldRef<"LeaveRequest", 'DateTime'>
+    readonly updatedAt: FieldRef<"LeaveRequest", 'DateTime'>
+    readonly deletedAt: FieldRef<"LeaveRequest", 'DateTime'>
+    readonly updatedBy: FieldRef<"LeaveRequest", 'String'>
   }
     
 
@@ -9108,16 +12051,19 @@ export namespace Prisma {
 
   export type CategoryMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
   }
 
   export type CategoryMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
   }
 
   export type CategoryCountAggregateOutputType = {
     id: number
+    tenantId: number
     name: number
     _all: number
   }
@@ -9125,16 +12071,19 @@ export namespace Prisma {
 
   export type CategoryMinAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
   }
 
   export type CategoryMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
   }
 
   export type CategoryCountAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     _all?: true
   }
@@ -9213,6 +12162,7 @@ export namespace Prisma {
 
   export type CategoryGroupByOutputType = {
     id: string
+    tenantId: string
     name: string
     _count: CategoryCountAggregateOutputType | null
     _min: CategoryMinAggregateOutputType | null
@@ -9235,6 +12185,7 @@ export namespace Prisma {
 
   export type CategorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     inventoryItems?: boolean | Category$inventoryItemsArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
@@ -9242,20 +12193,23 @@ export namespace Prisma {
 
   export type CategorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
   }, ExtArgs["result"]["category"]>
 
   export type CategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
   }, ExtArgs["result"]["category"]>
 
   export type CategorySelectScalar = {
     id?: boolean
+    tenantId?: boolean
     name?: boolean
   }
 
-  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name", ExtArgs["result"]["category"]>
+  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name", ExtArgs["result"]["category"]>
   export type CategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     inventoryItems?: boolean | Category$inventoryItemsArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
@@ -9270,6 +12224,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       name: string
     }, ExtArgs["result"]["category"]>
     composites: {}
@@ -9696,6 +12651,7 @@ export namespace Prisma {
    */
   interface CategoryFieldRefs {
     readonly id: FieldRef<"Category", 'String'>
+    readonly tenantId: FieldRef<"Category", 'String'>
     readonly name: FieldRef<"Category", 'String'>
   }
     
@@ -10145,47 +13101,54 @@ export namespace Prisma {
   }
 
   export type InventoryItemAvgAggregateOutputType = {
-    costPrice: number | null
-    basePrice: number | null
+    costPrice: Decimal | null
+    basePrice: Decimal | null
   }
 
   export type InventoryItemSumAggregateOutputType = {
-    costPrice: number | null
-    basePrice: number | null
+    costPrice: Decimal | null
+    basePrice: Decimal | null
   }
 
   export type InventoryItemMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
     sku: string | null
     categoryId: string | null
-    costPrice: number | null
-    basePrice: number | null
+    costPrice: Decimal | null
+    basePrice: Decimal | null
     unit: string | null
     rack: string | null
     image: string | null
     showInPos: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type InventoryItemMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
     sku: string | null
     categoryId: string | null
-    costPrice: number | null
-    basePrice: number | null
+    costPrice: Decimal | null
+    basePrice: Decimal | null
     unit: string | null
     rack: string | null
     image: string | null
     showInPos: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type InventoryItemCountAggregateOutputType = {
     id: number
+    tenantId: number
     name: number
     sku: number
     categoryId: number
@@ -10197,6 +13160,8 @@ export namespace Prisma {
     showInPos: number
     createdAt: number
     updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
@@ -10213,6 +13178,7 @@ export namespace Prisma {
 
   export type InventoryItemMinAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     sku?: true
     categoryId?: true
@@ -10224,10 +13190,13 @@ export namespace Prisma {
     showInPos?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type InventoryItemMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     sku?: true
     categoryId?: true
@@ -10239,10 +13208,13 @@ export namespace Prisma {
     showInPos?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type InventoryItemCountAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     sku?: true
     categoryId?: true
@@ -10254,6 +13226,8 @@ export namespace Prisma {
     showInPos?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -10345,17 +13319,20 @@ export namespace Prisma {
 
   export type InventoryItemGroupByOutputType = {
     id: string
+    tenantId: string
     name: string
     sku: string
     categoryId: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal
+    basePrice: Decimal
     unit: string
     rack: string | null
     image: string | null
     showInPos: boolean
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: InventoryItemCountAggregateOutputType | null
     _avg: InventoryItemAvgAggregateOutputType | null
     _sum: InventoryItemSumAggregateOutputType | null
@@ -10379,6 +13356,7 @@ export namespace Prisma {
 
   export type InventoryItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     sku?: boolean
     categoryId?: boolean
@@ -10390,6 +13368,8 @@ export namespace Prisma {
     showInPos?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     serviceSpareparts?: boolean | InventoryItem$serviceSparepartsArgs<ExtArgs>
     stocks?: boolean | InventoryItem$stocksArgs<ExtArgs>
@@ -10401,6 +13381,7 @@ export namespace Prisma {
 
   export type InventoryItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     sku?: boolean
     categoryId?: boolean
@@ -10412,11 +13393,14 @@ export namespace Prisma {
     showInPos?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     category?: boolean | CategoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inventoryItem"]>
 
   export type InventoryItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     sku?: boolean
     categoryId?: boolean
@@ -10428,11 +13412,14 @@ export namespace Prisma {
     showInPos?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     category?: boolean | CategoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inventoryItem"]>
 
   export type InventoryItemSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     sku?: boolean
     categoryId?: boolean
@@ -10444,9 +13431,11 @@ export namespace Prisma {
     showInPos?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type InventoryItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "sku" | "categoryId" | "costPrice" | "basePrice" | "unit" | "rack" | "image" | "showInPos" | "createdAt" | "updatedAt", ExtArgs["result"]["inventoryItem"]>
+  export type InventoryItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "sku" | "categoryId" | "costPrice" | "basePrice" | "unit" | "rack" | "image" | "showInPos" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["inventoryItem"]>
   export type InventoryItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     serviceSpareparts?: boolean | InventoryItem$serviceSparepartsArgs<ExtArgs>
@@ -10475,17 +13464,20 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       name: string
       sku: string
       categoryId: string
-      costPrice: number
-      basePrice: number
+      costPrice: Prisma.Decimal
+      basePrice: Prisma.Decimal
       unit: string
       rack: string | null
       image: string | null
       showInPos: boolean
       createdAt: Date
       updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["inventoryItem"]>
     composites: {}
   }
@@ -10916,17 +13908,20 @@ export namespace Prisma {
    */
   interface InventoryItemFieldRefs {
     readonly id: FieldRef<"InventoryItem", 'String'>
+    readonly tenantId: FieldRef<"InventoryItem", 'String'>
     readonly name: FieldRef<"InventoryItem", 'String'>
     readonly sku: FieldRef<"InventoryItem", 'String'>
     readonly categoryId: FieldRef<"InventoryItem", 'String'>
-    readonly costPrice: FieldRef<"InventoryItem", 'Float'>
-    readonly basePrice: FieldRef<"InventoryItem", 'Float'>
+    readonly costPrice: FieldRef<"InventoryItem", 'Decimal'>
+    readonly basePrice: FieldRef<"InventoryItem", 'Decimal'>
     readonly unit: FieldRef<"InventoryItem", 'String'>
     readonly rack: FieldRef<"InventoryItem", 'String'>
     readonly image: FieldRef<"InventoryItem", 'String'>
     readonly showInPos: FieldRef<"InventoryItem", 'Boolean'>
     readonly createdAt: FieldRef<"InventoryItem", 'DateTime'>
     readonly updatedAt: FieldRef<"InventoryItem", 'DateTime'>
+    readonly deletedAt: FieldRef<"InventoryItem", 'DateTime'>
+    readonly updatedBy: FieldRef<"InventoryItem", 'String'>
   }
     
 
@@ -11492,29 +14487,44 @@ export namespace Prisma {
 
   export type StockMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     itemId: string | null
     branchId: string | null
     quantity: number | null
     reservedQty: number | null
     minStock: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type StockMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     itemId: string | null
     branchId: string | null
     quantity: number | null
     reservedQty: number | null
     minStock: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type StockCountAggregateOutputType = {
     id: number
+    tenantId: number
     itemId: number
     branchId: number
     quantity: number
     reservedQty: number
     minStock: number
+    createdAt: number
+    updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
@@ -11533,29 +14543,44 @@ export namespace Prisma {
 
   export type StockMinAggregateInputType = {
     id?: true
+    tenantId?: true
     itemId?: true
     branchId?: true
     quantity?: true
     reservedQty?: true
     minStock?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type StockMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     itemId?: true
     branchId?: true
     quantity?: true
     reservedQty?: true
     minStock?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type StockCountAggregateInputType = {
     id?: true
+    tenantId?: true
     itemId?: true
     branchId?: true
     quantity?: true
     reservedQty?: true
     minStock?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -11647,11 +14672,16 @@ export namespace Prisma {
 
   export type StockGroupByOutputType = {
     id: string
+    tenantId: string
     itemId: string
     branchId: string
     quantity: number
     reservedQty: number
     minStock: number
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: StockCountAggregateOutputType | null
     _avg: StockAvgAggregateOutputType | null
     _sum: StockSumAggregateOutputType | null
@@ -11675,47 +14705,67 @@ export namespace Prisma {
 
   export type StockSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     itemId?: boolean
     branchId?: boolean
     quantity?: boolean
     reservedQty?: boolean
     minStock?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     item?: boolean | InventoryItemDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["stock"]>
 
   export type StockSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     itemId?: boolean
     branchId?: boolean
     quantity?: boolean
     reservedQty?: boolean
     minStock?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     item?: boolean | InventoryItemDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["stock"]>
 
   export type StockSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     itemId?: boolean
     branchId?: boolean
     quantity?: boolean
     reservedQty?: boolean
     minStock?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     item?: boolean | InventoryItemDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["stock"]>
 
   export type StockSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     itemId?: boolean
     branchId?: boolean
     quantity?: boolean
     reservedQty?: boolean
     minStock?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type StockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "itemId" | "branchId" | "quantity" | "reservedQty" | "minStock", ExtArgs["result"]["stock"]>
+  export type StockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "itemId" | "branchId" | "quantity" | "reservedQty" | "minStock" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["stock"]>
   export type StockInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     item?: boolean | InventoryItemDefaultArgs<ExtArgs>
@@ -11737,11 +14787,16 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       itemId: string
       branchId: string
       quantity: number
       reservedQty: number
       minStock: number
+      createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["stock"]>
     composites: {}
   }
@@ -12168,11 +15223,16 @@ export namespace Prisma {
    */
   interface StockFieldRefs {
     readonly id: FieldRef<"Stock", 'String'>
+    readonly tenantId: FieldRef<"Stock", 'String'>
     readonly itemId: FieldRef<"Stock", 'String'>
     readonly branchId: FieldRef<"Stock", 'String'>
     readonly quantity: FieldRef<"Stock", 'Int'>
     readonly reservedQty: FieldRef<"Stock", 'Int'>
     readonly minStock: FieldRef<"Stock", 'Int'>
+    readonly createdAt: FieldRef<"Stock", 'DateTime'>
+    readonly updatedAt: FieldRef<"Stock", 'DateTime'>
+    readonly deletedAt: FieldRef<"Stock", 'DateTime'>
+    readonly updatedBy: FieldRef<"Stock", 'String'>
   }
     
 
@@ -12605,67 +15665,74 @@ export namespace Prisma {
   }
 
   export type TransactionAvgAggregateOutputType = {
-    total: number | null
-    amountPaid: number | null
-    change: number | null
-    tax: number | null
-    discount: number | null
+    total: Decimal | null
+    amountPaid: Decimal | null
+    change: Decimal | null
+    tax: Decimal | null
+    discount: Decimal | null
   }
 
   export type TransactionSumAggregateOutputType = {
-    total: number | null
-    amountPaid: number | null
-    change: number | null
-    tax: number | null
-    discount: number | null
+    total: Decimal | null
+    amountPaid: Decimal | null
+    change: Decimal | null
+    tax: Decimal | null
+    discount: Decimal | null
   }
 
   export type TransactionMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     date: Date | null
     branchId: string | null
     cashierId: string | null
-    source: string | null
+    source: $Enums.TransactionSource | null
     serviceTicketId: string | null
-    total: number | null
-    paymentMethod: string | null
-    amountPaid: number | null
+    total: Decimal | null
+    paymentMethod: $Enums.PaymentMethod | null
+    amountPaid: Decimal | null
     customerName: string | null
     customerPhone: string | null
     customerAddress: string | null
-    change: number | null
-    tax: number | null
-    discount: number | null
-    status: string | null
+    change: Decimal | null
+    tax: Decimal | null
+    discount: Decimal | null
+    status: $Enums.TransactionStatus | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type TransactionMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     date: Date | null
     branchId: string | null
     cashierId: string | null
-    source: string | null
+    source: $Enums.TransactionSource | null
     serviceTicketId: string | null
-    total: number | null
-    paymentMethod: string | null
-    amountPaid: number | null
+    total: Decimal | null
+    paymentMethod: $Enums.PaymentMethod | null
+    amountPaid: Decimal | null
     customerName: string | null
     customerPhone: string | null
     customerAddress: string | null
-    change: number | null
-    tax: number | null
-    discount: number | null
-    status: string | null
+    change: Decimal | null
+    tax: Decimal | null
+    discount: Decimal | null
+    status: $Enums.TransactionStatus | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type TransactionCountAggregateOutputType = {
     id: number
+    tenantId: number
     date: number
     branchId: number
     cashierId: number
@@ -12684,6 +15751,8 @@ export namespace Prisma {
     notes: number
     createdAt: number
     updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
@@ -12706,6 +15775,7 @@ export namespace Prisma {
 
   export type TransactionMinAggregateInputType = {
     id?: true
+    tenantId?: true
     date?: true
     branchId?: true
     cashierId?: true
@@ -12724,10 +15794,13 @@ export namespace Prisma {
     notes?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type TransactionMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     date?: true
     branchId?: true
     cashierId?: true
@@ -12746,10 +15819,13 @@ export namespace Prisma {
     notes?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type TransactionCountAggregateInputType = {
     id?: true
+    tenantId?: true
     date?: true
     branchId?: true
     cashierId?: true
@@ -12768,6 +15844,8 @@ export namespace Prisma {
     notes?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -12859,24 +15937,27 @@ export namespace Prisma {
 
   export type TransactionGroupByOutputType = {
     id: string
+    tenantId: string
     date: Date
     branchId: string
     cashierId: string
-    source: string
+    source: $Enums.TransactionSource
     serviceTicketId: string | null
-    total: number
-    paymentMethod: string
-    amountPaid: number
+    total: Decimal
+    paymentMethod: $Enums.PaymentMethod
+    amountPaid: Decimal
     customerName: string | null
     customerPhone: string | null
     customerAddress: string | null
-    change: number
-    tax: number
-    discount: number
-    status: string
+    change: Decimal
+    tax: Decimal
+    discount: Decimal
+    status: $Enums.TransactionStatus
     notes: string | null
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: TransactionCountAggregateOutputType | null
     _avg: TransactionAvgAggregateOutputType | null
     _sum: TransactionSumAggregateOutputType | null
@@ -12900,6 +15981,7 @@ export namespace Prisma {
 
   export type TransactionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     date?: boolean
     branchId?: boolean
     cashierId?: boolean
@@ -12918,6 +16000,8 @@ export namespace Prisma {
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     cashier?: boolean | UserDefaultArgs<ExtArgs>
     items?: boolean | Transaction$itemsArgs<ExtArgs>
@@ -12926,6 +16010,7 @@ export namespace Prisma {
 
   export type TransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     date?: boolean
     branchId?: boolean
     cashierId?: boolean
@@ -12944,12 +16029,15 @@ export namespace Prisma {
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     cashier?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
   export type TransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     date?: boolean
     branchId?: boolean
     cashierId?: boolean
@@ -12968,12 +16056,15 @@ export namespace Prisma {
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     cashier?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
   export type TransactionSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     date?: boolean
     branchId?: boolean
     cashierId?: boolean
@@ -12992,9 +16083,11 @@ export namespace Prisma {
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "date" | "branchId" | "cashierId" | "source" | "serviceTicketId" | "total" | "paymentMethod" | "amountPaid" | "customerName" | "customerPhone" | "customerAddress" | "change" | "tax" | "discount" | "status" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "date" | "branchId" | "cashierId" | "source" | "serviceTicketId" | "total" | "paymentMethod" | "amountPaid" | "customerName" | "customerPhone" | "customerAddress" | "change" | "tax" | "discount" | "status" | "notes" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["transaction"]>
   export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     cashier?: boolean | UserDefaultArgs<ExtArgs>
@@ -13019,24 +16112,27 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       date: Date
       branchId: string
       cashierId: string
-      source: string
+      source: $Enums.TransactionSource
       serviceTicketId: string | null
-      total: number
-      paymentMethod: string
-      amountPaid: number
+      total: Prisma.Decimal
+      paymentMethod: $Enums.PaymentMethod
+      amountPaid: Prisma.Decimal
       customerName: string | null
       customerPhone: string | null
       customerAddress: string | null
-      change: number
-      tax: number
-      discount: number
-      status: string
+      change: Prisma.Decimal
+      tax: Prisma.Decimal
+      discount: Prisma.Decimal
+      status: $Enums.TransactionStatus
       notes: string | null
       createdAt: Date
       updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["transaction"]>
     composites: {}
   }
@@ -13464,24 +16560,27 @@ export namespace Prisma {
    */
   interface TransactionFieldRefs {
     readonly id: FieldRef<"Transaction", 'String'>
+    readonly tenantId: FieldRef<"Transaction", 'String'>
     readonly date: FieldRef<"Transaction", 'DateTime'>
     readonly branchId: FieldRef<"Transaction", 'String'>
     readonly cashierId: FieldRef<"Transaction", 'String'>
-    readonly source: FieldRef<"Transaction", 'String'>
+    readonly source: FieldRef<"Transaction", 'TransactionSource'>
     readonly serviceTicketId: FieldRef<"Transaction", 'String'>
-    readonly total: FieldRef<"Transaction", 'Float'>
-    readonly paymentMethod: FieldRef<"Transaction", 'String'>
-    readonly amountPaid: FieldRef<"Transaction", 'Float'>
+    readonly total: FieldRef<"Transaction", 'Decimal'>
+    readonly paymentMethod: FieldRef<"Transaction", 'PaymentMethod'>
+    readonly amountPaid: FieldRef<"Transaction", 'Decimal'>
     readonly customerName: FieldRef<"Transaction", 'String'>
     readonly customerPhone: FieldRef<"Transaction", 'String'>
     readonly customerAddress: FieldRef<"Transaction", 'String'>
-    readonly change: FieldRef<"Transaction", 'Float'>
-    readonly tax: FieldRef<"Transaction", 'Float'>
-    readonly discount: FieldRef<"Transaction", 'Float'>
-    readonly status: FieldRef<"Transaction", 'String'>
+    readonly change: FieldRef<"Transaction", 'Decimal'>
+    readonly tax: FieldRef<"Transaction", 'Decimal'>
+    readonly discount: FieldRef<"Transaction", 'Decimal'>
+    readonly status: FieldRef<"Transaction", 'TransactionStatus'>
     readonly notes: FieldRef<"Transaction", 'String'>
     readonly createdAt: FieldRef<"Transaction", 'DateTime'>
     readonly updatedAt: FieldRef<"Transaction", 'DateTime'>
+    readonly deletedAt: FieldRef<"Transaction", 'DateTime'>
+    readonly updatedBy: FieldRef<"Transaction", 'String'>
   }
     
 
@@ -13938,47 +17037,50 @@ export namespace Prisma {
   }
 
   export type TransactionItemAvgAggregateOutputType = {
-    price: number | null
-    costPrice: number | null
+    price: Decimal | null
+    costPrice: Decimal | null
     quantity: number | null
-    discount: number | null
+    discount: Decimal | null
   }
 
   export type TransactionItemSumAggregateOutputType = {
-    price: number | null
-    costPrice: number | null
+    price: Decimal | null
+    costPrice: Decimal | null
     quantity: number | null
-    discount: number | null
+    discount: Decimal | null
   }
 
   export type TransactionItemMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     transactionId: string | null
     itemId: string | null
     name: string | null
     category: string | null
-    price: number | null
-    costPrice: number | null
+    price: Decimal | null
+    costPrice: Decimal | null
     quantity: number | null
-    discount: number | null
+    discount: Decimal | null
     technicianId: string | null
   }
 
   export type TransactionItemMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     transactionId: string | null
     itemId: string | null
     name: string | null
     category: string | null
-    price: number | null
-    costPrice: number | null
+    price: Decimal | null
+    costPrice: Decimal | null
     quantity: number | null
-    discount: number | null
+    discount: Decimal | null
     technicianId: string | null
   }
 
   export type TransactionItemCountAggregateOutputType = {
     id: number
+    tenantId: number
     transactionId: number
     itemId: number
     name: number
@@ -14008,6 +17110,7 @@ export namespace Prisma {
 
   export type TransactionItemMinAggregateInputType = {
     id?: true
+    tenantId?: true
     transactionId?: true
     itemId?: true
     name?: true
@@ -14021,6 +17124,7 @@ export namespace Prisma {
 
   export type TransactionItemMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     transactionId?: true
     itemId?: true
     name?: true
@@ -14034,6 +17138,7 @@ export namespace Prisma {
 
   export type TransactionItemCountAggregateInputType = {
     id?: true
+    tenantId?: true
     transactionId?: true
     itemId?: true
     name?: true
@@ -14134,14 +17239,15 @@ export namespace Prisma {
 
   export type TransactionItemGroupByOutputType = {
     id: string
+    tenantId: string
     transactionId: string
     itemId: string | null
     name: string
     category: string
-    price: number
-    costPrice: number
+    price: Decimal
+    costPrice: Decimal
     quantity: number
-    discount: number
+    discount: Decimal
     technicianId: string | null
     _count: TransactionItemCountAggregateOutputType | null
     _avg: TransactionItemAvgAggregateOutputType | null
@@ -14166,6 +17272,7 @@ export namespace Prisma {
 
   export type TransactionItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     transactionId?: boolean
     itemId?: boolean
     name?: boolean
@@ -14181,6 +17288,7 @@ export namespace Prisma {
 
   export type TransactionItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     transactionId?: boolean
     itemId?: boolean
     name?: boolean
@@ -14196,6 +17304,7 @@ export namespace Prisma {
 
   export type TransactionItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     transactionId?: boolean
     itemId?: boolean
     name?: boolean
@@ -14211,6 +17320,7 @@ export namespace Prisma {
 
   export type TransactionItemSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     transactionId?: boolean
     itemId?: boolean
     name?: boolean
@@ -14222,7 +17332,7 @@ export namespace Prisma {
     technicianId?: boolean
   }
 
-  export type TransactionItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transactionId" | "itemId" | "name" | "category" | "price" | "costPrice" | "quantity" | "discount" | "technicianId", ExtArgs["result"]["transactionItem"]>
+  export type TransactionItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "transactionId" | "itemId" | "name" | "category" | "price" | "costPrice" | "quantity" | "discount" | "technicianId", ExtArgs["result"]["transactionItem"]>
   export type TransactionItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     item?: boolean | TransactionItem$itemArgs<ExtArgs>
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
@@ -14244,14 +17354,15 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       transactionId: string
       itemId: string | null
       name: string
       category: string
-      price: number
-      costPrice: number
+      price: Prisma.Decimal
+      costPrice: Prisma.Decimal
       quantity: number
-      discount: number
+      discount: Prisma.Decimal
       technicianId: string | null
     }, ExtArgs["result"]["transactionItem"]>
     composites: {}
@@ -14679,14 +17790,15 @@ export namespace Prisma {
    */
   interface TransactionItemFieldRefs {
     readonly id: FieldRef<"TransactionItem", 'String'>
+    readonly tenantId: FieldRef<"TransactionItem", 'String'>
     readonly transactionId: FieldRef<"TransactionItem", 'String'>
     readonly itemId: FieldRef<"TransactionItem", 'String'>
     readonly name: FieldRef<"TransactionItem", 'String'>
     readonly category: FieldRef<"TransactionItem", 'String'>
-    readonly price: FieldRef<"TransactionItem", 'Float'>
-    readonly costPrice: FieldRef<"TransactionItem", 'Float'>
+    readonly price: FieldRef<"TransactionItem", 'Decimal'>
+    readonly costPrice: FieldRef<"TransactionItem", 'Decimal'>
     readonly quantity: FieldRef<"TransactionItem", 'Int'>
-    readonly discount: FieldRef<"TransactionItem", 'Float'>
+    readonly discount: FieldRef<"TransactionItem", 'Decimal'>
     readonly technicianId: FieldRef<"TransactionItem", 'String'>
   }
     
@@ -15139,17 +18251,20 @@ export namespace Prisma {
   }
 
   export type ServiceTicketAvgAggregateOutputType = {
-    estimatedCost: number | null
-    serviceFee: number | null
+    estimatedCost: Decimal | null
+    serviceFee: Decimal | null
+    incentiveValue: Decimal | null
   }
 
   export type ServiceTicketSumAggregateOutputType = {
-    estimatedCost: number | null
-    serviceFee: number | null
+    estimatedCost: Decimal | null
+    serviceFee: Decimal | null
+    incentiveValue: Decimal | null
   }
 
   export type ServiceTicketMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     dateOpened: Date | null
     dateClosed: Date | null
     customerName: string | null
@@ -15159,17 +18274,22 @@ export namespace Prisma {
     deviceSerial: string | null
     issue: string | null
     diagnosis: string | null
-    estimatedCost: number | null
-    serviceFee: number | null
-    status: string | null
+    estimatedCost: Decimal | null
+    serviceFee: Decimal | null
+    status: $Enums.ServiceStatus | null
     technicianId: string | null
     branchId: string | null
+    incentiveType: string | null
+    incentiveValue: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type ServiceTicketMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     dateOpened: Date | null
     dateClosed: Date | null
     customerName: string | null
@@ -15179,17 +18299,22 @@ export namespace Prisma {
     deviceSerial: string | null
     issue: string | null
     diagnosis: string | null
-    estimatedCost: number | null
-    serviceFee: number | null
-    status: string | null
+    estimatedCost: Decimal | null
+    serviceFee: Decimal | null
+    status: $Enums.ServiceStatus | null
     technicianId: string | null
     branchId: string | null
+    incentiveType: string | null
+    incentiveValue: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type ServiceTicketCountAggregateOutputType = {
     id: number
+    tenantId: number
     dateOpened: number
     dateClosed: number
     customerName: number
@@ -15204,8 +18329,12 @@ export namespace Prisma {
     status: number
     technicianId: number
     branchId: number
+    incentiveType: number
+    incentiveValue: number
     createdAt: number
     updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
@@ -15213,15 +18342,18 @@ export namespace Prisma {
   export type ServiceTicketAvgAggregateInputType = {
     estimatedCost?: true
     serviceFee?: true
+    incentiveValue?: true
   }
 
   export type ServiceTicketSumAggregateInputType = {
     estimatedCost?: true
     serviceFee?: true
+    incentiveValue?: true
   }
 
   export type ServiceTicketMinAggregateInputType = {
     id?: true
+    tenantId?: true
     dateOpened?: true
     dateClosed?: true
     customerName?: true
@@ -15236,12 +18368,17 @@ export namespace Prisma {
     status?: true
     technicianId?: true
     branchId?: true
+    incentiveType?: true
+    incentiveValue?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type ServiceTicketMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     dateOpened?: true
     dateClosed?: true
     customerName?: true
@@ -15256,12 +18393,17 @@ export namespace Prisma {
     status?: true
     technicianId?: true
     branchId?: true
+    incentiveType?: true
+    incentiveValue?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type ServiceTicketCountAggregateInputType = {
     id?: true
+    tenantId?: true
     dateOpened?: true
     dateClosed?: true
     customerName?: true
@@ -15276,8 +18418,12 @@ export namespace Prisma {
     status?: true
     technicianId?: true
     branchId?: true
+    incentiveType?: true
+    incentiveValue?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -15369,6 +18515,7 @@ export namespace Prisma {
 
   export type ServiceTicketGroupByOutputType = {
     id: string
+    tenantId: string
     dateOpened: Date
     dateClosed: Date | null
     customerName: string
@@ -15378,13 +18525,17 @@ export namespace Prisma {
     deviceSerial: string
     issue: string
     diagnosis: string | null
-    estimatedCost: number
-    serviceFee: number
-    status: string
+    estimatedCost: Decimal
+    serviceFee: Decimal
+    status: $Enums.ServiceStatus
     technicianId: string | null
     branchId: string
+    incentiveType: string
+    incentiveValue: Decimal
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: ServiceTicketCountAggregateOutputType | null
     _avg: ServiceTicketAvgAggregateOutputType | null
     _sum: ServiceTicketSumAggregateOutputType | null
@@ -15408,6 +18559,7 @@ export namespace Prisma {
 
   export type ServiceTicketSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     dateOpened?: boolean
     dateClosed?: boolean
     customerName?: boolean
@@ -15422,8 +18574,12 @@ export namespace Prisma {
     status?: boolean
     technicianId?: boolean
     branchId?: boolean
+    incentiveType?: boolean
+    incentiveValue?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     spareparts?: boolean | ServiceTicket$sparepartsArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     technician?: boolean | ServiceTicket$technicianArgs<ExtArgs>
@@ -15432,6 +18588,7 @@ export namespace Prisma {
 
   export type ServiceTicketSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     dateOpened?: boolean
     dateClosed?: boolean
     customerName?: boolean
@@ -15446,14 +18603,19 @@ export namespace Prisma {
     status?: boolean
     technicianId?: boolean
     branchId?: boolean
+    incentiveType?: boolean
+    incentiveValue?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     technician?: boolean | ServiceTicket$technicianArgs<ExtArgs>
   }, ExtArgs["result"]["serviceTicket"]>
 
   export type ServiceTicketSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     dateOpened?: boolean
     dateClosed?: boolean
     customerName?: boolean
@@ -15468,14 +18630,19 @@ export namespace Prisma {
     status?: boolean
     technicianId?: boolean
     branchId?: boolean
+    incentiveType?: boolean
+    incentiveValue?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     technician?: boolean | ServiceTicket$technicianArgs<ExtArgs>
   }, ExtArgs["result"]["serviceTicket"]>
 
   export type ServiceTicketSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     dateOpened?: boolean
     dateClosed?: boolean
     customerName?: boolean
@@ -15490,11 +18657,15 @@ export namespace Prisma {
     status?: boolean
     technicianId?: boolean
     branchId?: boolean
+    incentiveType?: boolean
+    incentiveValue?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type ServiceTicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dateOpened" | "dateClosed" | "customerName" | "customerPhone" | "customerAddress" | "deviceModel" | "deviceSerial" | "issue" | "diagnosis" | "estimatedCost" | "serviceFee" | "status" | "technicianId" | "branchId" | "createdAt" | "updatedAt", ExtArgs["result"]["serviceTicket"]>
+  export type ServiceTicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "dateOpened" | "dateClosed" | "customerName" | "customerPhone" | "customerAddress" | "deviceModel" | "deviceSerial" | "issue" | "diagnosis" | "estimatedCost" | "serviceFee" | "status" | "technicianId" | "branchId" | "incentiveType" | "incentiveValue" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["serviceTicket"]>
   export type ServiceTicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     spareparts?: boolean | ServiceTicket$sparepartsArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
@@ -15519,6 +18690,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       dateOpened: Date
       dateClosed: Date | null
       customerName: string
@@ -15528,13 +18700,17 @@ export namespace Prisma {
       deviceSerial: string
       issue: string
       diagnosis: string | null
-      estimatedCost: number
-      serviceFee: number
-      status: string
+      estimatedCost: Prisma.Decimal
+      serviceFee: Prisma.Decimal
+      status: $Enums.ServiceStatus
       technicianId: string | null
       branchId: string
+      incentiveType: string
+      incentiveValue: Prisma.Decimal
       createdAt: Date
       updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["serviceTicket"]>
     composites: {}
   }
@@ -15962,6 +19138,7 @@ export namespace Prisma {
    */
   interface ServiceTicketFieldRefs {
     readonly id: FieldRef<"ServiceTicket", 'String'>
+    readonly tenantId: FieldRef<"ServiceTicket", 'String'>
     readonly dateOpened: FieldRef<"ServiceTicket", 'DateTime'>
     readonly dateClosed: FieldRef<"ServiceTicket", 'DateTime'>
     readonly customerName: FieldRef<"ServiceTicket", 'String'>
@@ -15971,13 +19148,17 @@ export namespace Prisma {
     readonly deviceSerial: FieldRef<"ServiceTicket", 'String'>
     readonly issue: FieldRef<"ServiceTicket", 'String'>
     readonly diagnosis: FieldRef<"ServiceTicket", 'String'>
-    readonly estimatedCost: FieldRef<"ServiceTicket", 'Float'>
-    readonly serviceFee: FieldRef<"ServiceTicket", 'Float'>
-    readonly status: FieldRef<"ServiceTicket", 'String'>
+    readonly estimatedCost: FieldRef<"ServiceTicket", 'Decimal'>
+    readonly serviceFee: FieldRef<"ServiceTicket", 'Decimal'>
+    readonly status: FieldRef<"ServiceTicket", 'ServiceStatus'>
     readonly technicianId: FieldRef<"ServiceTicket", 'String'>
     readonly branchId: FieldRef<"ServiceTicket", 'String'>
+    readonly incentiveType: FieldRef<"ServiceTicket", 'String'>
+    readonly incentiveValue: FieldRef<"ServiceTicket", 'Decimal'>
     readonly createdAt: FieldRef<"ServiceTicket", 'DateTime'>
     readonly updatedAt: FieldRef<"ServiceTicket", 'DateTime'>
+    readonly deletedAt: FieldRef<"ServiceTicket", 'DateTime'>
+    readonly updatedBy: FieldRef<"ServiceTicket", 'String'>
   }
     
 
@@ -16454,36 +19635,51 @@ export namespace Prisma {
 
   export type ServiceSparepartAvgAggregateOutputType = {
     quantity: number | null
-    price: number | null
+    price: Decimal | null
   }
 
   export type ServiceSparepartSumAggregateOutputType = {
     quantity: number | null
-    price: number | null
+    price: Decimal | null
   }
 
   export type ServiceSparepartMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     ticketId: string | null
     itemId: string | null
     quantity: number | null
-    price: number | null
+    price: Decimal | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type ServiceSparepartMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     ticketId: string | null
     itemId: string | null
     quantity: number | null
-    price: number | null
+    price: Decimal | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type ServiceSparepartCountAggregateOutputType = {
     id: number
+    tenantId: number
     ticketId: number
     itemId: number
     quantity: number
     price: number
+    createdAt: number
+    updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
@@ -16500,26 +19696,41 @@ export namespace Prisma {
 
   export type ServiceSparepartMinAggregateInputType = {
     id?: true
+    tenantId?: true
     ticketId?: true
     itemId?: true
     quantity?: true
     price?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type ServiceSparepartMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     ticketId?: true
     itemId?: true
     quantity?: true
     price?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type ServiceSparepartCountAggregateInputType = {
     id?: true
+    tenantId?: true
     ticketId?: true
     itemId?: true
     quantity?: true
     price?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -16611,10 +19822,15 @@ export namespace Prisma {
 
   export type ServiceSparepartGroupByOutputType = {
     id: string
+    tenantId: string
     ticketId: string
     itemId: string
     quantity: number
-    price: number
+    price: Decimal
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: ServiceSparepartCountAggregateOutputType | null
     _avg: ServiceSparepartAvgAggregateOutputType | null
     _sum: ServiceSparepartSumAggregateOutputType | null
@@ -16638,43 +19854,63 @@ export namespace Prisma {
 
   export type ServiceSparepartSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     ticketId?: boolean
     itemId?: boolean
     quantity?: boolean
     price?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     item?: boolean | InventoryItemDefaultArgs<ExtArgs>
     ticket?: boolean | ServiceTicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["serviceSparepart"]>
 
   export type ServiceSparepartSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     ticketId?: boolean
     itemId?: boolean
     quantity?: boolean
     price?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     item?: boolean | InventoryItemDefaultArgs<ExtArgs>
     ticket?: boolean | ServiceTicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["serviceSparepart"]>
 
   export type ServiceSparepartSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     ticketId?: boolean
     itemId?: boolean
     quantity?: boolean
     price?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     item?: boolean | InventoryItemDefaultArgs<ExtArgs>
     ticket?: boolean | ServiceTicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["serviceSparepart"]>
 
   export type ServiceSparepartSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     ticketId?: boolean
     itemId?: boolean
     quantity?: boolean
     price?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type ServiceSparepartOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "ticketId" | "itemId" | "quantity" | "price", ExtArgs["result"]["serviceSparepart"]>
+  export type ServiceSparepartOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "ticketId" | "itemId" | "quantity" | "price" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["serviceSparepart"]>
   export type ServiceSparepartInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     item?: boolean | InventoryItemDefaultArgs<ExtArgs>
     ticket?: boolean | ServiceTicketDefaultArgs<ExtArgs>
@@ -16696,10 +19932,15 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       ticketId: string
       itemId: string
       quantity: number
-      price: number
+      price: Prisma.Decimal
+      createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["serviceSparepart"]>
     composites: {}
   }
@@ -17126,10 +20367,15 @@ export namespace Prisma {
    */
   interface ServiceSparepartFieldRefs {
     readonly id: FieldRef<"ServiceSparepart", 'String'>
+    readonly tenantId: FieldRef<"ServiceSparepart", 'String'>
     readonly ticketId: FieldRef<"ServiceSparepart", 'String'>
     readonly itemId: FieldRef<"ServiceSparepart", 'String'>
     readonly quantity: FieldRef<"ServiceSparepart", 'Int'>
-    readonly price: FieldRef<"ServiceSparepart", 'Float'>
+    readonly price: FieldRef<"ServiceSparepart", 'Decimal'>
+    readonly createdAt: FieldRef<"ServiceSparepart", 'DateTime'>
+    readonly updatedAt: FieldRef<"ServiceSparepart", 'DateTime'>
+    readonly deletedAt: FieldRef<"ServiceSparepart", 'DateTime'>
+    readonly updatedBy: FieldRef<"ServiceSparepart", 'String'>
   }
     
 
@@ -17562,8 +20808,6 @@ export namespace Prisma {
   }
 
   export type AttendanceAvgAggregateOutputType = {
-    checkInTime: number | null
-    checkOutTime: number | null
     latitude: number | null
     longitude: number | null
     checkOutLatitude: number | null
@@ -17572,8 +20816,6 @@ export namespace Prisma {
   }
 
   export type AttendanceSumAggregateOutputType = {
-    checkInTime: bigint | null
-    checkOutTime: bigint | null
     latitude: number | null
     longitude: number | null
     checkOutLatitude: number | null
@@ -17583,13 +20825,14 @@ export namespace Prisma {
 
   export type AttendanceMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     employeeId: string | null
     employeeName: string | null
     branchId: string | null
-    date: string | null
-    checkInTime: bigint | null
-    checkOutTime: bigint | null
-    status: string | null
+    date: Date | null
+    checkInTime: Date | null
+    checkOutTime: Date | null
+    status: $Enums.AttendanceStatus | null
     isInRadius: boolean | null
     isMockGPS: boolean | null
     latitude: number | null
@@ -17600,17 +20843,21 @@ export namespace Prisma {
     checkOutLongitude: number | null
     workDurationMinutes: number | null
     createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type AttendanceMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     employeeId: string | null
     employeeName: string | null
     branchId: string | null
-    date: string | null
-    checkInTime: bigint | null
-    checkOutTime: bigint | null
-    status: string | null
+    date: Date | null
+    checkInTime: Date | null
+    checkOutTime: Date | null
+    status: $Enums.AttendanceStatus | null
     isInRadius: boolean | null
     isMockGPS: boolean | null
     latitude: number | null
@@ -17621,10 +20868,14 @@ export namespace Prisma {
     checkOutLongitude: number | null
     workDurationMinutes: number | null
     createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type AttendanceCountAggregateOutputType = {
     id: number
+    tenantId: number
     employeeId: number
     employeeName: number
     branchId: number
@@ -17642,13 +20893,14 @@ export namespace Prisma {
     checkOutLongitude: number
     workDurationMinutes: number
     createdAt: number
+    updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
 
   export type AttendanceAvgAggregateInputType = {
-    checkInTime?: true
-    checkOutTime?: true
     latitude?: true
     longitude?: true
     checkOutLatitude?: true
@@ -17657,8 +20909,6 @@ export namespace Prisma {
   }
 
   export type AttendanceSumAggregateInputType = {
-    checkInTime?: true
-    checkOutTime?: true
     latitude?: true
     longitude?: true
     checkOutLatitude?: true
@@ -17668,6 +20918,7 @@ export namespace Prisma {
 
   export type AttendanceMinAggregateInputType = {
     id?: true
+    tenantId?: true
     employeeId?: true
     employeeName?: true
     branchId?: true
@@ -17685,10 +20936,14 @@ export namespace Prisma {
     checkOutLongitude?: true
     workDurationMinutes?: true
     createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type AttendanceMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     employeeId?: true
     employeeName?: true
     branchId?: true
@@ -17706,10 +20961,14 @@ export namespace Prisma {
     checkOutLongitude?: true
     workDurationMinutes?: true
     createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type AttendanceCountAggregateInputType = {
     id?: true
+    tenantId?: true
     employeeId?: true
     employeeName?: true
     branchId?: true
@@ -17727,6 +20986,9 @@ export namespace Prisma {
     checkOutLongitude?: true
     workDurationMinutes?: true
     createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -17818,13 +21080,14 @@ export namespace Prisma {
 
   export type AttendanceGroupByOutputType = {
     id: string
+    tenantId: string
     employeeId: string
     employeeName: string
     branchId: string
-    date: string
-    checkInTime: bigint
-    checkOutTime: bigint | null
-    status: string
+    date: Date
+    checkInTime: Date
+    checkOutTime: Date | null
+    status: $Enums.AttendanceStatus
     isInRadius: boolean
     isMockGPS: boolean
     latitude: number | null
@@ -17835,6 +21098,9 @@ export namespace Prisma {
     checkOutLongitude: number | null
     workDurationMinutes: number | null
     createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: AttendanceCountAggregateOutputType | null
     _avg: AttendanceAvgAggregateOutputType | null
     _sum: AttendanceSumAggregateOutputType | null
@@ -17858,6 +21124,7 @@ export namespace Prisma {
 
   export type AttendanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     employeeName?: boolean
     branchId?: boolean
@@ -17875,11 +21142,15 @@ export namespace Prisma {
     checkOutLongitude?: boolean
     workDurationMinutes?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["attendance"]>
 
   export type AttendanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     employeeName?: boolean
     branchId?: boolean
@@ -17897,11 +21168,15 @@ export namespace Prisma {
     checkOutLongitude?: boolean
     workDurationMinutes?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["attendance"]>
 
   export type AttendanceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     employeeName?: boolean
     branchId?: boolean
@@ -17919,11 +21194,15 @@ export namespace Prisma {
     checkOutLongitude?: boolean
     workDurationMinutes?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["attendance"]>
 
   export type AttendanceSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     employeeName?: boolean
     branchId?: boolean
@@ -17941,9 +21220,12 @@ export namespace Prisma {
     checkOutLongitude?: boolean
     workDurationMinutes?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "employeeName" | "branchId" | "date" | "checkInTime" | "checkOutTime" | "status" | "isInRadius" | "isMockGPS" | "latitude" | "longitude" | "photoUrl" | "checkOutPhotoUrl" | "checkOutLatitude" | "checkOutLongitude" | "workDurationMinutes" | "createdAt", ExtArgs["result"]["attendance"]>
+  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "employeeId" | "employeeName" | "branchId" | "date" | "checkInTime" | "checkOutTime" | "status" | "isInRadius" | "isMockGPS" | "latitude" | "longitude" | "photoUrl" | "checkOutPhotoUrl" | "checkOutLatitude" | "checkOutLongitude" | "workDurationMinutes" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["attendance"]>
   export type AttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -17961,13 +21243,14 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       employeeId: string
       employeeName: string
       branchId: string
-      date: string
-      checkInTime: bigint
-      checkOutTime: bigint | null
-      status: string
+      date: Date
+      checkInTime: Date
+      checkOutTime: Date | null
+      status: $Enums.AttendanceStatus
       isInRadius: boolean
       isMockGPS: boolean
       latitude: number | null
@@ -17978,6 +21261,9 @@ export namespace Prisma {
       checkOutLongitude: number | null
       workDurationMinutes: number | null
       createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["attendance"]>
     composites: {}
   }
@@ -18403,13 +21689,14 @@ export namespace Prisma {
    */
   interface AttendanceFieldRefs {
     readonly id: FieldRef<"Attendance", 'String'>
+    readonly tenantId: FieldRef<"Attendance", 'String'>
     readonly employeeId: FieldRef<"Attendance", 'String'>
     readonly employeeName: FieldRef<"Attendance", 'String'>
     readonly branchId: FieldRef<"Attendance", 'String'>
-    readonly date: FieldRef<"Attendance", 'String'>
-    readonly checkInTime: FieldRef<"Attendance", 'BigInt'>
-    readonly checkOutTime: FieldRef<"Attendance", 'BigInt'>
-    readonly status: FieldRef<"Attendance", 'String'>
+    readonly date: FieldRef<"Attendance", 'DateTime'>
+    readonly checkInTime: FieldRef<"Attendance", 'DateTime'>
+    readonly checkOutTime: FieldRef<"Attendance", 'DateTime'>
+    readonly status: FieldRef<"Attendance", 'AttendanceStatus'>
     readonly isInRadius: FieldRef<"Attendance", 'Boolean'>
     readonly isMockGPS: FieldRef<"Attendance", 'Boolean'>
     readonly latitude: FieldRef<"Attendance", 'Float'>
@@ -18420,6 +21707,9 @@ export namespace Prisma {
     readonly checkOutLongitude: FieldRef<"Attendance", 'Float'>
     readonly workDurationMinutes: FieldRef<"Attendance", 'Int'>
     readonly createdAt: FieldRef<"Attendance", 'DateTime'>
+    readonly updatedAt: FieldRef<"Attendance", 'DateTime'>
+    readonly deletedAt: FieldRef<"Attendance", 'DateTime'>
+    readonly updatedBy: FieldRef<"Attendance", 'String'>
   }
     
 
@@ -18858,9 +22148,13 @@ export namespace Prisma {
     latePenalty: number | null
     absentPenalty: number | null
     totalWorkDays: number | null
-    baseSalary: number | null
-    overtimeRate: number | null
-    serviceIncentive: number | null
+    baseSalary: Decimal | null
+    overtimeRate: Decimal | null
+    serviceIncentive: Decimal | null
+    payDay: number | null
+    thrMonth: number | null
+    thrMinWorkMonths: number | null
+    thrMultiplier: Decimal | null
   }
 
   export type StoreProfileSumAggregateOutputType = {
@@ -18870,13 +22164,18 @@ export namespace Prisma {
     latePenalty: number | null
     absentPenalty: number | null
     totalWorkDays: number | null
-    baseSalary: number | null
-    overtimeRate: number | null
-    serviceIncentive: number | null
+    baseSalary: Decimal | null
+    overtimeRate: Decimal | null
+    serviceIncentive: Decimal | null
+    payDay: number | null
+    thrMonth: number | null
+    thrMinWorkMonths: number | null
+    thrMultiplier: Decimal | null
   }
 
   export type StoreProfileMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
     address: string | null
     phone: string | null
@@ -18889,14 +22188,21 @@ export namespace Prisma {
     latePenalty: number | null
     absentPenalty: number | null
     totalWorkDays: number | null
-    baseSalary: number | null
-    overtimeRate: number | null
-    serviceIncentive: number | null
+    baseSalary: Decimal | null
+    overtimeRate: Decimal | null
+    serviceIncentive: Decimal | null
+    payDay: number | null
+    thrMonth: number | null
+    thrMinWorkMonths: number | null
+    thrMultiplier: Decimal | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type StoreProfileMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
     address: string | null
     phone: string | null
@@ -18909,14 +22215,21 @@ export namespace Prisma {
     latePenalty: number | null
     absentPenalty: number | null
     totalWorkDays: number | null
-    baseSalary: number | null
-    overtimeRate: number | null
-    serviceIncentive: number | null
+    baseSalary: Decimal | null
+    overtimeRate: Decimal | null
+    serviceIncentive: Decimal | null
+    payDay: number | null
+    thrMonth: number | null
+    thrMinWorkMonths: number | null
+    thrMultiplier: Decimal | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type StoreProfileCountAggregateOutputType = {
     id: number
+    tenantId: number
     name: number
     address: number
     phone: number
@@ -18932,7 +22245,13 @@ export namespace Prisma {
     baseSalary: number
     overtimeRate: number
     serviceIncentive: number
+    payDay: number
+    thrMonth: number
+    thrMinWorkMonths: number
+    thrMultiplier: number
     updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
@@ -18947,6 +22266,10 @@ export namespace Prisma {
     baseSalary?: true
     overtimeRate?: true
     serviceIncentive?: true
+    payDay?: true
+    thrMonth?: true
+    thrMinWorkMonths?: true
+    thrMultiplier?: true
   }
 
   export type StoreProfileSumAggregateInputType = {
@@ -18959,10 +22282,15 @@ export namespace Prisma {
     baseSalary?: true
     overtimeRate?: true
     serviceIncentive?: true
+    payDay?: true
+    thrMonth?: true
+    thrMinWorkMonths?: true
+    thrMultiplier?: true
   }
 
   export type StoreProfileMinAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     address?: true
     phone?: true
@@ -18978,11 +22306,18 @@ export namespace Prisma {
     baseSalary?: true
     overtimeRate?: true
     serviceIncentive?: true
+    payDay?: true
+    thrMonth?: true
+    thrMinWorkMonths?: true
+    thrMultiplier?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type StoreProfileMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     address?: true
     phone?: true
@@ -18998,11 +22333,18 @@ export namespace Prisma {
     baseSalary?: true
     overtimeRate?: true
     serviceIncentive?: true
+    payDay?: true
+    thrMonth?: true
+    thrMinWorkMonths?: true
+    thrMultiplier?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type StoreProfileCountAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     address?: true
     phone?: true
@@ -19018,7 +22360,13 @@ export namespace Prisma {
     baseSalary?: true
     overtimeRate?: true
     serviceIncentive?: true
+    payDay?: true
+    thrMonth?: true
+    thrMinWorkMonths?: true
+    thrMultiplier?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -19110,6 +22458,7 @@ export namespace Prisma {
 
   export type StoreProfileGroupByOutputType = {
     id: string
+    tenantId: string
     name: string
     address: string
     phone: string
@@ -19122,10 +22471,16 @@ export namespace Prisma {
     latePenalty: number
     absentPenalty: number
     totalWorkDays: number
-    baseSalary: number
-    overtimeRate: number
-    serviceIncentive: number
+    baseSalary: Decimal
+    overtimeRate: Decimal
+    serviceIncentive: Decimal
+    payDay: number
+    thrMonth: number | null
+    thrMinWorkMonths: number
+    thrMultiplier: Decimal
     updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: StoreProfileCountAggregateOutputType | null
     _avg: StoreProfileAvgAggregateOutputType | null
     _sum: StoreProfileSumAggregateOutputType | null
@@ -19149,6 +22504,7 @@ export namespace Prisma {
 
   export type StoreProfileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     address?: boolean
     phone?: boolean
@@ -19164,11 +22520,18 @@ export namespace Prisma {
     baseSalary?: boolean
     overtimeRate?: boolean
     serviceIncentive?: boolean
+    payDay?: boolean
+    thrMonth?: boolean
+    thrMinWorkMonths?: boolean
+    thrMultiplier?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }, ExtArgs["result"]["storeProfile"]>
 
   export type StoreProfileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     address?: boolean
     phone?: boolean
@@ -19184,11 +22547,18 @@ export namespace Prisma {
     baseSalary?: boolean
     overtimeRate?: boolean
     serviceIncentive?: boolean
+    payDay?: boolean
+    thrMonth?: boolean
+    thrMinWorkMonths?: boolean
+    thrMultiplier?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }, ExtArgs["result"]["storeProfile"]>
 
   export type StoreProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     address?: boolean
     phone?: boolean
@@ -19204,11 +22574,18 @@ export namespace Prisma {
     baseSalary?: boolean
     overtimeRate?: boolean
     serviceIncentive?: boolean
+    payDay?: boolean
+    thrMonth?: boolean
+    thrMinWorkMonths?: boolean
+    thrMultiplier?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }, ExtArgs["result"]["storeProfile"]>
 
   export type StoreProfileSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     address?: boolean
     phone?: boolean
@@ -19224,16 +22601,23 @@ export namespace Prisma {
     baseSalary?: boolean
     overtimeRate?: boolean
     serviceIncentive?: boolean
+    payDay?: boolean
+    thrMonth?: boolean
+    thrMinWorkMonths?: boolean
+    thrMultiplier?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type StoreProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "phone" | "taxPercentage" | "enableTax" | "serviceIncentivePercentage" | "startTime" | "endTime" | "attendanceRate" | "latePenalty" | "absentPenalty" | "totalWorkDays" | "baseSalary" | "overtimeRate" | "serviceIncentive" | "updatedAt", ExtArgs["result"]["storeProfile"]>
+  export type StoreProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "address" | "phone" | "taxPercentage" | "enableTax" | "serviceIncentivePercentage" | "startTime" | "endTime" | "attendanceRate" | "latePenalty" | "absentPenalty" | "totalWorkDays" | "baseSalary" | "overtimeRate" | "serviceIncentive" | "payDay" | "thrMonth" | "thrMinWorkMonths" | "thrMultiplier" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["storeProfile"]>
 
   export type $StoreProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "StoreProfile"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       name: string
       address: string
       phone: string
@@ -19246,10 +22630,16 @@ export namespace Prisma {
       latePenalty: number
       absentPenalty: number
       totalWorkDays: number
-      baseSalary: number
-      overtimeRate: number
-      serviceIncentive: number
+      baseSalary: Prisma.Decimal
+      overtimeRate: Prisma.Decimal
+      serviceIncentive: Prisma.Decimal
+      payDay: number
+      thrMonth: number | null
+      thrMinWorkMonths: number
+      thrMultiplier: Prisma.Decimal
       updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["storeProfile"]>
     composites: {}
   }
@@ -19674,6 +23064,7 @@ export namespace Prisma {
    */
   interface StoreProfileFieldRefs {
     readonly id: FieldRef<"StoreProfile", 'String'>
+    readonly tenantId: FieldRef<"StoreProfile", 'String'>
     readonly name: FieldRef<"StoreProfile", 'String'>
     readonly address: FieldRef<"StoreProfile", 'String'>
     readonly phone: FieldRef<"StoreProfile", 'String'>
@@ -19686,10 +23077,16 @@ export namespace Prisma {
     readonly latePenalty: FieldRef<"StoreProfile", 'Float'>
     readonly absentPenalty: FieldRef<"StoreProfile", 'Float'>
     readonly totalWorkDays: FieldRef<"StoreProfile", 'Int'>
-    readonly baseSalary: FieldRef<"StoreProfile", 'Float'>
-    readonly overtimeRate: FieldRef<"StoreProfile", 'Float'>
-    readonly serviceIncentive: FieldRef<"StoreProfile", 'Float'>
+    readonly baseSalary: FieldRef<"StoreProfile", 'Decimal'>
+    readonly overtimeRate: FieldRef<"StoreProfile", 'Decimal'>
+    readonly serviceIncentive: FieldRef<"StoreProfile", 'Decimal'>
+    readonly payDay: FieldRef<"StoreProfile", 'Int'>
+    readonly thrMonth: FieldRef<"StoreProfile", 'Int'>
+    readonly thrMinWorkMonths: FieldRef<"StoreProfile", 'Int'>
+    readonly thrMultiplier: FieldRef<"StoreProfile", 'Decimal'>
     readonly updatedAt: FieldRef<"StoreProfile", 'DateTime'>
+    readonly deletedAt: FieldRef<"StoreProfile", 'DateTime'>
+    readonly updatedBy: FieldRef<"StoreProfile", 'String'>
   }
     
 
@@ -20074,75 +23471,109 @@ export namespace Prisma {
   }
 
   export type ServiceTypeAvgAggregateOutputType = {
-    price: number | null
+    price: Decimal | null
+    incentiveValue: Decimal | null
   }
 
   export type ServiceTypeSumAggregateOutputType = {
-    price: number | null
+    price: Decimal | null
+    incentiveValue: Decimal | null
   }
 
   export type ServiceTypeMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
-    price: number | null
+    price: Decimal | null
     category: string | null
+    incentiveType: string | null
+    incentiveValue: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type ServiceTypeMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
-    price: number | null
+    price: Decimal | null
     category: string | null
+    incentiveType: string | null
+    incentiveValue: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type ServiceTypeCountAggregateOutputType = {
     id: number
+    tenantId: number
     name: number
     price: number
     category: number
+    incentiveType: number
+    incentiveValue: number
     createdAt: number
     updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
 
   export type ServiceTypeAvgAggregateInputType = {
     price?: true
+    incentiveValue?: true
   }
 
   export type ServiceTypeSumAggregateInputType = {
     price?: true
+    incentiveValue?: true
   }
 
   export type ServiceTypeMinAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     price?: true
     category?: true
+    incentiveType?: true
+    incentiveValue?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type ServiceTypeMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     price?: true
     category?: true
+    incentiveType?: true
+    incentiveValue?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type ServiceTypeCountAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     price?: true
     category?: true
+    incentiveType?: true
+    incentiveValue?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -20234,11 +23665,16 @@ export namespace Prisma {
 
   export type ServiceTypeGroupByOutputType = {
     id: string
+    tenantId: string
     name: string
-    price: number
+    price: Decimal
     category: string | null
+    incentiveType: string
+    incentiveValue: Decimal
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: ServiceTypeCountAggregateOutputType | null
     _avg: ServiceTypeAvgAggregateOutputType | null
     _sum: ServiceTypeSumAggregateOutputType | null
@@ -20262,52 +23698,77 @@ export namespace Prisma {
 
   export type ServiceTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     price?: boolean
     category?: boolean
+    incentiveType?: boolean
+    incentiveValue?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }, ExtArgs["result"]["serviceType"]>
 
   export type ServiceTypeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     price?: boolean
     category?: boolean
+    incentiveType?: boolean
+    incentiveValue?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }, ExtArgs["result"]["serviceType"]>
 
   export type ServiceTypeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     price?: boolean
     category?: boolean
+    incentiveType?: boolean
+    incentiveValue?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }, ExtArgs["result"]["serviceType"]>
 
   export type ServiceTypeSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     price?: boolean
     category?: boolean
+    incentiveType?: boolean
+    incentiveValue?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type ServiceTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "price" | "category" | "createdAt" | "updatedAt", ExtArgs["result"]["serviceType"]>
+  export type ServiceTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "price" | "category" | "incentiveType" | "incentiveValue" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["serviceType"]>
 
   export type $ServiceTypePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ServiceType"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       name: string
-      price: number
+      price: Prisma.Decimal
       category: string | null
+      incentiveType: string
+      incentiveValue: Prisma.Decimal
       createdAt: Date
       updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["serviceType"]>
     composites: {}
   }
@@ -20732,11 +24193,16 @@ export namespace Prisma {
    */
   interface ServiceTypeFieldRefs {
     readonly id: FieldRef<"ServiceType", 'String'>
+    readonly tenantId: FieldRef<"ServiceType", 'String'>
     readonly name: FieldRef<"ServiceType", 'String'>
-    readonly price: FieldRef<"ServiceType", 'Float'>
+    readonly price: FieldRef<"ServiceType", 'Decimal'>
     readonly category: FieldRef<"ServiceType", 'String'>
+    readonly incentiveType: FieldRef<"ServiceType", 'String'>
+    readonly incentiveValue: FieldRef<"ServiceType", 'Decimal'>
     readonly createdAt: FieldRef<"ServiceType", 'DateTime'>
     readonly updatedAt: FieldRef<"ServiceType", 'DateTime'>
+    readonly deletedAt: FieldRef<"ServiceType", 'DateTime'>
+    readonly updatedBy: FieldRef<"ServiceType", 'String'>
   }
     
 
@@ -21130,32 +24596,44 @@ export namespace Prisma {
 
   export type OvertimeMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     employeeId: string | null
     hours: number | null
     date: Date | null
     reason: string | null
-    status: string | null
+    status: $Enums.RequestStatus | null
     createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type OvertimeMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     employeeId: string | null
     hours: number | null
     date: Date | null
     reason: string | null
-    status: string | null
+    status: $Enums.RequestStatus | null
     createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type OvertimeCountAggregateOutputType = {
     id: number
+    tenantId: number
     employeeId: number
     hours: number
     date: number
     reason: number
     status: number
     createdAt: number
+    updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
@@ -21170,32 +24648,44 @@ export namespace Prisma {
 
   export type OvertimeMinAggregateInputType = {
     id?: true
+    tenantId?: true
     employeeId?: true
     hours?: true
     date?: true
     reason?: true
     status?: true
     createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type OvertimeMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     employeeId?: true
     hours?: true
     date?: true
     reason?: true
     status?: true
     createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type OvertimeCountAggregateInputType = {
     id?: true
+    tenantId?: true
     employeeId?: true
     hours?: true
     date?: true
     reason?: true
     status?: true
     createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -21287,12 +24777,16 @@ export namespace Prisma {
 
   export type OvertimeGroupByOutputType = {
     id: string
+    tenantId: string
     employeeId: string
     hours: number
     date: Date
     reason: string
-    status: string
+    status: $Enums.RequestStatus
     createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: OvertimeCountAggregateOutputType | null
     _avg: OvertimeAvgAggregateOutputType | null
     _sum: OvertimeSumAggregateOutputType | null
@@ -21316,48 +24810,64 @@ export namespace Prisma {
 
   export type OvertimeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     hours?: boolean
     date?: boolean
     reason?: boolean
     status?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["overtime"]>
 
   export type OvertimeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     hours?: boolean
     date?: boolean
     reason?: boolean
     status?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["overtime"]>
 
   export type OvertimeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     hours?: boolean
     date?: boolean
     reason?: boolean
     status?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["overtime"]>
 
   export type OvertimeSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     employeeId?: boolean
     hours?: boolean
     date?: boolean
     reason?: boolean
     status?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type OvertimeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "hours" | "date" | "reason" | "status" | "createdAt", ExtArgs["result"]["overtime"]>
+  export type OvertimeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "employeeId" | "hours" | "date" | "reason" | "status" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["overtime"]>
   export type OvertimeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -21375,12 +24885,16 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       employeeId: string
       hours: number
       date: Date
       reason: string
-      status: string
+      status: $Enums.RequestStatus
       createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["overtime"]>
     composites: {}
   }
@@ -21806,12 +25320,16 @@ export namespace Prisma {
    */
   interface OvertimeFieldRefs {
     readonly id: FieldRef<"Overtime", 'String'>
+    readonly tenantId: FieldRef<"Overtime", 'String'>
     readonly employeeId: FieldRef<"Overtime", 'String'>
     readonly hours: FieldRef<"Overtime", 'Float'>
     readonly date: FieldRef<"Overtime", 'DateTime'>
     readonly reason: FieldRef<"Overtime", 'String'>
-    readonly status: FieldRef<"Overtime", 'String'>
+    readonly status: FieldRef<"Overtime", 'RequestStatus'>
     readonly createdAt: FieldRef<"Overtime", 'DateTime'>
+    readonly updatedAt: FieldRef<"Overtime", 'DateTime'>
+    readonly deletedAt: FieldRef<"Overtime", 'DateTime'>
+    readonly updatedBy: FieldRef<"Overtime", 'String'>
   }
     
 
@@ -22243,52 +25761,64 @@ export namespace Prisma {
 
   export type DeviceModelMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
     brand: string | null
     type: string | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type DeviceModelMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     name: string | null
     brand: string | null
     type: string | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type DeviceModelCountAggregateOutputType = {
     id: number
+    tenantId: number
     name: number
     brand: number
     type: number
     createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
   export type DeviceModelMinAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     brand?: true
     type?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type DeviceModelMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     brand?: true
     type?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type DeviceModelCountAggregateInputType = {
     id?: true
+    tenantId?: true
     name?: true
     brand?: true
     type?: true
     createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -22366,10 +25896,12 @@ export namespace Prisma {
 
   export type DeviceModelGroupByOutputType = {
     id: string
+    tenantId: string
     name: string
     brand: string
     type: string
     createdAt: Date
+    updatedAt: Date
     _count: DeviceModelCountAggregateOutputType | null
     _min: DeviceModelMinAggregateOutputType | null
     _max: DeviceModelMaxAggregateOutputType | null
@@ -22391,47 +25923,57 @@ export namespace Prisma {
 
   export type DeviceModelSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     brand?: boolean
     type?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["deviceModel"]>
 
   export type DeviceModelSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     brand?: boolean
     type?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["deviceModel"]>
 
   export type DeviceModelSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     brand?: boolean
     type?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["deviceModel"]>
 
   export type DeviceModelSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     name?: boolean
     brand?: boolean
     type?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type DeviceModelOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "brand" | "type" | "createdAt", ExtArgs["result"]["deviceModel"]>
+  export type DeviceModelOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "brand" | "type" | "createdAt" | "updatedAt", ExtArgs["result"]["deviceModel"]>
 
   export type $DeviceModelPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "DeviceModel"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       name: string
       brand: string
       type: string
       createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["deviceModel"]>
     composites: {}
   }
@@ -22856,10 +26398,12 @@ export namespace Prisma {
    */
   interface DeviceModelFieldRefs {
     readonly id: FieldRef<"DeviceModel", 'String'>
+    readonly tenantId: FieldRef<"DeviceModel", 'String'>
     readonly name: FieldRef<"DeviceModel", 'String'>
     readonly brand: FieldRef<"DeviceModel", 'String'>
     readonly type: FieldRef<"DeviceModel", 'String'>
     readonly createdAt: FieldRef<"DeviceModel", 'DateTime'>
+    readonly updatedAt: FieldRef<"DeviceModel", 'DateTime'>
   }
     
 
@@ -23243,64 +26787,82 @@ export namespace Prisma {
 
   export type StockTransferMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     fromBranchId: string | null
     toBranchId: string | null
-    status: string | null
+    status: $Enums.StockTransferStatus | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type StockTransferMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     fromBranchId: string | null
     toBranchId: string | null
-    status: string | null
+    status: $Enums.StockTransferStatus | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type StockTransferCountAggregateOutputType = {
     id: number
+    tenantId: number
     fromBranchId: number
     toBranchId: number
     status: number
     notes: number
     createdAt: number
     updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
 
   export type StockTransferMinAggregateInputType = {
     id?: true
+    tenantId?: true
     fromBranchId?: true
     toBranchId?: true
     status?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type StockTransferMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     fromBranchId?: true
     toBranchId?: true
     status?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type StockTransferCountAggregateInputType = {
     id?: true
+    tenantId?: true
     fromBranchId?: true
     toBranchId?: true
     status?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -23378,12 +26940,15 @@ export namespace Prisma {
 
   export type StockTransferGroupByOutputType = {
     id: string
+    tenantId: string
     fromBranchId: string
     toBranchId: string
-    status: string
+    status: $Enums.StockTransferStatus
     notes: string | null
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: StockTransferCountAggregateOutputType | null
     _min: StockTransferMinAggregateOutputType | null
     _max: StockTransferMaxAggregateOutputType | null
@@ -23405,12 +26970,15 @@ export namespace Prisma {
 
   export type StockTransferSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     fromBranchId?: boolean
     toBranchId?: boolean
     status?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     fromBranch?: boolean | BranchDefaultArgs<ExtArgs>
     toBranch?: boolean | BranchDefaultArgs<ExtArgs>
     items?: boolean | StockTransfer$itemsArgs<ExtArgs>
@@ -23419,39 +26987,48 @@ export namespace Prisma {
 
   export type StockTransferSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     fromBranchId?: boolean
     toBranchId?: boolean
     status?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     fromBranch?: boolean | BranchDefaultArgs<ExtArgs>
     toBranch?: boolean | BranchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["stockTransfer"]>
 
   export type StockTransferSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     fromBranchId?: boolean
     toBranchId?: boolean
     status?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     fromBranch?: boolean | BranchDefaultArgs<ExtArgs>
     toBranch?: boolean | BranchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["stockTransfer"]>
 
   export type StockTransferSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     fromBranchId?: boolean
     toBranchId?: boolean
     status?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type StockTransferOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fromBranchId" | "toBranchId" | "status" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["stockTransfer"]>
+  export type StockTransferOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "fromBranchId" | "toBranchId" | "status" | "notes" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["stockTransfer"]>
   export type StockTransferInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fromBranch?: boolean | BranchDefaultArgs<ExtArgs>
     toBranch?: boolean | BranchDefaultArgs<ExtArgs>
@@ -23476,12 +27053,15 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       fromBranchId: string
       toBranchId: string
-      status: string
+      status: $Enums.StockTransferStatus
       notes: string | null
       createdAt: Date
       updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["stockTransfer"]>
     composites: {}
   }
@@ -23909,12 +27489,15 @@ export namespace Prisma {
    */
   interface StockTransferFieldRefs {
     readonly id: FieldRef<"StockTransfer", 'String'>
+    readonly tenantId: FieldRef<"StockTransfer", 'String'>
     readonly fromBranchId: FieldRef<"StockTransfer", 'String'>
     readonly toBranchId: FieldRef<"StockTransfer", 'String'>
-    readonly status: FieldRef<"StockTransfer", 'String'>
+    readonly status: FieldRef<"StockTransfer", 'StockTransferStatus'>
     readonly notes: FieldRef<"StockTransfer", 'String'>
     readonly createdAt: FieldRef<"StockTransfer", 'DateTime'>
     readonly updatedAt: FieldRef<"StockTransfer", 'DateTime'>
+    readonly deletedAt: FieldRef<"StockTransfer", 'DateTime'>
+    readonly updatedBy: FieldRef<"StockTransfer", 'String'>
   }
     
 
@@ -24380,6 +27963,7 @@ export namespace Prisma {
 
   export type StockTransferItemMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     transferId: string | null
     itemId: string | null
     quantity: number | null
@@ -24387,6 +27971,7 @@ export namespace Prisma {
 
   export type StockTransferItemMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     transferId: string | null
     itemId: string | null
     quantity: number | null
@@ -24394,6 +27979,7 @@ export namespace Prisma {
 
   export type StockTransferItemCountAggregateOutputType = {
     id: number
+    tenantId: number
     transferId: number
     itemId: number
     quantity: number
@@ -24411,6 +27997,7 @@ export namespace Prisma {
 
   export type StockTransferItemMinAggregateInputType = {
     id?: true
+    tenantId?: true
     transferId?: true
     itemId?: true
     quantity?: true
@@ -24418,6 +28005,7 @@ export namespace Prisma {
 
   export type StockTransferItemMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     transferId?: true
     itemId?: true
     quantity?: true
@@ -24425,6 +28013,7 @@ export namespace Prisma {
 
   export type StockTransferItemCountAggregateInputType = {
     id?: true
+    tenantId?: true
     transferId?: true
     itemId?: true
     quantity?: true
@@ -24519,6 +28108,7 @@ export namespace Prisma {
 
   export type StockTransferItemGroupByOutputType = {
     id: string
+    tenantId: string
     transferId: string
     itemId: string
     quantity: number
@@ -24545,6 +28135,7 @@ export namespace Prisma {
 
   export type StockTransferItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     transferId?: boolean
     itemId?: boolean
     quantity?: boolean
@@ -24554,6 +28145,7 @@ export namespace Prisma {
 
   export type StockTransferItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     transferId?: boolean
     itemId?: boolean
     quantity?: boolean
@@ -24563,6 +28155,7 @@ export namespace Prisma {
 
   export type StockTransferItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     transferId?: boolean
     itemId?: boolean
     quantity?: boolean
@@ -24572,12 +28165,13 @@ export namespace Prisma {
 
   export type StockTransferItemSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     transferId?: boolean
     itemId?: boolean
     quantity?: boolean
   }
 
-  export type StockTransferItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transferId" | "itemId" | "quantity", ExtArgs["result"]["stockTransferItem"]>
+  export type StockTransferItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "transferId" | "itemId" | "quantity", ExtArgs["result"]["stockTransferItem"]>
   export type StockTransferItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     item?: boolean | InventoryItemDefaultArgs<ExtArgs>
     transfer?: boolean | StockTransferDefaultArgs<ExtArgs>
@@ -24599,6 +28193,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       transferId: string
       itemId: string
       quantity: number
@@ -25028,6 +28623,7 @@ export namespace Prisma {
    */
   interface StockTransferItemFieldRefs {
     readonly id: FieldRef<"StockTransferItem", 'String'>
+    readonly tenantId: FieldRef<"StockTransferItem", 'String'>
     readonly transferId: FieldRef<"StockTransferItem", 'String'>
     readonly itemId: FieldRef<"StockTransferItem", 'String'>
     readonly quantity: FieldRef<"StockTransferItem", 'Int'>
@@ -25463,37 +29059,48 @@ export namespace Prisma {
   }
 
   export type InventoryUnitAvgAggregateOutputType = {
-    costPrice: number | null
+    costPrice: Decimal | null
   }
 
   export type InventoryUnitSumAggregateOutputType = {
-    costPrice: number | null
+    costPrice: Decimal | null
   }
 
   export type InventoryUnitMinAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     itemId: string | null
     branchId: string | null
     serialNumber: string | null
-    status: string | null
-    costPrice: number | null
+    status: $Enums.InventoryUnitStatus | null
+    costPrice: Decimal | null
     entryDate: Date | null
     soldDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type InventoryUnitMaxAggregateOutputType = {
     id: string | null
+    tenantId: string | null
     itemId: string | null
     branchId: string | null
     serialNumber: string | null
-    status: string | null
-    costPrice: number | null
+    status: $Enums.InventoryUnitStatus | null
+    costPrice: Decimal | null
     entryDate: Date | null
     soldDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+    updatedBy: string | null
   }
 
   export type InventoryUnitCountAggregateOutputType = {
     id: number
+    tenantId: number
     itemId: number
     branchId: number
     serialNumber: number
@@ -25501,6 +29108,10 @@ export namespace Prisma {
     costPrice: number
     entryDate: number
     soldDate: number
+    createdAt: number
+    updatedAt: number
+    deletedAt: number
+    updatedBy: number
     _all: number
   }
 
@@ -25515,6 +29126,7 @@ export namespace Prisma {
 
   export type InventoryUnitMinAggregateInputType = {
     id?: true
+    tenantId?: true
     itemId?: true
     branchId?: true
     serialNumber?: true
@@ -25522,10 +29134,15 @@ export namespace Prisma {
     costPrice?: true
     entryDate?: true
     soldDate?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type InventoryUnitMaxAggregateInputType = {
     id?: true
+    tenantId?: true
     itemId?: true
     branchId?: true
     serialNumber?: true
@@ -25533,10 +29150,15 @@ export namespace Prisma {
     costPrice?: true
     entryDate?: true
     soldDate?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
   }
 
   export type InventoryUnitCountAggregateInputType = {
     id?: true
+    tenantId?: true
     itemId?: true
     branchId?: true
     serialNumber?: true
@@ -25544,6 +29166,10 @@ export namespace Prisma {
     costPrice?: true
     entryDate?: true
     soldDate?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    updatedBy?: true
     _all?: true
   }
 
@@ -25635,13 +29261,18 @@ export namespace Prisma {
 
   export type InventoryUnitGroupByOutputType = {
     id: string
+    tenantId: string
     itemId: string
     branchId: string
     serialNumber: string | null
-    status: string
-    costPrice: number | null
+    status: $Enums.InventoryUnitStatus
+    costPrice: Decimal | null
     entryDate: Date
     soldDate: Date | null
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    updatedBy: string | null
     _count: InventoryUnitCountAggregateOutputType | null
     _avg: InventoryUnitAvgAggregateOutputType | null
     _sum: InventoryUnitSumAggregateOutputType | null
@@ -25665,6 +29296,7 @@ export namespace Prisma {
 
   export type InventoryUnitSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     itemId?: boolean
     branchId?: boolean
     serialNumber?: boolean
@@ -25672,12 +29304,17 @@ export namespace Prisma {
     costPrice?: boolean
     entryDate?: boolean
     soldDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     item?: boolean | InventoryItemDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inventoryUnit"]>
 
   export type InventoryUnitSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     itemId?: boolean
     branchId?: boolean
     serialNumber?: boolean
@@ -25685,12 +29322,17 @@ export namespace Prisma {
     costPrice?: boolean
     entryDate?: boolean
     soldDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     item?: boolean | InventoryItemDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inventoryUnit"]>
 
   export type InventoryUnitSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tenantId?: boolean
     itemId?: boolean
     branchId?: boolean
     serialNumber?: boolean
@@ -25698,12 +29340,17 @@ export namespace Prisma {
     costPrice?: boolean
     entryDate?: boolean
     soldDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
     item?: boolean | InventoryItemDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inventoryUnit"]>
 
   export type InventoryUnitSelectScalar = {
     id?: boolean
+    tenantId?: boolean
     itemId?: boolean
     branchId?: boolean
     serialNumber?: boolean
@@ -25711,9 +29358,13 @@ export namespace Prisma {
     costPrice?: boolean
     entryDate?: boolean
     soldDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    updatedBy?: boolean
   }
 
-  export type InventoryUnitOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "itemId" | "branchId" | "serialNumber" | "status" | "costPrice" | "entryDate" | "soldDate", ExtArgs["result"]["inventoryUnit"]>
+  export type InventoryUnitOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "itemId" | "branchId" | "serialNumber" | "status" | "costPrice" | "entryDate" | "soldDate" | "createdAt" | "updatedAt" | "deletedAt" | "updatedBy", ExtArgs["result"]["inventoryUnit"]>
   export type InventoryUnitInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     item?: boolean | InventoryItemDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
@@ -25735,13 +29386,18 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      tenantId: string
       itemId: string
       branchId: string
       serialNumber: string | null
-      status: string
-      costPrice: number | null
+      status: $Enums.InventoryUnitStatus
+      costPrice: Prisma.Decimal | null
       entryDate: Date
       soldDate: Date | null
+      createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+      updatedBy: string | null
     }, ExtArgs["result"]["inventoryUnit"]>
     composites: {}
   }
@@ -26168,13 +29824,18 @@ export namespace Prisma {
    */
   interface InventoryUnitFieldRefs {
     readonly id: FieldRef<"InventoryUnit", 'String'>
+    readonly tenantId: FieldRef<"InventoryUnit", 'String'>
     readonly itemId: FieldRef<"InventoryUnit", 'String'>
     readonly branchId: FieldRef<"InventoryUnit", 'String'>
     readonly serialNumber: FieldRef<"InventoryUnit", 'String'>
-    readonly status: FieldRef<"InventoryUnit", 'String'>
-    readonly costPrice: FieldRef<"InventoryUnit", 'Float'>
+    readonly status: FieldRef<"InventoryUnit", 'InventoryUnitStatus'>
+    readonly costPrice: FieldRef<"InventoryUnit", 'Decimal'>
     readonly entryDate: FieldRef<"InventoryUnit", 'DateTime'>
     readonly soldDate: FieldRef<"InventoryUnit", 'DateTime'>
+    readonly createdAt: FieldRef<"InventoryUnit", 'DateTime'>
+    readonly updatedAt: FieldRef<"InventoryUnit", 'DateTime'>
+    readonly deletedAt: FieldRef<"InventoryUnit", 'DateTime'>
+    readonly updatedBy: FieldRef<"InventoryUnit", 'String'>
   }
     
 
@@ -26595,6 +30256,1208 @@ export namespace Prisma {
 
 
   /**
+   * Model BonusPool
+   */
+
+  export type AggregateBonusPool = {
+    _count: BonusPoolCountAggregateOutputType | null
+    _avg: BonusPoolAvgAggregateOutputType | null
+    _sum: BonusPoolSumAggregateOutputType | null
+    _min: BonusPoolMinAggregateOutputType | null
+    _max: BonusPoolMaxAggregateOutputType | null
+  }
+
+  export type BonusPoolAvgAggregateOutputType = {
+    amount: Decimal | null
+    month: number | null
+    year: number | null
+  }
+
+  export type BonusPoolSumAggregateOutputType = {
+    amount: Decimal | null
+    month: number | null
+    year: number | null
+  }
+
+  export type BonusPoolMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    name: string | null
+    amount: Decimal | null
+    month: number | null
+    year: number | null
+    roleId: string | null
+    branchId: string | null
+    employeeId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BonusPoolMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    name: string | null
+    amount: Decimal | null
+    month: number | null
+    year: number | null
+    roleId: string | null
+    branchId: string | null
+    employeeId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BonusPoolCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    name: number
+    amount: number
+    month: number
+    year: number
+    roleId: number
+    branchId: number
+    employeeId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BonusPoolAvgAggregateInputType = {
+    amount?: true
+    month?: true
+    year?: true
+  }
+
+  export type BonusPoolSumAggregateInputType = {
+    amount?: true
+    month?: true
+    year?: true
+  }
+
+  export type BonusPoolMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    amount?: true
+    month?: true
+    year?: true
+    roleId?: true
+    branchId?: true
+    employeeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BonusPoolMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    amount?: true
+    month?: true
+    year?: true
+    roleId?: true
+    branchId?: true
+    employeeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BonusPoolCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    amount?: true
+    month?: true
+    year?: true
+    roleId?: true
+    branchId?: true
+    employeeId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BonusPoolAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BonusPool to aggregate.
+     */
+    where?: BonusPoolWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BonusPools to fetch.
+     */
+    orderBy?: BonusPoolOrderByWithRelationInput | BonusPoolOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BonusPoolWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BonusPools from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BonusPools.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BonusPools
+    **/
+    _count?: true | BonusPoolCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BonusPoolAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BonusPoolSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BonusPoolMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BonusPoolMaxAggregateInputType
+  }
+
+  export type GetBonusPoolAggregateType<T extends BonusPoolAggregateArgs> = {
+        [P in keyof T & keyof AggregateBonusPool]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBonusPool[P]>
+      : GetScalarType<T[P], AggregateBonusPool[P]>
+  }
+
+
+
+
+  export type BonusPoolGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BonusPoolWhereInput
+    orderBy?: BonusPoolOrderByWithAggregationInput | BonusPoolOrderByWithAggregationInput[]
+    by: BonusPoolScalarFieldEnum[] | BonusPoolScalarFieldEnum
+    having?: BonusPoolScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BonusPoolCountAggregateInputType | true
+    _avg?: BonusPoolAvgAggregateInputType
+    _sum?: BonusPoolSumAggregateInputType
+    _min?: BonusPoolMinAggregateInputType
+    _max?: BonusPoolMaxAggregateInputType
+  }
+
+  export type BonusPoolGroupByOutputType = {
+    id: string
+    tenantId: string
+    name: string
+    amount: Decimal
+    month: number
+    year: number
+    roleId: string | null
+    branchId: string | null
+    employeeId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: BonusPoolCountAggregateOutputType | null
+    _avg: BonusPoolAvgAggregateOutputType | null
+    _sum: BonusPoolSumAggregateOutputType | null
+    _min: BonusPoolMinAggregateOutputType | null
+    _max: BonusPoolMaxAggregateOutputType | null
+  }
+
+  type GetBonusPoolGroupByPayload<T extends BonusPoolGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BonusPoolGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BonusPoolGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BonusPoolGroupByOutputType[P]>
+            : GetScalarType<T[P], BonusPoolGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BonusPoolSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    amount?: boolean
+    month?: boolean
+    year?: boolean
+    roleId?: boolean
+    branchId?: boolean
+    employeeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean | BonusPool$roleArgs<ExtArgs>
+  }, ExtArgs["result"]["bonusPool"]>
+
+  export type BonusPoolSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    amount?: boolean
+    month?: boolean
+    year?: boolean
+    roleId?: boolean
+    branchId?: boolean
+    employeeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean | BonusPool$roleArgs<ExtArgs>
+  }, ExtArgs["result"]["bonusPool"]>
+
+  export type BonusPoolSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    amount?: boolean
+    month?: boolean
+    year?: boolean
+    roleId?: boolean
+    branchId?: boolean
+    employeeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean | BonusPool$roleArgs<ExtArgs>
+  }, ExtArgs["result"]["bonusPool"]>
+
+  export type BonusPoolSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    amount?: boolean
+    month?: boolean
+    year?: boolean
+    roleId?: boolean
+    branchId?: boolean
+    employeeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BonusPoolOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "amount" | "month" | "year" | "roleId" | "branchId" | "employeeId" | "createdAt" | "updatedAt", ExtArgs["result"]["bonusPool"]>
+  export type BonusPoolInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    role?: boolean | BonusPool$roleArgs<ExtArgs>
+  }
+  export type BonusPoolIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    role?: boolean | BonusPool$roleArgs<ExtArgs>
+  }
+  export type BonusPoolIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    role?: boolean | BonusPool$roleArgs<ExtArgs>
+  }
+
+  export type $BonusPoolPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BonusPool"
+    objects: {
+      role: Prisma.$RolePayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      name: string
+      amount: Prisma.Decimal
+      month: number
+      year: number
+      roleId: string | null
+      branchId: string | null
+      employeeId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["bonusPool"]>
+    composites: {}
+  }
+
+  type BonusPoolGetPayload<S extends boolean | null | undefined | BonusPoolDefaultArgs> = $Result.GetResult<Prisma.$BonusPoolPayload, S>
+
+  type BonusPoolCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BonusPoolFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BonusPoolCountAggregateInputType | true
+    }
+
+  export interface BonusPoolDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BonusPool'], meta: { name: 'BonusPool' } }
+    /**
+     * Find zero or one BonusPool that matches the filter.
+     * @param {BonusPoolFindUniqueArgs} args - Arguments to find a BonusPool
+     * @example
+     * // Get one BonusPool
+     * const bonusPool = await prisma.bonusPool.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BonusPoolFindUniqueArgs>(args: SelectSubset<T, BonusPoolFindUniqueArgs<ExtArgs>>): Prisma__BonusPoolClient<$Result.GetResult<Prisma.$BonusPoolPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BonusPool that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BonusPoolFindUniqueOrThrowArgs} args - Arguments to find a BonusPool
+     * @example
+     * // Get one BonusPool
+     * const bonusPool = await prisma.bonusPool.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BonusPoolFindUniqueOrThrowArgs>(args: SelectSubset<T, BonusPoolFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BonusPoolClient<$Result.GetResult<Prisma.$BonusPoolPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BonusPool that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusPoolFindFirstArgs} args - Arguments to find a BonusPool
+     * @example
+     * // Get one BonusPool
+     * const bonusPool = await prisma.bonusPool.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BonusPoolFindFirstArgs>(args?: SelectSubset<T, BonusPoolFindFirstArgs<ExtArgs>>): Prisma__BonusPoolClient<$Result.GetResult<Prisma.$BonusPoolPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BonusPool that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusPoolFindFirstOrThrowArgs} args - Arguments to find a BonusPool
+     * @example
+     * // Get one BonusPool
+     * const bonusPool = await prisma.bonusPool.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BonusPoolFindFirstOrThrowArgs>(args?: SelectSubset<T, BonusPoolFindFirstOrThrowArgs<ExtArgs>>): Prisma__BonusPoolClient<$Result.GetResult<Prisma.$BonusPoolPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BonusPools that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusPoolFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BonusPools
+     * const bonusPools = await prisma.bonusPool.findMany()
+     * 
+     * // Get first 10 BonusPools
+     * const bonusPools = await prisma.bonusPool.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bonusPoolWithIdOnly = await prisma.bonusPool.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BonusPoolFindManyArgs>(args?: SelectSubset<T, BonusPoolFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BonusPoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BonusPool.
+     * @param {BonusPoolCreateArgs} args - Arguments to create a BonusPool.
+     * @example
+     * // Create one BonusPool
+     * const BonusPool = await prisma.bonusPool.create({
+     *   data: {
+     *     // ... data to create a BonusPool
+     *   }
+     * })
+     * 
+     */
+    create<T extends BonusPoolCreateArgs>(args: SelectSubset<T, BonusPoolCreateArgs<ExtArgs>>): Prisma__BonusPoolClient<$Result.GetResult<Prisma.$BonusPoolPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BonusPools.
+     * @param {BonusPoolCreateManyArgs} args - Arguments to create many BonusPools.
+     * @example
+     * // Create many BonusPools
+     * const bonusPool = await prisma.bonusPool.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BonusPoolCreateManyArgs>(args?: SelectSubset<T, BonusPoolCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BonusPools and returns the data saved in the database.
+     * @param {BonusPoolCreateManyAndReturnArgs} args - Arguments to create many BonusPools.
+     * @example
+     * // Create many BonusPools
+     * const bonusPool = await prisma.bonusPool.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BonusPools and only return the `id`
+     * const bonusPoolWithIdOnly = await prisma.bonusPool.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BonusPoolCreateManyAndReturnArgs>(args?: SelectSubset<T, BonusPoolCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BonusPoolPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BonusPool.
+     * @param {BonusPoolDeleteArgs} args - Arguments to delete one BonusPool.
+     * @example
+     * // Delete one BonusPool
+     * const BonusPool = await prisma.bonusPool.delete({
+     *   where: {
+     *     // ... filter to delete one BonusPool
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BonusPoolDeleteArgs>(args: SelectSubset<T, BonusPoolDeleteArgs<ExtArgs>>): Prisma__BonusPoolClient<$Result.GetResult<Prisma.$BonusPoolPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BonusPool.
+     * @param {BonusPoolUpdateArgs} args - Arguments to update one BonusPool.
+     * @example
+     * // Update one BonusPool
+     * const bonusPool = await prisma.bonusPool.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BonusPoolUpdateArgs>(args: SelectSubset<T, BonusPoolUpdateArgs<ExtArgs>>): Prisma__BonusPoolClient<$Result.GetResult<Prisma.$BonusPoolPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BonusPools.
+     * @param {BonusPoolDeleteManyArgs} args - Arguments to filter BonusPools to delete.
+     * @example
+     * // Delete a few BonusPools
+     * const { count } = await prisma.bonusPool.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BonusPoolDeleteManyArgs>(args?: SelectSubset<T, BonusPoolDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BonusPools.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusPoolUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BonusPools
+     * const bonusPool = await prisma.bonusPool.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BonusPoolUpdateManyArgs>(args: SelectSubset<T, BonusPoolUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BonusPools and returns the data updated in the database.
+     * @param {BonusPoolUpdateManyAndReturnArgs} args - Arguments to update many BonusPools.
+     * @example
+     * // Update many BonusPools
+     * const bonusPool = await prisma.bonusPool.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BonusPools and only return the `id`
+     * const bonusPoolWithIdOnly = await prisma.bonusPool.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BonusPoolUpdateManyAndReturnArgs>(args: SelectSubset<T, BonusPoolUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BonusPoolPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BonusPool.
+     * @param {BonusPoolUpsertArgs} args - Arguments to update or create a BonusPool.
+     * @example
+     * // Update or create a BonusPool
+     * const bonusPool = await prisma.bonusPool.upsert({
+     *   create: {
+     *     // ... data to create a BonusPool
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BonusPool we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BonusPoolUpsertArgs>(args: SelectSubset<T, BonusPoolUpsertArgs<ExtArgs>>): Prisma__BonusPoolClient<$Result.GetResult<Prisma.$BonusPoolPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BonusPools.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusPoolCountArgs} args - Arguments to filter BonusPools to count.
+     * @example
+     * // Count the number of BonusPools
+     * const count = await prisma.bonusPool.count({
+     *   where: {
+     *     // ... the filter for the BonusPools we want to count
+     *   }
+     * })
+    **/
+    count<T extends BonusPoolCountArgs>(
+      args?: Subset<T, BonusPoolCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BonusPoolCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BonusPool.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusPoolAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BonusPoolAggregateArgs>(args: Subset<T, BonusPoolAggregateArgs>): Prisma.PrismaPromise<GetBonusPoolAggregateType<T>>
+
+    /**
+     * Group by BonusPool.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusPoolGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BonusPoolGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BonusPoolGroupByArgs['orderBy'] }
+        : { orderBy?: BonusPoolGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BonusPoolGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBonusPoolGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BonusPool model
+   */
+  readonly fields: BonusPoolFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BonusPool.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BonusPoolClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    role<T extends BonusPool$roleArgs<ExtArgs> = {}>(args?: Subset<T, BonusPool$roleArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BonusPool model
+   */
+  interface BonusPoolFieldRefs {
+    readonly id: FieldRef<"BonusPool", 'String'>
+    readonly tenantId: FieldRef<"BonusPool", 'String'>
+    readonly name: FieldRef<"BonusPool", 'String'>
+    readonly amount: FieldRef<"BonusPool", 'Decimal'>
+    readonly month: FieldRef<"BonusPool", 'Int'>
+    readonly year: FieldRef<"BonusPool", 'Int'>
+    readonly roleId: FieldRef<"BonusPool", 'String'>
+    readonly branchId: FieldRef<"BonusPool", 'String'>
+    readonly employeeId: FieldRef<"BonusPool", 'String'>
+    readonly createdAt: FieldRef<"BonusPool", 'DateTime'>
+    readonly updatedAt: FieldRef<"BonusPool", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BonusPool findUnique
+   */
+  export type BonusPoolFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusPool
+     */
+    select?: BonusPoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusPool
+     */
+    omit?: BonusPoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusPoolInclude<ExtArgs> | null
+    /**
+     * Filter, which BonusPool to fetch.
+     */
+    where: BonusPoolWhereUniqueInput
+  }
+
+  /**
+   * BonusPool findUniqueOrThrow
+   */
+  export type BonusPoolFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusPool
+     */
+    select?: BonusPoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusPool
+     */
+    omit?: BonusPoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusPoolInclude<ExtArgs> | null
+    /**
+     * Filter, which BonusPool to fetch.
+     */
+    where: BonusPoolWhereUniqueInput
+  }
+
+  /**
+   * BonusPool findFirst
+   */
+  export type BonusPoolFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusPool
+     */
+    select?: BonusPoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusPool
+     */
+    omit?: BonusPoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusPoolInclude<ExtArgs> | null
+    /**
+     * Filter, which BonusPool to fetch.
+     */
+    where?: BonusPoolWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BonusPools to fetch.
+     */
+    orderBy?: BonusPoolOrderByWithRelationInput | BonusPoolOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BonusPools.
+     */
+    cursor?: BonusPoolWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BonusPools from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BonusPools.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BonusPools.
+     */
+    distinct?: BonusPoolScalarFieldEnum | BonusPoolScalarFieldEnum[]
+  }
+
+  /**
+   * BonusPool findFirstOrThrow
+   */
+  export type BonusPoolFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusPool
+     */
+    select?: BonusPoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusPool
+     */
+    omit?: BonusPoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusPoolInclude<ExtArgs> | null
+    /**
+     * Filter, which BonusPool to fetch.
+     */
+    where?: BonusPoolWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BonusPools to fetch.
+     */
+    orderBy?: BonusPoolOrderByWithRelationInput | BonusPoolOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BonusPools.
+     */
+    cursor?: BonusPoolWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BonusPools from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BonusPools.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BonusPools.
+     */
+    distinct?: BonusPoolScalarFieldEnum | BonusPoolScalarFieldEnum[]
+  }
+
+  /**
+   * BonusPool findMany
+   */
+  export type BonusPoolFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusPool
+     */
+    select?: BonusPoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusPool
+     */
+    omit?: BonusPoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusPoolInclude<ExtArgs> | null
+    /**
+     * Filter, which BonusPools to fetch.
+     */
+    where?: BonusPoolWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BonusPools to fetch.
+     */
+    orderBy?: BonusPoolOrderByWithRelationInput | BonusPoolOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BonusPools.
+     */
+    cursor?: BonusPoolWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BonusPools from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BonusPools.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BonusPools.
+     */
+    distinct?: BonusPoolScalarFieldEnum | BonusPoolScalarFieldEnum[]
+  }
+
+  /**
+   * BonusPool create
+   */
+  export type BonusPoolCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusPool
+     */
+    select?: BonusPoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusPool
+     */
+    omit?: BonusPoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusPoolInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BonusPool.
+     */
+    data: XOR<BonusPoolCreateInput, BonusPoolUncheckedCreateInput>
+  }
+
+  /**
+   * BonusPool createMany
+   */
+  export type BonusPoolCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BonusPools.
+     */
+    data: BonusPoolCreateManyInput | BonusPoolCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BonusPool createManyAndReturn
+   */
+  export type BonusPoolCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusPool
+     */
+    select?: BonusPoolSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusPool
+     */
+    omit?: BonusPoolOmit<ExtArgs> | null
+    /**
+     * The data used to create many BonusPools.
+     */
+    data: BonusPoolCreateManyInput | BonusPoolCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusPoolIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BonusPool update
+   */
+  export type BonusPoolUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusPool
+     */
+    select?: BonusPoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusPool
+     */
+    omit?: BonusPoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusPoolInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BonusPool.
+     */
+    data: XOR<BonusPoolUpdateInput, BonusPoolUncheckedUpdateInput>
+    /**
+     * Choose, which BonusPool to update.
+     */
+    where: BonusPoolWhereUniqueInput
+  }
+
+  /**
+   * BonusPool updateMany
+   */
+  export type BonusPoolUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BonusPools.
+     */
+    data: XOR<BonusPoolUpdateManyMutationInput, BonusPoolUncheckedUpdateManyInput>
+    /**
+     * Filter which BonusPools to update
+     */
+    where?: BonusPoolWhereInput
+    /**
+     * Limit how many BonusPools to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BonusPool updateManyAndReturn
+   */
+  export type BonusPoolUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusPool
+     */
+    select?: BonusPoolSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusPool
+     */
+    omit?: BonusPoolOmit<ExtArgs> | null
+    /**
+     * The data used to update BonusPools.
+     */
+    data: XOR<BonusPoolUpdateManyMutationInput, BonusPoolUncheckedUpdateManyInput>
+    /**
+     * Filter which BonusPools to update
+     */
+    where?: BonusPoolWhereInput
+    /**
+     * Limit how many BonusPools to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusPoolIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BonusPool upsert
+   */
+  export type BonusPoolUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusPool
+     */
+    select?: BonusPoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusPool
+     */
+    omit?: BonusPoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusPoolInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BonusPool to update in case it exists.
+     */
+    where: BonusPoolWhereUniqueInput
+    /**
+     * In case the BonusPool found by the `where` argument doesn't exist, create a new BonusPool with this data.
+     */
+    create: XOR<BonusPoolCreateInput, BonusPoolUncheckedCreateInput>
+    /**
+     * In case the BonusPool was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BonusPoolUpdateInput, BonusPoolUncheckedUpdateInput>
+  }
+
+  /**
+   * BonusPool delete
+   */
+  export type BonusPoolDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusPool
+     */
+    select?: BonusPoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusPool
+     */
+    omit?: BonusPoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusPoolInclude<ExtArgs> | null
+    /**
+     * Filter which BonusPool to delete.
+     */
+    where: BonusPoolWhereUniqueInput
+  }
+
+  /**
+   * BonusPool deleteMany
+   */
+  export type BonusPoolDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BonusPools to delete
+     */
+    where?: BonusPoolWhereInput
+    /**
+     * Limit how many BonusPools to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BonusPool.role
+   */
+  export type BonusPool$roleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoleInclude<ExtArgs> | null
+    where?: RoleWhereInput
+  }
+
+  /**
+   * BonusPool without action
+   */
+  export type BonusPoolDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusPool
+     */
+    select?: BonusPoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusPool
+     */
+    omit?: BonusPoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusPoolInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -26608,8 +31471,34 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+  export const RoleScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    name: 'name',
+    description: 'description',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
+
+
+  export const PermissionScalarFieldEnum: {
+    id: 'id',
+    roleId: 'roleId',
+    module: 'module',
+    canRead: 'canRead',
+    canCreate: 'canCreate',
+    canUpdate: 'canUpdate',
+    canDelete: 'canDelete'
+  };
+
+  export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
+
+
   export const BranchScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     name: 'name',
     address: 'address',
     phone: 'phone',
@@ -26617,7 +31506,9 @@ export namespace Prisma {
     longitude: 'longitude',
     radiusMeters: 'radiusMeters',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type BranchScalarFieldEnum = (typeof BranchScalarFieldEnum)[keyof typeof BranchScalarFieldEnum]
@@ -26625,12 +31516,16 @@ export namespace Prisma {
 
   export const UserScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     name: 'name',
     email: 'email',
     password: 'password',
-    role: 'role',
+    roleId: 'roleId',
     createdAt: 'createdAt',
+    joinDate: 'joinDate',
     updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy',
     branchId: 'branchId',
     wageType: 'wageType',
     wageRate: 'wageRate',
@@ -26642,7 +31537,8 @@ export namespace Prisma {
     phone: 'phone',
     address: 'address',
     incentiveRate: 'incentiveRate',
-    incentiveType: 'incentiveType'
+    incentiveType: 'incentiveType',
+    incentiveMode: 'incentiveMode'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -26650,10 +31546,15 @@ export namespace Prisma {
 
   export const ShiftScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     name: 'name',
     startTime: 'startTime',
     endTime: 'endTime',
-    branchId: 'branchId'
+    branchId: 'branchId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type ShiftScalarFieldEnum = (typeof ShiftScalarFieldEnum)[keyof typeof ShiftScalarFieldEnum]
@@ -26661,12 +31562,16 @@ export namespace Prisma {
 
   export const CashAdvanceScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     employeeId: 'employeeId',
     date: 'date',
     amount: 'amount',
     reason: 'reason',
     status: 'status',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type CashAdvanceScalarFieldEnum = (typeof CashAdvanceScalarFieldEnum)[keyof typeof CashAdvanceScalarFieldEnum]
@@ -26674,13 +31579,17 @@ export namespace Prisma {
 
   export const LeaveRequestScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     employeeId: 'employeeId',
     startDate: 'startDate',
     endDate: 'endDate',
     type: 'type',
     reason: 'reason',
     status: 'status',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type LeaveRequestScalarFieldEnum = (typeof LeaveRequestScalarFieldEnum)[keyof typeof LeaveRequestScalarFieldEnum]
@@ -26688,6 +31597,7 @@ export namespace Prisma {
 
   export const CategoryScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     name: 'name'
   };
 
@@ -26696,6 +31606,7 @@ export namespace Prisma {
 
   export const InventoryItemScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     name: 'name',
     sku: 'sku',
     categoryId: 'categoryId',
@@ -26706,7 +31617,9 @@ export namespace Prisma {
     image: 'image',
     showInPos: 'showInPos',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type InventoryItemScalarFieldEnum = (typeof InventoryItemScalarFieldEnum)[keyof typeof InventoryItemScalarFieldEnum]
@@ -26714,11 +31627,16 @@ export namespace Prisma {
 
   export const StockScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     itemId: 'itemId',
     branchId: 'branchId',
     quantity: 'quantity',
     reservedQty: 'reservedQty',
-    minStock: 'minStock'
+    minStock: 'minStock',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type StockScalarFieldEnum = (typeof StockScalarFieldEnum)[keyof typeof StockScalarFieldEnum]
@@ -26726,6 +31644,7 @@ export namespace Prisma {
 
   export const TransactionScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     date: 'date',
     branchId: 'branchId',
     cashierId: 'cashierId',
@@ -26743,7 +31662,9 @@ export namespace Prisma {
     status: 'status',
     notes: 'notes',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
@@ -26751,6 +31672,7 @@ export namespace Prisma {
 
   export const TransactionItemScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     transactionId: 'transactionId',
     itemId: 'itemId',
     name: 'name',
@@ -26767,6 +31689,7 @@ export namespace Prisma {
 
   export const ServiceTicketScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     dateOpened: 'dateOpened',
     dateClosed: 'dateClosed',
     customerName: 'customerName',
@@ -26781,8 +31704,12 @@ export namespace Prisma {
     status: 'status',
     technicianId: 'technicianId',
     branchId: 'branchId',
+    incentiveType: 'incentiveType',
+    incentiveValue: 'incentiveValue',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type ServiceTicketScalarFieldEnum = (typeof ServiceTicketScalarFieldEnum)[keyof typeof ServiceTicketScalarFieldEnum]
@@ -26790,10 +31717,15 @@ export namespace Prisma {
 
   export const ServiceSparepartScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     ticketId: 'ticketId',
     itemId: 'itemId',
     quantity: 'quantity',
-    price: 'price'
+    price: 'price',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type ServiceSparepartScalarFieldEnum = (typeof ServiceSparepartScalarFieldEnum)[keyof typeof ServiceSparepartScalarFieldEnum]
@@ -26801,6 +31733,7 @@ export namespace Prisma {
 
   export const AttendanceScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     employeeId: 'employeeId',
     employeeName: 'employeeName',
     branchId: 'branchId',
@@ -26817,7 +31750,10 @@ export namespace Prisma {
     checkOutLatitude: 'checkOutLatitude',
     checkOutLongitude: 'checkOutLongitude',
     workDurationMinutes: 'workDurationMinutes',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
@@ -26825,6 +31761,7 @@ export namespace Prisma {
 
   export const StoreProfileScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     name: 'name',
     address: 'address',
     phone: 'phone',
@@ -26840,7 +31777,13 @@ export namespace Prisma {
     baseSalary: 'baseSalary',
     overtimeRate: 'overtimeRate',
     serviceIncentive: 'serviceIncentive',
-    updatedAt: 'updatedAt'
+    payDay: 'payDay',
+    thrMonth: 'thrMonth',
+    thrMinWorkMonths: 'thrMinWorkMonths',
+    thrMultiplier: 'thrMultiplier',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type StoreProfileScalarFieldEnum = (typeof StoreProfileScalarFieldEnum)[keyof typeof StoreProfileScalarFieldEnum]
@@ -26848,11 +31791,16 @@ export namespace Prisma {
 
   export const ServiceTypeScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     name: 'name',
     price: 'price',
     category: 'category',
+    incentiveType: 'incentiveType',
+    incentiveValue: 'incentiveValue',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type ServiceTypeScalarFieldEnum = (typeof ServiceTypeScalarFieldEnum)[keyof typeof ServiceTypeScalarFieldEnum]
@@ -26860,12 +31808,16 @@ export namespace Prisma {
 
   export const OvertimeScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     employeeId: 'employeeId',
     hours: 'hours',
     date: 'date',
     reason: 'reason',
     status: 'status',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type OvertimeScalarFieldEnum = (typeof OvertimeScalarFieldEnum)[keyof typeof OvertimeScalarFieldEnum]
@@ -26873,10 +31825,12 @@ export namespace Prisma {
 
   export const DeviceModelScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     name: 'name',
     brand: 'brand',
     type: 'type',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type DeviceModelScalarFieldEnum = (typeof DeviceModelScalarFieldEnum)[keyof typeof DeviceModelScalarFieldEnum]
@@ -26884,12 +31838,15 @@ export namespace Prisma {
 
   export const StockTransferScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     fromBranchId: 'fromBranchId',
     toBranchId: 'toBranchId',
     status: 'status',
     notes: 'notes',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type StockTransferScalarFieldEnum = (typeof StockTransferScalarFieldEnum)[keyof typeof StockTransferScalarFieldEnum]
@@ -26897,6 +31854,7 @@ export namespace Prisma {
 
   export const StockTransferItemScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     transferId: 'transferId',
     itemId: 'itemId',
     quantity: 'quantity'
@@ -26907,16 +31865,38 @@ export namespace Prisma {
 
   export const InventoryUnitScalarFieldEnum: {
     id: 'id',
+    tenantId: 'tenantId',
     itemId: 'itemId',
     branchId: 'branchId',
     serialNumber: 'serialNumber',
     status: 'status',
     costPrice: 'costPrice',
     entryDate: 'entryDate',
-    soldDate: 'soldDate'
+    soldDate: 'soldDate',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    updatedBy: 'updatedBy'
   };
 
   export type InventoryUnitScalarFieldEnum = (typeof InventoryUnitScalarFieldEnum)[keyof typeof InventoryUnitScalarFieldEnum]
+
+
+  export const BonusPoolScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    name: 'name',
+    amount: 'amount',
+    month: 'month',
+    year: 'year',
+    roleId: 'roleId',
+    branchId: 'branchId',
+    employeeId: 'employeeId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BonusPoolScalarFieldEnum = (typeof BonusPoolScalarFieldEnum)[keyof typeof BonusPoolScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -26963,6 +31943,27 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -26991,48 +31992,273 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'DateTime'
+   * Reference to a field of type 'Decimal'
    */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
     
 
 
   /**
-   * Reference to a field of type 'DateTime[]'
+   * Reference to a field of type 'Decimal[]'
    */
-  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 
   /**
-   * Reference to a field of type 'Boolean'
+   * Reference to a field of type 'RequestStatus'
    */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+  export type EnumRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RequestStatus'>
     
 
 
   /**
-   * Reference to a field of type 'BigInt'
+   * Reference to a field of type 'RequestStatus[]'
    */
-  export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+  export type ListEnumRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RequestStatus[]'>
     
 
 
   /**
-   * Reference to a field of type 'BigInt[]'
+   * Reference to a field of type 'TransactionSource'
    */
-  export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+  export type EnumTransactionSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionSource'>
+    
+
+
+  /**
+   * Reference to a field of type 'TransactionSource[]'
+   */
+  export type ListEnumTransactionSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionSource[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'PaymentMethod'
+   */
+  export type EnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod'>
+    
+
+
+  /**
+   * Reference to a field of type 'PaymentMethod[]'
+   */
+  export type ListEnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TransactionStatus'
+   */
+  export type EnumTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'TransactionStatus[]'
+   */
+  export type ListEnumTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ServiceStatus'
+   */
+  export type EnumServiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServiceStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ServiceStatus[]'
+   */
+  export type ListEnumServiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServiceStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'AttendanceStatus'
+   */
+  export type EnumAttendanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AttendanceStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'AttendanceStatus[]'
+   */
+  export type ListEnumAttendanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AttendanceStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'StockTransferStatus'
+   */
+  export type EnumStockTransferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StockTransferStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'StockTransferStatus[]'
+   */
+  export type ListEnumStockTransferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StockTransferStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InventoryUnitStatus'
+   */
+  export type EnumInventoryUnitStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InventoryUnitStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'InventoryUnitStatus[]'
+   */
+  export type ListEnumInventoryUnitStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InventoryUnitStatus[]'>
     
   /**
    * Deep Input Types
    */
 
 
+  export type RoleWhereInput = {
+    AND?: RoleWhereInput | RoleWhereInput[]
+    OR?: RoleWhereInput[]
+    NOT?: RoleWhereInput | RoleWhereInput[]
+    id?: StringFilter<"Role"> | string
+    tenantId?: StringFilter<"Role"> | string
+    name?: StringFilter<"Role"> | string
+    description?: StringNullableFilter<"Role"> | string | null
+    createdAt?: DateTimeFilter<"Role"> | Date | string
+    updatedAt?: DateTimeFilter<"Role"> | Date | string
+    permissions?: PermissionListRelationFilter
+    users?: UserListRelationFilter
+    bonusPools?: BonusPoolListRelationFilter
+  }
+
+  export type RoleOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    permissions?: PermissionOrderByRelationAggregateInput
+    users?: UserOrderByRelationAggregateInput
+    bonusPools?: BonusPoolOrderByRelationAggregateInput
+  }
+
+  export type RoleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    name_tenantId?: RoleNameTenantIdCompoundUniqueInput
+    AND?: RoleWhereInput | RoleWhereInput[]
+    OR?: RoleWhereInput[]
+    NOT?: RoleWhereInput | RoleWhereInput[]
+    tenantId?: StringFilter<"Role"> | string
+    name?: StringFilter<"Role"> | string
+    description?: StringNullableFilter<"Role"> | string | null
+    createdAt?: DateTimeFilter<"Role"> | Date | string
+    updatedAt?: DateTimeFilter<"Role"> | Date | string
+    permissions?: PermissionListRelationFilter
+    users?: UserListRelationFilter
+    bonusPools?: BonusPoolListRelationFilter
+  }, "id" | "name_tenantId">
+
+  export type RoleOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RoleCountOrderByAggregateInput
+    _max?: RoleMaxOrderByAggregateInput
+    _min?: RoleMinOrderByAggregateInput
+  }
+
+  export type RoleScalarWhereWithAggregatesInput = {
+    AND?: RoleScalarWhereWithAggregatesInput | RoleScalarWhereWithAggregatesInput[]
+    OR?: RoleScalarWhereWithAggregatesInput[]
+    NOT?: RoleScalarWhereWithAggregatesInput | RoleScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Role"> | string
+    tenantId?: StringWithAggregatesFilter<"Role"> | string
+    name?: StringWithAggregatesFilter<"Role"> | string
+    description?: StringNullableWithAggregatesFilter<"Role"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Role"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Role"> | Date | string
+  }
+
+  export type PermissionWhereInput = {
+    AND?: PermissionWhereInput | PermissionWhereInput[]
+    OR?: PermissionWhereInput[]
+    NOT?: PermissionWhereInput | PermissionWhereInput[]
+    id?: StringFilter<"Permission"> | string
+    roleId?: StringFilter<"Permission"> | string
+    module?: StringFilter<"Permission"> | string
+    canRead?: BoolFilter<"Permission"> | boolean
+    canCreate?: BoolFilter<"Permission"> | boolean
+    canUpdate?: BoolFilter<"Permission"> | boolean
+    canDelete?: BoolFilter<"Permission"> | boolean
+    role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
+  }
+
+  export type PermissionOrderByWithRelationInput = {
+    id?: SortOrder
+    roleId?: SortOrder
+    module?: SortOrder
+    canRead?: SortOrder
+    canCreate?: SortOrder
+    canUpdate?: SortOrder
+    canDelete?: SortOrder
+    role?: RoleOrderByWithRelationInput
+  }
+
+  export type PermissionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    roleId_module?: PermissionRoleIdModuleCompoundUniqueInput
+    AND?: PermissionWhereInput | PermissionWhereInput[]
+    OR?: PermissionWhereInput[]
+    NOT?: PermissionWhereInput | PermissionWhereInput[]
+    roleId?: StringFilter<"Permission"> | string
+    module?: StringFilter<"Permission"> | string
+    canRead?: BoolFilter<"Permission"> | boolean
+    canCreate?: BoolFilter<"Permission"> | boolean
+    canUpdate?: BoolFilter<"Permission"> | boolean
+    canDelete?: BoolFilter<"Permission"> | boolean
+    role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
+  }, "id" | "roleId_module">
+
+  export type PermissionOrderByWithAggregationInput = {
+    id?: SortOrder
+    roleId?: SortOrder
+    module?: SortOrder
+    canRead?: SortOrder
+    canCreate?: SortOrder
+    canUpdate?: SortOrder
+    canDelete?: SortOrder
+    _count?: PermissionCountOrderByAggregateInput
+    _max?: PermissionMaxOrderByAggregateInput
+    _min?: PermissionMinOrderByAggregateInput
+  }
+
+  export type PermissionScalarWhereWithAggregatesInput = {
+    AND?: PermissionScalarWhereWithAggregatesInput | PermissionScalarWhereWithAggregatesInput[]
+    OR?: PermissionScalarWhereWithAggregatesInput[]
+    NOT?: PermissionScalarWhereWithAggregatesInput | PermissionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Permission"> | string
+    roleId?: StringWithAggregatesFilter<"Permission"> | string
+    module?: StringWithAggregatesFilter<"Permission"> | string
+    canRead?: BoolWithAggregatesFilter<"Permission"> | boolean
+    canCreate?: BoolWithAggregatesFilter<"Permission"> | boolean
+    canUpdate?: BoolWithAggregatesFilter<"Permission"> | boolean
+    canDelete?: BoolWithAggregatesFilter<"Permission"> | boolean
+  }
+
   export type BranchWhereInput = {
     AND?: BranchWhereInput | BranchWhereInput[]
     OR?: BranchWhereInput[]
     NOT?: BranchWhereInput | BranchWhereInput[]
     id?: StringFilter<"Branch"> | string
+    tenantId?: StringFilter<"Branch"> | string
     name?: StringFilter<"Branch"> | string
     address?: StringFilter<"Branch"> | string
     phone?: StringFilter<"Branch"> | string
@@ -27041,6 +32267,8 @@ export namespace Prisma {
     radiusMeters?: IntFilter<"Branch"> | number
     createdAt?: DateTimeFilter<"Branch"> | Date | string
     updatedAt?: DateTimeFilter<"Branch"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Branch"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Branch"> | string | null
     serviceTickets?: ServiceTicketListRelationFilter
     shifts?: ShiftListRelationFilter
     stocks?: StockListRelationFilter
@@ -27053,6 +32281,7 @@ export namespace Prisma {
 
   export type BranchOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
@@ -27061,6 +32290,8 @@ export namespace Prisma {
     radiusMeters?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     serviceTickets?: ServiceTicketOrderByRelationAggregateInput
     shifts?: ShiftOrderByRelationAggregateInput
     stocks?: StockOrderByRelationAggregateInput
@@ -27076,6 +32307,7 @@ export namespace Prisma {
     AND?: BranchWhereInput | BranchWhereInput[]
     OR?: BranchWhereInput[]
     NOT?: BranchWhereInput | BranchWhereInput[]
+    tenantId?: StringFilter<"Branch"> | string
     name?: StringFilter<"Branch"> | string
     address?: StringFilter<"Branch"> | string
     phone?: StringFilter<"Branch"> | string
@@ -27084,6 +32316,8 @@ export namespace Prisma {
     radiusMeters?: IntFilter<"Branch"> | number
     createdAt?: DateTimeFilter<"Branch"> | Date | string
     updatedAt?: DateTimeFilter<"Branch"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Branch"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Branch"> | string | null
     serviceTickets?: ServiceTicketListRelationFilter
     shifts?: ShiftListRelationFilter
     stocks?: StockListRelationFilter
@@ -27096,6 +32330,7 @@ export namespace Prisma {
 
   export type BranchOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
@@ -27104,6 +32339,8 @@ export namespace Prisma {
     radiusMeters?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: BranchCountOrderByAggregateInput
     _avg?: BranchAvgOrderByAggregateInput
     _max?: BranchMaxOrderByAggregateInput
@@ -27116,6 +32353,7 @@ export namespace Prisma {
     OR?: BranchScalarWhereWithAggregatesInput[]
     NOT?: BranchScalarWhereWithAggregatesInput | BranchScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Branch"> | string
+    tenantId?: StringWithAggregatesFilter<"Branch"> | string
     name?: StringWithAggregatesFilter<"Branch"> | string
     address?: StringWithAggregatesFilter<"Branch"> | string
     phone?: StringWithAggregatesFilter<"Branch"> | string
@@ -27124,6 +32362,8 @@ export namespace Prisma {
     radiusMeters?: IntWithAggregatesFilter<"Branch"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Branch"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Branch"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"Branch"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"Branch"> | string | null
   }
 
   export type UserWhereInput = {
@@ -27131,42 +32371,52 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     id?: StringFilter<"User"> | string
+    tenantId?: StringFilter<"User"> | string
     name?: StringNullableFilter<"User"> | string | null
     email?: StringFilter<"User"> | string
     password?: StringNullableFilter<"User"> | string | null
-    role?: StringFilter<"User"> | string
+    roleId?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
+    joinDate?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    branchId?: StringNullableFilter<"User"> | string | null
+    deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    updatedBy?: StringNullableFilter<"User"> | string | null
+    branchId?: StringFilter<"User"> | string
     wageType?: StringNullableFilter<"User"> | string | null
-    wageRate?: FloatNullableFilter<"User"> | number | null
-    allowance?: FloatNullableFilter<"User"> | number | null
-    insuranceDed?: FloatNullableFilter<"User"> | number | null
+    wageRate?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    allowance?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
     shiftId?: StringNullableFilter<"User"> | string | null
-    baseSalary?: FloatNullableFilter<"User"> | number | null
+    baseSalary?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: IntNullableFilter<"User"> | number | null
     phone?: StringNullableFilter<"User"> | string | null
     address?: StringNullableFilter<"User"> | string | null
-    incentiveRate?: FloatNullableFilter<"User"> | number | null
+    incentiveRate?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
     incentiveType?: StringNullableFilter<"User"> | string | null
+    incentiveMode?: StringNullableFilter<"User"> | string | null
+    role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
     cashAdvances?: CashAdvanceListRelationFilter
     leaveRequests?: LeaveRequestListRelationFilter
     serviceTickets?: ServiceTicketListRelationFilter
     transactions?: TransactionListRelationFilter
     attendances?: AttendanceListRelationFilter
     overtimes?: OvertimeListRelationFilter
-    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
+    branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrderInput | SortOrder
     email?: SortOrder
     password?: SortOrderInput | SortOrder
-    role?: SortOrder
+    roleId?: SortOrder
     createdAt?: SortOrder
+    joinDate?: SortOrder
     updatedAt?: SortOrder
-    branchId?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    branchId?: SortOrder
     wageType?: SortOrderInput | SortOrder
     wageRate?: SortOrderInput | SortOrder
     allowance?: SortOrderInput | SortOrder
@@ -27178,6 +32428,8 @@ export namespace Prisma {
     address?: SortOrderInput | SortOrder
     incentiveRate?: SortOrderInput | SortOrder
     incentiveType?: SortOrderInput | SortOrder
+    incentiveMode?: SortOrderInput | SortOrder
+    role?: RoleOrderByWithRelationInput
     cashAdvances?: CashAdvanceOrderByRelationAggregateInput
     leaveRequests?: LeaveRequestOrderByRelationAggregateInput
     serviceTickets?: ServiceTicketOrderByRelationAggregateInput
@@ -27193,41 +32445,51 @@ export namespace Prisma {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
+    tenantId?: StringFilter<"User"> | string
     name?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
-    role?: StringFilter<"User"> | string
+    roleId?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
+    joinDate?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    branchId?: StringNullableFilter<"User"> | string | null
+    deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    updatedBy?: StringNullableFilter<"User"> | string | null
+    branchId?: StringFilter<"User"> | string
     wageType?: StringNullableFilter<"User"> | string | null
-    wageRate?: FloatNullableFilter<"User"> | number | null
-    allowance?: FloatNullableFilter<"User"> | number | null
-    insuranceDed?: FloatNullableFilter<"User"> | number | null
+    wageRate?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    allowance?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
     shiftId?: StringNullableFilter<"User"> | string | null
-    baseSalary?: FloatNullableFilter<"User"> | number | null
+    baseSalary?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: IntNullableFilter<"User"> | number | null
     phone?: StringNullableFilter<"User"> | string | null
     address?: StringNullableFilter<"User"> | string | null
-    incentiveRate?: FloatNullableFilter<"User"> | number | null
+    incentiveRate?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
     incentiveType?: StringNullableFilter<"User"> | string | null
+    incentiveMode?: StringNullableFilter<"User"> | string | null
+    role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
     cashAdvances?: CashAdvanceListRelationFilter
     leaveRequests?: LeaveRequestListRelationFilter
     serviceTickets?: ServiceTicketListRelationFilter
     transactions?: TransactionListRelationFilter
     attendances?: AttendanceListRelationFilter
     overtimes?: OvertimeListRelationFilter
-    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
+    branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrderInput | SortOrder
     email?: SortOrder
     password?: SortOrderInput | SortOrder
-    role?: SortOrder
+    roleId?: SortOrder
     createdAt?: SortOrder
+    joinDate?: SortOrder
     updatedAt?: SortOrder
-    branchId?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    branchId?: SortOrder
     wageType?: SortOrderInput | SortOrder
     wageRate?: SortOrderInput | SortOrder
     allowance?: SortOrderInput | SortOrder
@@ -27239,6 +32501,7 @@ export namespace Prisma {
     address?: SortOrderInput | SortOrder
     incentiveRate?: SortOrderInput | SortOrder
     incentiveType?: SortOrderInput | SortOrder
+    incentiveMode?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -27251,24 +32514,29 @@ export namespace Prisma {
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"User"> | string
+    tenantId?: StringWithAggregatesFilter<"User"> | string
     name?: StringNullableWithAggregatesFilter<"User"> | string | null
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringNullableWithAggregatesFilter<"User"> | string | null
-    role?: StringWithAggregatesFilter<"User"> | string
+    roleId?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    joinDate?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
-    branchId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"User"> | string | null
+    branchId?: StringWithAggregatesFilter<"User"> | string
     wageType?: StringNullableWithAggregatesFilter<"User"> | string | null
-    wageRate?: FloatNullableWithAggregatesFilter<"User"> | number | null
-    allowance?: FloatNullableWithAggregatesFilter<"User"> | number | null
-    insuranceDed?: FloatNullableWithAggregatesFilter<"User"> | number | null
+    wageRate?: DecimalNullableWithAggregatesFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    allowance?: DecimalNullableWithAggregatesFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: DecimalNullableWithAggregatesFilter<"User"> | Decimal | DecimalJsLike | number | string | null
     shiftId?: StringNullableWithAggregatesFilter<"User"> | string | null
-    baseSalary?: FloatNullableWithAggregatesFilter<"User"> | number | null
+    baseSalary?: DecimalNullableWithAggregatesFilter<"User"> | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: IntNullableWithAggregatesFilter<"User"> | number | null
     phone?: StringNullableWithAggregatesFilter<"User"> | string | null
     address?: StringNullableWithAggregatesFilter<"User"> | string | null
-    incentiveRate?: FloatNullableWithAggregatesFilter<"User"> | number | null
+    incentiveRate?: DecimalNullableWithAggregatesFilter<"User"> | Decimal | DecimalJsLike | number | string | null
     incentiveType?: StringNullableWithAggregatesFilter<"User"> | string | null
+    incentiveMode?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type ShiftWhereInput = {
@@ -27276,19 +32544,29 @@ export namespace Prisma {
     OR?: ShiftWhereInput[]
     NOT?: ShiftWhereInput | ShiftWhereInput[]
     id?: StringFilter<"Shift"> | string
+    tenantId?: StringFilter<"Shift"> | string
     name?: StringFilter<"Shift"> | string
-    startTime?: StringFilter<"Shift"> | string
-    endTime?: StringFilter<"Shift"> | string
+    startTime?: DateTimeFilter<"Shift"> | Date | string
+    endTime?: DateTimeFilter<"Shift"> | Date | string
     branchId?: StringFilter<"Shift"> | string
+    createdAt?: DateTimeFilter<"Shift"> | Date | string
+    updatedAt?: DateTimeFilter<"Shift"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Shift"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Shift"> | string | null
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
   }
 
   export type ShiftOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
     branchId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     branch?: BranchOrderByWithRelationInput
   }
 
@@ -27297,19 +32575,29 @@ export namespace Prisma {
     AND?: ShiftWhereInput | ShiftWhereInput[]
     OR?: ShiftWhereInput[]
     NOT?: ShiftWhereInput | ShiftWhereInput[]
+    tenantId?: StringFilter<"Shift"> | string
     name?: StringFilter<"Shift"> | string
-    startTime?: StringFilter<"Shift"> | string
-    endTime?: StringFilter<"Shift"> | string
+    startTime?: DateTimeFilter<"Shift"> | Date | string
+    endTime?: DateTimeFilter<"Shift"> | Date | string
     branchId?: StringFilter<"Shift"> | string
+    createdAt?: DateTimeFilter<"Shift"> | Date | string
+    updatedAt?: DateTimeFilter<"Shift"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Shift"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Shift"> | string | null
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
   }, "id">
 
   export type ShiftOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
     branchId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: ShiftCountOrderByAggregateInput
     _max?: ShiftMaxOrderByAggregateInput
     _min?: ShiftMinOrderByAggregateInput
@@ -27320,10 +32608,15 @@ export namespace Prisma {
     OR?: ShiftScalarWhereWithAggregatesInput[]
     NOT?: ShiftScalarWhereWithAggregatesInput | ShiftScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Shift"> | string
+    tenantId?: StringWithAggregatesFilter<"Shift"> | string
     name?: StringWithAggregatesFilter<"Shift"> | string
-    startTime?: StringWithAggregatesFilter<"Shift"> | string
-    endTime?: StringWithAggregatesFilter<"Shift"> | string
+    startTime?: DateTimeWithAggregatesFilter<"Shift"> | Date | string
+    endTime?: DateTimeWithAggregatesFilter<"Shift"> | Date | string
     branchId?: StringWithAggregatesFilter<"Shift"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Shift"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Shift"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"Shift"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"Shift"> | string | null
   }
 
   export type CashAdvanceWhereInput = {
@@ -27331,23 +32624,31 @@ export namespace Prisma {
     OR?: CashAdvanceWhereInput[]
     NOT?: CashAdvanceWhereInput | CashAdvanceWhereInput[]
     id?: StringFilter<"CashAdvance"> | string
+    tenantId?: StringFilter<"CashAdvance"> | string
     employeeId?: StringFilter<"CashAdvance"> | string
     date?: DateTimeFilter<"CashAdvance"> | Date | string
-    amount?: FloatFilter<"CashAdvance"> | number
+    amount?: DecimalFilter<"CashAdvance"> | Decimal | DecimalJsLike | number | string
     reason?: StringFilter<"CashAdvance"> | string
-    status?: StringFilter<"CashAdvance"> | string
+    status?: EnumRequestStatusFilter<"CashAdvance"> | $Enums.RequestStatus
     createdAt?: DateTimeFilter<"CashAdvance"> | Date | string
+    updatedAt?: DateTimeFilter<"CashAdvance"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"CashAdvance"> | Date | string | null
+    updatedBy?: StringNullableFilter<"CashAdvance"> | string | null
     employee?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type CashAdvanceOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     date?: SortOrder
     amount?: SortOrder
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     employee?: UserOrderByWithRelationInput
   }
 
@@ -27356,23 +32657,31 @@ export namespace Prisma {
     AND?: CashAdvanceWhereInput | CashAdvanceWhereInput[]
     OR?: CashAdvanceWhereInput[]
     NOT?: CashAdvanceWhereInput | CashAdvanceWhereInput[]
+    tenantId?: StringFilter<"CashAdvance"> | string
     employeeId?: StringFilter<"CashAdvance"> | string
     date?: DateTimeFilter<"CashAdvance"> | Date | string
-    amount?: FloatFilter<"CashAdvance"> | number
+    amount?: DecimalFilter<"CashAdvance"> | Decimal | DecimalJsLike | number | string
     reason?: StringFilter<"CashAdvance"> | string
-    status?: StringFilter<"CashAdvance"> | string
+    status?: EnumRequestStatusFilter<"CashAdvance"> | $Enums.RequestStatus
     createdAt?: DateTimeFilter<"CashAdvance"> | Date | string
+    updatedAt?: DateTimeFilter<"CashAdvance"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"CashAdvance"> | Date | string | null
+    updatedBy?: StringNullableFilter<"CashAdvance"> | string | null
     employee?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type CashAdvanceOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     date?: SortOrder
     amount?: SortOrder
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: CashAdvanceCountOrderByAggregateInput
     _avg?: CashAdvanceAvgOrderByAggregateInput
     _max?: CashAdvanceMaxOrderByAggregateInput
@@ -27385,12 +32694,16 @@ export namespace Prisma {
     OR?: CashAdvanceScalarWhereWithAggregatesInput[]
     NOT?: CashAdvanceScalarWhereWithAggregatesInput | CashAdvanceScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"CashAdvance"> | string
+    tenantId?: StringWithAggregatesFilter<"CashAdvance"> | string
     employeeId?: StringWithAggregatesFilter<"CashAdvance"> | string
     date?: DateTimeWithAggregatesFilter<"CashAdvance"> | Date | string
-    amount?: FloatWithAggregatesFilter<"CashAdvance"> | number
+    amount?: DecimalWithAggregatesFilter<"CashAdvance"> | Decimal | DecimalJsLike | number | string
     reason?: StringWithAggregatesFilter<"CashAdvance"> | string
-    status?: StringWithAggregatesFilter<"CashAdvance"> | string
+    status?: EnumRequestStatusWithAggregatesFilter<"CashAdvance"> | $Enums.RequestStatus
     createdAt?: DateTimeWithAggregatesFilter<"CashAdvance"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CashAdvance"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"CashAdvance"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"CashAdvance"> | string | null
   }
 
   export type LeaveRequestWhereInput = {
@@ -27398,18 +32711,23 @@ export namespace Prisma {
     OR?: LeaveRequestWhereInput[]
     NOT?: LeaveRequestWhereInput | LeaveRequestWhereInput[]
     id?: StringFilter<"LeaveRequest"> | string
+    tenantId?: StringFilter<"LeaveRequest"> | string
     employeeId?: StringFilter<"LeaveRequest"> | string
     startDate?: DateTimeFilter<"LeaveRequest"> | Date | string
     endDate?: DateTimeFilter<"LeaveRequest"> | Date | string
     type?: StringFilter<"LeaveRequest"> | string
     reason?: StringFilter<"LeaveRequest"> | string
-    status?: StringFilter<"LeaveRequest"> | string
+    status?: EnumRequestStatusFilter<"LeaveRequest"> | $Enums.RequestStatus
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
+    updatedBy?: StringNullableFilter<"LeaveRequest"> | string | null
     employee?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type LeaveRequestOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
@@ -27417,6 +32735,9 @@ export namespace Prisma {
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     employee?: UserOrderByWithRelationInput
   }
 
@@ -27425,18 +32746,23 @@ export namespace Prisma {
     AND?: LeaveRequestWhereInput | LeaveRequestWhereInput[]
     OR?: LeaveRequestWhereInput[]
     NOT?: LeaveRequestWhereInput | LeaveRequestWhereInput[]
+    tenantId?: StringFilter<"LeaveRequest"> | string
     employeeId?: StringFilter<"LeaveRequest"> | string
     startDate?: DateTimeFilter<"LeaveRequest"> | Date | string
     endDate?: DateTimeFilter<"LeaveRequest"> | Date | string
     type?: StringFilter<"LeaveRequest"> | string
     reason?: StringFilter<"LeaveRequest"> | string
-    status?: StringFilter<"LeaveRequest"> | string
+    status?: EnumRequestStatusFilter<"LeaveRequest"> | $Enums.RequestStatus
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
+    updatedBy?: StringNullableFilter<"LeaveRequest"> | string | null
     employee?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type LeaveRequestOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
@@ -27444,6 +32770,9 @@ export namespace Prisma {
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: LeaveRequestCountOrderByAggregateInput
     _max?: LeaveRequestMaxOrderByAggregateInput
     _min?: LeaveRequestMinOrderByAggregateInput
@@ -27454,13 +32783,17 @@ export namespace Prisma {
     OR?: LeaveRequestScalarWhereWithAggregatesInput[]
     NOT?: LeaveRequestScalarWhereWithAggregatesInput | LeaveRequestScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"LeaveRequest"> | string
+    tenantId?: StringWithAggregatesFilter<"LeaveRequest"> | string
     employeeId?: StringWithAggregatesFilter<"LeaveRequest"> | string
     startDate?: DateTimeWithAggregatesFilter<"LeaveRequest"> | Date | string
     endDate?: DateTimeWithAggregatesFilter<"LeaveRequest"> | Date | string
     type?: StringWithAggregatesFilter<"LeaveRequest"> | string
     reason?: StringWithAggregatesFilter<"LeaveRequest"> | string
-    status?: StringWithAggregatesFilter<"LeaveRequest"> | string
+    status?: EnumRequestStatusWithAggregatesFilter<"LeaveRequest"> | $Enums.RequestStatus
     createdAt?: DateTimeWithAggregatesFilter<"LeaveRequest"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LeaveRequest"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"LeaveRequest"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"LeaveRequest"> | string | null
   }
 
   export type CategoryWhereInput = {
@@ -27468,12 +32801,14 @@ export namespace Prisma {
     OR?: CategoryWhereInput[]
     NOT?: CategoryWhereInput | CategoryWhereInput[]
     id?: StringFilter<"Category"> | string
+    tenantId?: StringFilter<"Category"> | string
     name?: StringFilter<"Category"> | string
     inventoryItems?: InventoryItemListRelationFilter
   }
 
   export type CategoryOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     inventoryItems?: InventoryItemOrderByRelationAggregateInput
   }
@@ -27484,11 +32819,13 @@ export namespace Prisma {
     AND?: CategoryWhereInput | CategoryWhereInput[]
     OR?: CategoryWhereInput[]
     NOT?: CategoryWhereInput | CategoryWhereInput[]
+    tenantId?: StringFilter<"Category"> | string
     inventoryItems?: InventoryItemListRelationFilter
   }, "id" | "name">
 
   export type CategoryOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     _count?: CategoryCountOrderByAggregateInput
     _max?: CategoryMaxOrderByAggregateInput
@@ -27500,6 +32837,7 @@ export namespace Prisma {
     OR?: CategoryScalarWhereWithAggregatesInput[]
     NOT?: CategoryScalarWhereWithAggregatesInput | CategoryScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Category"> | string
+    tenantId?: StringWithAggregatesFilter<"Category"> | string
     name?: StringWithAggregatesFilter<"Category"> | string
   }
 
@@ -27508,17 +32846,20 @@ export namespace Prisma {
     OR?: InventoryItemWhereInput[]
     NOT?: InventoryItemWhereInput | InventoryItemWhereInput[]
     id?: StringFilter<"InventoryItem"> | string
+    tenantId?: StringFilter<"InventoryItem"> | string
     name?: StringFilter<"InventoryItem"> | string
     sku?: StringFilter<"InventoryItem"> | string
     categoryId?: StringFilter<"InventoryItem"> | string
-    costPrice?: FloatFilter<"InventoryItem"> | number
-    basePrice?: FloatFilter<"InventoryItem"> | number
+    costPrice?: DecimalFilter<"InventoryItem"> | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFilter<"InventoryItem"> | Decimal | DecimalJsLike | number | string
     unit?: StringFilter<"InventoryItem"> | string
     rack?: StringNullableFilter<"InventoryItem"> | string | null
     image?: StringNullableFilter<"InventoryItem"> | string | null
     showInPos?: BoolFilter<"InventoryItem"> | boolean
     createdAt?: DateTimeFilter<"InventoryItem"> | Date | string
     updatedAt?: DateTimeFilter<"InventoryItem"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"InventoryItem"> | Date | string | null
+    updatedBy?: StringNullableFilter<"InventoryItem"> | string | null
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     serviceSpareparts?: ServiceSparepartListRelationFilter
     stocks?: StockListRelationFilter
@@ -27529,6 +32870,7 @@ export namespace Prisma {
 
   export type InventoryItemOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     sku?: SortOrder
     categoryId?: SortOrder
@@ -27540,6 +32882,8 @@ export namespace Prisma {
     showInPos?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     category?: CategoryOrderByWithRelationInput
     serviceSpareparts?: ServiceSparepartOrderByRelationAggregateInput
     stocks?: StockOrderByRelationAggregateInput
@@ -27554,16 +32898,19 @@ export namespace Prisma {
     AND?: InventoryItemWhereInput | InventoryItemWhereInput[]
     OR?: InventoryItemWhereInput[]
     NOT?: InventoryItemWhereInput | InventoryItemWhereInput[]
+    tenantId?: StringFilter<"InventoryItem"> | string
     name?: StringFilter<"InventoryItem"> | string
     categoryId?: StringFilter<"InventoryItem"> | string
-    costPrice?: FloatFilter<"InventoryItem"> | number
-    basePrice?: FloatFilter<"InventoryItem"> | number
+    costPrice?: DecimalFilter<"InventoryItem"> | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFilter<"InventoryItem"> | Decimal | DecimalJsLike | number | string
     unit?: StringFilter<"InventoryItem"> | string
     rack?: StringNullableFilter<"InventoryItem"> | string | null
     image?: StringNullableFilter<"InventoryItem"> | string | null
     showInPos?: BoolFilter<"InventoryItem"> | boolean
     createdAt?: DateTimeFilter<"InventoryItem"> | Date | string
     updatedAt?: DateTimeFilter<"InventoryItem"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"InventoryItem"> | Date | string | null
+    updatedBy?: StringNullableFilter<"InventoryItem"> | string | null
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     serviceSpareparts?: ServiceSparepartListRelationFilter
     stocks?: StockListRelationFilter
@@ -27574,6 +32921,7 @@ export namespace Prisma {
 
   export type InventoryItemOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     sku?: SortOrder
     categoryId?: SortOrder
@@ -27585,6 +32933,8 @@ export namespace Prisma {
     showInPos?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: InventoryItemCountOrderByAggregateInput
     _avg?: InventoryItemAvgOrderByAggregateInput
     _max?: InventoryItemMaxOrderByAggregateInput
@@ -27597,17 +32947,20 @@ export namespace Prisma {
     OR?: InventoryItemScalarWhereWithAggregatesInput[]
     NOT?: InventoryItemScalarWhereWithAggregatesInput | InventoryItemScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"InventoryItem"> | string
+    tenantId?: StringWithAggregatesFilter<"InventoryItem"> | string
     name?: StringWithAggregatesFilter<"InventoryItem"> | string
     sku?: StringWithAggregatesFilter<"InventoryItem"> | string
     categoryId?: StringWithAggregatesFilter<"InventoryItem"> | string
-    costPrice?: FloatWithAggregatesFilter<"InventoryItem"> | number
-    basePrice?: FloatWithAggregatesFilter<"InventoryItem"> | number
+    costPrice?: DecimalWithAggregatesFilter<"InventoryItem"> | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalWithAggregatesFilter<"InventoryItem"> | Decimal | DecimalJsLike | number | string
     unit?: StringWithAggregatesFilter<"InventoryItem"> | string
     rack?: StringNullableWithAggregatesFilter<"InventoryItem"> | string | null
     image?: StringNullableWithAggregatesFilter<"InventoryItem"> | string | null
     showInPos?: BoolWithAggregatesFilter<"InventoryItem"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"InventoryItem"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"InventoryItem"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"InventoryItem"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"InventoryItem"> | string | null
   }
 
   export type StockWhereInput = {
@@ -27615,22 +32968,32 @@ export namespace Prisma {
     OR?: StockWhereInput[]
     NOT?: StockWhereInput | StockWhereInput[]
     id?: StringFilter<"Stock"> | string
+    tenantId?: StringFilter<"Stock"> | string
     itemId?: StringFilter<"Stock"> | string
     branchId?: StringFilter<"Stock"> | string
     quantity?: IntFilter<"Stock"> | number
     reservedQty?: IntFilter<"Stock"> | number
     minStock?: IntFilter<"Stock"> | number
+    createdAt?: DateTimeFilter<"Stock"> | Date | string
+    updatedAt?: DateTimeFilter<"Stock"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Stock"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Stock"> | string | null
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     item?: XOR<InventoryItemScalarRelationFilter, InventoryItemWhereInput>
   }
 
   export type StockOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     itemId?: SortOrder
     branchId?: SortOrder
     quantity?: SortOrder
     reservedQty?: SortOrder
     minStock?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     branch?: BranchOrderByWithRelationInput
     item?: InventoryItemOrderByWithRelationInput
   }
@@ -27641,22 +33004,32 @@ export namespace Prisma {
     AND?: StockWhereInput | StockWhereInput[]
     OR?: StockWhereInput[]
     NOT?: StockWhereInput | StockWhereInput[]
+    tenantId?: StringFilter<"Stock"> | string
     itemId?: StringFilter<"Stock"> | string
     branchId?: StringFilter<"Stock"> | string
     quantity?: IntFilter<"Stock"> | number
     reservedQty?: IntFilter<"Stock"> | number
     minStock?: IntFilter<"Stock"> | number
+    createdAt?: DateTimeFilter<"Stock"> | Date | string
+    updatedAt?: DateTimeFilter<"Stock"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Stock"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Stock"> | string | null
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     item?: XOR<InventoryItemScalarRelationFilter, InventoryItemWhereInput>
   }, "id" | "itemId_branchId">
 
   export type StockOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     itemId?: SortOrder
     branchId?: SortOrder
     quantity?: SortOrder
     reservedQty?: SortOrder
     minStock?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: StockCountOrderByAggregateInput
     _avg?: StockAvgOrderByAggregateInput
     _max?: StockMaxOrderByAggregateInput
@@ -27669,11 +33042,16 @@ export namespace Prisma {
     OR?: StockScalarWhereWithAggregatesInput[]
     NOT?: StockScalarWhereWithAggregatesInput | StockScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Stock"> | string
+    tenantId?: StringWithAggregatesFilter<"Stock"> | string
     itemId?: StringWithAggregatesFilter<"Stock"> | string
     branchId?: StringWithAggregatesFilter<"Stock"> | string
     quantity?: IntWithAggregatesFilter<"Stock"> | number
     reservedQty?: IntWithAggregatesFilter<"Stock"> | number
     minStock?: IntWithAggregatesFilter<"Stock"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Stock"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Stock"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"Stock"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"Stock"> | string | null
   }
 
   export type TransactionWhereInput = {
@@ -27681,24 +33059,27 @@ export namespace Prisma {
     OR?: TransactionWhereInput[]
     NOT?: TransactionWhereInput | TransactionWhereInput[]
     id?: StringFilter<"Transaction"> | string
+    tenantId?: StringFilter<"Transaction"> | string
     date?: DateTimeFilter<"Transaction"> | Date | string
     branchId?: StringFilter<"Transaction"> | string
     cashierId?: StringFilter<"Transaction"> | string
-    source?: StringFilter<"Transaction"> | string
+    source?: EnumTransactionSourceFilter<"Transaction"> | $Enums.TransactionSource
     serviceTicketId?: StringNullableFilter<"Transaction"> | string | null
-    total?: FloatFilter<"Transaction"> | number
-    paymentMethod?: StringFilter<"Transaction"> | string
-    amountPaid?: FloatFilter<"Transaction"> | number
+    total?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFilter<"Transaction"> | $Enums.PaymentMethod
+    amountPaid?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     customerName?: StringNullableFilter<"Transaction"> | string | null
     customerPhone?: StringNullableFilter<"Transaction"> | string | null
     customerAddress?: StringNullableFilter<"Transaction"> | string | null
-    change?: FloatFilter<"Transaction"> | number
-    tax?: FloatFilter<"Transaction"> | number
-    discount?: FloatFilter<"Transaction"> | number
-    status?: StringFilter<"Transaction"> | string
+    change?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
     notes?: StringNullableFilter<"Transaction"> | string | null
     createdAt?: DateTimeFilter<"Transaction"> | Date | string
     updatedAt?: DateTimeFilter<"Transaction"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Transaction"> | string | null
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     cashier?: XOR<UserScalarRelationFilter, UserWhereInput>
     items?: TransactionItemListRelationFilter
@@ -27706,6 +33087,7 @@ export namespace Prisma {
 
   export type TransactionOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     date?: SortOrder
     branchId?: SortOrder
     cashierId?: SortOrder
@@ -27724,6 +33106,8 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     branch?: BranchOrderByWithRelationInput
     cashier?: UserOrderByWithRelationInput
     items?: TransactionItemOrderByRelationAggregateInput
@@ -27734,24 +33118,27 @@ export namespace Prisma {
     AND?: TransactionWhereInput | TransactionWhereInput[]
     OR?: TransactionWhereInput[]
     NOT?: TransactionWhereInput | TransactionWhereInput[]
+    tenantId?: StringFilter<"Transaction"> | string
     date?: DateTimeFilter<"Transaction"> | Date | string
     branchId?: StringFilter<"Transaction"> | string
     cashierId?: StringFilter<"Transaction"> | string
-    source?: StringFilter<"Transaction"> | string
+    source?: EnumTransactionSourceFilter<"Transaction"> | $Enums.TransactionSource
     serviceTicketId?: StringNullableFilter<"Transaction"> | string | null
-    total?: FloatFilter<"Transaction"> | number
-    paymentMethod?: StringFilter<"Transaction"> | string
-    amountPaid?: FloatFilter<"Transaction"> | number
+    total?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFilter<"Transaction"> | $Enums.PaymentMethod
+    amountPaid?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     customerName?: StringNullableFilter<"Transaction"> | string | null
     customerPhone?: StringNullableFilter<"Transaction"> | string | null
     customerAddress?: StringNullableFilter<"Transaction"> | string | null
-    change?: FloatFilter<"Transaction"> | number
-    tax?: FloatFilter<"Transaction"> | number
-    discount?: FloatFilter<"Transaction"> | number
-    status?: StringFilter<"Transaction"> | string
+    change?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
     notes?: StringNullableFilter<"Transaction"> | string | null
     createdAt?: DateTimeFilter<"Transaction"> | Date | string
     updatedAt?: DateTimeFilter<"Transaction"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Transaction"> | string | null
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     cashier?: XOR<UserScalarRelationFilter, UserWhereInput>
     items?: TransactionItemListRelationFilter
@@ -27759,6 +33146,7 @@ export namespace Prisma {
 
   export type TransactionOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     date?: SortOrder
     branchId?: SortOrder
     cashierId?: SortOrder
@@ -27777,6 +33165,8 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: TransactionCountOrderByAggregateInput
     _avg?: TransactionAvgOrderByAggregateInput
     _max?: TransactionMaxOrderByAggregateInput
@@ -27789,24 +33179,27 @@ export namespace Prisma {
     OR?: TransactionScalarWhereWithAggregatesInput[]
     NOT?: TransactionScalarWhereWithAggregatesInput | TransactionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Transaction"> | string
+    tenantId?: StringWithAggregatesFilter<"Transaction"> | string
     date?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
     branchId?: StringWithAggregatesFilter<"Transaction"> | string
     cashierId?: StringWithAggregatesFilter<"Transaction"> | string
-    source?: StringWithAggregatesFilter<"Transaction"> | string
+    source?: EnumTransactionSourceWithAggregatesFilter<"Transaction"> | $Enums.TransactionSource
     serviceTicketId?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
-    total?: FloatWithAggregatesFilter<"Transaction"> | number
-    paymentMethod?: StringWithAggregatesFilter<"Transaction"> | string
-    amountPaid?: FloatWithAggregatesFilter<"Transaction"> | number
+    total?: DecimalWithAggregatesFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodWithAggregatesFilter<"Transaction"> | $Enums.PaymentMethod
+    amountPaid?: DecimalWithAggregatesFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     customerName?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
     customerPhone?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
     customerAddress?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
-    change?: FloatWithAggregatesFilter<"Transaction"> | number
-    tax?: FloatWithAggregatesFilter<"Transaction"> | number
-    discount?: FloatWithAggregatesFilter<"Transaction"> | number
-    status?: StringWithAggregatesFilter<"Transaction"> | string
+    change?: DecimalWithAggregatesFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    tax?: DecimalWithAggregatesFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    discount?: DecimalWithAggregatesFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusWithAggregatesFilter<"Transaction"> | $Enums.TransactionStatus
     notes?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"Transaction"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
   }
 
   export type TransactionItemWhereInput = {
@@ -27814,14 +33207,15 @@ export namespace Prisma {
     OR?: TransactionItemWhereInput[]
     NOT?: TransactionItemWhereInput | TransactionItemWhereInput[]
     id?: StringFilter<"TransactionItem"> | string
+    tenantId?: StringFilter<"TransactionItem"> | string
     transactionId?: StringFilter<"TransactionItem"> | string
     itemId?: StringNullableFilter<"TransactionItem"> | string | null
     name?: StringFilter<"TransactionItem"> | string
     category?: StringFilter<"TransactionItem"> | string
-    price?: FloatFilter<"TransactionItem"> | number
-    costPrice?: FloatFilter<"TransactionItem"> | number
+    price?: DecimalFilter<"TransactionItem"> | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalFilter<"TransactionItem"> | Decimal | DecimalJsLike | number | string
     quantity?: IntFilter<"TransactionItem"> | number
-    discount?: FloatFilter<"TransactionItem"> | number
+    discount?: DecimalFilter<"TransactionItem"> | Decimal | DecimalJsLike | number | string
     technicianId?: StringNullableFilter<"TransactionItem"> | string | null
     item?: XOR<InventoryItemNullableScalarRelationFilter, InventoryItemWhereInput> | null
     transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
@@ -27829,6 +33223,7 @@ export namespace Prisma {
 
   export type TransactionItemOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     transactionId?: SortOrder
     itemId?: SortOrderInput | SortOrder
     name?: SortOrder
@@ -27847,14 +33242,15 @@ export namespace Prisma {
     AND?: TransactionItemWhereInput | TransactionItemWhereInput[]
     OR?: TransactionItemWhereInput[]
     NOT?: TransactionItemWhereInput | TransactionItemWhereInput[]
+    tenantId?: StringFilter<"TransactionItem"> | string
     transactionId?: StringFilter<"TransactionItem"> | string
     itemId?: StringNullableFilter<"TransactionItem"> | string | null
     name?: StringFilter<"TransactionItem"> | string
     category?: StringFilter<"TransactionItem"> | string
-    price?: FloatFilter<"TransactionItem"> | number
-    costPrice?: FloatFilter<"TransactionItem"> | number
+    price?: DecimalFilter<"TransactionItem"> | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalFilter<"TransactionItem"> | Decimal | DecimalJsLike | number | string
     quantity?: IntFilter<"TransactionItem"> | number
-    discount?: FloatFilter<"TransactionItem"> | number
+    discount?: DecimalFilter<"TransactionItem"> | Decimal | DecimalJsLike | number | string
     technicianId?: StringNullableFilter<"TransactionItem"> | string | null
     item?: XOR<InventoryItemNullableScalarRelationFilter, InventoryItemWhereInput> | null
     transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
@@ -27862,6 +33258,7 @@ export namespace Prisma {
 
   export type TransactionItemOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     transactionId?: SortOrder
     itemId?: SortOrderInput | SortOrder
     name?: SortOrder
@@ -27883,14 +33280,15 @@ export namespace Prisma {
     OR?: TransactionItemScalarWhereWithAggregatesInput[]
     NOT?: TransactionItemScalarWhereWithAggregatesInput | TransactionItemScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"TransactionItem"> | string
+    tenantId?: StringWithAggregatesFilter<"TransactionItem"> | string
     transactionId?: StringWithAggregatesFilter<"TransactionItem"> | string
     itemId?: StringNullableWithAggregatesFilter<"TransactionItem"> | string | null
     name?: StringWithAggregatesFilter<"TransactionItem"> | string
     category?: StringWithAggregatesFilter<"TransactionItem"> | string
-    price?: FloatWithAggregatesFilter<"TransactionItem"> | number
-    costPrice?: FloatWithAggregatesFilter<"TransactionItem"> | number
+    price?: DecimalWithAggregatesFilter<"TransactionItem"> | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalWithAggregatesFilter<"TransactionItem"> | Decimal | DecimalJsLike | number | string
     quantity?: IntWithAggregatesFilter<"TransactionItem"> | number
-    discount?: FloatWithAggregatesFilter<"TransactionItem"> | number
+    discount?: DecimalWithAggregatesFilter<"TransactionItem"> | Decimal | DecimalJsLike | number | string
     technicianId?: StringNullableWithAggregatesFilter<"TransactionItem"> | string | null
   }
 
@@ -27899,6 +33297,7 @@ export namespace Prisma {
     OR?: ServiceTicketWhereInput[]
     NOT?: ServiceTicketWhereInput | ServiceTicketWhereInput[]
     id?: StringFilter<"ServiceTicket"> | string
+    tenantId?: StringFilter<"ServiceTicket"> | string
     dateOpened?: DateTimeFilter<"ServiceTicket"> | Date | string
     dateClosed?: DateTimeNullableFilter<"ServiceTicket"> | Date | string | null
     customerName?: StringFilter<"ServiceTicket"> | string
@@ -27908,13 +33307,17 @@ export namespace Prisma {
     deviceSerial?: StringFilter<"ServiceTicket"> | string
     issue?: StringFilter<"ServiceTicket"> | string
     diagnosis?: StringNullableFilter<"ServiceTicket"> | string | null
-    estimatedCost?: FloatFilter<"ServiceTicket"> | number
-    serviceFee?: FloatFilter<"ServiceTicket"> | number
-    status?: StringFilter<"ServiceTicket"> | string
+    estimatedCost?: DecimalFilter<"ServiceTicket"> | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFilter<"ServiceTicket"> | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFilter<"ServiceTicket"> | $Enums.ServiceStatus
     technicianId?: StringNullableFilter<"ServiceTicket"> | string | null
     branchId?: StringFilter<"ServiceTicket"> | string
+    incentiveType?: StringFilter<"ServiceTicket"> | string
+    incentiveValue?: DecimalFilter<"ServiceTicket"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"ServiceTicket"> | Date | string
     updatedAt?: DateTimeFilter<"ServiceTicket"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ServiceTicket"> | Date | string | null
+    updatedBy?: StringNullableFilter<"ServiceTicket"> | string | null
     spareparts?: ServiceSparepartListRelationFilter
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     technician?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -27922,6 +33325,7 @@ export namespace Prisma {
 
   export type ServiceTicketOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     dateOpened?: SortOrder
     dateClosed?: SortOrderInput | SortOrder
     customerName?: SortOrder
@@ -27936,8 +33340,12 @@ export namespace Prisma {
     status?: SortOrder
     technicianId?: SortOrderInput | SortOrder
     branchId?: SortOrder
+    incentiveType?: SortOrder
+    incentiveValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     spareparts?: ServiceSparepartOrderByRelationAggregateInput
     branch?: BranchOrderByWithRelationInput
     technician?: UserOrderByWithRelationInput
@@ -27948,6 +33356,7 @@ export namespace Prisma {
     AND?: ServiceTicketWhereInput | ServiceTicketWhereInput[]
     OR?: ServiceTicketWhereInput[]
     NOT?: ServiceTicketWhereInput | ServiceTicketWhereInput[]
+    tenantId?: StringFilter<"ServiceTicket"> | string
     dateOpened?: DateTimeFilter<"ServiceTicket"> | Date | string
     dateClosed?: DateTimeNullableFilter<"ServiceTicket"> | Date | string | null
     customerName?: StringFilter<"ServiceTicket"> | string
@@ -27957,13 +33366,17 @@ export namespace Prisma {
     deviceSerial?: StringFilter<"ServiceTicket"> | string
     issue?: StringFilter<"ServiceTicket"> | string
     diagnosis?: StringNullableFilter<"ServiceTicket"> | string | null
-    estimatedCost?: FloatFilter<"ServiceTicket"> | number
-    serviceFee?: FloatFilter<"ServiceTicket"> | number
-    status?: StringFilter<"ServiceTicket"> | string
+    estimatedCost?: DecimalFilter<"ServiceTicket"> | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFilter<"ServiceTicket"> | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFilter<"ServiceTicket"> | $Enums.ServiceStatus
     technicianId?: StringNullableFilter<"ServiceTicket"> | string | null
     branchId?: StringFilter<"ServiceTicket"> | string
+    incentiveType?: StringFilter<"ServiceTicket"> | string
+    incentiveValue?: DecimalFilter<"ServiceTicket"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"ServiceTicket"> | Date | string
     updatedAt?: DateTimeFilter<"ServiceTicket"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ServiceTicket"> | Date | string | null
+    updatedBy?: StringNullableFilter<"ServiceTicket"> | string | null
     spareparts?: ServiceSparepartListRelationFilter
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     technician?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -27971,6 +33384,7 @@ export namespace Prisma {
 
   export type ServiceTicketOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     dateOpened?: SortOrder
     dateClosed?: SortOrderInput | SortOrder
     customerName?: SortOrder
@@ -27985,8 +33399,12 @@ export namespace Prisma {
     status?: SortOrder
     technicianId?: SortOrderInput | SortOrder
     branchId?: SortOrder
+    incentiveType?: SortOrder
+    incentiveValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: ServiceTicketCountOrderByAggregateInput
     _avg?: ServiceTicketAvgOrderByAggregateInput
     _max?: ServiceTicketMaxOrderByAggregateInput
@@ -27999,6 +33417,7 @@ export namespace Prisma {
     OR?: ServiceTicketScalarWhereWithAggregatesInput[]
     NOT?: ServiceTicketScalarWhereWithAggregatesInput | ServiceTicketScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"ServiceTicket"> | string
+    tenantId?: StringWithAggregatesFilter<"ServiceTicket"> | string
     dateOpened?: DateTimeWithAggregatesFilter<"ServiceTicket"> | Date | string
     dateClosed?: DateTimeNullableWithAggregatesFilter<"ServiceTicket"> | Date | string | null
     customerName?: StringWithAggregatesFilter<"ServiceTicket"> | string
@@ -28008,13 +33427,17 @@ export namespace Prisma {
     deviceSerial?: StringWithAggregatesFilter<"ServiceTicket"> | string
     issue?: StringWithAggregatesFilter<"ServiceTicket"> | string
     diagnosis?: StringNullableWithAggregatesFilter<"ServiceTicket"> | string | null
-    estimatedCost?: FloatWithAggregatesFilter<"ServiceTicket"> | number
-    serviceFee?: FloatWithAggregatesFilter<"ServiceTicket"> | number
-    status?: StringWithAggregatesFilter<"ServiceTicket"> | string
+    estimatedCost?: DecimalWithAggregatesFilter<"ServiceTicket"> | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalWithAggregatesFilter<"ServiceTicket"> | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusWithAggregatesFilter<"ServiceTicket"> | $Enums.ServiceStatus
     technicianId?: StringNullableWithAggregatesFilter<"ServiceTicket"> | string | null
     branchId?: StringWithAggregatesFilter<"ServiceTicket"> | string
+    incentiveType?: StringWithAggregatesFilter<"ServiceTicket"> | string
+    incentiveValue?: DecimalWithAggregatesFilter<"ServiceTicket"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeWithAggregatesFilter<"ServiceTicket"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ServiceTicket"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"ServiceTicket"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"ServiceTicket"> | string | null
   }
 
   export type ServiceSparepartWhereInput = {
@@ -28022,20 +33445,30 @@ export namespace Prisma {
     OR?: ServiceSparepartWhereInput[]
     NOT?: ServiceSparepartWhereInput | ServiceSparepartWhereInput[]
     id?: StringFilter<"ServiceSparepart"> | string
+    tenantId?: StringFilter<"ServiceSparepart"> | string
     ticketId?: StringFilter<"ServiceSparepart"> | string
     itemId?: StringFilter<"ServiceSparepart"> | string
     quantity?: IntFilter<"ServiceSparepart"> | number
-    price?: FloatFilter<"ServiceSparepart"> | number
+    price?: DecimalFilter<"ServiceSparepart"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"ServiceSparepart"> | Date | string
+    updatedAt?: DateTimeFilter<"ServiceSparepart"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ServiceSparepart"> | Date | string | null
+    updatedBy?: StringNullableFilter<"ServiceSparepart"> | string | null
     item?: XOR<InventoryItemScalarRelationFilter, InventoryItemWhereInput>
     ticket?: XOR<ServiceTicketScalarRelationFilter, ServiceTicketWhereInput>
   }
 
   export type ServiceSparepartOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     ticketId?: SortOrder
     itemId?: SortOrder
     quantity?: SortOrder
     price?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     item?: InventoryItemOrderByWithRelationInput
     ticket?: ServiceTicketOrderByWithRelationInput
   }
@@ -28045,20 +33478,30 @@ export namespace Prisma {
     AND?: ServiceSparepartWhereInput | ServiceSparepartWhereInput[]
     OR?: ServiceSparepartWhereInput[]
     NOT?: ServiceSparepartWhereInput | ServiceSparepartWhereInput[]
+    tenantId?: StringFilter<"ServiceSparepart"> | string
     ticketId?: StringFilter<"ServiceSparepart"> | string
     itemId?: StringFilter<"ServiceSparepart"> | string
     quantity?: IntFilter<"ServiceSparepart"> | number
-    price?: FloatFilter<"ServiceSparepart"> | number
+    price?: DecimalFilter<"ServiceSparepart"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"ServiceSparepart"> | Date | string
+    updatedAt?: DateTimeFilter<"ServiceSparepart"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ServiceSparepart"> | Date | string | null
+    updatedBy?: StringNullableFilter<"ServiceSparepart"> | string | null
     item?: XOR<InventoryItemScalarRelationFilter, InventoryItemWhereInput>
     ticket?: XOR<ServiceTicketScalarRelationFilter, ServiceTicketWhereInput>
   }, "id">
 
   export type ServiceSparepartOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     ticketId?: SortOrder
     itemId?: SortOrder
     quantity?: SortOrder
     price?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: ServiceSparepartCountOrderByAggregateInput
     _avg?: ServiceSparepartAvgOrderByAggregateInput
     _max?: ServiceSparepartMaxOrderByAggregateInput
@@ -28071,10 +33514,15 @@ export namespace Prisma {
     OR?: ServiceSparepartScalarWhereWithAggregatesInput[]
     NOT?: ServiceSparepartScalarWhereWithAggregatesInput | ServiceSparepartScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"ServiceSparepart"> | string
+    tenantId?: StringWithAggregatesFilter<"ServiceSparepart"> | string
     ticketId?: StringWithAggregatesFilter<"ServiceSparepart"> | string
     itemId?: StringWithAggregatesFilter<"ServiceSparepart"> | string
     quantity?: IntWithAggregatesFilter<"ServiceSparepart"> | number
-    price?: FloatWithAggregatesFilter<"ServiceSparepart"> | number
+    price?: DecimalWithAggregatesFilter<"ServiceSparepart"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeWithAggregatesFilter<"ServiceSparepart"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ServiceSparepart"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"ServiceSparepart"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"ServiceSparepart"> | string | null
   }
 
   export type AttendanceWhereInput = {
@@ -28082,13 +33530,14 @@ export namespace Prisma {
     OR?: AttendanceWhereInput[]
     NOT?: AttendanceWhereInput | AttendanceWhereInput[]
     id?: StringFilter<"Attendance"> | string
+    tenantId?: StringFilter<"Attendance"> | string
     employeeId?: StringFilter<"Attendance"> | string
     employeeName?: StringFilter<"Attendance"> | string
     branchId?: StringFilter<"Attendance"> | string
-    date?: StringFilter<"Attendance"> | string
-    checkInTime?: BigIntFilter<"Attendance"> | bigint | number
-    checkOutTime?: BigIntNullableFilter<"Attendance"> | bigint | number | null
-    status?: StringFilter<"Attendance"> | string
+    date?: DateTimeFilter<"Attendance"> | Date | string
+    checkInTime?: DateTimeFilter<"Attendance"> | Date | string
+    checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
+    status?: EnumAttendanceStatusFilter<"Attendance"> | $Enums.AttendanceStatus
     isInRadius?: BoolFilter<"Attendance"> | boolean
     isMockGPS?: BoolFilter<"Attendance"> | boolean
     latitude?: FloatNullableFilter<"Attendance"> | number | null
@@ -28099,11 +33548,15 @@ export namespace Prisma {
     checkOutLongitude?: FloatNullableFilter<"Attendance"> | number | null
     workDurationMinutes?: IntNullableFilter<"Attendance"> | number | null
     createdAt?: DateTimeFilter<"Attendance"> | Date | string
+    updatedAt?: DateTimeFilter<"Attendance"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Attendance"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Attendance"> | string | null
     employee?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type AttendanceOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     employeeName?: SortOrder
     branchId?: SortOrder
@@ -28121,6 +33574,9 @@ export namespace Prisma {
     checkOutLongitude?: SortOrderInput | SortOrder
     workDurationMinutes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     employee?: UserOrderByWithRelationInput
   }
 
@@ -28129,13 +33585,14 @@ export namespace Prisma {
     AND?: AttendanceWhereInput | AttendanceWhereInput[]
     OR?: AttendanceWhereInput[]
     NOT?: AttendanceWhereInput | AttendanceWhereInput[]
+    tenantId?: StringFilter<"Attendance"> | string
     employeeId?: StringFilter<"Attendance"> | string
     employeeName?: StringFilter<"Attendance"> | string
     branchId?: StringFilter<"Attendance"> | string
-    date?: StringFilter<"Attendance"> | string
-    checkInTime?: BigIntFilter<"Attendance"> | bigint | number
-    checkOutTime?: BigIntNullableFilter<"Attendance"> | bigint | number | null
-    status?: StringFilter<"Attendance"> | string
+    date?: DateTimeFilter<"Attendance"> | Date | string
+    checkInTime?: DateTimeFilter<"Attendance"> | Date | string
+    checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
+    status?: EnumAttendanceStatusFilter<"Attendance"> | $Enums.AttendanceStatus
     isInRadius?: BoolFilter<"Attendance"> | boolean
     isMockGPS?: BoolFilter<"Attendance"> | boolean
     latitude?: FloatNullableFilter<"Attendance"> | number | null
@@ -28146,11 +33603,15 @@ export namespace Prisma {
     checkOutLongitude?: FloatNullableFilter<"Attendance"> | number | null
     workDurationMinutes?: IntNullableFilter<"Attendance"> | number | null
     createdAt?: DateTimeFilter<"Attendance"> | Date | string
+    updatedAt?: DateTimeFilter<"Attendance"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Attendance"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Attendance"> | string | null
     employee?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type AttendanceOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     employeeName?: SortOrder
     branchId?: SortOrder
@@ -28168,6 +33629,9 @@ export namespace Prisma {
     checkOutLongitude?: SortOrderInput | SortOrder
     workDurationMinutes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: AttendanceCountOrderByAggregateInput
     _avg?: AttendanceAvgOrderByAggregateInput
     _max?: AttendanceMaxOrderByAggregateInput
@@ -28180,13 +33644,14 @@ export namespace Prisma {
     OR?: AttendanceScalarWhereWithAggregatesInput[]
     NOT?: AttendanceScalarWhereWithAggregatesInput | AttendanceScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Attendance"> | string
+    tenantId?: StringWithAggregatesFilter<"Attendance"> | string
     employeeId?: StringWithAggregatesFilter<"Attendance"> | string
     employeeName?: StringWithAggregatesFilter<"Attendance"> | string
     branchId?: StringWithAggregatesFilter<"Attendance"> | string
-    date?: StringWithAggregatesFilter<"Attendance"> | string
-    checkInTime?: BigIntWithAggregatesFilter<"Attendance"> | bigint | number
-    checkOutTime?: BigIntNullableWithAggregatesFilter<"Attendance"> | bigint | number | null
-    status?: StringWithAggregatesFilter<"Attendance"> | string
+    date?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
+    checkInTime?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
+    checkOutTime?: DateTimeNullableWithAggregatesFilter<"Attendance"> | Date | string | null
+    status?: EnumAttendanceStatusWithAggregatesFilter<"Attendance"> | $Enums.AttendanceStatus
     isInRadius?: BoolWithAggregatesFilter<"Attendance"> | boolean
     isMockGPS?: BoolWithAggregatesFilter<"Attendance"> | boolean
     latitude?: FloatNullableWithAggregatesFilter<"Attendance"> | number | null
@@ -28197,6 +33662,9 @@ export namespace Prisma {
     checkOutLongitude?: FloatNullableWithAggregatesFilter<"Attendance"> | number | null
     workDurationMinutes?: IntNullableWithAggregatesFilter<"Attendance"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"Attendance"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"Attendance"> | string | null
   }
 
   export type StoreProfileWhereInput = {
@@ -28204,6 +33672,7 @@ export namespace Prisma {
     OR?: StoreProfileWhereInput[]
     NOT?: StoreProfileWhereInput | StoreProfileWhereInput[]
     id?: StringFilter<"StoreProfile"> | string
+    tenantId?: StringFilter<"StoreProfile"> | string
     name?: StringFilter<"StoreProfile"> | string
     address?: StringFilter<"StoreProfile"> | string
     phone?: StringFilter<"StoreProfile"> | string
@@ -28216,14 +33685,21 @@ export namespace Prisma {
     latePenalty?: FloatFilter<"StoreProfile"> | number
     absentPenalty?: FloatFilter<"StoreProfile"> | number
     totalWorkDays?: IntFilter<"StoreProfile"> | number
-    baseSalary?: FloatFilter<"StoreProfile"> | number
-    overtimeRate?: FloatFilter<"StoreProfile"> | number
-    serviceIncentive?: FloatFilter<"StoreProfile"> | number
+    baseSalary?: DecimalFilter<"StoreProfile"> | Decimal | DecimalJsLike | number | string
+    overtimeRate?: DecimalFilter<"StoreProfile"> | Decimal | DecimalJsLike | number | string
+    serviceIncentive?: DecimalFilter<"StoreProfile"> | Decimal | DecimalJsLike | number | string
+    payDay?: IntFilter<"StoreProfile"> | number
+    thrMonth?: IntNullableFilter<"StoreProfile"> | number | null
+    thrMinWorkMonths?: IntFilter<"StoreProfile"> | number
+    thrMultiplier?: DecimalFilter<"StoreProfile"> | Decimal | DecimalJsLike | number | string
     updatedAt?: DateTimeFilter<"StoreProfile"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"StoreProfile"> | Date | string | null
+    updatedBy?: StringNullableFilter<"StoreProfile"> | string | null
   }
 
   export type StoreProfileOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
@@ -28239,7 +33715,13 @@ export namespace Prisma {
     baseSalary?: SortOrder
     overtimeRate?: SortOrder
     serviceIncentive?: SortOrder
+    payDay?: SortOrder
+    thrMonth?: SortOrderInput | SortOrder
+    thrMinWorkMonths?: SortOrder
+    thrMultiplier?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
   }
 
   export type StoreProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -28247,6 +33729,7 @@ export namespace Prisma {
     AND?: StoreProfileWhereInput | StoreProfileWhereInput[]
     OR?: StoreProfileWhereInput[]
     NOT?: StoreProfileWhereInput | StoreProfileWhereInput[]
+    tenantId?: StringFilter<"StoreProfile"> | string
     name?: StringFilter<"StoreProfile"> | string
     address?: StringFilter<"StoreProfile"> | string
     phone?: StringFilter<"StoreProfile"> | string
@@ -28259,14 +33742,21 @@ export namespace Prisma {
     latePenalty?: FloatFilter<"StoreProfile"> | number
     absentPenalty?: FloatFilter<"StoreProfile"> | number
     totalWorkDays?: IntFilter<"StoreProfile"> | number
-    baseSalary?: FloatFilter<"StoreProfile"> | number
-    overtimeRate?: FloatFilter<"StoreProfile"> | number
-    serviceIncentive?: FloatFilter<"StoreProfile"> | number
+    baseSalary?: DecimalFilter<"StoreProfile"> | Decimal | DecimalJsLike | number | string
+    overtimeRate?: DecimalFilter<"StoreProfile"> | Decimal | DecimalJsLike | number | string
+    serviceIncentive?: DecimalFilter<"StoreProfile"> | Decimal | DecimalJsLike | number | string
+    payDay?: IntFilter<"StoreProfile"> | number
+    thrMonth?: IntNullableFilter<"StoreProfile"> | number | null
+    thrMinWorkMonths?: IntFilter<"StoreProfile"> | number
+    thrMultiplier?: DecimalFilter<"StoreProfile"> | Decimal | DecimalJsLike | number | string
     updatedAt?: DateTimeFilter<"StoreProfile"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"StoreProfile"> | Date | string | null
+    updatedBy?: StringNullableFilter<"StoreProfile"> | string | null
   }, "id">
 
   export type StoreProfileOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
@@ -28282,7 +33772,13 @@ export namespace Prisma {
     baseSalary?: SortOrder
     overtimeRate?: SortOrder
     serviceIncentive?: SortOrder
+    payDay?: SortOrder
+    thrMonth?: SortOrderInput | SortOrder
+    thrMinWorkMonths?: SortOrder
+    thrMultiplier?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: StoreProfileCountOrderByAggregateInput
     _avg?: StoreProfileAvgOrderByAggregateInput
     _max?: StoreProfileMaxOrderByAggregateInput
@@ -28295,6 +33791,7 @@ export namespace Prisma {
     OR?: StoreProfileScalarWhereWithAggregatesInput[]
     NOT?: StoreProfileScalarWhereWithAggregatesInput | StoreProfileScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"StoreProfile"> | string
+    tenantId?: StringWithAggregatesFilter<"StoreProfile"> | string
     name?: StringWithAggregatesFilter<"StoreProfile"> | string
     address?: StringWithAggregatesFilter<"StoreProfile"> | string
     phone?: StringWithAggregatesFilter<"StoreProfile"> | string
@@ -28307,10 +33804,16 @@ export namespace Prisma {
     latePenalty?: FloatWithAggregatesFilter<"StoreProfile"> | number
     absentPenalty?: FloatWithAggregatesFilter<"StoreProfile"> | number
     totalWorkDays?: IntWithAggregatesFilter<"StoreProfile"> | number
-    baseSalary?: FloatWithAggregatesFilter<"StoreProfile"> | number
-    overtimeRate?: FloatWithAggregatesFilter<"StoreProfile"> | number
-    serviceIncentive?: FloatWithAggregatesFilter<"StoreProfile"> | number
+    baseSalary?: DecimalWithAggregatesFilter<"StoreProfile"> | Decimal | DecimalJsLike | number | string
+    overtimeRate?: DecimalWithAggregatesFilter<"StoreProfile"> | Decimal | DecimalJsLike | number | string
+    serviceIncentive?: DecimalWithAggregatesFilter<"StoreProfile"> | Decimal | DecimalJsLike | number | string
+    payDay?: IntWithAggregatesFilter<"StoreProfile"> | number
+    thrMonth?: IntNullableWithAggregatesFilter<"StoreProfile"> | number | null
+    thrMinWorkMonths?: IntWithAggregatesFilter<"StoreProfile"> | number
+    thrMultiplier?: DecimalWithAggregatesFilter<"StoreProfile"> | Decimal | DecimalJsLike | number | string
     updatedAt?: DateTimeWithAggregatesFilter<"StoreProfile"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"StoreProfile"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"StoreProfile"> | string | null
   }
 
   export type ServiceTypeWhereInput = {
@@ -28318,41 +33821,61 @@ export namespace Prisma {
     OR?: ServiceTypeWhereInput[]
     NOT?: ServiceTypeWhereInput | ServiceTypeWhereInput[]
     id?: StringFilter<"ServiceType"> | string
+    tenantId?: StringFilter<"ServiceType"> | string
     name?: StringFilter<"ServiceType"> | string
-    price?: FloatFilter<"ServiceType"> | number
+    price?: DecimalFilter<"ServiceType"> | Decimal | DecimalJsLike | number | string
     category?: StringNullableFilter<"ServiceType"> | string | null
+    incentiveType?: StringFilter<"ServiceType"> | string
+    incentiveValue?: DecimalFilter<"ServiceType"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"ServiceType"> | Date | string
     updatedAt?: DateTimeFilter<"ServiceType"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ServiceType"> | Date | string | null
+    updatedBy?: StringNullableFilter<"ServiceType"> | string | null
   }
 
   export type ServiceTypeOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     price?: SortOrder
     category?: SortOrderInput | SortOrder
+    incentiveType?: SortOrder
+    incentiveValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
   }
 
   export type ServiceTypeWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    name?: string
     AND?: ServiceTypeWhereInput | ServiceTypeWhereInput[]
     OR?: ServiceTypeWhereInput[]
     NOT?: ServiceTypeWhereInput | ServiceTypeWhereInput[]
-    name?: StringFilter<"ServiceType"> | string
-    price?: FloatFilter<"ServiceType"> | number
+    tenantId?: StringFilter<"ServiceType"> | string
+    price?: DecimalFilter<"ServiceType"> | Decimal | DecimalJsLike | number | string
     category?: StringNullableFilter<"ServiceType"> | string | null
+    incentiveType?: StringFilter<"ServiceType"> | string
+    incentiveValue?: DecimalFilter<"ServiceType"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"ServiceType"> | Date | string
     updatedAt?: DateTimeFilter<"ServiceType"> | Date | string
-  }, "id">
+    deletedAt?: DateTimeNullableFilter<"ServiceType"> | Date | string | null
+    updatedBy?: StringNullableFilter<"ServiceType"> | string | null
+  }, "id" | "name">
 
   export type ServiceTypeOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     price?: SortOrder
     category?: SortOrderInput | SortOrder
+    incentiveType?: SortOrder
+    incentiveValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: ServiceTypeCountOrderByAggregateInput
     _avg?: ServiceTypeAvgOrderByAggregateInput
     _max?: ServiceTypeMaxOrderByAggregateInput
@@ -28365,11 +33888,16 @@ export namespace Prisma {
     OR?: ServiceTypeScalarWhereWithAggregatesInput[]
     NOT?: ServiceTypeScalarWhereWithAggregatesInput | ServiceTypeScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"ServiceType"> | string
+    tenantId?: StringWithAggregatesFilter<"ServiceType"> | string
     name?: StringWithAggregatesFilter<"ServiceType"> | string
-    price?: FloatWithAggregatesFilter<"ServiceType"> | number
+    price?: DecimalWithAggregatesFilter<"ServiceType"> | Decimal | DecimalJsLike | number | string
     category?: StringNullableWithAggregatesFilter<"ServiceType"> | string | null
+    incentiveType?: StringWithAggregatesFilter<"ServiceType"> | string
+    incentiveValue?: DecimalWithAggregatesFilter<"ServiceType"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeWithAggregatesFilter<"ServiceType"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ServiceType"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"ServiceType"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"ServiceType"> | string | null
   }
 
   export type OvertimeWhereInput = {
@@ -28377,23 +33905,31 @@ export namespace Prisma {
     OR?: OvertimeWhereInput[]
     NOT?: OvertimeWhereInput | OvertimeWhereInput[]
     id?: StringFilter<"Overtime"> | string
+    tenantId?: StringFilter<"Overtime"> | string
     employeeId?: StringFilter<"Overtime"> | string
     hours?: FloatFilter<"Overtime"> | number
     date?: DateTimeFilter<"Overtime"> | Date | string
     reason?: StringFilter<"Overtime"> | string
-    status?: StringFilter<"Overtime"> | string
+    status?: EnumRequestStatusFilter<"Overtime"> | $Enums.RequestStatus
     createdAt?: DateTimeFilter<"Overtime"> | Date | string
+    updatedAt?: DateTimeFilter<"Overtime"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Overtime"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Overtime"> | string | null
     employee?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type OvertimeOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     hours?: SortOrder
     date?: SortOrder
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     employee?: UserOrderByWithRelationInput
   }
 
@@ -28402,23 +33938,31 @@ export namespace Prisma {
     AND?: OvertimeWhereInput | OvertimeWhereInput[]
     OR?: OvertimeWhereInput[]
     NOT?: OvertimeWhereInput | OvertimeWhereInput[]
+    tenantId?: StringFilter<"Overtime"> | string
     employeeId?: StringFilter<"Overtime"> | string
     hours?: FloatFilter<"Overtime"> | number
     date?: DateTimeFilter<"Overtime"> | Date | string
     reason?: StringFilter<"Overtime"> | string
-    status?: StringFilter<"Overtime"> | string
+    status?: EnumRequestStatusFilter<"Overtime"> | $Enums.RequestStatus
     createdAt?: DateTimeFilter<"Overtime"> | Date | string
+    updatedAt?: DateTimeFilter<"Overtime"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Overtime"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Overtime"> | string | null
     employee?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type OvertimeOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     hours?: SortOrder
     date?: SortOrder
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: OvertimeCountOrderByAggregateInput
     _avg?: OvertimeAvgOrderByAggregateInput
     _max?: OvertimeMaxOrderByAggregateInput
@@ -28431,12 +33975,16 @@ export namespace Prisma {
     OR?: OvertimeScalarWhereWithAggregatesInput[]
     NOT?: OvertimeScalarWhereWithAggregatesInput | OvertimeScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Overtime"> | string
+    tenantId?: StringWithAggregatesFilter<"Overtime"> | string
     employeeId?: StringWithAggregatesFilter<"Overtime"> | string
     hours?: FloatWithAggregatesFilter<"Overtime"> | number
     date?: DateTimeWithAggregatesFilter<"Overtime"> | Date | string
     reason?: StringWithAggregatesFilter<"Overtime"> | string
-    status?: StringWithAggregatesFilter<"Overtime"> | string
+    status?: EnumRequestStatusWithAggregatesFilter<"Overtime"> | $Enums.RequestStatus
     createdAt?: DateTimeWithAggregatesFilter<"Overtime"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Overtime"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"Overtime"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"Overtime"> | string | null
   }
 
   export type DeviceModelWhereInput = {
@@ -28444,18 +33992,22 @@ export namespace Prisma {
     OR?: DeviceModelWhereInput[]
     NOT?: DeviceModelWhereInput | DeviceModelWhereInput[]
     id?: StringFilter<"DeviceModel"> | string
+    tenantId?: StringFilter<"DeviceModel"> | string
     name?: StringFilter<"DeviceModel"> | string
     brand?: StringFilter<"DeviceModel"> | string
     type?: StringFilter<"DeviceModel"> | string
     createdAt?: DateTimeFilter<"DeviceModel"> | Date | string
+    updatedAt?: DateTimeFilter<"DeviceModel"> | Date | string
   }
 
   export type DeviceModelOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     brand?: SortOrder
     type?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type DeviceModelWhereUniqueInput = Prisma.AtLeast<{
@@ -28464,17 +34016,21 @@ export namespace Prisma {
     AND?: DeviceModelWhereInput | DeviceModelWhereInput[]
     OR?: DeviceModelWhereInput[]
     NOT?: DeviceModelWhereInput | DeviceModelWhereInput[]
+    tenantId?: StringFilter<"DeviceModel"> | string
     brand?: StringFilter<"DeviceModel"> | string
     type?: StringFilter<"DeviceModel"> | string
     createdAt?: DateTimeFilter<"DeviceModel"> | Date | string
+    updatedAt?: DateTimeFilter<"DeviceModel"> | Date | string
   }, "id" | "name">
 
   export type DeviceModelOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     brand?: SortOrder
     type?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: DeviceModelCountOrderByAggregateInput
     _max?: DeviceModelMaxOrderByAggregateInput
     _min?: DeviceModelMinOrderByAggregateInput
@@ -28485,10 +34041,12 @@ export namespace Prisma {
     OR?: DeviceModelScalarWhereWithAggregatesInput[]
     NOT?: DeviceModelScalarWhereWithAggregatesInput | DeviceModelScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"DeviceModel"> | string
+    tenantId?: StringWithAggregatesFilter<"DeviceModel"> | string
     name?: StringWithAggregatesFilter<"DeviceModel"> | string
     brand?: StringWithAggregatesFilter<"DeviceModel"> | string
     type?: StringWithAggregatesFilter<"DeviceModel"> | string
     createdAt?: DateTimeWithAggregatesFilter<"DeviceModel"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DeviceModel"> | Date | string
   }
 
   export type StockTransferWhereInput = {
@@ -28496,12 +34054,15 @@ export namespace Prisma {
     OR?: StockTransferWhereInput[]
     NOT?: StockTransferWhereInput | StockTransferWhereInput[]
     id?: StringFilter<"StockTransfer"> | string
+    tenantId?: StringFilter<"StockTransfer"> | string
     fromBranchId?: StringFilter<"StockTransfer"> | string
     toBranchId?: StringFilter<"StockTransfer"> | string
-    status?: StringFilter<"StockTransfer"> | string
+    status?: EnumStockTransferStatusFilter<"StockTransfer"> | $Enums.StockTransferStatus
     notes?: StringNullableFilter<"StockTransfer"> | string | null
     createdAt?: DateTimeFilter<"StockTransfer"> | Date | string
     updatedAt?: DateTimeFilter<"StockTransfer"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"StockTransfer"> | Date | string | null
+    updatedBy?: StringNullableFilter<"StockTransfer"> | string | null
     fromBranch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     toBranch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     items?: StockTransferItemListRelationFilter
@@ -28509,12 +34070,15 @@ export namespace Prisma {
 
   export type StockTransferOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     fromBranchId?: SortOrder
     toBranchId?: SortOrder
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     fromBranch?: BranchOrderByWithRelationInput
     toBranch?: BranchOrderByWithRelationInput
     items?: StockTransferItemOrderByRelationAggregateInput
@@ -28525,12 +34089,15 @@ export namespace Prisma {
     AND?: StockTransferWhereInput | StockTransferWhereInput[]
     OR?: StockTransferWhereInput[]
     NOT?: StockTransferWhereInput | StockTransferWhereInput[]
+    tenantId?: StringFilter<"StockTransfer"> | string
     fromBranchId?: StringFilter<"StockTransfer"> | string
     toBranchId?: StringFilter<"StockTransfer"> | string
-    status?: StringFilter<"StockTransfer"> | string
+    status?: EnumStockTransferStatusFilter<"StockTransfer"> | $Enums.StockTransferStatus
     notes?: StringNullableFilter<"StockTransfer"> | string | null
     createdAt?: DateTimeFilter<"StockTransfer"> | Date | string
     updatedAt?: DateTimeFilter<"StockTransfer"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"StockTransfer"> | Date | string | null
+    updatedBy?: StringNullableFilter<"StockTransfer"> | string | null
     fromBranch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     toBranch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     items?: StockTransferItemListRelationFilter
@@ -28538,12 +34105,15 @@ export namespace Prisma {
 
   export type StockTransferOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     fromBranchId?: SortOrder
     toBranchId?: SortOrder
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: StockTransferCountOrderByAggregateInput
     _max?: StockTransferMaxOrderByAggregateInput
     _min?: StockTransferMinOrderByAggregateInput
@@ -28554,12 +34124,15 @@ export namespace Prisma {
     OR?: StockTransferScalarWhereWithAggregatesInput[]
     NOT?: StockTransferScalarWhereWithAggregatesInput | StockTransferScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"StockTransfer"> | string
+    tenantId?: StringWithAggregatesFilter<"StockTransfer"> | string
     fromBranchId?: StringWithAggregatesFilter<"StockTransfer"> | string
     toBranchId?: StringWithAggregatesFilter<"StockTransfer"> | string
-    status?: StringWithAggregatesFilter<"StockTransfer"> | string
+    status?: EnumStockTransferStatusWithAggregatesFilter<"StockTransfer"> | $Enums.StockTransferStatus
     notes?: StringNullableWithAggregatesFilter<"StockTransfer"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"StockTransfer"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"StockTransfer"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"StockTransfer"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"StockTransfer"> | string | null
   }
 
   export type StockTransferItemWhereInput = {
@@ -28567,6 +34140,7 @@ export namespace Prisma {
     OR?: StockTransferItemWhereInput[]
     NOT?: StockTransferItemWhereInput | StockTransferItemWhereInput[]
     id?: StringFilter<"StockTransferItem"> | string
+    tenantId?: StringFilter<"StockTransferItem"> | string
     transferId?: StringFilter<"StockTransferItem"> | string
     itemId?: StringFilter<"StockTransferItem"> | string
     quantity?: IntFilter<"StockTransferItem"> | number
@@ -28576,6 +34150,7 @@ export namespace Prisma {
 
   export type StockTransferItemOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     transferId?: SortOrder
     itemId?: SortOrder
     quantity?: SortOrder
@@ -28588,6 +34163,7 @@ export namespace Prisma {
     AND?: StockTransferItemWhereInput | StockTransferItemWhereInput[]
     OR?: StockTransferItemWhereInput[]
     NOT?: StockTransferItemWhereInput | StockTransferItemWhereInput[]
+    tenantId?: StringFilter<"StockTransferItem"> | string
     transferId?: StringFilter<"StockTransferItem"> | string
     itemId?: StringFilter<"StockTransferItem"> | string
     quantity?: IntFilter<"StockTransferItem"> | number
@@ -28597,6 +34173,7 @@ export namespace Prisma {
 
   export type StockTransferItemOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     transferId?: SortOrder
     itemId?: SortOrder
     quantity?: SortOrder
@@ -28612,6 +34189,7 @@ export namespace Prisma {
     OR?: StockTransferItemScalarWhereWithAggregatesInput[]
     NOT?: StockTransferItemScalarWhereWithAggregatesInput | StockTransferItemScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"StockTransferItem"> | string
+    tenantId?: StringWithAggregatesFilter<"StockTransferItem"> | string
     transferId?: StringWithAggregatesFilter<"StockTransferItem"> | string
     itemId?: StringWithAggregatesFilter<"StockTransferItem"> | string
     quantity?: IntWithAggregatesFilter<"StockTransferItem"> | number
@@ -28622,19 +34200,25 @@ export namespace Prisma {
     OR?: InventoryUnitWhereInput[]
     NOT?: InventoryUnitWhereInput | InventoryUnitWhereInput[]
     id?: StringFilter<"InventoryUnit"> | string
+    tenantId?: StringFilter<"InventoryUnit"> | string
     itemId?: StringFilter<"InventoryUnit"> | string
     branchId?: StringFilter<"InventoryUnit"> | string
     serialNumber?: StringNullableFilter<"InventoryUnit"> | string | null
-    status?: StringFilter<"InventoryUnit"> | string
-    costPrice?: FloatNullableFilter<"InventoryUnit"> | number | null
+    status?: EnumInventoryUnitStatusFilter<"InventoryUnit"> | $Enums.InventoryUnitStatus
+    costPrice?: DecimalNullableFilter<"InventoryUnit"> | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeFilter<"InventoryUnit"> | Date | string
     soldDate?: DateTimeNullableFilter<"InventoryUnit"> | Date | string | null
+    createdAt?: DateTimeFilter<"InventoryUnit"> | Date | string
+    updatedAt?: DateTimeFilter<"InventoryUnit"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"InventoryUnit"> | Date | string | null
+    updatedBy?: StringNullableFilter<"InventoryUnit"> | string | null
     item?: XOR<InventoryItemScalarRelationFilter, InventoryItemWhereInput>
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
   }
 
   export type InventoryUnitOrderByWithRelationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     itemId?: SortOrder
     branchId?: SortOrder
     serialNumber?: SortOrderInput | SortOrder
@@ -28642,28 +34226,39 @@ export namespace Prisma {
     costPrice?: SortOrderInput | SortOrder
     entryDate?: SortOrder
     soldDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     item?: InventoryItemOrderByWithRelationInput
     branch?: BranchOrderByWithRelationInput
   }
 
   export type InventoryUnitWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    serialNumber?: string
+    serialNumber_branchId?: InventoryUnitSerialNumberBranchIdCompoundUniqueInput
     AND?: InventoryUnitWhereInput | InventoryUnitWhereInput[]
     OR?: InventoryUnitWhereInput[]
     NOT?: InventoryUnitWhereInput | InventoryUnitWhereInput[]
+    tenantId?: StringFilter<"InventoryUnit"> | string
     itemId?: StringFilter<"InventoryUnit"> | string
     branchId?: StringFilter<"InventoryUnit"> | string
-    status?: StringFilter<"InventoryUnit"> | string
-    costPrice?: FloatNullableFilter<"InventoryUnit"> | number | null
+    serialNumber?: StringNullableFilter<"InventoryUnit"> | string | null
+    status?: EnumInventoryUnitStatusFilter<"InventoryUnit"> | $Enums.InventoryUnitStatus
+    costPrice?: DecimalNullableFilter<"InventoryUnit"> | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeFilter<"InventoryUnit"> | Date | string
     soldDate?: DateTimeNullableFilter<"InventoryUnit"> | Date | string | null
+    createdAt?: DateTimeFilter<"InventoryUnit"> | Date | string
+    updatedAt?: DateTimeFilter<"InventoryUnit"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"InventoryUnit"> | Date | string | null
+    updatedBy?: StringNullableFilter<"InventoryUnit"> | string | null
     item?: XOR<InventoryItemScalarRelationFilter, InventoryItemWhereInput>
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
-  }, "id" | "serialNumber">
+  }, "id" | "serialNumber_branchId">
 
   export type InventoryUnitOrderByWithAggregationInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     itemId?: SortOrder
     branchId?: SortOrder
     serialNumber?: SortOrderInput | SortOrder
@@ -28671,6 +34266,10 @@ export namespace Prisma {
     costPrice?: SortOrderInput | SortOrder
     entryDate?: SortOrder
     soldDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
     _count?: InventoryUnitCountOrderByAggregateInput
     _avg?: InventoryUnitAvgOrderByAggregateInput
     _max?: InventoryUnitMaxOrderByAggregateInput
@@ -28683,17 +34282,254 @@ export namespace Prisma {
     OR?: InventoryUnitScalarWhereWithAggregatesInput[]
     NOT?: InventoryUnitScalarWhereWithAggregatesInput | InventoryUnitScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"InventoryUnit"> | string
+    tenantId?: StringWithAggregatesFilter<"InventoryUnit"> | string
     itemId?: StringWithAggregatesFilter<"InventoryUnit"> | string
     branchId?: StringWithAggregatesFilter<"InventoryUnit"> | string
     serialNumber?: StringNullableWithAggregatesFilter<"InventoryUnit"> | string | null
-    status?: StringWithAggregatesFilter<"InventoryUnit"> | string
-    costPrice?: FloatNullableWithAggregatesFilter<"InventoryUnit"> | number | null
+    status?: EnumInventoryUnitStatusWithAggregatesFilter<"InventoryUnit"> | $Enums.InventoryUnitStatus
+    costPrice?: DecimalNullableWithAggregatesFilter<"InventoryUnit"> | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeWithAggregatesFilter<"InventoryUnit"> | Date | string
     soldDate?: DateTimeNullableWithAggregatesFilter<"InventoryUnit"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"InventoryUnit"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"InventoryUnit"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"InventoryUnit"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"InventoryUnit"> | string | null
+  }
+
+  export type BonusPoolWhereInput = {
+    AND?: BonusPoolWhereInput | BonusPoolWhereInput[]
+    OR?: BonusPoolWhereInput[]
+    NOT?: BonusPoolWhereInput | BonusPoolWhereInput[]
+    id?: StringFilter<"BonusPool"> | string
+    tenantId?: StringFilter<"BonusPool"> | string
+    name?: StringFilter<"BonusPool"> | string
+    amount?: DecimalFilter<"BonusPool"> | Decimal | DecimalJsLike | number | string
+    month?: IntFilter<"BonusPool"> | number
+    year?: IntFilter<"BonusPool"> | number
+    roleId?: StringNullableFilter<"BonusPool"> | string | null
+    branchId?: StringNullableFilter<"BonusPool"> | string | null
+    employeeId?: StringNullableFilter<"BonusPool"> | string | null
+    createdAt?: DateTimeFilter<"BonusPool"> | Date | string
+    updatedAt?: DateTimeFilter<"BonusPool"> | Date | string
+    role?: XOR<RoleNullableScalarRelationFilter, RoleWhereInput> | null
+  }
+
+  export type BonusPoolOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    amount?: SortOrder
+    month?: SortOrder
+    year?: SortOrder
+    roleId?: SortOrderInput | SortOrder
+    branchId?: SortOrderInput | SortOrder
+    employeeId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    role?: RoleOrderByWithRelationInput
+  }
+
+  export type BonusPoolWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: BonusPoolWhereInput | BonusPoolWhereInput[]
+    OR?: BonusPoolWhereInput[]
+    NOT?: BonusPoolWhereInput | BonusPoolWhereInput[]
+    tenantId?: StringFilter<"BonusPool"> | string
+    name?: StringFilter<"BonusPool"> | string
+    amount?: DecimalFilter<"BonusPool"> | Decimal | DecimalJsLike | number | string
+    month?: IntFilter<"BonusPool"> | number
+    year?: IntFilter<"BonusPool"> | number
+    roleId?: StringNullableFilter<"BonusPool"> | string | null
+    branchId?: StringNullableFilter<"BonusPool"> | string | null
+    employeeId?: StringNullableFilter<"BonusPool"> | string | null
+    createdAt?: DateTimeFilter<"BonusPool"> | Date | string
+    updatedAt?: DateTimeFilter<"BonusPool"> | Date | string
+    role?: XOR<RoleNullableScalarRelationFilter, RoleWhereInput> | null
+  }, "id">
+
+  export type BonusPoolOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    amount?: SortOrder
+    month?: SortOrder
+    year?: SortOrder
+    roleId?: SortOrderInput | SortOrder
+    branchId?: SortOrderInput | SortOrder
+    employeeId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BonusPoolCountOrderByAggregateInput
+    _avg?: BonusPoolAvgOrderByAggregateInput
+    _max?: BonusPoolMaxOrderByAggregateInput
+    _min?: BonusPoolMinOrderByAggregateInput
+    _sum?: BonusPoolSumOrderByAggregateInput
+  }
+
+  export type BonusPoolScalarWhereWithAggregatesInput = {
+    AND?: BonusPoolScalarWhereWithAggregatesInput | BonusPoolScalarWhereWithAggregatesInput[]
+    OR?: BonusPoolScalarWhereWithAggregatesInput[]
+    NOT?: BonusPoolScalarWhereWithAggregatesInput | BonusPoolScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BonusPool"> | string
+    tenantId?: StringWithAggregatesFilter<"BonusPool"> | string
+    name?: StringWithAggregatesFilter<"BonusPool"> | string
+    amount?: DecimalWithAggregatesFilter<"BonusPool"> | Decimal | DecimalJsLike | number | string
+    month?: IntWithAggregatesFilter<"BonusPool"> | number
+    year?: IntWithAggregatesFilter<"BonusPool"> | number
+    roleId?: StringNullableWithAggregatesFilter<"BonusPool"> | string | null
+    branchId?: StringNullableWithAggregatesFilter<"BonusPool"> | string | null
+    employeeId?: StringNullableWithAggregatesFilter<"BonusPool"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"BonusPool"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"BonusPool"> | Date | string
+  }
+
+  export type RoleCreateInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: PermissionCreateNestedManyWithoutRoleInput
+    users?: UserCreateNestedManyWithoutRoleInput
+    bonusPools?: BonusPoolCreateNestedManyWithoutRoleInput
+  }
+
+  export type RoleUncheckedCreateInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: PermissionUncheckedCreateNestedManyWithoutRoleInput
+    users?: UserUncheckedCreateNestedManyWithoutRoleInput
+    bonusPools?: BonusPoolUncheckedCreateNestedManyWithoutRoleInput
+  }
+
+  export type RoleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: PermissionUpdateManyWithoutRoleNestedInput
+    users?: UserUpdateManyWithoutRoleNestedInput
+    bonusPools?: BonusPoolUpdateManyWithoutRoleNestedInput
+  }
+
+  export type RoleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: PermissionUncheckedUpdateManyWithoutRoleNestedInput
+    users?: UserUncheckedUpdateManyWithoutRoleNestedInput
+    bonusPools?: BonusPoolUncheckedUpdateManyWithoutRoleNestedInput
+  }
+
+  export type RoleCreateManyInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PermissionCreateInput = {
+    id?: string
+    module: string
+    canRead?: boolean
+    canCreate?: boolean
+    canUpdate?: boolean
+    canDelete?: boolean
+    role: RoleCreateNestedOneWithoutPermissionsInput
+  }
+
+  export type PermissionUncheckedCreateInput = {
+    id?: string
+    roleId: string
+    module: string
+    canRead?: boolean
+    canCreate?: boolean
+    canUpdate?: boolean
+    canDelete?: boolean
+  }
+
+  export type PermissionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    module?: StringFieldUpdateOperationsInput | string
+    canRead?: BoolFieldUpdateOperationsInput | boolean
+    canCreate?: BoolFieldUpdateOperationsInput | boolean
+    canUpdate?: BoolFieldUpdateOperationsInput | boolean
+    canDelete?: BoolFieldUpdateOperationsInput | boolean
+    role?: RoleUpdateOneRequiredWithoutPermissionsNestedInput
+  }
+
+  export type PermissionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
+    module?: StringFieldUpdateOperationsInput | string
+    canRead?: BoolFieldUpdateOperationsInput | boolean
+    canCreate?: BoolFieldUpdateOperationsInput | boolean
+    canUpdate?: BoolFieldUpdateOperationsInput | boolean
+    canDelete?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type PermissionCreateManyInput = {
+    id?: string
+    roleId: string
+    module: string
+    canRead?: boolean
+    canCreate?: boolean
+    canUpdate?: boolean
+    canDelete?: boolean
+  }
+
+  export type PermissionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    module?: StringFieldUpdateOperationsInput | string
+    canRead?: BoolFieldUpdateOperationsInput | boolean
+    canCreate?: BoolFieldUpdateOperationsInput | boolean
+    canUpdate?: BoolFieldUpdateOperationsInput | boolean
+    canDelete?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type PermissionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
+    module?: StringFieldUpdateOperationsInput | string
+    canRead?: BoolFieldUpdateOperationsInput | boolean
+    canCreate?: BoolFieldUpdateOperationsInput | boolean
+    canUpdate?: BoolFieldUpdateOperationsInput | boolean
+    canDelete?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type BranchCreateInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -28702,6 +34538,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketCreateNestedManyWithoutBranchInput
     shifts?: ShiftCreateNestedManyWithoutBranchInput
     stocks?: StockCreateNestedManyWithoutBranchInput
@@ -28714,6 +34552,7 @@ export namespace Prisma {
 
   export type BranchUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -28722,6 +34561,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutBranchInput
     shifts?: ShiftUncheckedCreateNestedManyWithoutBranchInput
     stocks?: StockUncheckedCreateNestedManyWithoutBranchInput
@@ -28734,6 +34575,7 @@ export namespace Prisma {
 
   export type BranchUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -28742,6 +34584,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUpdateManyWithoutBranchNestedInput
     stocks?: StockUpdateManyWithoutBranchNestedInput
@@ -28754,6 +34598,7 @@ export namespace Prisma {
 
   export type BranchUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -28762,6 +34607,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUncheckedUpdateManyWithoutBranchNestedInput
     stocks?: StockUncheckedUpdateManyWithoutBranchNestedInput
@@ -28774,6 +34621,7 @@ export namespace Prisma {
 
   export type BranchCreateManyInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -28782,10 +34630,13 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type BranchUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -28794,10 +34645,13 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BranchUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -28806,56 +34660,68 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserCreateInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
+    role: RoleCreateNestedOneWithoutUsersInput
     cashAdvances?: CashAdvanceCreateNestedManyWithoutEmployeeInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketCreateNestedManyWithoutTechnicianInput
     transactions?: TransactionCreateNestedManyWithoutCashierInput
     attendances?: AttendanceCreateNestedManyWithoutEmployeeInput
     overtimes?: OvertimeCreateNestedManyWithoutEmployeeInput
-    branch?: BranchCreateNestedOneWithoutUsersInput
+    branch: BranchCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
+    roleId: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
-    branchId?: string | null
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
+    branchId: string
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
     cashAdvances?: CashAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutTechnicianInput
@@ -28866,52 +34732,62 @@ export namespace Prisma {
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     cashAdvances?: CashAdvanceUpdateManyWithoutEmployeeNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUpdateManyWithoutTechnicianNestedInput
     transactions?: TransactionUpdateManyWithoutCashierNestedInput
     attendances?: AttendanceUpdateManyWithoutEmployeeNestedInput
     overtimes?: OvertimeUpdateManyWithoutEmployeeNestedInput
-    branch?: BranchUpdateOneWithoutUsersNestedInput
+    branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: StringFieldUpdateOperationsInput | string
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
     cashAdvances?: CashAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutTechnicianNestedInput
@@ -28922,320 +34798,435 @@ export namespace Prisma {
 
   export type UserCreateManyInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
+    roleId: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
-    branchId?: string | null
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
+    branchId: string
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: StringFieldUpdateOperationsInput | string
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ShiftCreateInput = {
     id?: string
+    tenantId?: string
     name: string
-    startTime: string
-    endTime: string
+    startTime: Date | string
+    endTime: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     branch: BranchCreateNestedOneWithoutShiftsInput
   }
 
   export type ShiftUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     name: string
-    startTime: string
-    endTime: string
+    startTime: Date | string
+    endTime: Date | string
     branchId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ShiftUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startTime?: StringFieldUpdateOperationsInput | string
-    endTime?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: BranchUpdateOneRequiredWithoutShiftsNestedInput
   }
 
   export type ShiftUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startTime?: StringFieldUpdateOperationsInput | string
-    endTime?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     branchId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ShiftCreateManyInput = {
     id?: string
+    tenantId?: string
     name: string
-    startTime: string
-    endTime: string
+    startTime: Date | string
+    endTime: Date | string
     branchId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ShiftUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startTime?: StringFieldUpdateOperationsInput | string
-    endTime?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ShiftUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startTime?: StringFieldUpdateOperationsInput | string
-    endTime?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     branchId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CashAdvanceCreateInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
-    amount: number
+    amount: Decimal | DecimalJsLike | number | string
     reason: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     employee: UserCreateNestedOneWithoutCashAdvancesInput
   }
 
   export type CashAdvanceUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     employeeId: string
     date?: Date | string
-    amount: number
+    amount: Decimal | DecimalJsLike | number | string
     reason: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type CashAdvanceUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: UserUpdateOneRequiredWithoutCashAdvancesNestedInput
   }
 
   export type CashAdvanceUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     employeeId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CashAdvanceCreateManyInput = {
     id?: string
+    tenantId?: string
     employeeId: string
     date?: Date | string
-    amount: number
+    amount: Decimal | DecimalJsLike | number | string
     reason: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type CashAdvanceUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CashAdvanceUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     employeeId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LeaveRequestCreateInput = {
     id?: string
+    tenantId?: string
     startDate: Date | string
     endDate: Date | string
     type: string
     reason: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     employee: UserCreateNestedOneWithoutLeaveRequestsInput
   }
 
   export type LeaveRequestUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     employeeId: string
     startDate: Date | string
     endDate: Date | string
     type: string
     reason: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type LeaveRequestUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: UserUpdateOneRequiredWithoutLeaveRequestsNestedInput
   }
 
   export type LeaveRequestUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     employeeId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LeaveRequestCreateManyInput = {
     id?: string
+    tenantId?: string
     employeeId: string
     startDate: Date | string
     endDate: Date | string
     type: string
     reason: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type LeaveRequestUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LeaveRequestUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     employeeId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CategoryCreateInput = {
     id?: string
+    tenantId?: string
     name: string
     inventoryItems?: InventoryItemCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     name: string
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     inventoryItems?: InventoryItemUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryCreateManyInput = {
     id?: string
+    tenantId?: string
     name: string
   }
 
   export type CategoryUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
   }
 
   export type CategoryUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
   }
 
   export type InventoryItemCreateInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     category: CategoryCreateNestedOneWithoutInventoryItemsInput
     serviceSpareparts?: ServiceSparepartCreateNestedManyWithoutItemInput
     stocks?: StockCreateNestedManyWithoutItemInput
@@ -29246,17 +35237,20 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
     categoryId: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceSpareparts?: ServiceSparepartUncheckedCreateNestedManyWithoutItemInput
     stocks?: StockUncheckedCreateNestedManyWithoutItemInput
     transactionItems?: TransactionItemUncheckedCreateNestedManyWithoutItemInput
@@ -29266,16 +35260,19 @@ export namespace Prisma {
 
   export type InventoryItemUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     category?: CategoryUpdateOneRequiredWithoutInventoryItemsNestedInput
     serviceSpareparts?: ServiceSparepartUpdateManyWithoutItemNestedInput
     stocks?: StockUpdateManyWithoutItemNestedInput
@@ -29286,17 +35283,20 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceSpareparts?: ServiceSparepartUncheckedUpdateManyWithoutItemNestedInput
     stocks?: StockUncheckedUpdateManyWithoutItemNestedInput
     transactionItems?: TransactionItemUncheckedUpdateManyWithoutItemNestedInput
@@ -29306,127 +35306,174 @@ export namespace Prisma {
 
   export type InventoryItemCreateManyInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
     categoryId: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type InventoryItemUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InventoryItemUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StockCreateInput = {
     id?: string
+    tenantId?: string
     quantity?: number
     reservedQty?: number
     minStock?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     branch: BranchCreateNestedOneWithoutStocksInput
     item: InventoryItemCreateNestedOneWithoutStocksInput
   }
 
   export type StockUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     itemId: string
     branchId: string
     quantity?: number
     reservedQty?: number
     minStock?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type StockUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     reservedQty?: IntFieldUpdateOperationsInput | number
     minStock?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: BranchUpdateOneRequiredWithoutStocksNestedInput
     item?: InventoryItemUpdateOneRequiredWithoutStocksNestedInput
   }
 
   export type StockUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     reservedQty?: IntFieldUpdateOperationsInput | number
     minStock?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StockCreateManyInput = {
     id?: string
+    tenantId?: string
     itemId: string
     branchId: string
     quantity?: number
     reservedQty?: number
     minStock?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type StockUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     reservedQty?: IntFieldUpdateOperationsInput | number
     minStock?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StockUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     reservedQty?: IntFieldUpdateOperationsInput | number
     minStock?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TransactionCreateInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
-    source: string
+    source: $Enums.TransactionSource
     serviceTicketId?: string | null
-    total: number
-    paymentMethod: string
-    amountPaid: number
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod: $Enums.PaymentMethod
+    amountPaid: Decimal | DecimalJsLike | number | string
     customerName?: string | null
     customerPhone?: string | null
     customerAddress?: string | null
-    change: number
-    tax: number
-    discount: number
-    status: string
+    change: Decimal | DecimalJsLike | number | string
+    tax: Decimal | DecimalJsLike | number | string
+    discount: Decimal | DecimalJsLike | number | string
+    status: $Enums.TransactionStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     branch: BranchCreateNestedOneWithoutTransactionsInput
     cashier: UserCreateNestedOneWithoutTransactionsInput
     items?: TransactionItemCreateNestedManyWithoutTransactionInput
@@ -29434,45 +35481,51 @@ export namespace Prisma {
 
   export type TransactionUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
     branchId: string
     cashierId: string
-    source: string
+    source: $Enums.TransactionSource
     serviceTicketId?: string | null
-    total: number
-    paymentMethod: string
-    amountPaid: number
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod: $Enums.PaymentMethod
+    amountPaid: Decimal | DecimalJsLike | number | string
     customerName?: string | null
     customerPhone?: string | null
     customerAddress?: string | null
-    change: number
-    tax: number
-    discount: number
-    status: string
+    change: Decimal | DecimalJsLike | number | string
+    tax: Decimal | DecimalJsLike | number | string
+    discount: Decimal | DecimalJsLike | number | string
+    status: $Enums.TransactionStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     items?: TransactionItemUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    source?: StringFieldUpdateOperationsInput | string
+    source?: EnumTransactionSourceFieldUpdateOperationsInput | $Enums.TransactionSource
     serviceTicketId?: NullableStringFieldUpdateOperationsInput | string | null
-    total?: FloatFieldUpdateOperationsInput | number
-    paymentMethod?: StringFieldUpdateOperationsInput | string
-    amountPaid?: FloatFieldUpdateOperationsInput | number
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    change?: FloatFieldUpdateOperationsInput | number
-    tax?: FloatFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    change?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: BranchUpdateOneRequiredWithoutTransactionsNestedInput
     cashier?: UserUpdateOneRequiredWithoutTransactionsNestedInput
     items?: TransactionItemUpdateManyWithoutTransactionNestedInput
@@ -29480,99 +35533,112 @@ export namespace Prisma {
 
   export type TransactionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     branchId?: StringFieldUpdateOperationsInput | string
     cashierId?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
+    source?: EnumTransactionSourceFieldUpdateOperationsInput | $Enums.TransactionSource
     serviceTicketId?: NullableStringFieldUpdateOperationsInput | string | null
-    total?: FloatFieldUpdateOperationsInput | number
-    paymentMethod?: StringFieldUpdateOperationsInput | string
-    amountPaid?: FloatFieldUpdateOperationsInput | number
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    change?: FloatFieldUpdateOperationsInput | number
-    tax?: FloatFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    change?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     items?: TransactionItemUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionCreateManyInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
     branchId: string
     cashierId: string
-    source: string
+    source: $Enums.TransactionSource
     serviceTicketId?: string | null
-    total: number
-    paymentMethod: string
-    amountPaid: number
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod: $Enums.PaymentMethod
+    amountPaid: Decimal | DecimalJsLike | number | string
     customerName?: string | null
     customerPhone?: string | null
     customerAddress?: string | null
-    change: number
-    tax: number
-    discount: number
-    status: string
+    change: Decimal | DecimalJsLike | number | string
+    tax: Decimal | DecimalJsLike | number | string
+    discount: Decimal | DecimalJsLike | number | string
+    status: $Enums.TransactionStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type TransactionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    source?: StringFieldUpdateOperationsInput | string
+    source?: EnumTransactionSourceFieldUpdateOperationsInput | $Enums.TransactionSource
     serviceTicketId?: NullableStringFieldUpdateOperationsInput | string | null
-    total?: FloatFieldUpdateOperationsInput | number
-    paymentMethod?: StringFieldUpdateOperationsInput | string
-    amountPaid?: FloatFieldUpdateOperationsInput | number
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    change?: FloatFieldUpdateOperationsInput | number
-    tax?: FloatFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    change?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TransactionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     branchId?: StringFieldUpdateOperationsInput | string
     cashierId?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
+    source?: EnumTransactionSourceFieldUpdateOperationsInput | $Enums.TransactionSource
     serviceTicketId?: NullableStringFieldUpdateOperationsInput | string | null
-    total?: FloatFieldUpdateOperationsInput | number
-    paymentMethod?: StringFieldUpdateOperationsInput | string
-    amountPaid?: FloatFieldUpdateOperationsInput | number
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    change?: FloatFieldUpdateOperationsInput | number
-    tax?: FloatFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    change?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TransactionItemCreateInput = {
     id?: string
+    tenantId?: string
     name: string
     category: string
-    price: number
-    costPrice: number
+    price: Decimal | DecimalJsLike | number | string
+    costPrice: Decimal | DecimalJsLike | number | string
     quantity: number
-    discount?: number
+    discount?: Decimal | DecimalJsLike | number | string
     technicianId?: string | null
     item?: InventoryItemCreateNestedOneWithoutTransactionItemsInput
     transaction: TransactionCreateNestedOneWithoutItemsInput
@@ -29580,25 +35646,27 @@ export namespace Prisma {
 
   export type TransactionItemUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     transactionId: string
     itemId?: string | null
     name: string
     category: string
-    price: number
-    costPrice: number
+    price: Decimal | DecimalJsLike | number | string
+    costPrice: Decimal | DecimalJsLike | number | string
     quantity: number
-    discount?: number
+    discount?: Decimal | DecimalJsLike | number | string
     technicianId?: string | null
   }
 
   export type TransactionItemUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    costPrice?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantity?: IntFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
     item?: InventoryItemUpdateOneWithoutTransactionItemsNestedInput
     transaction?: TransactionUpdateOneRequiredWithoutItemsNestedInput
@@ -29606,56 +35674,61 @@ export namespace Prisma {
 
   export type TransactionItemUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     transactionId?: StringFieldUpdateOperationsInput | string
     itemId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    costPrice?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantity?: IntFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TransactionItemCreateManyInput = {
     id?: string
+    tenantId?: string
     transactionId: string
     itemId?: string | null
     name: string
     category: string
-    price: number
-    costPrice: number
+    price: Decimal | DecimalJsLike | number | string
+    costPrice: Decimal | DecimalJsLike | number | string
     quantity: number
-    discount?: number
+    discount?: Decimal | DecimalJsLike | number | string
     technicianId?: string | null
   }
 
   export type TransactionItemUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    costPrice?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantity?: IntFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TransactionItemUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     transactionId?: StringFieldUpdateOperationsInput | string
     itemId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    costPrice?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantity?: IntFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceTicketCreateInput = {
     id?: string
+    tenantId?: string
     dateOpened?: Date | string
     dateClosed?: Date | string | null
     customerName: string
@@ -29665,11 +35738,15 @@ export namespace Prisma {
     deviceSerial: string
     issue: string
     diagnosis?: string | null
-    estimatedCost: number
-    serviceFee: number
-    status: string
+    estimatedCost: Decimal | DecimalJsLike | number | string
+    serviceFee: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ServiceStatus
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     spareparts?: ServiceSparepartCreateNestedManyWithoutTicketInput
     branch: BranchCreateNestedOneWithoutServiceTicketsInput
     technician?: UserCreateNestedOneWithoutServiceTicketsInput
@@ -29677,6 +35754,7 @@ export namespace Prisma {
 
   export type ServiceTicketUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     dateOpened?: Date | string
     dateClosed?: Date | string | null
     customerName: string
@@ -29686,18 +35764,23 @@ export namespace Prisma {
     deviceSerial: string
     issue: string
     diagnosis?: string | null
-    estimatedCost: number
-    serviceFee: number
-    status: string
+    estimatedCost: Decimal | DecimalJsLike | number | string
+    serviceFee: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ServiceStatus
     technicianId?: string | null
     branchId: string
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     spareparts?: ServiceSparepartUncheckedCreateNestedManyWithoutTicketInput
   }
 
   export type ServiceTicketUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     dateOpened?: DateTimeFieldUpdateOperationsInput | Date | string
     dateClosed?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customerName?: StringFieldUpdateOperationsInput | string
@@ -29707,11 +35790,15 @@ export namespace Prisma {
     deviceSerial?: StringFieldUpdateOperationsInput | string
     issue?: StringFieldUpdateOperationsInput | string
     diagnosis?: NullableStringFieldUpdateOperationsInput | string | null
-    estimatedCost?: FloatFieldUpdateOperationsInput | number
-    serviceFee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    estimatedCost?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     spareparts?: ServiceSparepartUpdateManyWithoutTicketNestedInput
     branch?: BranchUpdateOneRequiredWithoutServiceTicketsNestedInput
     technician?: UserUpdateOneWithoutServiceTicketsNestedInput
@@ -29719,6 +35806,7 @@ export namespace Prisma {
 
   export type ServiceTicketUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     dateOpened?: DateTimeFieldUpdateOperationsInput | Date | string
     dateClosed?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customerName?: StringFieldUpdateOperationsInput | string
@@ -29728,18 +35816,23 @@ export namespace Prisma {
     deviceSerial?: StringFieldUpdateOperationsInput | string
     issue?: StringFieldUpdateOperationsInput | string
     diagnosis?: NullableStringFieldUpdateOperationsInput | string | null
-    estimatedCost?: FloatFieldUpdateOperationsInput | number
-    serviceFee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    estimatedCost?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: StringFieldUpdateOperationsInput | string
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     spareparts?: ServiceSparepartUncheckedUpdateManyWithoutTicketNestedInput
   }
 
   export type ServiceTicketCreateManyInput = {
     id?: string
+    tenantId?: string
     dateOpened?: Date | string
     dateClosed?: Date | string | null
     customerName: string
@@ -29749,17 +35842,22 @@ export namespace Prisma {
     deviceSerial: string
     issue: string
     diagnosis?: string | null
-    estimatedCost: number
-    serviceFee: number
-    status: string
+    estimatedCost: Decimal | DecimalJsLike | number | string
+    serviceFee: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ServiceStatus
     technicianId?: string | null
     branchId: string
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ServiceTicketUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     dateOpened?: DateTimeFieldUpdateOperationsInput | Date | string
     dateClosed?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customerName?: StringFieldUpdateOperationsInput | string
@@ -29769,15 +35867,20 @@ export namespace Prisma {
     deviceSerial?: StringFieldUpdateOperationsInput | string
     issue?: StringFieldUpdateOperationsInput | string
     diagnosis?: NullableStringFieldUpdateOperationsInput | string | null
-    estimatedCost?: FloatFieldUpdateOperationsInput | number
-    serviceFee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    estimatedCost?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceTicketUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     dateOpened?: DateTimeFieldUpdateOperationsInput | Date | string
     dateClosed?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customerName?: StringFieldUpdateOperationsInput | string
@@ -29787,77 +35890,117 @@ export namespace Prisma {
     deviceSerial?: StringFieldUpdateOperationsInput | string
     issue?: StringFieldUpdateOperationsInput | string
     diagnosis?: NullableStringFieldUpdateOperationsInput | string | null
-    estimatedCost?: FloatFieldUpdateOperationsInput | number
-    serviceFee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    estimatedCost?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: StringFieldUpdateOperationsInput | string
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceSparepartCreateInput = {
     id?: string
+    tenantId?: string
     quantity: number
-    price: number
+    price: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     item: InventoryItemCreateNestedOneWithoutServiceSparepartsInput
     ticket: ServiceTicketCreateNestedOneWithoutSparepartsInput
   }
 
   export type ServiceSparepartUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     ticketId: string
     itemId: string
     quantity: number
-    price: number
+    price: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ServiceSparepartUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     item?: InventoryItemUpdateOneRequiredWithoutServiceSparepartsNestedInput
     ticket?: ServiceTicketUpdateOneRequiredWithoutSparepartsNestedInput
   }
 
   export type ServiceSparepartUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     ticketId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceSparepartCreateManyInput = {
     id?: string
+    tenantId?: string
     ticketId: string
     itemId: string
     quantity: number
-    price: number
+    price: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ServiceSparepartUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceSparepartUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     ticketId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AttendanceCreateInput = {
     id?: string
+    tenantId?: string
     employeeName: string
     branchId: string
-    date: string
-    checkInTime: bigint | number
-    checkOutTime?: bigint | number | null
-    status: string
+    date: Date | string
+    checkInTime: Date | string
+    checkOutTime?: Date | string | null
+    status: $Enums.AttendanceStatus
     isInRadius: boolean
     isMockGPS: boolean
     latitude?: number | null
@@ -29868,18 +36011,22 @@ export namespace Prisma {
     checkOutLongitude?: number | null
     workDurationMinutes?: number | null
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     employee: UserCreateNestedOneWithoutAttendancesInput
   }
 
   export type AttendanceUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     employeeId: string
     employeeName: string
     branchId: string
-    date: string
-    checkInTime: bigint | number
-    checkOutTime?: bigint | number | null
-    status: string
+    date: Date | string
+    checkInTime: Date | string
+    checkOutTime?: Date | string | null
+    status: $Enums.AttendanceStatus
     isInRadius: boolean
     isMockGPS: boolean
     latitude?: number | null
@@ -29890,16 +36037,20 @@ export namespace Prisma {
     checkOutLongitude?: number | null
     workDurationMinutes?: number | null
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type AttendanceUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     employeeName?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
-    date?: StringFieldUpdateOperationsInput | string
-    checkInTime?: BigIntFieldUpdateOperationsInput | bigint | number
-    checkOutTime?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    status?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
     isInRadius?: BoolFieldUpdateOperationsInput | boolean
     isMockGPS?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -29910,18 +36061,22 @@ export namespace Prisma {
     checkOutLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     workDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: UserUpdateOneRequiredWithoutAttendancesNestedInput
   }
 
   export type AttendanceUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     employeeId?: StringFieldUpdateOperationsInput | string
     employeeName?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
-    date?: StringFieldUpdateOperationsInput | string
-    checkInTime?: BigIntFieldUpdateOperationsInput | bigint | number
-    checkOutTime?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    status?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
     isInRadius?: BoolFieldUpdateOperationsInput | boolean
     isMockGPS?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -29932,17 +36087,21 @@ export namespace Prisma {
     checkOutLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     workDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AttendanceCreateManyInput = {
     id?: string
+    tenantId?: string
     employeeId: string
     employeeName: string
     branchId: string
-    date: string
-    checkInTime: bigint | number
-    checkOutTime?: bigint | number | null
-    status: string
+    date: Date | string
+    checkInTime: Date | string
+    checkOutTime?: Date | string | null
+    status: $Enums.AttendanceStatus
     isInRadius: boolean
     isMockGPS: boolean
     latitude?: number | null
@@ -29953,16 +36112,20 @@ export namespace Prisma {
     checkOutLongitude?: number | null
     workDurationMinutes?: number | null
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type AttendanceUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     employeeName?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
-    date?: StringFieldUpdateOperationsInput | string
-    checkInTime?: BigIntFieldUpdateOperationsInput | bigint | number
-    checkOutTime?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    status?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
     isInRadius?: BoolFieldUpdateOperationsInput | boolean
     isMockGPS?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -29973,17 +36136,21 @@ export namespace Prisma {
     checkOutLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     workDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AttendanceUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     employeeId?: StringFieldUpdateOperationsInput | string
     employeeName?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
-    date?: StringFieldUpdateOperationsInput | string
-    checkInTime?: BigIntFieldUpdateOperationsInput | bigint | number
-    checkOutTime?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    status?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
     isInRadius?: BoolFieldUpdateOperationsInput | boolean
     isMockGPS?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -29994,10 +36161,14 @@ export namespace Prisma {
     checkOutLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     workDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StoreProfileCreateInput = {
     id?: string
+    tenantId?: string
     name?: string
     address?: string
     phone?: string
@@ -30010,14 +36181,21 @@ export namespace Prisma {
     latePenalty?: number
     absentPenalty?: number
     totalWorkDays?: number
-    baseSalary?: number
-    overtimeRate?: number
-    serviceIncentive?: number
+    baseSalary?: Decimal | DecimalJsLike | number | string
+    overtimeRate?: Decimal | DecimalJsLike | number | string
+    serviceIncentive?: Decimal | DecimalJsLike | number | string
+    payDay?: number
+    thrMonth?: number | null
+    thrMinWorkMonths?: number
+    thrMultiplier?: Decimal | DecimalJsLike | number | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type StoreProfileUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     name?: string
     address?: string
     phone?: string
@@ -30030,14 +36208,21 @@ export namespace Prisma {
     latePenalty?: number
     absentPenalty?: number
     totalWorkDays?: number
-    baseSalary?: number
-    overtimeRate?: number
-    serviceIncentive?: number
+    baseSalary?: Decimal | DecimalJsLike | number | string
+    overtimeRate?: Decimal | DecimalJsLike | number | string
+    serviceIncentive?: Decimal | DecimalJsLike | number | string
+    payDay?: number
+    thrMonth?: number | null
+    thrMinWorkMonths?: number
+    thrMultiplier?: Decimal | DecimalJsLike | number | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type StoreProfileUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -30050,14 +36235,21 @@ export namespace Prisma {
     latePenalty?: FloatFieldUpdateOperationsInput | number
     absentPenalty?: FloatFieldUpdateOperationsInput | number
     totalWorkDays?: IntFieldUpdateOperationsInput | number
-    baseSalary?: FloatFieldUpdateOperationsInput | number
-    overtimeRate?: FloatFieldUpdateOperationsInput | number
-    serviceIncentive?: FloatFieldUpdateOperationsInput | number
+    baseSalary?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceIncentive?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payDay?: IntFieldUpdateOperationsInput | number
+    thrMonth?: NullableIntFieldUpdateOperationsInput | number | null
+    thrMinWorkMonths?: IntFieldUpdateOperationsInput | number
+    thrMultiplier?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StoreProfileUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -30070,14 +36262,21 @@ export namespace Prisma {
     latePenalty?: FloatFieldUpdateOperationsInput | number
     absentPenalty?: FloatFieldUpdateOperationsInput | number
     totalWorkDays?: IntFieldUpdateOperationsInput | number
-    baseSalary?: FloatFieldUpdateOperationsInput | number
-    overtimeRate?: FloatFieldUpdateOperationsInput | number
-    serviceIncentive?: FloatFieldUpdateOperationsInput | number
+    baseSalary?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceIncentive?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payDay?: IntFieldUpdateOperationsInput | number
+    thrMonth?: NullableIntFieldUpdateOperationsInput | number | null
+    thrMinWorkMonths?: IntFieldUpdateOperationsInput | number
+    thrMultiplier?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StoreProfileCreateManyInput = {
     id?: string
+    tenantId?: string
     name?: string
     address?: string
     phone?: string
@@ -30090,14 +36289,21 @@ export namespace Prisma {
     latePenalty?: number
     absentPenalty?: number
     totalWorkDays?: number
-    baseSalary?: number
-    overtimeRate?: number
-    serviceIncentive?: number
+    baseSalary?: Decimal | DecimalJsLike | number | string
+    overtimeRate?: Decimal | DecimalJsLike | number | string
+    serviceIncentive?: Decimal | DecimalJsLike | number | string
+    payDay?: number
+    thrMonth?: number | null
+    thrMinWorkMonths?: number
+    thrMultiplier?: Decimal | DecimalJsLike | number | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type StoreProfileUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -30110,14 +36316,21 @@ export namespace Prisma {
     latePenalty?: FloatFieldUpdateOperationsInput | number
     absentPenalty?: FloatFieldUpdateOperationsInput | number
     totalWorkDays?: IntFieldUpdateOperationsInput | number
-    baseSalary?: FloatFieldUpdateOperationsInput | number
-    overtimeRate?: FloatFieldUpdateOperationsInput | number
-    serviceIncentive?: FloatFieldUpdateOperationsInput | number
+    baseSalary?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceIncentive?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payDay?: IntFieldUpdateOperationsInput | number
+    thrMonth?: NullableIntFieldUpdateOperationsInput | number | null
+    thrMinWorkMonths?: IntFieldUpdateOperationsInput | number
+    thrMultiplier?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StoreProfileUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -30130,206 +36343,292 @@ export namespace Prisma {
     latePenalty?: FloatFieldUpdateOperationsInput | number
     absentPenalty?: FloatFieldUpdateOperationsInput | number
     totalWorkDays?: IntFieldUpdateOperationsInput | number
-    baseSalary?: FloatFieldUpdateOperationsInput | number
-    overtimeRate?: FloatFieldUpdateOperationsInput | number
-    serviceIncentive?: FloatFieldUpdateOperationsInput | number
+    baseSalary?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceIncentive?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payDay?: IntFieldUpdateOperationsInput | number
+    thrMonth?: NullableIntFieldUpdateOperationsInput | number | null
+    thrMinWorkMonths?: IntFieldUpdateOperationsInput | number
+    thrMultiplier?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceTypeCreateInput = {
     id?: string
+    tenantId?: string
     name: string
-    price: number
+    price: Decimal | DecimalJsLike | number | string
     category?: string | null
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ServiceTypeUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     name: string
-    price: number
+    price: Decimal | DecimalJsLike | number | string
     category?: string | null
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ServiceTypeUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceTypeUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceTypeCreateManyInput = {
     id?: string
+    tenantId?: string
     name: string
-    price: number
+    price: Decimal | DecimalJsLike | number | string
     category?: string | null
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ServiceTypeUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceTypeUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OvertimeCreateInput = {
     id?: string
+    tenantId?: string
     hours?: number
     date?: Date | string
     reason?: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     employee: UserCreateNestedOneWithoutOvertimesInput
   }
 
   export type OvertimeUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     employeeId: string
     hours?: number
     date?: Date | string
     reason?: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type OvertimeUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     hours?: FloatFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: UserUpdateOneRequiredWithoutOvertimesNestedInput
   }
 
   export type OvertimeUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     employeeId?: StringFieldUpdateOperationsInput | string
     hours?: FloatFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OvertimeCreateManyInput = {
     id?: string
+    tenantId?: string
     employeeId: string
     hours?: number
     date?: Date | string
     reason?: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type OvertimeUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     hours?: FloatFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OvertimeUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     employeeId?: StringFieldUpdateOperationsInput | string
     hours?: FloatFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DeviceModelCreateInput = {
     id?: string
+    tenantId?: string
     name: string
     brand?: string
     type: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type DeviceModelUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     name: string
     brand?: string
     type: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type DeviceModelUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     brand?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DeviceModelUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     brand?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DeviceModelCreateManyInput = {
     id?: string
+    tenantId?: string
     name: string
     brand?: string
     type: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type DeviceModelUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     brand?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DeviceModelUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     brand?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StockTransferCreateInput = {
     id?: string
-    status?: string
+    tenantId?: string
+    status?: $Enums.StockTransferStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     fromBranch: BranchCreateNestedOneWithoutTransfersFromInput
     toBranch: BranchCreateNestedOneWithoutTransfersToInput
     items?: StockTransferItemCreateNestedManyWithoutTransferInput
@@ -30337,21 +36636,27 @@ export namespace Prisma {
 
   export type StockTransferUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     fromBranchId: string
     toBranchId: string
-    status?: string
+    status?: $Enums.StockTransferStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     items?: StockTransferItemUncheckedCreateNestedManyWithoutTransferInput
   }
 
   export type StockTransferUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStockTransferStatusFieldUpdateOperationsInput | $Enums.StockTransferStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     fromBranch?: BranchUpdateOneRequiredWithoutTransfersFromNestedInput
     toBranch?: BranchUpdateOneRequiredWithoutTransfersToNestedInput
     items?: StockTransferItemUpdateManyWithoutTransferNestedInput
@@ -30359,45 +36664,58 @@ export namespace Prisma {
 
   export type StockTransferUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     fromBranchId?: StringFieldUpdateOperationsInput | string
     toBranchId?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumStockTransferStatusFieldUpdateOperationsInput | $Enums.StockTransferStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     items?: StockTransferItemUncheckedUpdateManyWithoutTransferNestedInput
   }
 
   export type StockTransferCreateManyInput = {
     id?: string
+    tenantId?: string
     fromBranchId: string
     toBranchId: string
-    status?: string
+    status?: $Enums.StockTransferStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type StockTransferUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStockTransferStatusFieldUpdateOperationsInput | $Enums.StockTransferStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StockTransferUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     fromBranchId?: StringFieldUpdateOperationsInput | string
     toBranchId?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumStockTransferStatusFieldUpdateOperationsInput | $Enums.StockTransferStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StockTransferItemCreateInput = {
     id?: string
+    tenantId?: string
     quantity: number
     item: InventoryItemCreateNestedOneWithoutTransferItemsInput
     transfer: StockTransferCreateNestedOneWithoutItemsInput
@@ -30405,6 +36723,7 @@ export namespace Prisma {
 
   export type StockTransferItemUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     transferId: string
     itemId: string
     quantity: number
@@ -30412,6 +36731,7 @@ export namespace Prisma {
 
   export type StockTransferItemUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     item?: InventoryItemUpdateOneRequiredWithoutTransferItemsNestedInput
     transfer?: StockTransferUpdateOneRequiredWithoutItemsNestedInput
@@ -30419,6 +36739,7 @@ export namespace Prisma {
 
   export type StockTransferItemUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     transferId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
@@ -30426,6 +36747,7 @@ export namespace Prisma {
 
   export type StockTransferItemCreateManyInput = {
     id?: string
+    tenantId?: string
     transferId: string
     itemId: string
     quantity: number
@@ -30433,11 +36755,13 @@ export namespace Prisma {
 
   export type StockTransferItemUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
   }
 
   export type StockTransferItemUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     transferId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
@@ -30445,77 +36769,209 @@ export namespace Prisma {
 
   export type InventoryUnitCreateInput = {
     id?: string
+    tenantId?: string
     serialNumber?: string | null
-    status?: string
-    costPrice?: number | null
+    status?: $Enums.InventoryUnitStatus
+    costPrice?: Decimal | DecimalJsLike | number | string | null
     entryDate?: Date | string
     soldDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     item: InventoryItemCreateNestedOneWithoutUnitsInput
     branch: BranchCreateNestedOneWithoutUnitsInput
   }
 
   export type InventoryUnitUncheckedCreateInput = {
     id?: string
+    tenantId?: string
     itemId: string
     branchId: string
     serialNumber?: string | null
-    status?: string
-    costPrice?: number | null
+    status?: $Enums.InventoryUnitStatus
+    costPrice?: Decimal | DecimalJsLike | number | string | null
     entryDate?: Date | string
     soldDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type InventoryUnitUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    costPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInventoryUnitStatusFieldUpdateOperationsInput | $Enums.InventoryUnitStatus
+    costPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     soldDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     item?: InventoryItemUpdateOneRequiredWithoutUnitsNestedInput
     branch?: BranchUpdateOneRequiredWithoutUnitsNestedInput
   }
 
   export type InventoryUnitUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
     serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    costPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInventoryUnitStatusFieldUpdateOperationsInput | $Enums.InventoryUnitStatus
+    costPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     soldDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InventoryUnitCreateManyInput = {
     id?: string
+    tenantId?: string
     itemId: string
     branchId: string
     serialNumber?: string | null
-    status?: string
-    costPrice?: number | null
+    status?: $Enums.InventoryUnitStatus
+    costPrice?: Decimal | DecimalJsLike | number | string | null
     entryDate?: Date | string
     soldDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type InventoryUnitUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    costPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInventoryUnitStatusFieldUpdateOperationsInput | $Enums.InventoryUnitStatus
+    costPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     soldDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InventoryUnitUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
     serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    costPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInventoryUnitStatusFieldUpdateOperationsInput | $Enums.InventoryUnitStatus
+    costPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     soldDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type BonusPoolCreateInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    amount: Decimal | DecimalJsLike | number | string
+    month: number
+    year: number
+    branchId?: string | null
+    employeeId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: RoleCreateNestedOneWithoutBonusPoolsInput
+  }
+
+  export type BonusPoolUncheckedCreateInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    amount: Decimal | DecimalJsLike | number | string
+    month: number
+    year: number
+    roleId?: string | null
+    branchId?: string | null
+    employeeId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BonusPoolUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneWithoutBonusPoolsNestedInput
+  }
+
+  export type BonusPoolUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BonusPoolCreateManyInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    amount: Decimal | DecimalJsLike | number | string
+    month: number
+    year: number
+    roleId?: string | null
+    branchId?: string | null
+    employeeId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BonusPoolUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BonusPoolUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -30531,6 +36987,202 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type PermissionListRelationFilter = {
+    every?: PermissionWhereInput
+    some?: PermissionWhereInput
+    none?: PermissionWhereInput
+  }
+
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
+  }
+
+  export type BonusPoolListRelationFilter = {
+    every?: BonusPoolWhereInput
+    some?: BonusPoolWhereInput
+    none?: BonusPoolWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type PermissionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BonusPoolOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RoleNameTenantIdCompoundUniqueInput = {
+    name: string
+    tenantId: string
+  }
+
+  export type RoleCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoleMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type RoleScalarRelationFilter = {
+    is?: RoleWhereInput
+    isNot?: RoleWhereInput
+  }
+
+  export type PermissionRoleIdModuleCompoundUniqueInput = {
+    roleId: string
+    module: string
+  }
+
+  export type PermissionCountOrderByAggregateInput = {
+    id?: SortOrder
+    roleId?: SortOrder
+    module?: SortOrder
+    canRead?: SortOrder
+    canCreate?: SortOrder
+    canUpdate?: SortOrder
+    canDelete?: SortOrder
+  }
+
+  export type PermissionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    roleId?: SortOrder
+    module?: SortOrder
+    canRead?: SortOrder
+    canCreate?: SortOrder
+    canUpdate?: SortOrder
+    canDelete?: SortOrder
+  }
+
+  export type PermissionMinOrderByAggregateInput = {
+    id?: SortOrder
+    roleId?: SortOrder
+    module?: SortOrder
+    canRead?: SortOrder
+    canCreate?: SortOrder
+    canUpdate?: SortOrder
+    canDelete?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type FloatFilter<$PrismaModel = never> = {
@@ -30555,15 +37207,15 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type ServiceTicketListRelationFilter = {
@@ -30588,12 +37240,6 @@ export namespace Prisma {
     every?: TransactionWhereInput
     some?: TransactionWhereInput
     none?: TransactionWhereInput
-  }
-
-  export type UserListRelationFilter = {
-    every?: UserWhereInput
-    some?: UserWhereInput
-    none?: UserWhereInput
   }
 
   export type StockTransferListRelationFilter = {
@@ -30624,10 +37270,6 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type UserOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type StockTransferOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -30638,6 +37280,7 @@ export namespace Prisma {
 
   export type BranchCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
@@ -30646,6 +37289,8 @@ export namespace Prisma {
     radiusMeters?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type BranchAvgOrderByAggregateInput = {
@@ -30656,6 +37301,7 @@ export namespace Prisma {
 
   export type BranchMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
@@ -30664,10 +37310,13 @@ export namespace Prisma {
     radiusMeters?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type BranchMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
@@ -30676,30 +37325,14 @@ export namespace Prisma {
     radiusMeters?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type BranchSumOrderByAggregateInput = {
     latitude?: SortOrder
     longitude?: SortOrder
     radiusMeters?: SortOrder
-  }
-
-  export type StringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -30734,44 +37367,29 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type FloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -30809,14 +37427,9 @@ export namespace Prisma {
     none?: OvertimeWhereInput
   }
 
-  export type BranchNullableScalarRelationFilter = {
-    is?: BranchWhereInput | null
-    isNot?: BranchWhereInput | null
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
+  export type BranchScalarRelationFilter = {
+    is?: BranchWhereInput
+    isNot?: BranchWhereInput
   }
 
   export type CashAdvanceOrderByRelationAggregateInput = {
@@ -30837,12 +37450,16 @@ export namespace Prisma {
 
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
-    role?: SortOrder
+    roleId?: SortOrder
     createdAt?: SortOrder
+    joinDate?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
     branchId?: SortOrder
     wageType?: SortOrder
     wageRate?: SortOrder
@@ -30855,6 +37472,7 @@ export namespace Prisma {
     address?: SortOrder
     incentiveRate?: SortOrder
     incentiveType?: SortOrder
+    incentiveMode?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -30868,12 +37486,16 @@ export namespace Prisma {
 
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
-    role?: SortOrder
+    roleId?: SortOrder
     createdAt?: SortOrder
+    joinDate?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
     branchId?: SortOrder
     wageType?: SortOrder
     wageRate?: SortOrder
@@ -30886,16 +37508,21 @@ export namespace Prisma {
     address?: SortOrder
     incentiveRate?: SortOrder
     incentiveType?: SortOrder
+    incentiveMode?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
-    role?: SortOrder
+    roleId?: SortOrder
     createdAt?: SortOrder
+    joinDate?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
     branchId?: SortOrder
     wageType?: SortOrder
     wageRate?: SortOrder
@@ -30908,6 +37535,7 @@ export namespace Prisma {
     address?: SortOrder
     incentiveRate?: SortOrder
     incentiveType?: SortOrder
+    incentiveMode?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -30919,38 +37547,20 @@ export namespace Prisma {
     incentiveRate?: SortOrder
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -30969,33 +37579,61 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type BranchScalarRelationFilter = {
-    is?: BranchWhereInput
-    isNot?: BranchWhereInput
-  }
-
   export type ShiftCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
     branchId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type ShiftMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
     branchId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type ShiftMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
     branchId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type DecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type EnumRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RequestStatus | EnumRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RequestStatus[] | ListEnumRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RequestStatus[] | ListEnumRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRequestStatusFilter<$PrismaModel> | $Enums.RequestStatus
   }
 
   export type UserScalarRelationFilter = {
@@ -31005,12 +37643,16 @@ export namespace Prisma {
 
   export type CashAdvanceCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     date?: SortOrder
     amount?: SortOrder
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type CashAdvanceAvgOrderByAggregateInput = {
@@ -31019,30 +37661,65 @@ export namespace Prisma {
 
   export type CashAdvanceMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     date?: SortOrder
     amount?: SortOrder
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type CashAdvanceMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     date?: SortOrder
     amount?: SortOrder
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type CashAdvanceSumOrderByAggregateInput = {
     amount?: SortOrder
   }
 
+  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type EnumRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RequestStatus | EnumRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RequestStatus[] | ListEnumRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RequestStatus[] | ListEnumRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.RequestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRequestStatusFilter<$PrismaModel>
+    _max?: NestedEnumRequestStatusFilter<$PrismaModel>
+  }
+
   export type LeaveRequestCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
@@ -31050,10 +37727,14 @@ export namespace Prisma {
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type LeaveRequestMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
@@ -31061,10 +37742,14 @@ export namespace Prisma {
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type LeaveRequestMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
@@ -31072,6 +37757,9 @@ export namespace Prisma {
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type InventoryItemListRelationFilter = {
@@ -31086,22 +37774,20 @@ export namespace Prisma {
 
   export type CategoryCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
   }
 
   export type CategoryMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
   }
 
   export type CategoryMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type CategoryScalarRelationFilter = {
@@ -31141,6 +37827,7 @@ export namespace Prisma {
 
   export type InventoryItemCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     sku?: SortOrder
     categoryId?: SortOrder
@@ -31152,6 +37839,8 @@ export namespace Prisma {
     showInPos?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type InventoryItemAvgOrderByAggregateInput = {
@@ -31161,6 +37850,7 @@ export namespace Prisma {
 
   export type InventoryItemMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     sku?: SortOrder
     categoryId?: SortOrder
@@ -31172,10 +37862,13 @@ export namespace Prisma {
     showInPos?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type InventoryItemMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     sku?: SortOrder
     categoryId?: SortOrder
@@ -31187,19 +37880,13 @@ export namespace Prisma {
     showInPos?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type InventoryItemSumOrderByAggregateInput = {
     costPrice?: SortOrder
     basePrice?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type InventoryItemScalarRelationFilter = {
@@ -31214,11 +37901,16 @@ export namespace Prisma {
 
   export type StockCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     itemId?: SortOrder
     branchId?: SortOrder
     quantity?: SortOrder
     reservedQty?: SortOrder
     minStock?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type StockAvgOrderByAggregateInput = {
@@ -31229,20 +37921,30 @@ export namespace Prisma {
 
   export type StockMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     itemId?: SortOrder
     branchId?: SortOrder
     quantity?: SortOrder
     reservedQty?: SortOrder
     minStock?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type StockMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     itemId?: SortOrder
     branchId?: SortOrder
     quantity?: SortOrder
     reservedQty?: SortOrder
     minStock?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type StockSumOrderByAggregateInput = {
@@ -31251,8 +37953,30 @@ export namespace Prisma {
     minStock?: SortOrder
   }
 
+  export type EnumTransactionSourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionSource | EnumTransactionSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionSource[] | ListEnumTransactionSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionSource[] | ListEnumTransactionSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionSourceFilter<$PrismaModel> | $Enums.TransactionSource
+  }
+
+  export type EnumPaymentMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
+  }
+
+  export type EnumTransactionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionStatus | EnumTransactionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionStatusFilter<$PrismaModel> | $Enums.TransactionStatus
+  }
+
   export type TransactionCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     date?: SortOrder
     branchId?: SortOrder
     cashierId?: SortOrder
@@ -31271,6 +37995,8 @@ export namespace Prisma {
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type TransactionAvgOrderByAggregateInput = {
@@ -31283,6 +38009,7 @@ export namespace Prisma {
 
   export type TransactionMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     date?: SortOrder
     branchId?: SortOrder
     cashierId?: SortOrder
@@ -31301,10 +38028,13 @@ export namespace Prisma {
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type TransactionMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     date?: SortOrder
     branchId?: SortOrder
     cashierId?: SortOrder
@@ -31323,6 +38053,8 @@ export namespace Prisma {
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type TransactionSumOrderByAggregateInput = {
@@ -31331,6 +38063,36 @@ export namespace Prisma {
     change?: SortOrder
     tax?: SortOrder
     discount?: SortOrder
+  }
+
+  export type EnumTransactionSourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionSource | EnumTransactionSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionSource[] | ListEnumTransactionSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionSource[] | ListEnumTransactionSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionSourceWithAggregatesFilter<$PrismaModel> | $Enums.TransactionSource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransactionSourceFilter<$PrismaModel>
+    _max?: NestedEnumTransactionSourceFilter<$PrismaModel>
+  }
+
+  export type EnumPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMethod
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
+    _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
+  }
+
+  export type EnumTransactionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionStatus | EnumTransactionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionStatusWithAggregatesFilter<$PrismaModel> | $Enums.TransactionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransactionStatusFilter<$PrismaModel>
+    _max?: NestedEnumTransactionStatusFilter<$PrismaModel>
   }
 
   export type InventoryItemNullableScalarRelationFilter = {
@@ -31345,6 +38107,7 @@ export namespace Prisma {
 
   export type TransactionItemCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     transactionId?: SortOrder
     itemId?: SortOrder
     name?: SortOrder
@@ -31365,6 +38128,7 @@ export namespace Prisma {
 
   export type TransactionItemMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     transactionId?: SortOrder
     itemId?: SortOrder
     name?: SortOrder
@@ -31378,6 +38142,7 @@ export namespace Prisma {
 
   export type TransactionItemMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     transactionId?: SortOrder
     itemId?: SortOrder
     name?: SortOrder
@@ -31396,15 +38161,11 @@ export namespace Prisma {
     discount?: SortOrder
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  export type EnumServiceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceStatus | EnumServiceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceStatus[] | ListEnumServiceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServiceStatus[] | ListEnumServiceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumServiceStatusFilter<$PrismaModel> | $Enums.ServiceStatus
   }
 
   export type UserNullableScalarRelationFilter = {
@@ -31414,6 +38175,7 @@ export namespace Prisma {
 
   export type ServiceTicketCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     dateOpened?: SortOrder
     dateClosed?: SortOrder
     customerName?: SortOrder
@@ -31428,17 +38190,23 @@ export namespace Prisma {
     status?: SortOrder
     technicianId?: SortOrder
     branchId?: SortOrder
+    incentiveType?: SortOrder
+    incentiveValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type ServiceTicketAvgOrderByAggregateInput = {
     estimatedCost?: SortOrder
     serviceFee?: SortOrder
+    incentiveValue?: SortOrder
   }
 
   export type ServiceTicketMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     dateOpened?: SortOrder
     dateClosed?: SortOrder
     customerName?: SortOrder
@@ -31453,12 +38221,17 @@ export namespace Prisma {
     status?: SortOrder
     technicianId?: SortOrder
     branchId?: SortOrder
+    incentiveType?: SortOrder
+    incentiveValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type ServiceTicketMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     dateOpened?: SortOrder
     dateClosed?: SortOrder
     customerName?: SortOrder
@@ -31473,27 +38246,28 @@ export namespace Prisma {
     status?: SortOrder
     technicianId?: SortOrder
     branchId?: SortOrder
+    incentiveType?: SortOrder
+    incentiveValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type ServiceTicketSumOrderByAggregateInput = {
     estimatedCost?: SortOrder
     serviceFee?: SortOrder
+    incentiveValue?: SortOrder
   }
 
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  export type EnumServiceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceStatus | EnumServiceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceStatus[] | ListEnumServiceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServiceStatus[] | ListEnumServiceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumServiceStatusWithAggregatesFilter<$PrismaModel> | $Enums.ServiceStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumServiceStatusFilter<$PrismaModel>
+    _max?: NestedEnumServiceStatusFilter<$PrismaModel>
   }
 
   export type ServiceTicketScalarRelationFilter = {
@@ -31503,10 +38277,15 @@ export namespace Prisma {
 
   export type ServiceSparepartCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     ticketId?: SortOrder
     itemId?: SortOrder
     quantity?: SortOrder
     price?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type ServiceSparepartAvgOrderByAggregateInput = {
@@ -31516,18 +38295,28 @@ export namespace Prisma {
 
   export type ServiceSparepartMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     ticketId?: SortOrder
     itemId?: SortOrder
     quantity?: SortOrder
     price?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type ServiceSparepartMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     ticketId?: SortOrder
     itemId?: SortOrder
     quantity?: SortOrder
     price?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type ServiceSparepartSumOrderByAggregateInput = {
@@ -31535,30 +38324,27 @@ export namespace Prisma {
     price?: SortOrder
   }
 
-  export type BigIntFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
+  export type EnumAttendanceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAttendanceStatusFilter<$PrismaModel> | $Enums.AttendanceStatus
   }
 
-  export type BigIntNullableFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type AttendanceCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     employeeName?: SortOrder
     branchId?: SortOrder
@@ -31576,11 +38362,12 @@ export namespace Prisma {
     checkOutLongitude?: SortOrder
     workDurationMinutes?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type AttendanceAvgOrderByAggregateInput = {
-    checkInTime?: SortOrder
-    checkOutTime?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     checkOutLatitude?: SortOrder
@@ -31590,6 +38377,7 @@ export namespace Prisma {
 
   export type AttendanceMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     employeeName?: SortOrder
     branchId?: SortOrder
@@ -31607,10 +38395,14 @@ export namespace Prisma {
     checkOutLongitude?: SortOrder
     workDurationMinutes?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type AttendanceMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     employeeName?: SortOrder
     branchId?: SortOrder
@@ -31628,11 +38420,12 @@ export namespace Prisma {
     checkOutLongitude?: SortOrder
     workDurationMinutes?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type AttendanceSumOrderByAggregateInput = {
-    checkInTime?: SortOrder
-    checkOutTime?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     checkOutLatitude?: SortOrder
@@ -31640,40 +38433,35 @@ export namespace Prisma {
     workDurationMinutes?: SortOrder
   }
 
-  export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
+  export type EnumAttendanceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAttendanceStatusWithAggregatesFilter<$PrismaModel> | $Enums.AttendanceStatus
     _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedBigIntFilter<$PrismaModel>
-    _min?: NestedBigIntFilter<$PrismaModel>
-    _max?: NestedBigIntFilter<$PrismaModel>
+    _min?: NestedEnumAttendanceStatusFilter<$PrismaModel>
+    _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
   }
 
-  export type BigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedBigIntNullableFilter<$PrismaModel>
-    _min?: NestedBigIntNullableFilter<$PrismaModel>
-    _max?: NestedBigIntNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type StoreProfileCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
@@ -31689,7 +38477,13 @@ export namespace Prisma {
     baseSalary?: SortOrder
     overtimeRate?: SortOrder
     serviceIncentive?: SortOrder
+    payDay?: SortOrder
+    thrMonth?: SortOrder
+    thrMinWorkMonths?: SortOrder
+    thrMultiplier?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type StoreProfileAvgOrderByAggregateInput = {
@@ -31702,10 +38496,15 @@ export namespace Prisma {
     baseSalary?: SortOrder
     overtimeRate?: SortOrder
     serviceIncentive?: SortOrder
+    payDay?: SortOrder
+    thrMonth?: SortOrder
+    thrMinWorkMonths?: SortOrder
+    thrMultiplier?: SortOrder
   }
 
   export type StoreProfileMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
@@ -31721,11 +38520,18 @@ export namespace Prisma {
     baseSalary?: SortOrder
     overtimeRate?: SortOrder
     serviceIncentive?: SortOrder
+    payDay?: SortOrder
+    thrMonth?: SortOrder
+    thrMinWorkMonths?: SortOrder
+    thrMultiplier?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type StoreProfileMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
@@ -31741,7 +38547,13 @@ export namespace Prisma {
     baseSalary?: SortOrder
     overtimeRate?: SortOrder
     serviceIncentive?: SortOrder
+    payDay?: SortOrder
+    thrMonth?: SortOrder
+    thrMinWorkMonths?: SortOrder
+    thrMultiplier?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type StoreProfileSumOrderByAggregateInput = {
@@ -31754,51 +38566,76 @@ export namespace Prisma {
     baseSalary?: SortOrder
     overtimeRate?: SortOrder
     serviceIncentive?: SortOrder
+    payDay?: SortOrder
+    thrMonth?: SortOrder
+    thrMinWorkMonths?: SortOrder
+    thrMultiplier?: SortOrder
   }
 
   export type ServiceTypeCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     price?: SortOrder
     category?: SortOrder
+    incentiveType?: SortOrder
+    incentiveValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type ServiceTypeAvgOrderByAggregateInput = {
     price?: SortOrder
+    incentiveValue?: SortOrder
   }
 
   export type ServiceTypeMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     price?: SortOrder
     category?: SortOrder
+    incentiveType?: SortOrder
+    incentiveValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type ServiceTypeMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     price?: SortOrder
     category?: SortOrder
+    incentiveType?: SortOrder
+    incentiveValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type ServiceTypeSumOrderByAggregateInput = {
     price?: SortOrder
+    incentiveValue?: SortOrder
   }
 
   export type OvertimeCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     hours?: SortOrder
     date?: SortOrder
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type OvertimeAvgOrderByAggregateInput = {
@@ -31807,22 +38644,30 @@ export namespace Prisma {
 
   export type OvertimeMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     hours?: SortOrder
     date?: SortOrder
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type OvertimeMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     employeeId?: SortOrder
     hours?: SortOrder
     date?: SortOrder
     reason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type OvertimeSumOrderByAggregateInput = {
@@ -31831,56 +38676,88 @@ export namespace Prisma {
 
   export type DeviceModelCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     brand?: SortOrder
     type?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type DeviceModelMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     brand?: SortOrder
     type?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type DeviceModelMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     name?: SortOrder
     brand?: SortOrder
     type?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumStockTransferStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.StockTransferStatus | EnumStockTransferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StockTransferStatus[] | ListEnumStockTransferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StockTransferStatus[] | ListEnumStockTransferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStockTransferStatusFilter<$PrismaModel> | $Enums.StockTransferStatus
   }
 
   export type StockTransferCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     fromBranchId?: SortOrder
     toBranchId?: SortOrder
     status?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type StockTransferMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     fromBranchId?: SortOrder
     toBranchId?: SortOrder
     status?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type StockTransferMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     fromBranchId?: SortOrder
     toBranchId?: SortOrder
     status?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type EnumStockTransferStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StockTransferStatus | EnumStockTransferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StockTransferStatus[] | ListEnumStockTransferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StockTransferStatus[] | ListEnumStockTransferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStockTransferStatusWithAggregatesFilter<$PrismaModel> | $Enums.StockTransferStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStockTransferStatusFilter<$PrismaModel>
+    _max?: NestedEnumStockTransferStatusFilter<$PrismaModel>
   }
 
   export type StockTransferScalarRelationFilter = {
@@ -31890,6 +38767,7 @@ export namespace Prisma {
 
   export type StockTransferItemCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     transferId?: SortOrder
     itemId?: SortOrder
     quantity?: SortOrder
@@ -31901,6 +38779,7 @@ export namespace Prisma {
 
   export type StockTransferItemMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     transferId?: SortOrder
     itemId?: SortOrder
     quantity?: SortOrder
@@ -31908,6 +38787,7 @@ export namespace Prisma {
 
   export type StockTransferItemMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     transferId?: SortOrder
     itemId?: SortOrder
     quantity?: SortOrder
@@ -31917,8 +38797,21 @@ export namespace Prisma {
     quantity?: SortOrder
   }
 
+  export type EnumInventoryUnitStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InventoryUnitStatus | EnumInventoryUnitStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InventoryUnitStatus[] | ListEnumInventoryUnitStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InventoryUnitStatus[] | ListEnumInventoryUnitStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInventoryUnitStatusFilter<$PrismaModel> | $Enums.InventoryUnitStatus
+  }
+
+  export type InventoryUnitSerialNumberBranchIdCompoundUniqueInput = {
+    serialNumber: string
+    branchId: string
+  }
+
   export type InventoryUnitCountOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     itemId?: SortOrder
     branchId?: SortOrder
     serialNumber?: SortOrder
@@ -31926,6 +38819,10 @@ export namespace Prisma {
     costPrice?: SortOrder
     entryDate?: SortOrder
     soldDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type InventoryUnitAvgOrderByAggregateInput = {
@@ -31934,6 +38831,7 @@ export namespace Prisma {
 
   export type InventoryUnitMaxOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     itemId?: SortOrder
     branchId?: SortOrder
     serialNumber?: SortOrder
@@ -31941,10 +38839,15 @@ export namespace Prisma {
     costPrice?: SortOrder
     entryDate?: SortOrder
     soldDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type InventoryUnitMinOrderByAggregateInput = {
     id?: SortOrder
+    tenantId?: SortOrder
     itemId?: SortOrder
     branchId?: SortOrder
     serialNumber?: SortOrder
@@ -31952,10 +38855,239 @@ export namespace Prisma {
     costPrice?: SortOrder
     entryDate?: SortOrder
     soldDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+    updatedBy?: SortOrder
   }
 
   export type InventoryUnitSumOrderByAggregateInput = {
     costPrice?: SortOrder
+  }
+
+  export type EnumInventoryUnitStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InventoryUnitStatus | EnumInventoryUnitStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InventoryUnitStatus[] | ListEnumInventoryUnitStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InventoryUnitStatus[] | ListEnumInventoryUnitStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInventoryUnitStatusWithAggregatesFilter<$PrismaModel> | $Enums.InventoryUnitStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInventoryUnitStatusFilter<$PrismaModel>
+    _max?: NestedEnumInventoryUnitStatusFilter<$PrismaModel>
+  }
+
+  export type RoleNullableScalarRelationFilter = {
+    is?: RoleWhereInput | null
+    isNot?: RoleWhereInput | null
+  }
+
+  export type BonusPoolCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    amount?: SortOrder
+    month?: SortOrder
+    year?: SortOrder
+    roleId?: SortOrder
+    branchId?: SortOrder
+    employeeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BonusPoolAvgOrderByAggregateInput = {
+    amount?: SortOrder
+    month?: SortOrder
+    year?: SortOrder
+  }
+
+  export type BonusPoolMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    amount?: SortOrder
+    month?: SortOrder
+    year?: SortOrder
+    roleId?: SortOrder
+    branchId?: SortOrder
+    employeeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BonusPoolMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    amount?: SortOrder
+    month?: SortOrder
+    year?: SortOrder
+    roleId?: SortOrder
+    branchId?: SortOrder
+    employeeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BonusPoolSumOrderByAggregateInput = {
+    amount?: SortOrder
+    month?: SortOrder
+    year?: SortOrder
+  }
+
+  export type PermissionCreateNestedManyWithoutRoleInput = {
+    create?: XOR<PermissionCreateWithoutRoleInput, PermissionUncheckedCreateWithoutRoleInput> | PermissionCreateWithoutRoleInput[] | PermissionUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: PermissionCreateOrConnectWithoutRoleInput | PermissionCreateOrConnectWithoutRoleInput[]
+    createMany?: PermissionCreateManyRoleInputEnvelope
+    connect?: PermissionWhereUniqueInput | PermissionWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedManyWithoutRoleInput = {
+    create?: XOR<UserCreateWithoutRoleInput, UserUncheckedCreateWithoutRoleInput> | UserCreateWithoutRoleInput[] | UserUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutRoleInput | UserCreateOrConnectWithoutRoleInput[]
+    createMany?: UserCreateManyRoleInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type BonusPoolCreateNestedManyWithoutRoleInput = {
+    create?: XOR<BonusPoolCreateWithoutRoleInput, BonusPoolUncheckedCreateWithoutRoleInput> | BonusPoolCreateWithoutRoleInput[] | BonusPoolUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: BonusPoolCreateOrConnectWithoutRoleInput | BonusPoolCreateOrConnectWithoutRoleInput[]
+    createMany?: BonusPoolCreateManyRoleInputEnvelope
+    connect?: BonusPoolWhereUniqueInput | BonusPoolWhereUniqueInput[]
+  }
+
+  export type PermissionUncheckedCreateNestedManyWithoutRoleInput = {
+    create?: XOR<PermissionCreateWithoutRoleInput, PermissionUncheckedCreateWithoutRoleInput> | PermissionCreateWithoutRoleInput[] | PermissionUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: PermissionCreateOrConnectWithoutRoleInput | PermissionCreateOrConnectWithoutRoleInput[]
+    createMany?: PermissionCreateManyRoleInputEnvelope
+    connect?: PermissionWhereUniqueInput | PermissionWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutRoleInput = {
+    create?: XOR<UserCreateWithoutRoleInput, UserUncheckedCreateWithoutRoleInput> | UserCreateWithoutRoleInput[] | UserUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutRoleInput | UserCreateOrConnectWithoutRoleInput[]
+    createMany?: UserCreateManyRoleInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type BonusPoolUncheckedCreateNestedManyWithoutRoleInput = {
+    create?: XOR<BonusPoolCreateWithoutRoleInput, BonusPoolUncheckedCreateWithoutRoleInput> | BonusPoolCreateWithoutRoleInput[] | BonusPoolUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: BonusPoolCreateOrConnectWithoutRoleInput | BonusPoolCreateOrConnectWithoutRoleInput[]
+    createMany?: BonusPoolCreateManyRoleInputEnvelope
+    connect?: BonusPoolWhereUniqueInput | BonusPoolWhereUniqueInput[]
+  }
+
+  export type StringFieldUpdateOperationsInput = {
+    set?: string
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type PermissionUpdateManyWithoutRoleNestedInput = {
+    create?: XOR<PermissionCreateWithoutRoleInput, PermissionUncheckedCreateWithoutRoleInput> | PermissionCreateWithoutRoleInput[] | PermissionUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: PermissionCreateOrConnectWithoutRoleInput | PermissionCreateOrConnectWithoutRoleInput[]
+    upsert?: PermissionUpsertWithWhereUniqueWithoutRoleInput | PermissionUpsertWithWhereUniqueWithoutRoleInput[]
+    createMany?: PermissionCreateManyRoleInputEnvelope
+    set?: PermissionWhereUniqueInput | PermissionWhereUniqueInput[]
+    disconnect?: PermissionWhereUniqueInput | PermissionWhereUniqueInput[]
+    delete?: PermissionWhereUniqueInput | PermissionWhereUniqueInput[]
+    connect?: PermissionWhereUniqueInput | PermissionWhereUniqueInput[]
+    update?: PermissionUpdateWithWhereUniqueWithoutRoleInput | PermissionUpdateWithWhereUniqueWithoutRoleInput[]
+    updateMany?: PermissionUpdateManyWithWhereWithoutRoleInput | PermissionUpdateManyWithWhereWithoutRoleInput[]
+    deleteMany?: PermissionScalarWhereInput | PermissionScalarWhereInput[]
+  }
+
+  export type UserUpdateManyWithoutRoleNestedInput = {
+    create?: XOR<UserCreateWithoutRoleInput, UserUncheckedCreateWithoutRoleInput> | UserCreateWithoutRoleInput[] | UserUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutRoleInput | UserCreateOrConnectWithoutRoleInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutRoleInput | UserUpsertWithWhereUniqueWithoutRoleInput[]
+    createMany?: UserCreateManyRoleInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutRoleInput | UserUpdateWithWhereUniqueWithoutRoleInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutRoleInput | UserUpdateManyWithWhereWithoutRoleInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type BonusPoolUpdateManyWithoutRoleNestedInput = {
+    create?: XOR<BonusPoolCreateWithoutRoleInput, BonusPoolUncheckedCreateWithoutRoleInput> | BonusPoolCreateWithoutRoleInput[] | BonusPoolUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: BonusPoolCreateOrConnectWithoutRoleInput | BonusPoolCreateOrConnectWithoutRoleInput[]
+    upsert?: BonusPoolUpsertWithWhereUniqueWithoutRoleInput | BonusPoolUpsertWithWhereUniqueWithoutRoleInput[]
+    createMany?: BonusPoolCreateManyRoleInputEnvelope
+    set?: BonusPoolWhereUniqueInput | BonusPoolWhereUniqueInput[]
+    disconnect?: BonusPoolWhereUniqueInput | BonusPoolWhereUniqueInput[]
+    delete?: BonusPoolWhereUniqueInput | BonusPoolWhereUniqueInput[]
+    connect?: BonusPoolWhereUniqueInput | BonusPoolWhereUniqueInput[]
+    update?: BonusPoolUpdateWithWhereUniqueWithoutRoleInput | BonusPoolUpdateWithWhereUniqueWithoutRoleInput[]
+    updateMany?: BonusPoolUpdateManyWithWhereWithoutRoleInput | BonusPoolUpdateManyWithWhereWithoutRoleInput[]
+    deleteMany?: BonusPoolScalarWhereInput | BonusPoolScalarWhereInput[]
+  }
+
+  export type PermissionUncheckedUpdateManyWithoutRoleNestedInput = {
+    create?: XOR<PermissionCreateWithoutRoleInput, PermissionUncheckedCreateWithoutRoleInput> | PermissionCreateWithoutRoleInput[] | PermissionUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: PermissionCreateOrConnectWithoutRoleInput | PermissionCreateOrConnectWithoutRoleInput[]
+    upsert?: PermissionUpsertWithWhereUniqueWithoutRoleInput | PermissionUpsertWithWhereUniqueWithoutRoleInput[]
+    createMany?: PermissionCreateManyRoleInputEnvelope
+    set?: PermissionWhereUniqueInput | PermissionWhereUniqueInput[]
+    disconnect?: PermissionWhereUniqueInput | PermissionWhereUniqueInput[]
+    delete?: PermissionWhereUniqueInput | PermissionWhereUniqueInput[]
+    connect?: PermissionWhereUniqueInput | PermissionWhereUniqueInput[]
+    update?: PermissionUpdateWithWhereUniqueWithoutRoleInput | PermissionUpdateWithWhereUniqueWithoutRoleInput[]
+    updateMany?: PermissionUpdateManyWithWhereWithoutRoleInput | PermissionUpdateManyWithWhereWithoutRoleInput[]
+    deleteMany?: PermissionScalarWhereInput | PermissionScalarWhereInput[]
+  }
+
+  export type UserUncheckedUpdateManyWithoutRoleNestedInput = {
+    create?: XOR<UserCreateWithoutRoleInput, UserUncheckedCreateWithoutRoleInput> | UserCreateWithoutRoleInput[] | UserUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutRoleInput | UserCreateOrConnectWithoutRoleInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutRoleInput | UserUpsertWithWhereUniqueWithoutRoleInput[]
+    createMany?: UserCreateManyRoleInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutRoleInput | UserUpdateWithWhereUniqueWithoutRoleInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutRoleInput | UserUpdateManyWithWhereWithoutRoleInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type BonusPoolUncheckedUpdateManyWithoutRoleNestedInput = {
+    create?: XOR<BonusPoolCreateWithoutRoleInput, BonusPoolUncheckedCreateWithoutRoleInput> | BonusPoolCreateWithoutRoleInput[] | BonusPoolUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: BonusPoolCreateOrConnectWithoutRoleInput | BonusPoolCreateOrConnectWithoutRoleInput[]
+    upsert?: BonusPoolUpsertWithWhereUniqueWithoutRoleInput | BonusPoolUpsertWithWhereUniqueWithoutRoleInput[]
+    createMany?: BonusPoolCreateManyRoleInputEnvelope
+    set?: BonusPoolWhereUniqueInput | BonusPoolWhereUniqueInput[]
+    disconnect?: BonusPoolWhereUniqueInput | BonusPoolWhereUniqueInput[]
+    delete?: BonusPoolWhereUniqueInput | BonusPoolWhereUniqueInput[]
+    connect?: BonusPoolWhereUniqueInput | BonusPoolWhereUniqueInput[]
+    update?: BonusPoolUpdateWithWhereUniqueWithoutRoleInput | BonusPoolUpdateWithWhereUniqueWithoutRoleInput[]
+    updateMany?: BonusPoolUpdateManyWithWhereWithoutRoleInput | BonusPoolUpdateManyWithWhereWithoutRoleInput[]
+    deleteMany?: BonusPoolScalarWhereInput | BonusPoolScalarWhereInput[]
+  }
+
+  export type RoleCreateNestedOneWithoutPermissionsInput = {
+    create?: XOR<RoleCreateWithoutPermissionsInput, RoleUncheckedCreateWithoutPermissionsInput>
+    connectOrCreate?: RoleCreateOrConnectWithoutPermissionsInput
+    connect?: RoleWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type RoleUpdateOneRequiredWithoutPermissionsNestedInput = {
+    create?: XOR<RoleCreateWithoutPermissionsInput, RoleUncheckedCreateWithoutPermissionsInput>
+    connectOrCreate?: RoleCreateOrConnectWithoutPermissionsInput
+    upsert?: RoleUpsertWithoutPermissionsInput
+    connect?: RoleWhereUniqueInput
+    update?: XOR<XOR<RoleUpdateToOneWithWhereWithoutPermissionsInput, RoleUpdateWithoutPermissionsInput>, RoleUncheckedUpdateWithoutPermissionsInput>
   }
 
   export type ServiceTicketCreateNestedManyWithoutBranchInput = {
@@ -32070,10 +39202,6 @@ export namespace Prisma {
     connect?: InventoryUnitWhereUniqueInput | InventoryUnitWhereUniqueInput[]
   }
 
-  export type StringFieldUpdateOperationsInput = {
-    set?: string
-  }
-
   export type FloatFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -32090,8 +39218,8 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type ServiceTicketUpdateManyWithoutBranchNestedInput = {
@@ -32318,6 +39446,12 @@ export namespace Prisma {
     deleteMany?: InventoryUnitScalarWhereInput | InventoryUnitScalarWhereInput[]
   }
 
+  export type RoleCreateNestedOneWithoutUsersInput = {
+    create?: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: RoleCreateOrConnectWithoutUsersInput
+    connect?: RoleWhereUniqueInput
+  }
+
   export type CashAdvanceCreateNestedManyWithoutEmployeeInput = {
     create?: XOR<CashAdvanceCreateWithoutEmployeeInput, CashAdvanceUncheckedCreateWithoutEmployeeInput> | CashAdvanceCreateWithoutEmployeeInput[] | CashAdvanceUncheckedCreateWithoutEmployeeInput[]
     connectOrCreate?: CashAdvanceCreateOrConnectWithoutEmployeeInput | CashAdvanceCreateOrConnectWithoutEmployeeInput[]
@@ -32408,16 +39542,12 @@ export namespace Prisma {
     connect?: OvertimeWhereUniqueInput | OvertimeWhereUniqueInput[]
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
-  export type NullableFloatFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -32426,6 +39556,14 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type RoleUpdateOneRequiredWithoutUsersNestedInput = {
+    create?: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: RoleCreateOrConnectWithoutUsersInput
+    upsert?: RoleUpsertWithoutUsersInput
+    connect?: RoleWhereUniqueInput
+    update?: XOR<XOR<RoleUpdateToOneWithWhereWithoutUsersInput, RoleUpdateWithoutUsersInput>, RoleUncheckedUpdateWithoutUsersInput>
   }
 
   export type CashAdvanceUpdateManyWithoutEmployeeNestedInput = {
@@ -32512,12 +39650,10 @@ export namespace Prisma {
     deleteMany?: OvertimeScalarWhereInput | OvertimeScalarWhereInput[]
   }
 
-  export type BranchUpdateOneWithoutUsersNestedInput = {
+  export type BranchUpdateOneRequiredWithoutUsersNestedInput = {
     create?: XOR<BranchCreateWithoutUsersInput, BranchUncheckedCreateWithoutUsersInput>
     connectOrCreate?: BranchCreateOrConnectWithoutUsersInput
     upsert?: BranchUpsertWithoutUsersInput
-    disconnect?: BranchWhereInput | boolean
-    delete?: BranchWhereInput | boolean
     connect?: BranchWhereUniqueInput
     update?: XOR<XOR<BranchUpdateToOneWithWhereWithoutUsersInput, BranchUpdateWithoutUsersInput>, BranchUncheckedUpdateWithoutUsersInput>
   }
@@ -32624,6 +39760,18 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutCashAdvancesInput, UserUncheckedCreateWithoutCashAdvancesInput>
     connectOrCreate?: UserCreateOrConnectWithoutCashAdvancesInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type EnumRequestStatusFieldUpdateOperationsInput = {
+    set?: $Enums.RequestStatus
   }
 
   export type UserUpdateOneRequiredWithoutCashAdvancesNestedInput = {
@@ -32764,10 +39912,6 @@ export namespace Prisma {
     connectOrCreate?: InventoryUnitCreateOrConnectWithoutItemInput | InventoryUnitCreateOrConnectWithoutItemInput[]
     createMany?: InventoryUnitCreateManyItemInputEnvelope
     connect?: InventoryUnitWhereUniqueInput | InventoryUnitWhereUniqueInput[]
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type CategoryUpdateOneRequiredWithoutInventoryItemsNestedInput = {
@@ -32972,6 +40116,18 @@ export namespace Prisma {
     connect?: TransactionItemWhereUniqueInput | TransactionItemWhereUniqueInput[]
   }
 
+  export type EnumTransactionSourceFieldUpdateOperationsInput = {
+    set?: $Enums.TransactionSource
+  }
+
+  export type EnumPaymentMethodFieldUpdateOperationsInput = {
+    set?: $Enums.PaymentMethod
+  }
+
+  export type EnumTransactionStatusFieldUpdateOperationsInput = {
+    set?: $Enums.TransactionStatus
+  }
+
   export type BranchUpdateOneRequiredWithoutTransactionsNestedInput = {
     create?: XOR<BranchCreateWithoutTransactionsInput, BranchUncheckedCreateWithoutTransactionsInput>
     connectOrCreate?: BranchCreateOrConnectWithoutTransactionsInput
@@ -33072,8 +40228,8 @@ export namespace Prisma {
     connect?: ServiceSparepartWhereUniqueInput | ServiceSparepartWhereUniqueInput[]
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
+  export type EnumServiceStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ServiceStatus
   }
 
   export type ServiceSparepartUpdateManyWithoutTicketNestedInput = {
@@ -33156,20 +40312,16 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type BigIntFieldUpdateOperationsInput = {
-    set?: bigint | number
-    increment?: bigint | number
-    decrement?: bigint | number
-    multiply?: bigint | number
-    divide?: bigint | number
+  export type EnumAttendanceStatusFieldUpdateOperationsInput = {
+    set?: $Enums.AttendanceStatus
   }
 
-  export type NullableBigIntFieldUpdateOperationsInput = {
-    set?: bigint | number | null
-    increment?: bigint | number
-    decrement?: bigint | number
-    multiply?: bigint | number
-    divide?: bigint | number
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type UserUpdateOneRequiredWithoutAttendancesNestedInput = {
@@ -33218,6 +40370,10 @@ export namespace Prisma {
     connectOrCreate?: StockTransferItemCreateOrConnectWithoutTransferInput | StockTransferItemCreateOrConnectWithoutTransferInput[]
     createMany?: StockTransferItemCreateManyTransferInputEnvelope
     connect?: StockTransferItemWhereUniqueInput | StockTransferItemWhereUniqueInput[]
+  }
+
+  export type EnumStockTransferStatusFieldUpdateOperationsInput = {
+    set?: $Enums.StockTransferStatus
   }
 
   export type BranchUpdateOneRequiredWithoutTransfersFromNestedInput = {
@@ -33304,6 +40460,10 @@ export namespace Prisma {
     connect?: BranchWhereUniqueInput
   }
 
+  export type EnumInventoryUnitStatusFieldUpdateOperationsInput = {
+    set?: $Enums.InventoryUnitStatus
+  }
+
   export type InventoryItemUpdateOneRequiredWithoutUnitsNestedInput = {
     create?: XOR<InventoryItemCreateWithoutUnitsInput, InventoryItemUncheckedCreateWithoutUnitsInput>
     connectOrCreate?: InventoryItemCreateOrConnectWithoutUnitsInput
@@ -33320,6 +40480,22 @@ export namespace Prisma {
     update?: XOR<XOR<BranchUpdateToOneWithWhereWithoutUnitsInput, BranchUpdateWithoutUnitsInput>, BranchUncheckedUpdateWithoutUnitsInput>
   }
 
+  export type RoleCreateNestedOneWithoutBonusPoolsInput = {
+    create?: XOR<RoleCreateWithoutBonusPoolsInput, RoleUncheckedCreateWithoutBonusPoolsInput>
+    connectOrCreate?: RoleCreateOrConnectWithoutBonusPoolsInput
+    connect?: RoleWhereUniqueInput
+  }
+
+  export type RoleUpdateOneWithoutBonusPoolsNestedInput = {
+    create?: XOR<RoleCreateWithoutBonusPoolsInput, RoleUncheckedCreateWithoutBonusPoolsInput>
+    connectOrCreate?: RoleCreateOrConnectWithoutBonusPoolsInput
+    upsert?: RoleUpsertWithoutBonusPoolsInput
+    disconnect?: RoleWhereInput | boolean
+    delete?: RoleWhereInput | boolean
+    connect?: RoleWhereUniqueInput
+    update?: XOR<XOR<RoleUpdateToOneWithWhereWithoutBonusPoolsInput, RoleUpdateWithoutBonusPoolsInput>, RoleUncheckedUpdateWithoutBonusPoolsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -33334,26 +40510,18 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -33382,6 +40550,94 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -33416,87 +40672,45 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -33515,100 +40729,505 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  export type NestedDecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type NestedEnumRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RequestStatus | EnumRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RequestStatus[] | ListEnumRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RequestStatus[] | ListEnumRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRequestStatusFilter<$PrismaModel> | $Enums.RequestStatus
+  }
+
+  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedBigIntFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
-  }
-
-  export type NestedBigIntNullableFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
-  }
-
-  export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
+  export type NestedEnumRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RequestStatus | EnumRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RequestStatus[] | ListEnumRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RequestStatus[] | ListEnumRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.RequestStatus
     _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedBigIntFilter<$PrismaModel>
-    _min?: NestedBigIntFilter<$PrismaModel>
-    _max?: NestedBigIntFilter<$PrismaModel>
+    _min?: NestedEnumRequestStatusFilter<$PrismaModel>
+    _max?: NestedEnumRequestStatusFilter<$PrismaModel>
   }
 
-  export type NestedBigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
+  export type NestedEnumTransactionSourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionSource | EnumTransactionSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionSource[] | ListEnumTransactionSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionSource[] | ListEnumTransactionSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionSourceFilter<$PrismaModel> | $Enums.TransactionSource
+  }
+
+  export type NestedEnumPaymentMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
+  }
+
+  export type NestedEnumTransactionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionStatus | EnumTransactionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionStatusFilter<$PrismaModel> | $Enums.TransactionStatus
+  }
+
+  export type NestedEnumTransactionSourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionSource | EnumTransactionSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionSource[] | ListEnumTransactionSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionSource[] | ListEnumTransactionSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionSourceWithAggregatesFilter<$PrismaModel> | $Enums.TransactionSource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransactionSourceFilter<$PrismaModel>
+    _max?: NestedEnumTransactionSourceFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMethod
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
+    _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTransactionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionStatus | EnumTransactionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionStatusWithAggregatesFilter<$PrismaModel> | $Enums.TransactionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransactionStatusFilter<$PrismaModel>
+    _max?: NestedEnumTransactionStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumServiceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceStatus | EnumServiceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceStatus[] | ListEnumServiceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServiceStatus[] | ListEnumServiceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumServiceStatusFilter<$PrismaModel> | $Enums.ServiceStatus
+  }
+
+  export type NestedEnumServiceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceStatus | EnumServiceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceStatus[] | ListEnumServiceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServiceStatus[] | ListEnumServiceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumServiceStatusWithAggregatesFilter<$PrismaModel> | $Enums.ServiceStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumServiceStatusFilter<$PrismaModel>
+    _max?: NestedEnumServiceStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumAttendanceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAttendanceStatusFilter<$PrismaModel> | $Enums.AttendanceStatus
+  }
+
+  export type NestedEnumAttendanceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAttendanceStatusWithAggregatesFilter<$PrismaModel> | $Enums.AttendanceStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAttendanceStatusFilter<$PrismaModel>
+    _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedBigIntNullableFilter<$PrismaModel>
-    _min?: NestedBigIntNullableFilter<$PrismaModel>
-    _max?: NestedBigIntNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumStockTransferStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.StockTransferStatus | EnumStockTransferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StockTransferStatus[] | ListEnumStockTransferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StockTransferStatus[] | ListEnumStockTransferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStockTransferStatusFilter<$PrismaModel> | $Enums.StockTransferStatus
+  }
+
+  export type NestedEnumStockTransferStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StockTransferStatus | EnumStockTransferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StockTransferStatus[] | ListEnumStockTransferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StockTransferStatus[] | ListEnumStockTransferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStockTransferStatusWithAggregatesFilter<$PrismaModel> | $Enums.StockTransferStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStockTransferStatusFilter<$PrismaModel>
+    _max?: NestedEnumStockTransferStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInventoryUnitStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InventoryUnitStatus | EnumInventoryUnitStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InventoryUnitStatus[] | ListEnumInventoryUnitStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InventoryUnitStatus[] | ListEnumInventoryUnitStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInventoryUnitStatusFilter<$PrismaModel> | $Enums.InventoryUnitStatus
+  }
+
+  export type NestedEnumInventoryUnitStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InventoryUnitStatus | EnumInventoryUnitStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InventoryUnitStatus[] | ListEnumInventoryUnitStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InventoryUnitStatus[] | ListEnumInventoryUnitStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInventoryUnitStatusWithAggregatesFilter<$PrismaModel> | $Enums.InventoryUnitStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInventoryUnitStatusFilter<$PrismaModel>
+    _max?: NestedEnumInventoryUnitStatusFilter<$PrismaModel>
+  }
+
+  export type PermissionCreateWithoutRoleInput = {
+    id?: string
+    module: string
+    canRead?: boolean
+    canCreate?: boolean
+    canUpdate?: boolean
+    canDelete?: boolean
+  }
+
+  export type PermissionUncheckedCreateWithoutRoleInput = {
+    id?: string
+    module: string
+    canRead?: boolean
+    canCreate?: boolean
+    canUpdate?: boolean
+    canDelete?: boolean
+  }
+
+  export type PermissionCreateOrConnectWithoutRoleInput = {
+    where: PermissionWhereUniqueInput
+    create: XOR<PermissionCreateWithoutRoleInput, PermissionUncheckedCreateWithoutRoleInput>
+  }
+
+  export type PermissionCreateManyRoleInputEnvelope = {
+    data: PermissionCreateManyRoleInput | PermissionCreateManyRoleInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutRoleInput = {
+    id?: string
+    tenantId?: string
+    name?: string | null
+    email: string
+    password?: string | null
+    createdAt?: Date | string
+    joinDate?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
+    wageType?: string | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
+    shiftId?: string | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
+    leaveQuota?: number | null
+    phone?: string | null
+    address?: string | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
+    incentiveType?: string | null
+    incentiveMode?: string | null
+    cashAdvances?: CashAdvanceCreateNestedManyWithoutEmployeeInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    serviceTickets?: ServiceTicketCreateNestedManyWithoutTechnicianInput
+    transactions?: TransactionCreateNestedManyWithoutCashierInput
+    attendances?: AttendanceCreateNestedManyWithoutEmployeeInput
+    overtimes?: OvertimeCreateNestedManyWithoutEmployeeInput
+    branch: BranchCreateNestedOneWithoutUsersInput
+  }
+
+  export type UserUncheckedCreateWithoutRoleInput = {
+    id?: string
+    tenantId?: string
+    name?: string | null
+    email: string
+    password?: string | null
+    createdAt?: Date | string
+    joinDate?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
+    branchId: string
+    wageType?: string | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
+    shiftId?: string | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
+    leaveQuota?: number | null
+    phone?: string | null
+    address?: string | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
+    incentiveType?: string | null
+    incentiveMode?: string | null
+    cashAdvances?: CashAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutTechnicianInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCashierInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    overtimes?: OvertimeUncheckedCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type UserCreateOrConnectWithoutRoleInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutRoleInput, UserUncheckedCreateWithoutRoleInput>
+  }
+
+  export type UserCreateManyRoleInputEnvelope = {
+    data: UserCreateManyRoleInput | UserCreateManyRoleInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BonusPoolCreateWithoutRoleInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    amount: Decimal | DecimalJsLike | number | string
+    month: number
+    year: number
+    branchId?: string | null
+    employeeId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BonusPoolUncheckedCreateWithoutRoleInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    amount: Decimal | DecimalJsLike | number | string
+    month: number
+    year: number
+    branchId?: string | null
+    employeeId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BonusPoolCreateOrConnectWithoutRoleInput = {
+    where: BonusPoolWhereUniqueInput
+    create: XOR<BonusPoolCreateWithoutRoleInput, BonusPoolUncheckedCreateWithoutRoleInput>
+  }
+
+  export type BonusPoolCreateManyRoleInputEnvelope = {
+    data: BonusPoolCreateManyRoleInput | BonusPoolCreateManyRoleInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PermissionUpsertWithWhereUniqueWithoutRoleInput = {
+    where: PermissionWhereUniqueInput
+    update: XOR<PermissionUpdateWithoutRoleInput, PermissionUncheckedUpdateWithoutRoleInput>
+    create: XOR<PermissionCreateWithoutRoleInput, PermissionUncheckedCreateWithoutRoleInput>
+  }
+
+  export type PermissionUpdateWithWhereUniqueWithoutRoleInput = {
+    where: PermissionWhereUniqueInput
+    data: XOR<PermissionUpdateWithoutRoleInput, PermissionUncheckedUpdateWithoutRoleInput>
+  }
+
+  export type PermissionUpdateManyWithWhereWithoutRoleInput = {
+    where: PermissionScalarWhereInput
+    data: XOR<PermissionUpdateManyMutationInput, PermissionUncheckedUpdateManyWithoutRoleInput>
+  }
+
+  export type PermissionScalarWhereInput = {
+    AND?: PermissionScalarWhereInput | PermissionScalarWhereInput[]
+    OR?: PermissionScalarWhereInput[]
+    NOT?: PermissionScalarWhereInput | PermissionScalarWhereInput[]
+    id?: StringFilter<"Permission"> | string
+    roleId?: StringFilter<"Permission"> | string
+    module?: StringFilter<"Permission"> | string
+    canRead?: BoolFilter<"Permission"> | boolean
+    canCreate?: BoolFilter<"Permission"> | boolean
+    canUpdate?: BoolFilter<"Permission"> | boolean
+    canDelete?: BoolFilter<"Permission"> | boolean
+  }
+
+  export type UserUpsertWithWhereUniqueWithoutRoleInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutRoleInput, UserUncheckedUpdateWithoutRoleInput>
+    create: XOR<UserCreateWithoutRoleInput, UserUncheckedCreateWithoutRoleInput>
+  }
+
+  export type UserUpdateWithWhereUniqueWithoutRoleInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutRoleInput, UserUncheckedUpdateWithoutRoleInput>
+  }
+
+  export type UserUpdateManyWithWhereWithoutRoleInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutRoleInput>
+  }
+
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: StringFilter<"User"> | string
+    tenantId?: StringFilter<"User"> | string
+    name?: StringNullableFilter<"User"> | string | null
+    email?: StringFilter<"User"> | string
+    password?: StringNullableFilter<"User"> | string | null
+    roleId?: StringFilter<"User"> | string
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    joinDate?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeFilter<"User"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    updatedBy?: StringNullableFilter<"User"> | string | null
+    branchId?: StringFilter<"User"> | string
+    wageType?: StringNullableFilter<"User"> | string | null
+    wageRate?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    allowance?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    shiftId?: StringNullableFilter<"User"> | string | null
+    baseSalary?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    leaveQuota?: IntNullableFilter<"User"> | number | null
+    phone?: StringNullableFilter<"User"> | string | null
+    address?: StringNullableFilter<"User"> | string | null
+    incentiveRate?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    incentiveType?: StringNullableFilter<"User"> | string | null
+    incentiveMode?: StringNullableFilter<"User"> | string | null
+  }
+
+  export type BonusPoolUpsertWithWhereUniqueWithoutRoleInput = {
+    where: BonusPoolWhereUniqueInput
+    update: XOR<BonusPoolUpdateWithoutRoleInput, BonusPoolUncheckedUpdateWithoutRoleInput>
+    create: XOR<BonusPoolCreateWithoutRoleInput, BonusPoolUncheckedCreateWithoutRoleInput>
+  }
+
+  export type BonusPoolUpdateWithWhereUniqueWithoutRoleInput = {
+    where: BonusPoolWhereUniqueInput
+    data: XOR<BonusPoolUpdateWithoutRoleInput, BonusPoolUncheckedUpdateWithoutRoleInput>
+  }
+
+  export type BonusPoolUpdateManyWithWhereWithoutRoleInput = {
+    where: BonusPoolScalarWhereInput
+    data: XOR<BonusPoolUpdateManyMutationInput, BonusPoolUncheckedUpdateManyWithoutRoleInput>
+  }
+
+  export type BonusPoolScalarWhereInput = {
+    AND?: BonusPoolScalarWhereInput | BonusPoolScalarWhereInput[]
+    OR?: BonusPoolScalarWhereInput[]
+    NOT?: BonusPoolScalarWhereInput | BonusPoolScalarWhereInput[]
+    id?: StringFilter<"BonusPool"> | string
+    tenantId?: StringFilter<"BonusPool"> | string
+    name?: StringFilter<"BonusPool"> | string
+    amount?: DecimalFilter<"BonusPool"> | Decimal | DecimalJsLike | number | string
+    month?: IntFilter<"BonusPool"> | number
+    year?: IntFilter<"BonusPool"> | number
+    roleId?: StringNullableFilter<"BonusPool"> | string | null
+    branchId?: StringNullableFilter<"BonusPool"> | string | null
+    employeeId?: StringNullableFilter<"BonusPool"> | string | null
+    createdAt?: DateTimeFilter<"BonusPool"> | Date | string
+    updatedAt?: DateTimeFilter<"BonusPool"> | Date | string
+  }
+
+  export type RoleCreateWithoutPermissionsInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutRoleInput
+    bonusPools?: BonusPoolCreateNestedManyWithoutRoleInput
+  }
+
+  export type RoleUncheckedCreateWithoutPermissionsInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutRoleInput
+    bonusPools?: BonusPoolUncheckedCreateNestedManyWithoutRoleInput
+  }
+
+  export type RoleCreateOrConnectWithoutPermissionsInput = {
+    where: RoleWhereUniqueInput
+    create: XOR<RoleCreateWithoutPermissionsInput, RoleUncheckedCreateWithoutPermissionsInput>
+  }
+
+  export type RoleUpsertWithoutPermissionsInput = {
+    update: XOR<RoleUpdateWithoutPermissionsInput, RoleUncheckedUpdateWithoutPermissionsInput>
+    create: XOR<RoleCreateWithoutPermissionsInput, RoleUncheckedCreateWithoutPermissionsInput>
+    where?: RoleWhereInput
+  }
+
+  export type RoleUpdateToOneWithWhereWithoutPermissionsInput = {
+    where?: RoleWhereInput
+    data: XOR<RoleUpdateWithoutPermissionsInput, RoleUncheckedUpdateWithoutPermissionsInput>
+  }
+
+  export type RoleUpdateWithoutPermissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutRoleNestedInput
+    bonusPools?: BonusPoolUpdateManyWithoutRoleNestedInput
+  }
+
+  export type RoleUncheckedUpdateWithoutPermissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutRoleNestedInput
+    bonusPools?: BonusPoolUncheckedUpdateManyWithoutRoleNestedInput
   }
 
   export type ServiceTicketCreateWithoutBranchInput = {
     id?: string
+    tenantId?: string
     dateOpened?: Date | string
     dateClosed?: Date | string | null
     customerName: string
@@ -33618,17 +41237,22 @@ export namespace Prisma {
     deviceSerial: string
     issue: string
     diagnosis?: string | null
-    estimatedCost: number
-    serviceFee: number
-    status: string
+    estimatedCost: Decimal | DecimalJsLike | number | string
+    serviceFee: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ServiceStatus
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     spareparts?: ServiceSparepartCreateNestedManyWithoutTicketInput
     technician?: UserCreateNestedOneWithoutServiceTicketsInput
   }
 
   export type ServiceTicketUncheckedCreateWithoutBranchInput = {
     id?: string
+    tenantId?: string
     dateOpened?: Date | string
     dateClosed?: Date | string | null
     customerName: string
@@ -33638,12 +41262,16 @@ export namespace Prisma {
     deviceSerial: string
     issue: string
     diagnosis?: string | null
-    estimatedCost: number
-    serviceFee: number
-    status: string
+    estimatedCost: Decimal | DecimalJsLike | number | string
+    serviceFee: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ServiceStatus
     technicianId?: string | null
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     spareparts?: ServiceSparepartUncheckedCreateNestedManyWithoutTicketInput
   }
 
@@ -33659,16 +41287,26 @@ export namespace Prisma {
 
   export type ShiftCreateWithoutBranchInput = {
     id?: string
+    tenantId?: string
     name: string
-    startTime: string
-    endTime: string
+    startTime: Date | string
+    endTime: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ShiftUncheckedCreateWithoutBranchInput = {
     id?: string
+    tenantId?: string
     name: string
-    startTime: string
-    endTime: string
+    startTime: Date | string
+    endTime: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ShiftCreateOrConnectWithoutBranchInput = {
@@ -33683,18 +41321,28 @@ export namespace Prisma {
 
   export type StockCreateWithoutBranchInput = {
     id?: string
+    tenantId?: string
     quantity?: number
     reservedQty?: number
     minStock?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     item: InventoryItemCreateNestedOneWithoutStocksInput
   }
 
   export type StockUncheckedCreateWithoutBranchInput = {
     id?: string
+    tenantId?: string
     itemId: string
     quantity?: number
     reservedQty?: number
     minStock?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type StockCreateOrConnectWithoutBranchInput = {
@@ -33709,45 +41357,51 @@ export namespace Prisma {
 
   export type TransactionCreateWithoutBranchInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
-    source: string
+    source: $Enums.TransactionSource
     serviceTicketId?: string | null
-    total: number
-    paymentMethod: string
-    amountPaid: number
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod: $Enums.PaymentMethod
+    amountPaid: Decimal | DecimalJsLike | number | string
     customerName?: string | null
     customerPhone?: string | null
     customerAddress?: string | null
-    change: number
-    tax: number
-    discount: number
-    status: string
+    change: Decimal | DecimalJsLike | number | string
+    tax: Decimal | DecimalJsLike | number | string
+    discount: Decimal | DecimalJsLike | number | string
+    status: $Enums.TransactionStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     cashier: UserCreateNestedOneWithoutTransactionsInput
     items?: TransactionItemCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutBranchInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
     cashierId: string
-    source: string
+    source: $Enums.TransactionSource
     serviceTicketId?: string | null
-    total: number
-    paymentMethod: string
-    amountPaid: number
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod: $Enums.PaymentMethod
+    amountPaid: Decimal | DecimalJsLike | number | string
     customerName?: string | null
     customerPhone?: string | null
     customerAddress?: string | null
-    change: number
-    tax: number
-    discount: number
-    status: string
+    change: Decimal | DecimalJsLike | number | string
+    tax: Decimal | DecimalJsLike | number | string
+    discount: Decimal | DecimalJsLike | number | string
+    status: $Enums.TransactionStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     items?: TransactionItemUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -33763,23 +41417,28 @@ export namespace Prisma {
 
   export type UserCreateWithoutBranchInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
+    role: RoleCreateNestedOneWithoutUsersInput
     cashAdvances?: CashAdvanceCreateNestedManyWithoutEmployeeInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketCreateNestedManyWithoutTechnicianInput
@@ -33790,23 +41449,28 @@ export namespace Prisma {
 
   export type UserUncheckedCreateWithoutBranchInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
+    roleId: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
     cashAdvances?: CashAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutTechnicianInput
@@ -33827,21 +41491,27 @@ export namespace Prisma {
 
   export type StockTransferCreateWithoutFromBranchInput = {
     id?: string
-    status?: string
+    tenantId?: string
+    status?: $Enums.StockTransferStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     toBranch: BranchCreateNestedOneWithoutTransfersToInput
     items?: StockTransferItemCreateNestedManyWithoutTransferInput
   }
 
   export type StockTransferUncheckedCreateWithoutFromBranchInput = {
     id?: string
+    tenantId?: string
     toBranchId: string
-    status?: string
+    status?: $Enums.StockTransferStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     items?: StockTransferItemUncheckedCreateNestedManyWithoutTransferInput
   }
 
@@ -33857,21 +41527,27 @@ export namespace Prisma {
 
   export type StockTransferCreateWithoutToBranchInput = {
     id?: string
-    status?: string
+    tenantId?: string
+    status?: $Enums.StockTransferStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     fromBranch: BranchCreateNestedOneWithoutTransfersFromInput
     items?: StockTransferItemCreateNestedManyWithoutTransferInput
   }
 
   export type StockTransferUncheckedCreateWithoutToBranchInput = {
     id?: string
+    tenantId?: string
     fromBranchId: string
-    status?: string
+    status?: $Enums.StockTransferStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     items?: StockTransferItemUncheckedCreateNestedManyWithoutTransferInput
   }
 
@@ -33887,22 +41563,32 @@ export namespace Prisma {
 
   export type InventoryUnitCreateWithoutBranchInput = {
     id?: string
+    tenantId?: string
     serialNumber?: string | null
-    status?: string
-    costPrice?: number | null
+    status?: $Enums.InventoryUnitStatus
+    costPrice?: Decimal | DecimalJsLike | number | string | null
     entryDate?: Date | string
     soldDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     item: InventoryItemCreateNestedOneWithoutUnitsInput
   }
 
   export type InventoryUnitUncheckedCreateWithoutBranchInput = {
     id?: string
+    tenantId?: string
     itemId: string
     serialNumber?: string | null
-    status?: string
-    costPrice?: number | null
+    status?: $Enums.InventoryUnitStatus
+    costPrice?: Decimal | DecimalJsLike | number | string | null
     entryDate?: Date | string
     soldDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type InventoryUnitCreateOrConnectWithoutBranchInput = {
@@ -33936,6 +41622,7 @@ export namespace Prisma {
     OR?: ServiceTicketScalarWhereInput[]
     NOT?: ServiceTicketScalarWhereInput | ServiceTicketScalarWhereInput[]
     id?: StringFilter<"ServiceTicket"> | string
+    tenantId?: StringFilter<"ServiceTicket"> | string
     dateOpened?: DateTimeFilter<"ServiceTicket"> | Date | string
     dateClosed?: DateTimeNullableFilter<"ServiceTicket"> | Date | string | null
     customerName?: StringFilter<"ServiceTicket"> | string
@@ -33945,13 +41632,17 @@ export namespace Prisma {
     deviceSerial?: StringFilter<"ServiceTicket"> | string
     issue?: StringFilter<"ServiceTicket"> | string
     diagnosis?: StringNullableFilter<"ServiceTicket"> | string | null
-    estimatedCost?: FloatFilter<"ServiceTicket"> | number
-    serviceFee?: FloatFilter<"ServiceTicket"> | number
-    status?: StringFilter<"ServiceTicket"> | string
+    estimatedCost?: DecimalFilter<"ServiceTicket"> | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFilter<"ServiceTicket"> | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFilter<"ServiceTicket"> | $Enums.ServiceStatus
     technicianId?: StringNullableFilter<"ServiceTicket"> | string | null
     branchId?: StringFilter<"ServiceTicket"> | string
+    incentiveType?: StringFilter<"ServiceTicket"> | string
+    incentiveValue?: DecimalFilter<"ServiceTicket"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"ServiceTicket"> | Date | string
     updatedAt?: DateTimeFilter<"ServiceTicket"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ServiceTicket"> | Date | string | null
+    updatedBy?: StringNullableFilter<"ServiceTicket"> | string | null
   }
 
   export type ShiftUpsertWithWhereUniqueWithoutBranchInput = {
@@ -33975,10 +41666,15 @@ export namespace Prisma {
     OR?: ShiftScalarWhereInput[]
     NOT?: ShiftScalarWhereInput | ShiftScalarWhereInput[]
     id?: StringFilter<"Shift"> | string
+    tenantId?: StringFilter<"Shift"> | string
     name?: StringFilter<"Shift"> | string
-    startTime?: StringFilter<"Shift"> | string
-    endTime?: StringFilter<"Shift"> | string
+    startTime?: DateTimeFilter<"Shift"> | Date | string
+    endTime?: DateTimeFilter<"Shift"> | Date | string
     branchId?: StringFilter<"Shift"> | string
+    createdAt?: DateTimeFilter<"Shift"> | Date | string
+    updatedAt?: DateTimeFilter<"Shift"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Shift"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Shift"> | string | null
   }
 
   export type StockUpsertWithWhereUniqueWithoutBranchInput = {
@@ -34002,11 +41698,16 @@ export namespace Prisma {
     OR?: StockScalarWhereInput[]
     NOT?: StockScalarWhereInput | StockScalarWhereInput[]
     id?: StringFilter<"Stock"> | string
+    tenantId?: StringFilter<"Stock"> | string
     itemId?: StringFilter<"Stock"> | string
     branchId?: StringFilter<"Stock"> | string
     quantity?: IntFilter<"Stock"> | number
     reservedQty?: IntFilter<"Stock"> | number
     minStock?: IntFilter<"Stock"> | number
+    createdAt?: DateTimeFilter<"Stock"> | Date | string
+    updatedAt?: DateTimeFilter<"Stock"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Stock"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Stock"> | string | null
   }
 
   export type TransactionUpsertWithWhereUniqueWithoutBranchInput = {
@@ -34030,24 +41731,27 @@ export namespace Prisma {
     OR?: TransactionScalarWhereInput[]
     NOT?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
     id?: StringFilter<"Transaction"> | string
+    tenantId?: StringFilter<"Transaction"> | string
     date?: DateTimeFilter<"Transaction"> | Date | string
     branchId?: StringFilter<"Transaction"> | string
     cashierId?: StringFilter<"Transaction"> | string
-    source?: StringFilter<"Transaction"> | string
+    source?: EnumTransactionSourceFilter<"Transaction"> | $Enums.TransactionSource
     serviceTicketId?: StringNullableFilter<"Transaction"> | string | null
-    total?: FloatFilter<"Transaction"> | number
-    paymentMethod?: StringFilter<"Transaction"> | string
-    amountPaid?: FloatFilter<"Transaction"> | number
+    total?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFilter<"Transaction"> | $Enums.PaymentMethod
+    amountPaid?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     customerName?: StringNullableFilter<"Transaction"> | string | null
     customerPhone?: StringNullableFilter<"Transaction"> | string | null
     customerAddress?: StringNullableFilter<"Transaction"> | string | null
-    change?: FloatFilter<"Transaction"> | number
-    tax?: FloatFilter<"Transaction"> | number
-    discount?: FloatFilter<"Transaction"> | number
-    status?: StringFilter<"Transaction"> | string
+    change?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
     notes?: StringNullableFilter<"Transaction"> | string | null
     createdAt?: DateTimeFilter<"Transaction"> | Date | string
     updatedAt?: DateTimeFilter<"Transaction"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Transaction"> | string | null
   }
 
   export type UserUpsertWithWhereUniqueWithoutBranchInput = {
@@ -34064,31 +41768,6 @@ export namespace Prisma {
   export type UserUpdateManyWithWhereWithoutBranchInput = {
     where: UserScalarWhereInput
     data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutBranchInput>
-  }
-
-  export type UserScalarWhereInput = {
-    AND?: UserScalarWhereInput | UserScalarWhereInput[]
-    OR?: UserScalarWhereInput[]
-    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
-    id?: StringFilter<"User"> | string
-    name?: StringNullableFilter<"User"> | string | null
-    email?: StringFilter<"User"> | string
-    password?: StringNullableFilter<"User"> | string | null
-    role?: StringFilter<"User"> | string
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeFilter<"User"> | Date | string
-    branchId?: StringNullableFilter<"User"> | string | null
-    wageType?: StringNullableFilter<"User"> | string | null
-    wageRate?: FloatNullableFilter<"User"> | number | null
-    allowance?: FloatNullableFilter<"User"> | number | null
-    insuranceDed?: FloatNullableFilter<"User"> | number | null
-    shiftId?: StringNullableFilter<"User"> | string | null
-    baseSalary?: FloatNullableFilter<"User"> | number | null
-    leaveQuota?: IntNullableFilter<"User"> | number | null
-    phone?: StringNullableFilter<"User"> | string | null
-    address?: StringNullableFilter<"User"> | string | null
-    incentiveRate?: FloatNullableFilter<"User"> | number | null
-    incentiveType?: StringNullableFilter<"User"> | string | null
   }
 
   export type StockTransferUpsertWithWhereUniqueWithoutFromBranchInput = {
@@ -34112,12 +41791,15 @@ export namespace Prisma {
     OR?: StockTransferScalarWhereInput[]
     NOT?: StockTransferScalarWhereInput | StockTransferScalarWhereInput[]
     id?: StringFilter<"StockTransfer"> | string
+    tenantId?: StringFilter<"StockTransfer"> | string
     fromBranchId?: StringFilter<"StockTransfer"> | string
     toBranchId?: StringFilter<"StockTransfer"> | string
-    status?: StringFilter<"StockTransfer"> | string
+    status?: EnumStockTransferStatusFilter<"StockTransfer"> | $Enums.StockTransferStatus
     notes?: StringNullableFilter<"StockTransfer"> | string | null
     createdAt?: DateTimeFilter<"StockTransfer"> | Date | string
     updatedAt?: DateTimeFilter<"StockTransfer"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"StockTransfer"> | Date | string | null
+    updatedBy?: StringNullableFilter<"StockTransfer"> | string | null
   }
 
   export type StockTransferUpsertWithWhereUniqueWithoutToBranchInput = {
@@ -34157,31 +41839,71 @@ export namespace Prisma {
     OR?: InventoryUnitScalarWhereInput[]
     NOT?: InventoryUnitScalarWhereInput | InventoryUnitScalarWhereInput[]
     id?: StringFilter<"InventoryUnit"> | string
+    tenantId?: StringFilter<"InventoryUnit"> | string
     itemId?: StringFilter<"InventoryUnit"> | string
     branchId?: StringFilter<"InventoryUnit"> | string
     serialNumber?: StringNullableFilter<"InventoryUnit"> | string | null
-    status?: StringFilter<"InventoryUnit"> | string
-    costPrice?: FloatNullableFilter<"InventoryUnit"> | number | null
+    status?: EnumInventoryUnitStatusFilter<"InventoryUnit"> | $Enums.InventoryUnitStatus
+    costPrice?: DecimalNullableFilter<"InventoryUnit"> | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeFilter<"InventoryUnit"> | Date | string
     soldDate?: DateTimeNullableFilter<"InventoryUnit"> | Date | string | null
+    createdAt?: DateTimeFilter<"InventoryUnit"> | Date | string
+    updatedAt?: DateTimeFilter<"InventoryUnit"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"InventoryUnit"> | Date | string | null
+    updatedBy?: StringNullableFilter<"InventoryUnit"> | string | null
+  }
+
+  export type RoleCreateWithoutUsersInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: PermissionCreateNestedManyWithoutRoleInput
+    bonusPools?: BonusPoolCreateNestedManyWithoutRoleInput
+  }
+
+  export type RoleUncheckedCreateWithoutUsersInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: PermissionUncheckedCreateNestedManyWithoutRoleInput
+    bonusPools?: BonusPoolUncheckedCreateNestedManyWithoutRoleInput
+  }
+
+  export type RoleCreateOrConnectWithoutUsersInput = {
+    where: RoleWhereUniqueInput
+    create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
   }
 
   export type CashAdvanceCreateWithoutEmployeeInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
-    amount: number
+    amount: Decimal | DecimalJsLike | number | string
     reason: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type CashAdvanceUncheckedCreateWithoutEmployeeInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
-    amount: number
+    amount: Decimal | DecimalJsLike | number | string
     reason: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type CashAdvanceCreateOrConnectWithoutEmployeeInput = {
@@ -34196,22 +41918,30 @@ export namespace Prisma {
 
   export type LeaveRequestCreateWithoutEmployeeInput = {
     id?: string
+    tenantId?: string
     startDate: Date | string
     endDate: Date | string
     type: string
     reason: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type LeaveRequestUncheckedCreateWithoutEmployeeInput = {
     id?: string
+    tenantId?: string
     startDate: Date | string
     endDate: Date | string
     type: string
     reason: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type LeaveRequestCreateOrConnectWithoutEmployeeInput = {
@@ -34226,6 +41956,7 @@ export namespace Prisma {
 
   export type ServiceTicketCreateWithoutTechnicianInput = {
     id?: string
+    tenantId?: string
     dateOpened?: Date | string
     dateClosed?: Date | string | null
     customerName: string
@@ -34235,17 +41966,22 @@ export namespace Prisma {
     deviceSerial: string
     issue: string
     diagnosis?: string | null
-    estimatedCost: number
-    serviceFee: number
-    status: string
+    estimatedCost: Decimal | DecimalJsLike | number | string
+    serviceFee: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ServiceStatus
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     spareparts?: ServiceSparepartCreateNestedManyWithoutTicketInput
     branch: BranchCreateNestedOneWithoutServiceTicketsInput
   }
 
   export type ServiceTicketUncheckedCreateWithoutTechnicianInput = {
     id?: string
+    tenantId?: string
     dateOpened?: Date | string
     dateClosed?: Date | string | null
     customerName: string
@@ -34255,12 +41991,16 @@ export namespace Prisma {
     deviceSerial: string
     issue: string
     diagnosis?: string | null
-    estimatedCost: number
-    serviceFee: number
-    status: string
+    estimatedCost: Decimal | DecimalJsLike | number | string
+    serviceFee: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ServiceStatus
     branchId: string
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     spareparts?: ServiceSparepartUncheckedCreateNestedManyWithoutTicketInput
   }
 
@@ -34276,45 +42016,51 @@ export namespace Prisma {
 
   export type TransactionCreateWithoutCashierInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
-    source: string
+    source: $Enums.TransactionSource
     serviceTicketId?: string | null
-    total: number
-    paymentMethod: string
-    amountPaid: number
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod: $Enums.PaymentMethod
+    amountPaid: Decimal | DecimalJsLike | number | string
     customerName?: string | null
     customerPhone?: string | null
     customerAddress?: string | null
-    change: number
-    tax: number
-    discount: number
-    status: string
+    change: Decimal | DecimalJsLike | number | string
+    tax: Decimal | DecimalJsLike | number | string
+    discount: Decimal | DecimalJsLike | number | string
+    status: $Enums.TransactionStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     branch: BranchCreateNestedOneWithoutTransactionsInput
     items?: TransactionItemCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutCashierInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
     branchId: string
-    source: string
+    source: $Enums.TransactionSource
     serviceTicketId?: string | null
-    total: number
-    paymentMethod: string
-    amountPaid: number
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod: $Enums.PaymentMethod
+    amountPaid: Decimal | DecimalJsLike | number | string
     customerName?: string | null
     customerPhone?: string | null
     customerAddress?: string | null
-    change: number
-    tax: number
-    discount: number
-    status: string
+    change: Decimal | DecimalJsLike | number | string
+    tax: Decimal | DecimalJsLike | number | string
+    discount: Decimal | DecimalJsLike | number | string
+    status: $Enums.TransactionStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     items?: TransactionItemUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -34330,12 +42076,13 @@ export namespace Prisma {
 
   export type AttendanceCreateWithoutEmployeeInput = {
     id?: string
+    tenantId?: string
     employeeName: string
     branchId: string
-    date: string
-    checkInTime: bigint | number
-    checkOutTime?: bigint | number | null
-    status: string
+    date: Date | string
+    checkInTime: Date | string
+    checkOutTime?: Date | string | null
+    status: $Enums.AttendanceStatus
     isInRadius: boolean
     isMockGPS: boolean
     latitude?: number | null
@@ -34346,16 +42093,20 @@ export namespace Prisma {
     checkOutLongitude?: number | null
     workDurationMinutes?: number | null
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type AttendanceUncheckedCreateWithoutEmployeeInput = {
     id?: string
+    tenantId?: string
     employeeName: string
     branchId: string
-    date: string
-    checkInTime: bigint | number
-    checkOutTime?: bigint | number | null
-    status: string
+    date: Date | string
+    checkInTime: Date | string
+    checkOutTime?: Date | string | null
+    status: $Enums.AttendanceStatus
     isInRadius: boolean
     isMockGPS: boolean
     latitude?: number | null
@@ -34366,6 +42117,9 @@ export namespace Prisma {
     checkOutLongitude?: number | null
     workDurationMinutes?: number | null
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type AttendanceCreateOrConnectWithoutEmployeeInput = {
@@ -34380,20 +42134,28 @@ export namespace Prisma {
 
   export type OvertimeCreateWithoutEmployeeInput = {
     id?: string
+    tenantId?: string
     hours?: number
     date?: Date | string
     reason?: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type OvertimeUncheckedCreateWithoutEmployeeInput = {
     id?: string
+    tenantId?: string
     hours?: number
     date?: Date | string
     reason?: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type OvertimeCreateOrConnectWithoutEmployeeInput = {
@@ -34408,6 +42170,7 @@ export namespace Prisma {
 
   export type BranchCreateWithoutUsersInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -34416,6 +42179,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketCreateNestedManyWithoutBranchInput
     shifts?: ShiftCreateNestedManyWithoutBranchInput
     stocks?: StockCreateNestedManyWithoutBranchInput
@@ -34427,6 +42192,7 @@ export namespace Prisma {
 
   export type BranchUncheckedCreateWithoutUsersInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -34435,6 +42201,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutBranchInput
     shifts?: ShiftUncheckedCreateNestedManyWithoutBranchInput
     stocks?: StockUncheckedCreateNestedManyWithoutBranchInput
@@ -34447,6 +42215,39 @@ export namespace Prisma {
   export type BranchCreateOrConnectWithoutUsersInput = {
     where: BranchWhereUniqueInput
     create: XOR<BranchCreateWithoutUsersInput, BranchUncheckedCreateWithoutUsersInput>
+  }
+
+  export type RoleUpsertWithoutUsersInput = {
+    update: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
+    create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
+    where?: RoleWhereInput
+  }
+
+  export type RoleUpdateToOneWithWhereWithoutUsersInput = {
+    where?: RoleWhereInput
+    data: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type RoleUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: PermissionUpdateManyWithoutRoleNestedInput
+    bonusPools?: BonusPoolUpdateManyWithoutRoleNestedInput
+  }
+
+  export type RoleUncheckedUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: PermissionUncheckedUpdateManyWithoutRoleNestedInput
+    bonusPools?: BonusPoolUncheckedUpdateManyWithoutRoleNestedInput
   }
 
   export type CashAdvanceUpsertWithWhereUniqueWithoutEmployeeInput = {
@@ -34470,12 +42271,16 @@ export namespace Prisma {
     OR?: CashAdvanceScalarWhereInput[]
     NOT?: CashAdvanceScalarWhereInput | CashAdvanceScalarWhereInput[]
     id?: StringFilter<"CashAdvance"> | string
+    tenantId?: StringFilter<"CashAdvance"> | string
     employeeId?: StringFilter<"CashAdvance"> | string
     date?: DateTimeFilter<"CashAdvance"> | Date | string
-    amount?: FloatFilter<"CashAdvance"> | number
+    amount?: DecimalFilter<"CashAdvance"> | Decimal | DecimalJsLike | number | string
     reason?: StringFilter<"CashAdvance"> | string
-    status?: StringFilter<"CashAdvance"> | string
+    status?: EnumRequestStatusFilter<"CashAdvance"> | $Enums.RequestStatus
     createdAt?: DateTimeFilter<"CashAdvance"> | Date | string
+    updatedAt?: DateTimeFilter<"CashAdvance"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"CashAdvance"> | Date | string | null
+    updatedBy?: StringNullableFilter<"CashAdvance"> | string | null
   }
 
   export type LeaveRequestUpsertWithWhereUniqueWithoutEmployeeInput = {
@@ -34499,13 +42304,17 @@ export namespace Prisma {
     OR?: LeaveRequestScalarWhereInput[]
     NOT?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
     id?: StringFilter<"LeaveRequest"> | string
+    tenantId?: StringFilter<"LeaveRequest"> | string
     employeeId?: StringFilter<"LeaveRequest"> | string
     startDate?: DateTimeFilter<"LeaveRequest"> | Date | string
     endDate?: DateTimeFilter<"LeaveRequest"> | Date | string
     type?: StringFilter<"LeaveRequest"> | string
     reason?: StringFilter<"LeaveRequest"> | string
-    status?: StringFilter<"LeaveRequest"> | string
+    status?: EnumRequestStatusFilter<"LeaveRequest"> | $Enums.RequestStatus
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
+    updatedBy?: StringNullableFilter<"LeaveRequest"> | string | null
   }
 
   export type ServiceTicketUpsertWithWhereUniqueWithoutTechnicianInput = {
@@ -34561,13 +42370,14 @@ export namespace Prisma {
     OR?: AttendanceScalarWhereInput[]
     NOT?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
     id?: StringFilter<"Attendance"> | string
+    tenantId?: StringFilter<"Attendance"> | string
     employeeId?: StringFilter<"Attendance"> | string
     employeeName?: StringFilter<"Attendance"> | string
     branchId?: StringFilter<"Attendance"> | string
-    date?: StringFilter<"Attendance"> | string
-    checkInTime?: BigIntFilter<"Attendance"> | bigint | number
-    checkOutTime?: BigIntNullableFilter<"Attendance"> | bigint | number | null
-    status?: StringFilter<"Attendance"> | string
+    date?: DateTimeFilter<"Attendance"> | Date | string
+    checkInTime?: DateTimeFilter<"Attendance"> | Date | string
+    checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
+    status?: EnumAttendanceStatusFilter<"Attendance"> | $Enums.AttendanceStatus
     isInRadius?: BoolFilter<"Attendance"> | boolean
     isMockGPS?: BoolFilter<"Attendance"> | boolean
     latitude?: FloatNullableFilter<"Attendance"> | number | null
@@ -34578,6 +42388,9 @@ export namespace Prisma {
     checkOutLongitude?: FloatNullableFilter<"Attendance"> | number | null
     workDurationMinutes?: IntNullableFilter<"Attendance"> | number | null
     createdAt?: DateTimeFilter<"Attendance"> | Date | string
+    updatedAt?: DateTimeFilter<"Attendance"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Attendance"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Attendance"> | string | null
   }
 
   export type OvertimeUpsertWithWhereUniqueWithoutEmployeeInput = {
@@ -34601,12 +42414,16 @@ export namespace Prisma {
     OR?: OvertimeScalarWhereInput[]
     NOT?: OvertimeScalarWhereInput | OvertimeScalarWhereInput[]
     id?: StringFilter<"Overtime"> | string
+    tenantId?: StringFilter<"Overtime"> | string
     employeeId?: StringFilter<"Overtime"> | string
     hours?: FloatFilter<"Overtime"> | number
     date?: DateTimeFilter<"Overtime"> | Date | string
     reason?: StringFilter<"Overtime"> | string
-    status?: StringFilter<"Overtime"> | string
+    status?: EnumRequestStatusFilter<"Overtime"> | $Enums.RequestStatus
     createdAt?: DateTimeFilter<"Overtime"> | Date | string
+    updatedAt?: DateTimeFilter<"Overtime"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Overtime"> | Date | string | null
+    updatedBy?: StringNullableFilter<"Overtime"> | string | null
   }
 
   export type BranchUpsertWithoutUsersInput = {
@@ -34622,6 +42439,7 @@ export namespace Prisma {
 
   export type BranchUpdateWithoutUsersInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -34630,6 +42448,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUpdateManyWithoutBranchNestedInput
     stocks?: StockUpdateManyWithoutBranchNestedInput
@@ -34641,6 +42461,7 @@ export namespace Prisma {
 
   export type BranchUncheckedUpdateWithoutUsersInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -34649,6 +42470,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUncheckedUpdateManyWithoutBranchNestedInput
     stocks?: StockUncheckedUpdateManyWithoutBranchNestedInput
@@ -34660,6 +42483,7 @@ export namespace Prisma {
 
   export type BranchCreateWithoutShiftsInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -34668,6 +42492,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketCreateNestedManyWithoutBranchInput
     stocks?: StockCreateNestedManyWithoutBranchInput
     transactions?: TransactionCreateNestedManyWithoutBranchInput
@@ -34679,6 +42505,7 @@ export namespace Prisma {
 
   export type BranchUncheckedCreateWithoutShiftsInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -34687,6 +42514,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutBranchInput
     stocks?: StockUncheckedCreateNestedManyWithoutBranchInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutBranchInput
@@ -34714,6 +42543,7 @@ export namespace Prisma {
 
   export type BranchUpdateWithoutShiftsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -34722,6 +42552,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUpdateManyWithoutBranchNestedInput
     stocks?: StockUpdateManyWithoutBranchNestedInput
     transactions?: TransactionUpdateManyWithoutBranchNestedInput
@@ -34733,6 +42565,7 @@ export namespace Prisma {
 
   export type BranchUncheckedUpdateWithoutShiftsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -34741,6 +42574,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutBranchNestedInput
     stocks?: StockUncheckedUpdateManyWithoutBranchNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutBranchNestedInput
@@ -34752,51 +42587,61 @@ export namespace Prisma {
 
   export type UserCreateWithoutCashAdvancesInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
+    role: RoleCreateNestedOneWithoutUsersInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketCreateNestedManyWithoutTechnicianInput
     transactions?: TransactionCreateNestedManyWithoutCashierInput
     attendances?: AttendanceCreateNestedManyWithoutEmployeeInput
     overtimes?: OvertimeCreateNestedManyWithoutEmployeeInput
-    branch?: BranchCreateNestedOneWithoutUsersInput
+    branch: BranchCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateWithoutCashAdvancesInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
+    roleId: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
-    branchId?: string | null
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
+    branchId: string
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutTechnicianInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCashierInput
@@ -34822,51 +42667,61 @@ export namespace Prisma {
 
   export type UserUpdateWithoutCashAdvancesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUpdateManyWithoutTechnicianNestedInput
     transactions?: TransactionUpdateManyWithoutCashierNestedInput
     attendances?: AttendanceUpdateManyWithoutEmployeeNestedInput
     overtimes?: OvertimeUpdateManyWithoutEmployeeNestedInput
-    branch?: BranchUpdateOneWithoutUsersNestedInput
+    branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCashAdvancesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: StringFieldUpdateOperationsInput | string
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutTechnicianNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCashierNestedInput
@@ -34876,51 +42731,61 @@ export namespace Prisma {
 
   export type UserCreateWithoutLeaveRequestsInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
+    role: RoleCreateNestedOneWithoutUsersInput
     cashAdvances?: CashAdvanceCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketCreateNestedManyWithoutTechnicianInput
     transactions?: TransactionCreateNestedManyWithoutCashierInput
     attendances?: AttendanceCreateNestedManyWithoutEmployeeInput
     overtimes?: OvertimeCreateNestedManyWithoutEmployeeInput
-    branch?: BranchCreateNestedOneWithoutUsersInput
+    branch: BranchCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateWithoutLeaveRequestsInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
+    roleId: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
-    branchId?: string | null
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
+    branchId: string
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
     cashAdvances?: CashAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutTechnicianInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCashierInput
@@ -34946,51 +42811,61 @@ export namespace Prisma {
 
   export type UserUpdateWithoutLeaveRequestsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     cashAdvances?: CashAdvanceUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUpdateManyWithoutTechnicianNestedInput
     transactions?: TransactionUpdateManyWithoutCashierNestedInput
     attendances?: AttendanceUpdateManyWithoutEmployeeNestedInput
     overtimes?: OvertimeUpdateManyWithoutEmployeeNestedInput
-    branch?: BranchUpdateOneWithoutUsersNestedInput
+    branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveRequestsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: StringFieldUpdateOperationsInput | string
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
     cashAdvances?: CashAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutTechnicianNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCashierNestedInput
@@ -35000,16 +42875,19 @@ export namespace Prisma {
 
   export type InventoryItemCreateWithoutCategoryInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceSpareparts?: ServiceSparepartCreateNestedManyWithoutItemInput
     stocks?: StockCreateNestedManyWithoutItemInput
     transactionItems?: TransactionItemCreateNestedManyWithoutItemInput
@@ -35019,16 +42897,19 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedCreateWithoutCategoryInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceSpareparts?: ServiceSparepartUncheckedCreateNestedManyWithoutItemInput
     stocks?: StockUncheckedCreateNestedManyWithoutItemInput
     transactionItems?: TransactionItemUncheckedCreateNestedManyWithoutItemInput
@@ -35067,26 +42948,31 @@ export namespace Prisma {
     OR?: InventoryItemScalarWhereInput[]
     NOT?: InventoryItemScalarWhereInput | InventoryItemScalarWhereInput[]
     id?: StringFilter<"InventoryItem"> | string
+    tenantId?: StringFilter<"InventoryItem"> | string
     name?: StringFilter<"InventoryItem"> | string
     sku?: StringFilter<"InventoryItem"> | string
     categoryId?: StringFilter<"InventoryItem"> | string
-    costPrice?: FloatFilter<"InventoryItem"> | number
-    basePrice?: FloatFilter<"InventoryItem"> | number
+    costPrice?: DecimalFilter<"InventoryItem"> | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFilter<"InventoryItem"> | Decimal | DecimalJsLike | number | string
     unit?: StringFilter<"InventoryItem"> | string
     rack?: StringNullableFilter<"InventoryItem"> | string | null
     image?: StringNullableFilter<"InventoryItem"> | string | null
     showInPos?: BoolFilter<"InventoryItem"> | boolean
     createdAt?: DateTimeFilter<"InventoryItem"> | Date | string
     updatedAt?: DateTimeFilter<"InventoryItem"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"InventoryItem"> | Date | string | null
+    updatedBy?: StringNullableFilter<"InventoryItem"> | string | null
   }
 
   export type CategoryCreateWithoutInventoryItemsInput = {
     id?: string
+    tenantId?: string
     name: string
   }
 
   export type CategoryUncheckedCreateWithoutInventoryItemsInput = {
     id?: string
+    tenantId?: string
     name: string
   }
 
@@ -35097,16 +42983,26 @@ export namespace Prisma {
 
   export type ServiceSparepartCreateWithoutItemInput = {
     id?: string
+    tenantId?: string
     quantity: number
-    price: number
+    price: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     ticket: ServiceTicketCreateNestedOneWithoutSparepartsInput
   }
 
   export type ServiceSparepartUncheckedCreateWithoutItemInput = {
     id?: string
+    tenantId?: string
     ticketId: string
     quantity: number
-    price: number
+    price: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ServiceSparepartCreateOrConnectWithoutItemInput = {
@@ -35121,18 +43017,28 @@ export namespace Prisma {
 
   export type StockCreateWithoutItemInput = {
     id?: string
+    tenantId?: string
     quantity?: number
     reservedQty?: number
     minStock?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     branch: BranchCreateNestedOneWithoutStocksInput
   }
 
   export type StockUncheckedCreateWithoutItemInput = {
     id?: string
+    tenantId?: string
     branchId: string
     quantity?: number
     reservedQty?: number
     minStock?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type StockCreateOrConnectWithoutItemInput = {
@@ -35147,25 +43053,27 @@ export namespace Prisma {
 
   export type TransactionItemCreateWithoutItemInput = {
     id?: string
+    tenantId?: string
     name: string
     category: string
-    price: number
-    costPrice: number
+    price: Decimal | DecimalJsLike | number | string
+    costPrice: Decimal | DecimalJsLike | number | string
     quantity: number
-    discount?: number
+    discount?: Decimal | DecimalJsLike | number | string
     technicianId?: string | null
     transaction: TransactionCreateNestedOneWithoutItemsInput
   }
 
   export type TransactionItemUncheckedCreateWithoutItemInput = {
     id?: string
+    tenantId?: string
     transactionId: string
     name: string
     category: string
-    price: number
-    costPrice: number
+    price: Decimal | DecimalJsLike | number | string
+    costPrice: Decimal | DecimalJsLike | number | string
     quantity: number
-    discount?: number
+    discount?: Decimal | DecimalJsLike | number | string
     technicianId?: string | null
   }
 
@@ -35181,12 +43089,14 @@ export namespace Prisma {
 
   export type StockTransferItemCreateWithoutItemInput = {
     id?: string
+    tenantId?: string
     quantity: number
     transfer: StockTransferCreateNestedOneWithoutItemsInput
   }
 
   export type StockTransferItemUncheckedCreateWithoutItemInput = {
     id?: string
+    tenantId?: string
     transferId: string
     quantity: number
   }
@@ -35203,22 +43113,32 @@ export namespace Prisma {
 
   export type InventoryUnitCreateWithoutItemInput = {
     id?: string
+    tenantId?: string
     serialNumber?: string | null
-    status?: string
-    costPrice?: number | null
+    status?: $Enums.InventoryUnitStatus
+    costPrice?: Decimal | DecimalJsLike | number | string | null
     entryDate?: Date | string
     soldDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     branch: BranchCreateNestedOneWithoutUnitsInput
   }
 
   export type InventoryUnitUncheckedCreateWithoutItemInput = {
     id?: string
+    tenantId?: string
     branchId: string
     serialNumber?: string | null
-    status?: string
-    costPrice?: number | null
+    status?: $Enums.InventoryUnitStatus
+    costPrice?: Decimal | DecimalJsLike | number | string | null
     entryDate?: Date | string
     soldDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type InventoryUnitCreateOrConnectWithoutItemInput = {
@@ -35244,11 +43164,13 @@ export namespace Prisma {
 
   export type CategoryUpdateWithoutInventoryItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
   }
 
   export type CategoryUncheckedUpdateWithoutInventoryItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
   }
 
@@ -35273,10 +43195,15 @@ export namespace Prisma {
     OR?: ServiceSparepartScalarWhereInput[]
     NOT?: ServiceSparepartScalarWhereInput | ServiceSparepartScalarWhereInput[]
     id?: StringFilter<"ServiceSparepart"> | string
+    tenantId?: StringFilter<"ServiceSparepart"> | string
     ticketId?: StringFilter<"ServiceSparepart"> | string
     itemId?: StringFilter<"ServiceSparepart"> | string
     quantity?: IntFilter<"ServiceSparepart"> | number
-    price?: FloatFilter<"ServiceSparepart"> | number
+    price?: DecimalFilter<"ServiceSparepart"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"ServiceSparepart"> | Date | string
+    updatedAt?: DateTimeFilter<"ServiceSparepart"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ServiceSparepart"> | Date | string | null
+    updatedBy?: StringNullableFilter<"ServiceSparepart"> | string | null
   }
 
   export type StockUpsertWithWhereUniqueWithoutItemInput = {
@@ -35316,14 +43243,15 @@ export namespace Prisma {
     OR?: TransactionItemScalarWhereInput[]
     NOT?: TransactionItemScalarWhereInput | TransactionItemScalarWhereInput[]
     id?: StringFilter<"TransactionItem"> | string
+    tenantId?: StringFilter<"TransactionItem"> | string
     transactionId?: StringFilter<"TransactionItem"> | string
     itemId?: StringNullableFilter<"TransactionItem"> | string | null
     name?: StringFilter<"TransactionItem"> | string
     category?: StringFilter<"TransactionItem"> | string
-    price?: FloatFilter<"TransactionItem"> | number
-    costPrice?: FloatFilter<"TransactionItem"> | number
+    price?: DecimalFilter<"TransactionItem"> | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalFilter<"TransactionItem"> | Decimal | DecimalJsLike | number | string
     quantity?: IntFilter<"TransactionItem"> | number
-    discount?: FloatFilter<"TransactionItem"> | number
+    discount?: DecimalFilter<"TransactionItem"> | Decimal | DecimalJsLike | number | string
     technicianId?: StringNullableFilter<"TransactionItem"> | string | null
   }
 
@@ -35348,6 +43276,7 @@ export namespace Prisma {
     OR?: StockTransferItemScalarWhereInput[]
     NOT?: StockTransferItemScalarWhereInput | StockTransferItemScalarWhereInput[]
     id?: StringFilter<"StockTransferItem"> | string
+    tenantId?: StringFilter<"StockTransferItem"> | string
     transferId?: StringFilter<"StockTransferItem"> | string
     itemId?: StringFilter<"StockTransferItem"> | string
     quantity?: IntFilter<"StockTransferItem"> | number
@@ -35371,6 +43300,7 @@ export namespace Prisma {
 
   export type BranchCreateWithoutStocksInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -35379,6 +43309,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketCreateNestedManyWithoutBranchInput
     shifts?: ShiftCreateNestedManyWithoutBranchInput
     transactions?: TransactionCreateNestedManyWithoutBranchInput
@@ -35390,6 +43322,7 @@ export namespace Prisma {
 
   export type BranchUncheckedCreateWithoutStocksInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -35398,6 +43331,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutBranchInput
     shifts?: ShiftUncheckedCreateNestedManyWithoutBranchInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutBranchInput
@@ -35414,16 +43349,19 @@ export namespace Prisma {
 
   export type InventoryItemCreateWithoutStocksInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     category: CategoryCreateNestedOneWithoutInventoryItemsInput
     serviceSpareparts?: ServiceSparepartCreateNestedManyWithoutItemInput
     transactionItems?: TransactionItemCreateNestedManyWithoutItemInput
@@ -35433,17 +43371,20 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedCreateWithoutStocksInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
     categoryId: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceSpareparts?: ServiceSparepartUncheckedCreateNestedManyWithoutItemInput
     transactionItems?: TransactionItemUncheckedCreateNestedManyWithoutItemInput
     transferItems?: StockTransferItemUncheckedCreateNestedManyWithoutItemInput
@@ -35468,6 +43409,7 @@ export namespace Prisma {
 
   export type BranchUpdateWithoutStocksInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -35476,6 +43418,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUpdateManyWithoutBranchNestedInput
     transactions?: TransactionUpdateManyWithoutBranchNestedInput
@@ -35487,6 +43431,7 @@ export namespace Prisma {
 
   export type BranchUncheckedUpdateWithoutStocksInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -35495,6 +43440,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUncheckedUpdateManyWithoutBranchNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutBranchNestedInput
@@ -35517,16 +43464,19 @@ export namespace Prisma {
 
   export type InventoryItemUpdateWithoutStocksInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     category?: CategoryUpdateOneRequiredWithoutInventoryItemsNestedInput
     serviceSpareparts?: ServiceSparepartUpdateManyWithoutItemNestedInput
     transactionItems?: TransactionItemUpdateManyWithoutItemNestedInput
@@ -35536,17 +43486,20 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedUpdateWithoutStocksInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceSpareparts?: ServiceSparepartUncheckedUpdateManyWithoutItemNestedInput
     transactionItems?: TransactionItemUncheckedUpdateManyWithoutItemNestedInput
     transferItems?: StockTransferItemUncheckedUpdateManyWithoutItemNestedInput
@@ -35555,6 +43508,7 @@ export namespace Prisma {
 
   export type BranchCreateWithoutTransactionsInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -35563,6 +43517,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketCreateNestedManyWithoutBranchInput
     shifts?: ShiftCreateNestedManyWithoutBranchInput
     stocks?: StockCreateNestedManyWithoutBranchInput
@@ -35574,6 +43530,7 @@ export namespace Prisma {
 
   export type BranchUncheckedCreateWithoutTransactionsInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -35582,6 +43539,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutBranchInput
     shifts?: ShiftUncheckedCreateNestedManyWithoutBranchInput
     stocks?: StockUncheckedCreateNestedManyWithoutBranchInput
@@ -35598,51 +43557,61 @@ export namespace Prisma {
 
   export type UserCreateWithoutTransactionsInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
+    role: RoleCreateNestedOneWithoutUsersInput
     cashAdvances?: CashAdvanceCreateNestedManyWithoutEmployeeInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketCreateNestedManyWithoutTechnicianInput
     attendances?: AttendanceCreateNestedManyWithoutEmployeeInput
     overtimes?: OvertimeCreateNestedManyWithoutEmployeeInput
-    branch?: BranchCreateNestedOneWithoutUsersInput
+    branch: BranchCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateWithoutTransactionsInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
+    roleId: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
-    branchId?: string | null
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
+    branchId: string
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
     cashAdvances?: CashAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutTechnicianInput
@@ -35657,25 +43626,27 @@ export namespace Prisma {
 
   export type TransactionItemCreateWithoutTransactionInput = {
     id?: string
+    tenantId?: string
     name: string
     category: string
-    price: number
-    costPrice: number
+    price: Decimal | DecimalJsLike | number | string
+    costPrice: Decimal | DecimalJsLike | number | string
     quantity: number
-    discount?: number
+    discount?: Decimal | DecimalJsLike | number | string
     technicianId?: string | null
     item?: InventoryItemCreateNestedOneWithoutTransactionItemsInput
   }
 
   export type TransactionItemUncheckedCreateWithoutTransactionInput = {
     id?: string
+    tenantId?: string
     itemId?: string | null
     name: string
     category: string
-    price: number
-    costPrice: number
+    price: Decimal | DecimalJsLike | number | string
+    costPrice: Decimal | DecimalJsLike | number | string
     quantity: number
-    discount?: number
+    discount?: Decimal | DecimalJsLike | number | string
     technicianId?: string | null
   }
 
@@ -35702,6 +43673,7 @@ export namespace Prisma {
 
   export type BranchUpdateWithoutTransactionsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -35710,6 +43682,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUpdateManyWithoutBranchNestedInput
     stocks?: StockUpdateManyWithoutBranchNestedInput
@@ -35721,6 +43695,7 @@ export namespace Prisma {
 
   export type BranchUncheckedUpdateWithoutTransactionsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -35729,6 +43704,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUncheckedUpdateManyWithoutBranchNestedInput
     stocks?: StockUncheckedUpdateManyWithoutBranchNestedInput
@@ -35751,51 +43728,61 @@ export namespace Prisma {
 
   export type UserUpdateWithoutTransactionsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     cashAdvances?: CashAdvanceUpdateManyWithoutEmployeeNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUpdateManyWithoutTechnicianNestedInput
     attendances?: AttendanceUpdateManyWithoutEmployeeNestedInput
     overtimes?: OvertimeUpdateManyWithoutEmployeeNestedInput
-    branch?: BranchUpdateOneWithoutUsersNestedInput
+    branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransactionsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: StringFieldUpdateOperationsInput | string
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
     cashAdvances?: CashAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutTechnicianNestedInput
@@ -35821,16 +43808,19 @@ export namespace Prisma {
 
   export type InventoryItemCreateWithoutTransactionItemsInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     category: CategoryCreateNestedOneWithoutInventoryItemsInput
     serviceSpareparts?: ServiceSparepartCreateNestedManyWithoutItemInput
     stocks?: StockCreateNestedManyWithoutItemInput
@@ -35840,17 +43830,20 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedCreateWithoutTransactionItemsInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
     categoryId: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceSpareparts?: ServiceSparepartUncheckedCreateNestedManyWithoutItemInput
     stocks?: StockUncheckedCreateNestedManyWithoutItemInput
     transferItems?: StockTransferItemUncheckedCreateNestedManyWithoutItemInput
@@ -35864,46 +43857,52 @@ export namespace Prisma {
 
   export type TransactionCreateWithoutItemsInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
-    source: string
+    source: $Enums.TransactionSource
     serviceTicketId?: string | null
-    total: number
-    paymentMethod: string
-    amountPaid: number
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod: $Enums.PaymentMethod
+    amountPaid: Decimal | DecimalJsLike | number | string
     customerName?: string | null
     customerPhone?: string | null
     customerAddress?: string | null
-    change: number
-    tax: number
-    discount: number
-    status: string
+    change: Decimal | DecimalJsLike | number | string
+    tax: Decimal | DecimalJsLike | number | string
+    discount: Decimal | DecimalJsLike | number | string
+    status: $Enums.TransactionStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     branch: BranchCreateNestedOneWithoutTransactionsInput
     cashier: UserCreateNestedOneWithoutTransactionsInput
   }
 
   export type TransactionUncheckedCreateWithoutItemsInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
     branchId: string
     cashierId: string
-    source: string
+    source: $Enums.TransactionSource
     serviceTicketId?: string | null
-    total: number
-    paymentMethod: string
-    amountPaid: number
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod: $Enums.PaymentMethod
+    amountPaid: Decimal | DecimalJsLike | number | string
     customerName?: string | null
     customerPhone?: string | null
     customerAddress?: string | null
-    change: number
-    tax: number
-    discount: number
-    status: string
+    change: Decimal | DecimalJsLike | number | string
+    tax: Decimal | DecimalJsLike | number | string
+    discount: Decimal | DecimalJsLike | number | string
+    status: $Enums.TransactionStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type TransactionCreateOrConnectWithoutItemsInput = {
@@ -35924,16 +43923,19 @@ export namespace Prisma {
 
   export type InventoryItemUpdateWithoutTransactionItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     category?: CategoryUpdateOneRequiredWithoutInventoryItemsNestedInput
     serviceSpareparts?: ServiceSparepartUpdateManyWithoutItemNestedInput
     stocks?: StockUpdateManyWithoutItemNestedInput
@@ -35943,17 +43945,20 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedUpdateWithoutTransactionItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceSpareparts?: ServiceSparepartUncheckedUpdateManyWithoutItemNestedInput
     stocks?: StockUncheckedUpdateManyWithoutItemNestedInput
     transferItems?: StockTransferItemUncheckedUpdateManyWithoutItemNestedInput
@@ -35973,60 +43978,76 @@ export namespace Prisma {
 
   export type TransactionUpdateWithoutItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    source?: StringFieldUpdateOperationsInput | string
+    source?: EnumTransactionSourceFieldUpdateOperationsInput | $Enums.TransactionSource
     serviceTicketId?: NullableStringFieldUpdateOperationsInput | string | null
-    total?: FloatFieldUpdateOperationsInput | number
-    paymentMethod?: StringFieldUpdateOperationsInput | string
-    amountPaid?: FloatFieldUpdateOperationsInput | number
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    change?: FloatFieldUpdateOperationsInput | number
-    tax?: FloatFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    change?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: BranchUpdateOneRequiredWithoutTransactionsNestedInput
     cashier?: UserUpdateOneRequiredWithoutTransactionsNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     branchId?: StringFieldUpdateOperationsInput | string
     cashierId?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
+    source?: EnumTransactionSourceFieldUpdateOperationsInput | $Enums.TransactionSource
     serviceTicketId?: NullableStringFieldUpdateOperationsInput | string | null
-    total?: FloatFieldUpdateOperationsInput | number
-    paymentMethod?: StringFieldUpdateOperationsInput | string
-    amountPaid?: FloatFieldUpdateOperationsInput | number
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    change?: FloatFieldUpdateOperationsInput | number
-    tax?: FloatFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    change?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceSparepartCreateWithoutTicketInput = {
     id?: string
+    tenantId?: string
     quantity: number
-    price: number
+    price: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     item: InventoryItemCreateNestedOneWithoutServiceSparepartsInput
   }
 
   export type ServiceSparepartUncheckedCreateWithoutTicketInput = {
     id?: string
+    tenantId?: string
     itemId: string
     quantity: number
-    price: number
+    price: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ServiceSparepartCreateOrConnectWithoutTicketInput = {
@@ -36041,6 +44062,7 @@ export namespace Prisma {
 
   export type BranchCreateWithoutServiceTicketsInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -36049,6 +44071,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     shifts?: ShiftCreateNestedManyWithoutBranchInput
     stocks?: StockCreateNestedManyWithoutBranchInput
     transactions?: TransactionCreateNestedManyWithoutBranchInput
@@ -36060,6 +44084,7 @@ export namespace Prisma {
 
   export type BranchUncheckedCreateWithoutServiceTicketsInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -36068,6 +44093,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     shifts?: ShiftUncheckedCreateNestedManyWithoutBranchInput
     stocks?: StockUncheckedCreateNestedManyWithoutBranchInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutBranchInput
@@ -36084,51 +44111,61 @@ export namespace Prisma {
 
   export type UserCreateWithoutServiceTicketsInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
+    role: RoleCreateNestedOneWithoutUsersInput
     cashAdvances?: CashAdvanceCreateNestedManyWithoutEmployeeInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     transactions?: TransactionCreateNestedManyWithoutCashierInput
     attendances?: AttendanceCreateNestedManyWithoutEmployeeInput
     overtimes?: OvertimeCreateNestedManyWithoutEmployeeInput
-    branch?: BranchCreateNestedOneWithoutUsersInput
+    branch: BranchCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateWithoutServiceTicketsInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
+    roleId: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
-    branchId?: string | null
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
+    branchId: string
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
     cashAdvances?: CashAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCashierInput
@@ -36170,6 +44207,7 @@ export namespace Prisma {
 
   export type BranchUpdateWithoutServiceTicketsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -36178,6 +44216,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     shifts?: ShiftUpdateManyWithoutBranchNestedInput
     stocks?: StockUpdateManyWithoutBranchNestedInput
     transactions?: TransactionUpdateManyWithoutBranchNestedInput
@@ -36189,6 +44229,7 @@ export namespace Prisma {
 
   export type BranchUncheckedUpdateWithoutServiceTicketsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -36197,6 +44238,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     shifts?: ShiftUncheckedUpdateManyWithoutBranchNestedInput
     stocks?: StockUncheckedUpdateManyWithoutBranchNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutBranchNestedInput
@@ -36219,51 +44262,61 @@ export namespace Prisma {
 
   export type UserUpdateWithoutServiceTicketsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     cashAdvances?: CashAdvanceUpdateManyWithoutEmployeeNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     transactions?: TransactionUpdateManyWithoutCashierNestedInput
     attendances?: AttendanceUpdateManyWithoutEmployeeNestedInput
     overtimes?: OvertimeUpdateManyWithoutEmployeeNestedInput
-    branch?: BranchUpdateOneWithoutUsersNestedInput
+    branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutServiceTicketsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: StringFieldUpdateOperationsInput | string
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
     cashAdvances?: CashAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCashierNestedInput
@@ -36273,16 +44326,19 @@ export namespace Prisma {
 
   export type InventoryItemCreateWithoutServiceSparepartsInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     category: CategoryCreateNestedOneWithoutInventoryItemsInput
     stocks?: StockCreateNestedManyWithoutItemInput
     transactionItems?: TransactionItemCreateNestedManyWithoutItemInput
@@ -36292,17 +44348,20 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedCreateWithoutServiceSparepartsInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
     categoryId: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     stocks?: StockUncheckedCreateNestedManyWithoutItemInput
     transactionItems?: TransactionItemUncheckedCreateNestedManyWithoutItemInput
     transferItems?: StockTransferItemUncheckedCreateNestedManyWithoutItemInput
@@ -36316,6 +44375,7 @@ export namespace Prisma {
 
   export type ServiceTicketCreateWithoutSparepartsInput = {
     id?: string
+    tenantId?: string
     dateOpened?: Date | string
     dateClosed?: Date | string | null
     customerName: string
@@ -36325,17 +44385,22 @@ export namespace Prisma {
     deviceSerial: string
     issue: string
     diagnosis?: string | null
-    estimatedCost: number
-    serviceFee: number
-    status: string
+    estimatedCost: Decimal | DecimalJsLike | number | string
+    serviceFee: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ServiceStatus
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     branch: BranchCreateNestedOneWithoutServiceTicketsInput
     technician?: UserCreateNestedOneWithoutServiceTicketsInput
   }
 
   export type ServiceTicketUncheckedCreateWithoutSparepartsInput = {
     id?: string
+    tenantId?: string
     dateOpened?: Date | string
     dateClosed?: Date | string | null
     customerName: string
@@ -36345,13 +44410,17 @@ export namespace Prisma {
     deviceSerial: string
     issue: string
     diagnosis?: string | null
-    estimatedCost: number
-    serviceFee: number
-    status: string
+    estimatedCost: Decimal | DecimalJsLike | number | string
+    serviceFee: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ServiceStatus
     technicianId?: string | null
     branchId: string
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ServiceTicketCreateOrConnectWithoutSparepartsInput = {
@@ -36372,16 +44441,19 @@ export namespace Prisma {
 
   export type InventoryItemUpdateWithoutServiceSparepartsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     category?: CategoryUpdateOneRequiredWithoutInventoryItemsNestedInput
     stocks?: StockUpdateManyWithoutItemNestedInput
     transactionItems?: TransactionItemUpdateManyWithoutItemNestedInput
@@ -36391,17 +44463,20 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedUpdateWithoutServiceSparepartsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     stocks?: StockUncheckedUpdateManyWithoutItemNestedInput
     transactionItems?: TransactionItemUncheckedUpdateManyWithoutItemNestedInput
     transferItems?: StockTransferItemUncheckedUpdateManyWithoutItemNestedInput
@@ -36421,6 +44496,7 @@ export namespace Prisma {
 
   export type ServiceTicketUpdateWithoutSparepartsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     dateOpened?: DateTimeFieldUpdateOperationsInput | Date | string
     dateClosed?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customerName?: StringFieldUpdateOperationsInput | string
@@ -36430,17 +44506,22 @@ export namespace Prisma {
     deviceSerial?: StringFieldUpdateOperationsInput | string
     issue?: StringFieldUpdateOperationsInput | string
     diagnosis?: NullableStringFieldUpdateOperationsInput | string | null
-    estimatedCost?: FloatFieldUpdateOperationsInput | number
-    serviceFee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    estimatedCost?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: BranchUpdateOneRequiredWithoutServiceTicketsNestedInput
     technician?: UserUpdateOneWithoutServiceTicketsNestedInput
   }
 
   export type ServiceTicketUncheckedUpdateWithoutSparepartsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     dateOpened?: DateTimeFieldUpdateOperationsInput | Date | string
     dateClosed?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customerName?: StringFieldUpdateOperationsInput | string
@@ -36450,62 +44531,76 @@ export namespace Prisma {
     deviceSerial?: StringFieldUpdateOperationsInput | string
     issue?: StringFieldUpdateOperationsInput | string
     diagnosis?: NullableStringFieldUpdateOperationsInput | string | null
-    estimatedCost?: FloatFieldUpdateOperationsInput | number
-    serviceFee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    estimatedCost?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: StringFieldUpdateOperationsInput | string
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserCreateWithoutAttendancesInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
+    role: RoleCreateNestedOneWithoutUsersInput
     cashAdvances?: CashAdvanceCreateNestedManyWithoutEmployeeInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketCreateNestedManyWithoutTechnicianInput
     transactions?: TransactionCreateNestedManyWithoutCashierInput
     overtimes?: OvertimeCreateNestedManyWithoutEmployeeInput
-    branch?: BranchCreateNestedOneWithoutUsersInput
+    branch: BranchCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateWithoutAttendancesInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
+    roleId: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
-    branchId?: string | null
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
+    branchId: string
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
     cashAdvances?: CashAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutTechnicianInput
@@ -36531,51 +44626,61 @@ export namespace Prisma {
 
   export type UserUpdateWithoutAttendancesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     cashAdvances?: CashAdvanceUpdateManyWithoutEmployeeNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUpdateManyWithoutTechnicianNestedInput
     transactions?: TransactionUpdateManyWithoutCashierNestedInput
     overtimes?: OvertimeUpdateManyWithoutEmployeeNestedInput
-    branch?: BranchUpdateOneWithoutUsersNestedInput
+    branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendancesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: StringFieldUpdateOperationsInput | string
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
     cashAdvances?: CashAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutTechnicianNestedInput
@@ -36585,51 +44690,61 @@ export namespace Prisma {
 
   export type UserCreateWithoutOvertimesInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
+    role: RoleCreateNestedOneWithoutUsersInput
     cashAdvances?: CashAdvanceCreateNestedManyWithoutEmployeeInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketCreateNestedManyWithoutTechnicianInput
     transactions?: TransactionCreateNestedManyWithoutCashierInput
     attendances?: AttendanceCreateNestedManyWithoutEmployeeInput
-    branch?: BranchCreateNestedOneWithoutUsersInput
+    branch: BranchCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateWithoutOvertimesInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
+    roleId: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
-    branchId?: string | null
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
+    branchId: string
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
     cashAdvances?: CashAdvanceUncheckedCreateNestedManyWithoutEmployeeInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutTechnicianInput
@@ -36655,51 +44770,61 @@ export namespace Prisma {
 
   export type UserUpdateWithoutOvertimesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     cashAdvances?: CashAdvanceUpdateManyWithoutEmployeeNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUpdateManyWithoutTechnicianNestedInput
     transactions?: TransactionUpdateManyWithoutCashierNestedInput
     attendances?: AttendanceUpdateManyWithoutEmployeeNestedInput
-    branch?: BranchUpdateOneWithoutUsersNestedInput
+    branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOvertimesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: StringFieldUpdateOperationsInput | string
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
     cashAdvances?: CashAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutTechnicianNestedInput
@@ -36709,6 +44834,7 @@ export namespace Prisma {
 
   export type BranchCreateWithoutTransfersFromInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -36717,6 +44843,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketCreateNestedManyWithoutBranchInput
     shifts?: ShiftCreateNestedManyWithoutBranchInput
     stocks?: StockCreateNestedManyWithoutBranchInput
@@ -36728,6 +44856,7 @@ export namespace Prisma {
 
   export type BranchUncheckedCreateWithoutTransfersFromInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -36736,6 +44865,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutBranchInput
     shifts?: ShiftUncheckedCreateNestedManyWithoutBranchInput
     stocks?: StockUncheckedCreateNestedManyWithoutBranchInput
@@ -36752,6 +44883,7 @@ export namespace Prisma {
 
   export type BranchCreateWithoutTransfersToInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -36760,6 +44892,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketCreateNestedManyWithoutBranchInput
     shifts?: ShiftCreateNestedManyWithoutBranchInput
     stocks?: StockCreateNestedManyWithoutBranchInput
@@ -36771,6 +44905,7 @@ export namespace Prisma {
 
   export type BranchUncheckedCreateWithoutTransfersToInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -36779,6 +44914,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutBranchInput
     shifts?: ShiftUncheckedCreateNestedManyWithoutBranchInput
     stocks?: StockUncheckedCreateNestedManyWithoutBranchInput
@@ -36795,12 +44932,14 @@ export namespace Prisma {
 
   export type StockTransferItemCreateWithoutTransferInput = {
     id?: string
+    tenantId?: string
     quantity: number
     item: InventoryItemCreateNestedOneWithoutTransferItemsInput
   }
 
   export type StockTransferItemUncheckedCreateWithoutTransferInput = {
     id?: string
+    tenantId?: string
     itemId: string
     quantity: number
   }
@@ -36828,6 +44967,7 @@ export namespace Prisma {
 
   export type BranchUpdateWithoutTransfersFromInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -36836,6 +44976,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUpdateManyWithoutBranchNestedInput
     stocks?: StockUpdateManyWithoutBranchNestedInput
@@ -36847,6 +44989,7 @@ export namespace Prisma {
 
   export type BranchUncheckedUpdateWithoutTransfersFromInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -36855,6 +44998,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUncheckedUpdateManyWithoutBranchNestedInput
     stocks?: StockUncheckedUpdateManyWithoutBranchNestedInput
@@ -36877,6 +45022,7 @@ export namespace Prisma {
 
   export type BranchUpdateWithoutTransfersToInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -36885,6 +45031,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUpdateManyWithoutBranchNestedInput
     stocks?: StockUpdateManyWithoutBranchNestedInput
@@ -36896,6 +45044,7 @@ export namespace Prisma {
 
   export type BranchUncheckedUpdateWithoutTransfersToInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -36904,6 +45053,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUncheckedUpdateManyWithoutBranchNestedInput
     stocks?: StockUncheckedUpdateManyWithoutBranchNestedInput
@@ -36931,16 +45082,19 @@ export namespace Prisma {
 
   export type InventoryItemCreateWithoutTransferItemsInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     category: CategoryCreateNestedOneWithoutInventoryItemsInput
     serviceSpareparts?: ServiceSparepartCreateNestedManyWithoutItemInput
     stocks?: StockCreateNestedManyWithoutItemInput
@@ -36950,17 +45104,20 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedCreateWithoutTransferItemsInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
     categoryId: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceSpareparts?: ServiceSparepartUncheckedCreateNestedManyWithoutItemInput
     stocks?: StockUncheckedCreateNestedManyWithoutItemInput
     transactionItems?: TransactionItemUncheckedCreateNestedManyWithoutItemInput
@@ -36974,22 +45131,28 @@ export namespace Prisma {
 
   export type StockTransferCreateWithoutItemsInput = {
     id?: string
-    status?: string
+    tenantId?: string
+    status?: $Enums.StockTransferStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     fromBranch: BranchCreateNestedOneWithoutTransfersFromInput
     toBranch: BranchCreateNestedOneWithoutTransfersToInput
   }
 
   export type StockTransferUncheckedCreateWithoutItemsInput = {
     id?: string
+    tenantId?: string
     fromBranchId: string
     toBranchId: string
-    status?: string
+    status?: $Enums.StockTransferStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type StockTransferCreateOrConnectWithoutItemsInput = {
@@ -37010,16 +45173,19 @@ export namespace Prisma {
 
   export type InventoryItemUpdateWithoutTransferItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     category?: CategoryUpdateOneRequiredWithoutInventoryItemsNestedInput
     serviceSpareparts?: ServiceSparepartUpdateManyWithoutItemNestedInput
     stocks?: StockUpdateManyWithoutItemNestedInput
@@ -37029,17 +45195,20 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedUpdateWithoutTransferItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceSpareparts?: ServiceSparepartUncheckedUpdateManyWithoutItemNestedInput
     stocks?: StockUncheckedUpdateManyWithoutItemNestedInput
     transactionItems?: TransactionItemUncheckedUpdateManyWithoutItemNestedInput
@@ -37059,36 +45228,45 @@ export namespace Prisma {
 
   export type StockTransferUpdateWithoutItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStockTransferStatusFieldUpdateOperationsInput | $Enums.StockTransferStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     fromBranch?: BranchUpdateOneRequiredWithoutTransfersFromNestedInput
     toBranch?: BranchUpdateOneRequiredWithoutTransfersToNestedInput
   }
 
   export type StockTransferUncheckedUpdateWithoutItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     fromBranchId?: StringFieldUpdateOperationsInput | string
     toBranchId?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumStockTransferStatusFieldUpdateOperationsInput | $Enums.StockTransferStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InventoryItemCreateWithoutUnitsInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     category: CategoryCreateNestedOneWithoutInventoryItemsInput
     serviceSpareparts?: ServiceSparepartCreateNestedManyWithoutItemInput
     stocks?: StockCreateNestedManyWithoutItemInput
@@ -37098,17 +45276,20 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedCreateWithoutUnitsInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
     categoryId: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceSpareparts?: ServiceSparepartUncheckedCreateNestedManyWithoutItemInput
     stocks?: StockUncheckedCreateNestedManyWithoutItemInput
     transactionItems?: TransactionItemUncheckedCreateNestedManyWithoutItemInput
@@ -37122,6 +45303,7 @@ export namespace Prisma {
 
   export type BranchCreateWithoutUnitsInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -37130,6 +45312,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketCreateNestedManyWithoutBranchInput
     shifts?: ShiftCreateNestedManyWithoutBranchInput
     stocks?: StockCreateNestedManyWithoutBranchInput
@@ -37141,6 +45325,7 @@ export namespace Prisma {
 
   export type BranchUncheckedCreateWithoutUnitsInput = {
     id?: string
+    tenantId?: string
     name: string
     address: string
     phone: string
@@ -37149,6 +45334,8 @@ export namespace Prisma {
     radiusMeters?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     serviceTickets?: ServiceTicketUncheckedCreateNestedManyWithoutBranchInput
     shifts?: ShiftUncheckedCreateNestedManyWithoutBranchInput
     stocks?: StockUncheckedCreateNestedManyWithoutBranchInput
@@ -37176,16 +45363,19 @@ export namespace Prisma {
 
   export type InventoryItemUpdateWithoutUnitsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     category?: CategoryUpdateOneRequiredWithoutInventoryItemsNestedInput
     serviceSpareparts?: ServiceSparepartUpdateManyWithoutItemNestedInput
     stocks?: StockUpdateManyWithoutItemNestedInput
@@ -37195,17 +45385,20 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedUpdateWithoutUnitsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceSpareparts?: ServiceSparepartUncheckedUpdateManyWithoutItemNestedInput
     stocks?: StockUncheckedUpdateManyWithoutItemNestedInput
     transactionItems?: TransactionItemUncheckedUpdateManyWithoutItemNestedInput
@@ -37225,6 +45418,7 @@ export namespace Prisma {
 
   export type BranchUpdateWithoutUnitsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -37233,6 +45427,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUpdateManyWithoutBranchNestedInput
     stocks?: StockUpdateManyWithoutBranchNestedInput
@@ -37244,6 +45440,7 @@ export namespace Prisma {
 
   export type BranchUncheckedUpdateWithoutUnitsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -37252,6 +45449,8 @@ export namespace Prisma {
     radiusMeters?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutBranchNestedInput
     shifts?: ShiftUncheckedUpdateManyWithoutBranchNestedInput
     stocks?: StockUncheckedUpdateManyWithoutBranchNestedInput
@@ -37261,8 +45460,273 @@ export namespace Prisma {
     transfersTo?: StockTransferUncheckedUpdateManyWithoutToBranchNestedInput
   }
 
+  export type RoleCreateWithoutBonusPoolsInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: PermissionCreateNestedManyWithoutRoleInput
+    users?: UserCreateNestedManyWithoutRoleInput
+  }
+
+  export type RoleUncheckedCreateWithoutBonusPoolsInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: PermissionUncheckedCreateNestedManyWithoutRoleInput
+    users?: UserUncheckedCreateNestedManyWithoutRoleInput
+  }
+
+  export type RoleCreateOrConnectWithoutBonusPoolsInput = {
+    where: RoleWhereUniqueInput
+    create: XOR<RoleCreateWithoutBonusPoolsInput, RoleUncheckedCreateWithoutBonusPoolsInput>
+  }
+
+  export type RoleUpsertWithoutBonusPoolsInput = {
+    update: XOR<RoleUpdateWithoutBonusPoolsInput, RoleUncheckedUpdateWithoutBonusPoolsInput>
+    create: XOR<RoleCreateWithoutBonusPoolsInput, RoleUncheckedCreateWithoutBonusPoolsInput>
+    where?: RoleWhereInput
+  }
+
+  export type RoleUpdateToOneWithWhereWithoutBonusPoolsInput = {
+    where?: RoleWhereInput
+    data: XOR<RoleUpdateWithoutBonusPoolsInput, RoleUncheckedUpdateWithoutBonusPoolsInput>
+  }
+
+  export type RoleUpdateWithoutBonusPoolsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: PermissionUpdateManyWithoutRoleNestedInput
+    users?: UserUpdateManyWithoutRoleNestedInput
+  }
+
+  export type RoleUncheckedUpdateWithoutBonusPoolsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: PermissionUncheckedUpdateManyWithoutRoleNestedInput
+    users?: UserUncheckedUpdateManyWithoutRoleNestedInput
+  }
+
+  export type PermissionCreateManyRoleInput = {
+    id?: string
+    module: string
+    canRead?: boolean
+    canCreate?: boolean
+    canUpdate?: boolean
+    canDelete?: boolean
+  }
+
+  export type UserCreateManyRoleInput = {
+    id?: string
+    tenantId?: string
+    name?: string | null
+    email: string
+    password?: string | null
+    createdAt?: Date | string
+    joinDate?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
+    branchId: string
+    wageType?: string | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
+    shiftId?: string | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
+    leaveQuota?: number | null
+    phone?: string | null
+    address?: string | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
+    incentiveType?: string | null
+    incentiveMode?: string | null
+  }
+
+  export type BonusPoolCreateManyRoleInput = {
+    id?: string
+    tenantId?: string
+    name: string
+    amount: Decimal | DecimalJsLike | number | string
+    month: number
+    year: number
+    branchId?: string | null
+    employeeId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PermissionUpdateWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    module?: StringFieldUpdateOperationsInput | string
+    canRead?: BoolFieldUpdateOperationsInput | boolean
+    canCreate?: BoolFieldUpdateOperationsInput | boolean
+    canUpdate?: BoolFieldUpdateOperationsInput | boolean
+    canDelete?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type PermissionUncheckedUpdateWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    module?: StringFieldUpdateOperationsInput | string
+    canRead?: BoolFieldUpdateOperationsInput | boolean
+    canCreate?: BoolFieldUpdateOperationsInput | boolean
+    canUpdate?: BoolFieldUpdateOperationsInput | boolean
+    canDelete?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type PermissionUncheckedUpdateManyWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    module?: StringFieldUpdateOperationsInput | string
+    canRead?: BoolFieldUpdateOperationsInput | boolean
+    canCreate?: BoolFieldUpdateOperationsInput | boolean
+    canUpdate?: BoolFieldUpdateOperationsInput | boolean
+    canDelete?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UserUpdateWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    wageType?: NullableStringFieldUpdateOperationsInput | string | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    shiftId?: NullableStringFieldUpdateOperationsInput | string | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
+    cashAdvances?: CashAdvanceUpdateManyWithoutEmployeeNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    serviceTickets?: ServiceTicketUpdateManyWithoutTechnicianNestedInput
+    transactions?: TransactionUpdateManyWithoutCashierNestedInput
+    attendances?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    overtimes?: OvertimeUpdateManyWithoutEmployeeNestedInput
+    branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: StringFieldUpdateOperationsInput | string
+    wageType?: NullableStringFieldUpdateOperationsInput | string | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    shiftId?: NullableStringFieldUpdateOperationsInput | string | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
+    cashAdvances?: CashAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutTechnicianNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCashierNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    overtimes?: OvertimeUncheckedUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type UserUncheckedUpdateManyWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: StringFieldUpdateOperationsInput | string
+    wageType?: NullableStringFieldUpdateOperationsInput | string | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    shiftId?: NullableStringFieldUpdateOperationsInput | string | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type BonusPoolUpdateWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BonusPoolUncheckedUpdateWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BonusPoolUncheckedUpdateManyWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ServiceTicketCreateManyBranchInput = {
     id?: string
+    tenantId?: string
     dateOpened?: Date | string
     dateClosed?: Date | string | null
     customerName: string
@@ -37272,101 +45736,135 @@ export namespace Prisma {
     deviceSerial: string
     issue: string
     diagnosis?: string | null
-    estimatedCost: number
-    serviceFee: number
-    status: string
+    estimatedCost: Decimal | DecimalJsLike | number | string
+    serviceFee: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ServiceStatus
     technicianId?: string | null
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ShiftCreateManyBranchInput = {
     id?: string
+    tenantId?: string
     name: string
-    startTime: string
-    endTime: string
+    startTime: Date | string
+    endTime: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type StockCreateManyBranchInput = {
     id?: string
+    tenantId?: string
     itemId: string
     quantity?: number
     reservedQty?: number
     minStock?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type TransactionCreateManyBranchInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
     cashierId: string
-    source: string
+    source: $Enums.TransactionSource
     serviceTicketId?: string | null
-    total: number
-    paymentMethod: string
-    amountPaid: number
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod: $Enums.PaymentMethod
+    amountPaid: Decimal | DecimalJsLike | number | string
     customerName?: string | null
     customerPhone?: string | null
     customerAddress?: string | null
-    change: number
-    tax: number
-    discount: number
-    status: string
+    change: Decimal | DecimalJsLike | number | string
+    tax: Decimal | DecimalJsLike | number | string
+    discount: Decimal | DecimalJsLike | number | string
+    status: $Enums.TransactionStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type UserCreateManyBranchInput = {
     id?: string
+    tenantId?: string
     name?: string | null
     email: string
     password?: string | null
-    role?: string
+    roleId: string
     createdAt?: Date | string
+    joinDate?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
     wageType?: string | null
-    wageRate?: number | null
-    allowance?: number | null
-    insuranceDed?: number | null
+    wageRate?: Decimal | DecimalJsLike | number | string | null
+    allowance?: Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: Decimal | DecimalJsLike | number | string | null
     shiftId?: string | null
-    baseSalary?: number | null
+    baseSalary?: Decimal | DecimalJsLike | number | string | null
     leaveQuota?: number | null
     phone?: string | null
     address?: string | null
-    incentiveRate?: number | null
+    incentiveRate?: Decimal | DecimalJsLike | number | string | null
     incentiveType?: string | null
+    incentiveMode?: string | null
   }
 
   export type StockTransferCreateManyFromBranchInput = {
     id?: string
+    tenantId?: string
     toBranchId: string
-    status?: string
+    status?: $Enums.StockTransferStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type StockTransferCreateManyToBranchInput = {
     id?: string
+    tenantId?: string
     fromBranchId: string
-    status?: string
+    status?: $Enums.StockTransferStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type InventoryUnitCreateManyBranchInput = {
     id?: string
+    tenantId?: string
     itemId: string
     serialNumber?: string | null
-    status?: string
-    costPrice?: number | null
+    status?: $Enums.InventoryUnitStatus
+    costPrice?: Decimal | DecimalJsLike | number | string | null
     entryDate?: Date | string
     soldDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ServiceTicketUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     dateOpened?: DateTimeFieldUpdateOperationsInput | Date | string
     dateClosed?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customerName?: StringFieldUpdateOperationsInput | string
@@ -37376,17 +45874,22 @@ export namespace Prisma {
     deviceSerial?: StringFieldUpdateOperationsInput | string
     issue?: StringFieldUpdateOperationsInput | string
     diagnosis?: NullableStringFieldUpdateOperationsInput | string | null
-    estimatedCost?: FloatFieldUpdateOperationsInput | number
-    serviceFee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    estimatedCost?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     spareparts?: ServiceSparepartUpdateManyWithoutTicketNestedInput
     technician?: UserUpdateOneWithoutServiceTicketsNestedInput
   }
 
   export type ServiceTicketUncheckedUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     dateOpened?: DateTimeFieldUpdateOperationsInput | Date | string
     dateClosed?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customerName?: StringFieldUpdateOperationsInput | string
@@ -37396,17 +45899,22 @@ export namespace Prisma {
     deviceSerial?: StringFieldUpdateOperationsInput | string
     issue?: StringFieldUpdateOperationsInput | string
     diagnosis?: NullableStringFieldUpdateOperationsInput | string | null
-    estimatedCost?: FloatFieldUpdateOperationsInput | number
-    serviceFee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    estimatedCost?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     spareparts?: ServiceSparepartUncheckedUpdateManyWithoutTicketNestedInput
   }
 
   export type ServiceTicketUncheckedUpdateManyWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     dateOpened?: DateTimeFieldUpdateOperationsInput | Date | string
     dateClosed?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customerName?: StringFieldUpdateOperationsInput | string
@@ -37416,143 +45924,191 @@ export namespace Prisma {
     deviceSerial?: StringFieldUpdateOperationsInput | string
     issue?: StringFieldUpdateOperationsInput | string
     diagnosis?: NullableStringFieldUpdateOperationsInput | string | null
-    estimatedCost?: FloatFieldUpdateOperationsInput | number
-    serviceFee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    estimatedCost?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ShiftUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startTime?: StringFieldUpdateOperationsInput | string
-    endTime?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ShiftUncheckedUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startTime?: StringFieldUpdateOperationsInput | string
-    endTime?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ShiftUncheckedUpdateManyWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startTime?: StringFieldUpdateOperationsInput | string
-    endTime?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StockUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     reservedQty?: IntFieldUpdateOperationsInput | number
     minStock?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     item?: InventoryItemUpdateOneRequiredWithoutStocksNestedInput
   }
 
   export type StockUncheckedUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     reservedQty?: IntFieldUpdateOperationsInput | number
     minStock?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StockUncheckedUpdateManyWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     reservedQty?: IntFieldUpdateOperationsInput | number
     minStock?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TransactionUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    source?: StringFieldUpdateOperationsInput | string
+    source?: EnumTransactionSourceFieldUpdateOperationsInput | $Enums.TransactionSource
     serviceTicketId?: NullableStringFieldUpdateOperationsInput | string | null
-    total?: FloatFieldUpdateOperationsInput | number
-    paymentMethod?: StringFieldUpdateOperationsInput | string
-    amountPaid?: FloatFieldUpdateOperationsInput | number
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    change?: FloatFieldUpdateOperationsInput | number
-    tax?: FloatFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    change?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     cashier?: UserUpdateOneRequiredWithoutTransactionsNestedInput
     items?: TransactionItemUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     cashierId?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
+    source?: EnumTransactionSourceFieldUpdateOperationsInput | $Enums.TransactionSource
     serviceTicketId?: NullableStringFieldUpdateOperationsInput | string | null
-    total?: FloatFieldUpdateOperationsInput | number
-    paymentMethod?: StringFieldUpdateOperationsInput | string
-    amountPaid?: FloatFieldUpdateOperationsInput | number
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    change?: FloatFieldUpdateOperationsInput | number
-    tax?: FloatFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    change?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     items?: TransactionItemUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateManyWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     cashierId?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
+    source?: EnumTransactionSourceFieldUpdateOperationsInput | $Enums.TransactionSource
     serviceTicketId?: NullableStringFieldUpdateOperationsInput | string | null
-    total?: FloatFieldUpdateOperationsInput | number
-    paymentMethod?: StringFieldUpdateOperationsInput | string
-    amountPaid?: FloatFieldUpdateOperationsInput | number
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    change?: FloatFieldUpdateOperationsInput | number
-    tax?: FloatFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    change?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     cashAdvances?: CashAdvanceUpdateManyWithoutEmployeeNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUpdateManyWithoutTechnicianNestedInput
@@ -37563,23 +46119,28 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
     cashAdvances?: CashAdvanceUncheckedUpdateManyWithoutEmployeeNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     serviceTickets?: ServiceTicketUncheckedUpdateManyWithoutTechnicianNestedInput
@@ -37590,134 +46151,181 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateManyWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     wageType?: NullableStringFieldUpdateOperationsInput | string | null
-    wageRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    allowance?: NullableFloatFieldUpdateOperationsInput | number | null
-    insuranceDed?: NullableFloatFieldUpdateOperationsInput | number | null
+    wageRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    allowance?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    insuranceDed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     shiftId?: NullableStringFieldUpdateOperationsInput | string | null
-    baseSalary?: NullableFloatFieldUpdateOperationsInput | number | null
+    baseSalary?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     leaveQuota?: NullableIntFieldUpdateOperationsInput | number | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    incentiveRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    incentiveRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     incentiveType?: NullableStringFieldUpdateOperationsInput | string | null
+    incentiveMode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StockTransferUpdateWithoutFromBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStockTransferStatusFieldUpdateOperationsInput | $Enums.StockTransferStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     toBranch?: BranchUpdateOneRequiredWithoutTransfersToNestedInput
     items?: StockTransferItemUpdateManyWithoutTransferNestedInput
   }
 
   export type StockTransferUncheckedUpdateWithoutFromBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     toBranchId?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumStockTransferStatusFieldUpdateOperationsInput | $Enums.StockTransferStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     items?: StockTransferItemUncheckedUpdateManyWithoutTransferNestedInput
   }
 
   export type StockTransferUncheckedUpdateManyWithoutFromBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     toBranchId?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumStockTransferStatusFieldUpdateOperationsInput | $Enums.StockTransferStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StockTransferUpdateWithoutToBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStockTransferStatusFieldUpdateOperationsInput | $Enums.StockTransferStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     fromBranch?: BranchUpdateOneRequiredWithoutTransfersFromNestedInput
     items?: StockTransferItemUpdateManyWithoutTransferNestedInput
   }
 
   export type StockTransferUncheckedUpdateWithoutToBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     fromBranchId?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumStockTransferStatusFieldUpdateOperationsInput | $Enums.StockTransferStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     items?: StockTransferItemUncheckedUpdateManyWithoutTransferNestedInput
   }
 
   export type StockTransferUncheckedUpdateManyWithoutToBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     fromBranchId?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumStockTransferStatusFieldUpdateOperationsInput | $Enums.StockTransferStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InventoryUnitUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    costPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInventoryUnitStatusFieldUpdateOperationsInput | $Enums.InventoryUnitStatus
+    costPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     soldDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     item?: InventoryItemUpdateOneRequiredWithoutUnitsNestedInput
   }
 
   export type InventoryUnitUncheckedUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    costPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInventoryUnitStatusFieldUpdateOperationsInput | $Enums.InventoryUnitStatus
+    costPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     soldDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InventoryUnitUncheckedUpdateManyWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    costPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInventoryUnitStatusFieldUpdateOperationsInput | $Enums.InventoryUnitStatus
+    costPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     soldDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CashAdvanceCreateManyEmployeeInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
-    amount: number
+    amount: Decimal | DecimalJsLike | number | string
     reason: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type LeaveRequestCreateManyEmployeeInput = {
     id?: string
+    tenantId?: string
     startDate: Date | string
     endDate: Date | string
     type: string
     reason: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ServiceTicketCreateManyTechnicianInput = {
     id?: string
+    tenantId?: string
     dateOpened?: Date | string
     dateClosed?: Date | string | null
     customerName: string
@@ -37727,43 +46335,51 @@ export namespace Prisma {
     deviceSerial: string
     issue: string
     diagnosis?: string | null
-    estimatedCost: number
-    serviceFee: number
-    status: string
+    estimatedCost: Decimal | DecimalJsLike | number | string
+    serviceFee: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ServiceStatus
     branchId: string
+    incentiveType?: string
+    incentiveValue?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type TransactionCreateManyCashierInput = {
     id?: string
+    tenantId?: string
     date?: Date | string
     branchId: string
-    source: string
+    source: $Enums.TransactionSource
     serviceTicketId?: string | null
-    total: number
-    paymentMethod: string
-    amountPaid: number
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod: $Enums.PaymentMethod
+    amountPaid: Decimal | DecimalJsLike | number | string
     customerName?: string | null
     customerPhone?: string | null
     customerAddress?: string | null
-    change: number
-    tax: number
-    discount: number
-    status: string
+    change: Decimal | DecimalJsLike | number | string
+    tax: Decimal | DecimalJsLike | number | string
+    discount: Decimal | DecimalJsLike | number | string
+    status: $Enums.TransactionStatus
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type AttendanceCreateManyEmployeeInput = {
     id?: string
+    tenantId?: string
     employeeName: string
     branchId: string
-    date: string
-    checkInTime: bigint | number
-    checkOutTime?: bigint | number | null
-    status: string
+    date: Date | string
+    checkInTime: Date | string
+    checkOutTime?: Date | string | null
+    status: $Enums.AttendanceStatus
     isInRadius: boolean
     isMockGPS: boolean
     latitude?: number | null
@@ -37774,76 +46390,108 @@ export namespace Prisma {
     checkOutLongitude?: number | null
     workDurationMinutes?: number | null
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type OvertimeCreateManyEmployeeInput = {
     id?: string
+    tenantId?: string
     hours?: number
     date?: Date | string
     reason?: string
-    status?: string
+    status?: $Enums.RequestStatus
     createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type CashAdvanceUpdateWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CashAdvanceUncheckedUpdateWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CashAdvanceUncheckedUpdateManyWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LeaveRequestUpdateWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LeaveRequestUncheckedUpdateWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LeaveRequestUncheckedUpdateManyWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceTicketUpdateWithoutTechnicianInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     dateOpened?: DateTimeFieldUpdateOperationsInput | Date | string
     dateClosed?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customerName?: StringFieldUpdateOperationsInput | string
@@ -37853,17 +46501,22 @@ export namespace Prisma {
     deviceSerial?: StringFieldUpdateOperationsInput | string
     issue?: StringFieldUpdateOperationsInput | string
     diagnosis?: NullableStringFieldUpdateOperationsInput | string | null
-    estimatedCost?: FloatFieldUpdateOperationsInput | number
-    serviceFee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    estimatedCost?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     spareparts?: ServiceSparepartUpdateManyWithoutTicketNestedInput
     branch?: BranchUpdateOneRequiredWithoutServiceTicketsNestedInput
   }
 
   export type ServiceTicketUncheckedUpdateWithoutTechnicianInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     dateOpened?: DateTimeFieldUpdateOperationsInput | Date | string
     dateClosed?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customerName?: StringFieldUpdateOperationsInput | string
@@ -37873,17 +46526,22 @@ export namespace Prisma {
     deviceSerial?: StringFieldUpdateOperationsInput | string
     issue?: StringFieldUpdateOperationsInput | string
     diagnosis?: NullableStringFieldUpdateOperationsInput | string | null
-    estimatedCost?: FloatFieldUpdateOperationsInput | number
-    serviceFee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    estimatedCost?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
     branchId?: StringFieldUpdateOperationsInput | string
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     spareparts?: ServiceSparepartUncheckedUpdateManyWithoutTicketNestedInput
   }
 
   export type ServiceTicketUncheckedUpdateManyWithoutTechnicianInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     dateOpened?: DateTimeFieldUpdateOperationsInput | Date | string
     dateClosed?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customerName?: StringFieldUpdateOperationsInput | string
@@ -37893,87 +46551,101 @@ export namespace Prisma {
     deviceSerial?: StringFieldUpdateOperationsInput | string
     issue?: StringFieldUpdateOperationsInput | string
     diagnosis?: NullableStringFieldUpdateOperationsInput | string | null
-    estimatedCost?: FloatFieldUpdateOperationsInput | number
-    serviceFee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    estimatedCost?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    serviceFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
     branchId?: StringFieldUpdateOperationsInput | string
+    incentiveType?: StringFieldUpdateOperationsInput | string
+    incentiveValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TransactionUpdateWithoutCashierInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    source?: StringFieldUpdateOperationsInput | string
+    source?: EnumTransactionSourceFieldUpdateOperationsInput | $Enums.TransactionSource
     serviceTicketId?: NullableStringFieldUpdateOperationsInput | string | null
-    total?: FloatFieldUpdateOperationsInput | number
-    paymentMethod?: StringFieldUpdateOperationsInput | string
-    amountPaid?: FloatFieldUpdateOperationsInput | number
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    change?: FloatFieldUpdateOperationsInput | number
-    tax?: FloatFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    change?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: BranchUpdateOneRequiredWithoutTransactionsNestedInput
     items?: TransactionItemUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutCashierInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     branchId?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
+    source?: EnumTransactionSourceFieldUpdateOperationsInput | $Enums.TransactionSource
     serviceTicketId?: NullableStringFieldUpdateOperationsInput | string | null
-    total?: FloatFieldUpdateOperationsInput | number
-    paymentMethod?: StringFieldUpdateOperationsInput | string
-    amountPaid?: FloatFieldUpdateOperationsInput | number
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    change?: FloatFieldUpdateOperationsInput | number
-    tax?: FloatFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    change?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     items?: TransactionItemUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateManyWithoutCashierInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     branchId?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
+    source?: EnumTransactionSourceFieldUpdateOperationsInput | $Enums.TransactionSource
     serviceTicketId?: NullableStringFieldUpdateOperationsInput | string | null
-    total?: FloatFieldUpdateOperationsInput | number
-    paymentMethod?: StringFieldUpdateOperationsInput | string
-    amountPaid?: FloatFieldUpdateOperationsInput | number
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    change?: FloatFieldUpdateOperationsInput | number
-    tax?: FloatFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    change?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AttendanceUpdateWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     employeeName?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
-    date?: StringFieldUpdateOperationsInput | string
-    checkInTime?: BigIntFieldUpdateOperationsInput | bigint | number
-    checkOutTime?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    status?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
     isInRadius?: BoolFieldUpdateOperationsInput | boolean
     isMockGPS?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -37984,16 +46656,20 @@ export namespace Prisma {
     checkOutLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     workDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AttendanceUncheckedUpdateWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     employeeName?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
-    date?: StringFieldUpdateOperationsInput | string
-    checkInTime?: BigIntFieldUpdateOperationsInput | bigint | number
-    checkOutTime?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    status?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
     isInRadius?: BoolFieldUpdateOperationsInput | boolean
     isMockGPS?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -38004,16 +46680,20 @@ export namespace Prisma {
     checkOutLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     workDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AttendanceUncheckedUpdateManyWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     employeeName?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
-    date?: StringFieldUpdateOperationsInput | string
-    checkInTime?: BigIntFieldUpdateOperationsInput | bigint | number
-    checkOutTime?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    status?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
     isInRadius?: BoolFieldUpdateOperationsInput | boolean
     isMockGPS?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -38024,61 +46704,82 @@ export namespace Prisma {
     checkOutLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     workDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OvertimeUpdateWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     hours?: FloatFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OvertimeUncheckedUpdateWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     hours?: FloatFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OvertimeUncheckedUpdateManyWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     hours?: FloatFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InventoryItemCreateManyCategoryInput = {
     id?: string
+    tenantId?: string
     name: string
     sku: string
-    costPrice: number
-    basePrice: number
+    costPrice: Decimal | DecimalJsLike | number | string
+    basePrice: Decimal | DecimalJsLike | number | string
     unit: string
     rack?: string | null
     image?: string | null
     showInPos?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type InventoryItemUpdateWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceSpareparts?: ServiceSparepartUpdateManyWithoutItemNestedInput
     stocks?: StockUpdateManyWithoutItemNestedInput
     transactionItems?: TransactionItemUpdateManyWithoutItemNestedInput
@@ -38088,16 +46789,19 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedUpdateWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     serviceSpareparts?: ServiceSparepartUncheckedUpdateManyWithoutItemNestedInput
     stocks?: StockUncheckedUpdateManyWithoutItemNestedInput
     transactionItems?: TransactionItemUncheckedUpdateManyWithoutItemNestedInput
@@ -38107,286 +46811,385 @@ export namespace Prisma {
 
   export type InventoryItemUncheckedUpdateManyWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sku?: StringFieldUpdateOperationsInput | string
-    costPrice?: FloatFieldUpdateOperationsInput | number
-    basePrice?: FloatFieldUpdateOperationsInput | number
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    basePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unit?: StringFieldUpdateOperationsInput | string
     rack?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     showInPos?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceSparepartCreateManyItemInput = {
     id?: string
+    tenantId?: string
     ticketId: string
     quantity: number
-    price: number
+    price: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type StockCreateManyItemInput = {
     id?: string
+    tenantId?: string
     branchId: string
     quantity?: number
     reservedQty?: number
     minStock?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type TransactionItemCreateManyItemInput = {
     id?: string
+    tenantId?: string
     transactionId: string
     name: string
     category: string
-    price: number
-    costPrice: number
+    price: Decimal | DecimalJsLike | number | string
+    costPrice: Decimal | DecimalJsLike | number | string
     quantity: number
-    discount?: number
+    discount?: Decimal | DecimalJsLike | number | string
     technicianId?: string | null
   }
 
   export type StockTransferItemCreateManyItemInput = {
     id?: string
+    tenantId?: string
     transferId: string
     quantity: number
   }
 
   export type InventoryUnitCreateManyItemInput = {
     id?: string
+    tenantId?: string
     branchId: string
     serialNumber?: string | null
-    status?: string
-    costPrice?: number | null
+    status?: $Enums.InventoryUnitStatus
+    costPrice?: Decimal | DecimalJsLike | number | string | null
     entryDate?: Date | string
     soldDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ServiceSparepartUpdateWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     ticket?: ServiceTicketUpdateOneRequiredWithoutSparepartsNestedInput
   }
 
   export type ServiceSparepartUncheckedUpdateWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     ticketId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceSparepartUncheckedUpdateManyWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     ticketId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StockUpdateWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     reservedQty?: IntFieldUpdateOperationsInput | number
     minStock?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: BranchUpdateOneRequiredWithoutStocksNestedInput
   }
 
   export type StockUncheckedUpdateWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     reservedQty?: IntFieldUpdateOperationsInput | number
     minStock?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StockUncheckedUpdateManyWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     reservedQty?: IntFieldUpdateOperationsInput | number
     minStock?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TransactionItemUpdateWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    costPrice?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantity?: IntFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
     transaction?: TransactionUpdateOneRequiredWithoutItemsNestedInput
   }
 
   export type TransactionItemUncheckedUpdateWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     transactionId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    costPrice?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantity?: IntFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TransactionItemUncheckedUpdateManyWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     transactionId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    costPrice?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantity?: IntFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StockTransferItemUpdateWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     transfer?: StockTransferUpdateOneRequiredWithoutItemsNestedInput
   }
 
   export type StockTransferItemUncheckedUpdateWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     transferId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
   }
 
   export type StockTransferItemUncheckedUpdateManyWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     transferId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
   }
 
   export type InventoryUnitUpdateWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    costPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInventoryUnitStatusFieldUpdateOperationsInput | $Enums.InventoryUnitStatus
+    costPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     soldDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: BranchUpdateOneRequiredWithoutUnitsNestedInput
   }
 
   export type InventoryUnitUncheckedUpdateWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
     serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    costPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInventoryUnitStatusFieldUpdateOperationsInput | $Enums.InventoryUnitStatus
+    costPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     soldDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InventoryUnitUncheckedUpdateManyWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
     serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    costPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInventoryUnitStatusFieldUpdateOperationsInput | $Enums.InventoryUnitStatus
+    costPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     soldDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TransactionItemCreateManyTransactionInput = {
     id?: string
+    tenantId?: string
     itemId?: string | null
     name: string
     category: string
-    price: number
-    costPrice: number
+    price: Decimal | DecimalJsLike | number | string
+    costPrice: Decimal | DecimalJsLike | number | string
     quantity: number
-    discount?: number
+    discount?: Decimal | DecimalJsLike | number | string
     technicianId?: string | null
   }
 
   export type TransactionItemUpdateWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    costPrice?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantity?: IntFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
     item?: InventoryItemUpdateOneWithoutTransactionItemsNestedInput
   }
 
   export type TransactionItemUncheckedUpdateWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    costPrice?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantity?: IntFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TransactionItemUncheckedUpdateManyWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    costPrice?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    costPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantity?: IntFieldUpdateOperationsInput | number
-    discount?: FloatFieldUpdateOperationsInput | number
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     technicianId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceSparepartCreateManyTicketInput = {
     id?: string
+    tenantId?: string
     itemId: string
     quantity: number
-    price: number
+    price: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    updatedBy?: string | null
   }
 
   export type ServiceSparepartUpdateWithoutTicketInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     item?: InventoryItemUpdateOneRequiredWithoutServiceSparepartsNestedInput
   }
 
   export type ServiceSparepartUncheckedUpdateWithoutTicketInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceSparepartUncheckedUpdateManyWithoutTicketInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    price?: FloatFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StockTransferItemCreateManyTransferInput = {
     id?: string
+    tenantId?: string
     itemId: string
     quantity: number
   }
 
   export type StockTransferItemUpdateWithoutTransferInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     item?: InventoryItemUpdateOneRequiredWithoutTransferItemsNestedInput
   }
 
   export type StockTransferItemUncheckedUpdateWithoutTransferInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
   }
 
   export type StockTransferItemUncheckedUpdateManyWithoutTransferInput = {
     id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
   }

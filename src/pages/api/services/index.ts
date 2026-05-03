@@ -17,6 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       const newService = await prisma.serviceTicket.create({
         data: {
+          tenantId: 'default',
           customerName, customerPhone, customerAddress, deviceModel, deviceSerial, issue, 
           estimatedCost: estimatedCost || 0, serviceFee: serviceFee || 0, status, 
           branchId: branchId || 'b1', dateOpened: dateOpened ? new Date(dateOpened) : new Date(),

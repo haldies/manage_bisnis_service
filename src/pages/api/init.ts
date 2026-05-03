@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       prisma.storeProfile.upsert({
         where: { id: 'default' },
         update: {},
-        create: { id: 'default' }
+        create: { id: 'default', tenantId: 'default' }
       }),
       prisma.stockTransfer.findMany({
         include: { 

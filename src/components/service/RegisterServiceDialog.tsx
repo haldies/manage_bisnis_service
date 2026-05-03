@@ -193,7 +193,7 @@ export default function RegisterServiceDialog({ open, onOpenChange }: RegisterSe
                 <SelectValue placeholder="Pilih Teknisi" />
               </SelectTrigger>
               <SelectContent>
-                {users.filter(u => u.role === 'Technician').map(tech => (
+                {users.filter(u => (u.role?.name === 'Technician' || u.roleId === 'tech-role-id')).map(tech => (
                   <SelectItem key={tech.id} value={tech.id}>{tech.name}</SelectItem>
                 ))}
               </SelectContent>

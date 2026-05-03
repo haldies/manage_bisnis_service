@@ -16,7 +16,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ 
+      where: { email },
+      include: {
+        role: {
+          include: {
+            permissions: true
+          }
+        }
+      }
+    });
+    
     if (!user || !user.password) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -26,7 +36,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const token = signToken({ userId: user.id, email: user.email, role: user.role });
+    // Gunakan nama role untuk token JWT (sebagai fallback)
+    const token = signToken({ userId: user.id, email: user.email, role: user.role?.name });
 
     res.setHeader('Set-Cookie', serialize('token', token, {
       httpOnly: true,
@@ -37,7 +48,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     return res.status(200).json({
       message: 'Logged in successfully',
-      user: { id: user.id, email: user.email, name: user.name, role: user.role, branchId: user.branchId },
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        name: user.name, 
+        role: user.role, // Sekarang mengirimkan objek Role lengkap
+        branchId: user.branchId 
+      },
     });
   } catch (error) {
     console.error('Login error:', error);

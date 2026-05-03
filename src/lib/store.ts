@@ -5,7 +5,7 @@ import {
   Supplier, PurchaseOrder, StockTransfer, FinanceLog,
   Transaction, CartItem, PaymentMethod, StoreProfile, ReceiptSettings,
   Shift, CashAdvance, LeaveRequest, ModuleName, Role, Category, AccessLevel, Attendance, DeviceModel, ServiceType,
-  InventoryUnit, StockTransferStatus
+  InventoryUnit, StockTransferStatus, BonusPool
 } from './types';
 
 
@@ -54,8 +54,10 @@ interface PosState {
   cashAdvances: CashAdvance[];
   leaveRequests: LeaveRequest[];
   overtimes: any[];
-  rolePermissions: Record<Role, Record<ModuleName, AccessLevel>>;
+  roles: Role[];
+  rolePermissions: Record<string, Record<ModuleName, AccessLevel>>;
   attendances: Attendance[];
+  bonusPools: BonusPool[];
 
   // POS State
   products: Product[];
@@ -80,6 +82,9 @@ interface PosState {
   addBranch: (branch: Omit<Branch, 'id'>) => Promise<void>;
   updateBranch: (id: string, updates: Partial<Branch>) => Promise<void>;
   removeBranch: (id: string) => Promise<void>;
+  fetchBonusPools: () => Promise<void>;
+  addBonusPool: (pool: Omit<BonusPool, 'id'>) => Promise<void>;
+  removeBonusPool: (id: string) => Promise<void>;
   
   addCategory: (category: string) => void;
   deleteCategory: (category: string) => void;
@@ -143,7 +148,7 @@ interface PosState {
   updateLeaveRequest: (id: string, updates: any) => Promise<void>;
   addOvertime: (overtime: any) => Promise<void>;
   updateOvertime: (id: string, updates: any) => Promise<void>;
-  updateRolePermission: (role: Role, module: ModuleName, level: AccessLevel) => void;
+  updateRolePermission: (roleName: string, module: ModuleName, level: AccessLevel) => void;
   addRole: (role: string) => void;
   deleteRole: (role: string) => void;
   renameRole: (oldRole: string, newRole: string) => void;
@@ -152,6 +157,7 @@ interface PosState {
   updateServiceType: (id: string, updates: Partial<ServiceType>) => Promise<void>;
   deleteServiceType: (id: string) => Promise<void>;
 
+  fetchRoles: () => Promise<void>;
   fetchUsers: () => Promise<void>;
   fetchInventory: () => Promise<void>;
   fetchServices: () => Promise<void>;
@@ -170,6 +176,7 @@ export const usePosStore = create<PosState>()(
       cart: [],
       transactions: [],
       attendances: [],
+      bonusPools: [],
       storeProfile: {
         name: 'Kasirai POS',
         address: 'Jl. Raya No. 123',
@@ -186,6 +193,10 @@ export const usePosStore = create<PosState>()(
         overtimeRate: 0,
         totalWorkDays: 26,
         serviceIncentive: 10,
+        payDay: 1,
+        thrMonth: undefined,
+        thrMinWorkMonths: 12,
+        thrMultiplier: 1.0,
       },
       selectedPrinter: null,
       receiptSettings: {
@@ -223,11 +234,11 @@ export const usePosStore = create<PosState>()(
       overtimes: [],
       serviceTypes: [],
       deviceModels: [],
+      roles: [],
       rolePermissions: {
-        'Admin': { 'Cashier': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Full', 'Staff': 'Full', 'Transactions': 'Full', 'Printers': 'Full' },
-        'Manager': { 'Cashier': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Read', 'Staff': 'Read', 'Transactions': 'Full', 'Printers': 'Full' },
-        'Cashier': { 'Cashier': 'Full', 'Service': 'Full', 'Inventory': 'Read', 'Finance': 'None', 'Staff': 'None', 'Transactions': 'Read', 'Printers': 'Full' },
-        'Technician': { 'Cashier': 'None', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'None', 'Staff': 'None', 'Transactions': 'None', 'Printers': 'None' }
+        'Owner': { 'Cashier': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Full', 'Staff': 'Full', 'Transactions': 'Full', 'Printers': 'Full' },
+        'Editor': { 'Cashier': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Read', 'Staff': 'Read', 'Transactions': 'Full', 'Printers': 'Full' },
+        'Viewer': { 'Cashier': 'Read', 'Service': 'Read', 'Inventory': 'Read', 'Finance': 'Read', 'Staff': 'Read', 'Transactions': 'Read', 'Printers': 'Read' }
       },
 
       // --- GENERAL ACTIONS ---
@@ -244,6 +255,7 @@ export const usePosStore = create<PosState>()(
         try {
           // Fetch everything in parallel
           await Promise.all([
+            get().fetchRoles(),
             fetchUsers(),
             fetchBranches(),
             fetchInventory(),
@@ -251,14 +263,25 @@ export const usePosStore = create<PosState>()(
             fetchTransactions(),
             fetchSettings(),
             fetchStaffOperasional(),
-            fetchAttendances()
+            fetchAttendances(),
+            get().fetchBonusPools()
           ]);
           set({ lastFetched: now });
         } catch (error) {
           console.error("Failed to fetch initial data", error);
         }
       },
-
+      fetchRoles: async () => {
+        try {
+          const res = await fetch('/api/roles');
+          if (res.ok) {
+            const data = await res.json();
+            set({ roles: data });
+          }
+        } catch (error) {
+          console.error("Failed to fetch roles", error);
+        }
+      },
       fetchUsers: async () => {
         try {
           const res = await fetch('/api/users');
@@ -378,7 +401,7 @@ export const usePosStore = create<PosState>()(
           });
           if (res.ok) {
             const data = await res.json();
-            if (data.user.role === 'Technician') return false;
+            if (data.user.role?.name === 'Technician') return false;
             
             // Auto-select branch if user has one assigned
             const branch = data.user.branchId 
@@ -856,54 +879,46 @@ export const usePosStore = create<PosState>()(
         }
       },
 
-      updateRolePermission: (role, module, level) => {
+      updateRolePermission: (roleName: string, module: ModuleName, level: AccessLevel) => {
         set((state) => ({
-          rolePermissions: { 
-            ...state.rolePermissions, 
-            [role]: { ...state.rolePermissions[role], [module]: level } 
+          rolePermissions: {
+            ...state.rolePermissions,
+            [roleName]: {
+              ...(state.rolePermissions[roleName] || {}),
+              [module]: level
+            }
           }
         }));
       },
 
-      renameRole: (oldRole: string, newRole: string) => {
+      addRole: (roleName: string) => {
+        set((state) => ({
+          rolePermissions: {
+            ...state.rolePermissions,
+            [roleName]: {
+              'Cashier': 'None', 'Service': 'None', 'Inventory': 'None', 'Finance': 'None', 'Staff': 'None', 'Transactions': 'None', 'Printers': 'None'
+            }
+          }
+        }));
+      },
+
+      deleteRole: (roleName: string) => {
         set((state) => {
-          // 1. Migrate permissions from old role to new role
-          const oldPerms = state.rolePermissions[oldRole as Role] || {};
-          const newPermissions = { ...state.rolePermissions };
-          newPermissions[newRole as Role] = { ...oldPerms };
-          delete (newPermissions as any)[oldRole];
-
-          // 2. Update all users who have the old role
-          const updatedUsers = state.users.map((u) =>
-            u.role === oldRole ? { ...u, role: newRole as Role } : u
-          );
-
-          return {
-            rolePermissions: newPermissions,
-            users: updatedUsers,
-          };
+          const { [roleName]: deleted, ...rest } = state.rolePermissions;
+          return { rolePermissions: rest };
         });
       },
 
-      addRole: (role: string) => {
+      renameRole: (oldName: string, newName: string) => {
         set((state) => {
-          if (state.rolePermissions[role]) return state; // Already exists
+          const permissions = state.rolePermissions[oldName];
+          if (!permissions) return state;
+          const { [oldName]: removed, ...rest } = state.rolePermissions;
           return {
             rolePermissions: {
-              ...state.rolePermissions,
-              [role]: {} as Record<ModuleName, AccessLevel>
+              ...rest,
+              [newName]: permissions
             }
-          };
-        });
-      },
-
-      deleteRole: (role: string) => {
-        set((state) => {
-          const newPermissions = { ...state.rolePermissions };
-          delete newPermissions[role];
-          
-          return {
-            rolePermissions: newPermissions
           };
         });
       },
@@ -1017,6 +1032,49 @@ export const usePosStore = create<PosState>()(
         } catch (error) {
           console.error("Error updating leave request:", error);
           throw error;
+        }
+      },
+
+      fetchBonusPools: async () => {
+        try {
+          const res = await fetch('/api/staff/bonus-pools');
+          if (res.ok) {
+            const pools = await res.json();
+            set({ bonusPools: pools });
+          }
+        } catch (error) {
+          console.error("Error fetching bonus pools:", error);
+        }
+      },
+
+      addBonusPool: async (pool) => {
+        try {
+          const res = await fetch('/api/staff/bonus-pools', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(pool)
+          });
+          if (!res.ok) throw new Error("Add bonus pool failed");
+          const newPool = await res.json();
+          set((state) => ({ bonusPools: [...state.bonusPools, newPool] }));
+        } catch (error) {
+          console.error("Error adding bonus pool:", error);
+          // Fallback for demo if API doesn't exist yet
+          const fallbackPool = { ...pool, id: Math.random().toString(36).substr(2, 9) } as any;
+          set((state) => ({ bonusPools: [...state.bonusPools, fallbackPool] }));
+        }
+      },
+
+      removeBonusPool: async (id) => {
+        try {
+          const res = await fetch(`/api/staff/bonus-pools/${id}`, { method: 'DELETE' });
+          if (res.ok) {
+            set((state) => ({ bonusPools: state.bonusPools.filter(p => p.id !== id) }));
+          }
+        } catch (error) {
+          console.error("Error removing bonus pool:", error);
+          // Local fallback
+          set((state) => ({ bonusPools: state.bonusPools.filter(p => p.id !== id) }));
         }
       },
 

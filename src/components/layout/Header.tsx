@@ -52,7 +52,7 @@ export function Header({
               </div>
               <div className="flex flex-col items-start leading-none hidden md:flex">
                  <span className="text-xs font-bold">{currentUser?.name || 'User'}</span>
-                 <span className="text-[10px] font-medium opacity-40">{currentUser?.role || 'Guest'}</span>
+                 <span className="text-[10px] font-medium opacity-40">{currentUser?.role?.name || 'Guest'}</span>
               </div>
             </Button>
           </DropdownMenuTrigger>

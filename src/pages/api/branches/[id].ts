@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!decoded) return res.status(401).json({ error: 'Invalid token' });
   
   // Only Admin should be able to create/update branches
-  if (decoded.role !== 'Admin') {
+  if (decoded.role !== 'Admin' && decoded.role !== 'Owner') {
     return res.status(403).json({ error: 'Forbidden. Only Admin can manage branches.' });
   }
 

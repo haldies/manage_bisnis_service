@@ -20,7 +20,7 @@ export function AuthScreen() {
     } else {
       // Auto-assign branch based on role
       const loggedInUser = usePosStore.getState().currentUser;
-      if (loggedInUser?.role === 'Admin') {
+      if (loggedInUser?.role?.name === 'Owner') {
         setBranch(null);
       } else if (loggedInUser?.branchId) {
         setBranch(loggedInUser.branchId);
@@ -29,7 +29,7 @@ export function AuthScreen() {
   };
 
   useEffect(() => {
-    if (currentUser && currentUser.role !== 'Admin' && !currentBranch && branches.length > 0) {
+    if (currentUser && currentUser.role?.name !== 'Owner' && !currentBranch && branches.length > 0) {
       if (currentUser.branchId) {
         setBranch(currentUser.branchId);
       }

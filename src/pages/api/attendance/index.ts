@@ -21,8 +21,8 @@ export default async function handler(
 
       const data = attendances.map((a) => ({
         ...a,
-        checkInTime: Number(a.checkInTime),
-        checkOutTime: a.checkOutTime ? Number(a.checkOutTime) : null,
+        checkInTime: a.checkInTime.getTime(),
+        checkOutTime: a.checkOutTime ? a.checkOutTime.getTime() : null,
       }));
 
       return res.status(200).json({ data, total: data.length });
@@ -99,8 +99,8 @@ export default async function handler(
           employeeId,
           employeeName,
           branchId,
-          date,
-          checkInTime: BigInt(checkInTime),
+          date: new Date(date),
+          checkInTime: new Date(Number(checkInTime)),
           status,
           isInRadius: true,
           isMockGPS: false,
@@ -165,7 +165,7 @@ export default async function handler(
       const updated = await prisma.attendance.update({
         where: { id: attendanceId },
         data: {
-          checkOutTime: BigInt(checkOutTime),
+          checkOutTime: new Date(Number(checkOutTime)),
           checkOutPhotoUrl: checkOutPhotoUrl || null,
           checkOutLatitude: checkOutLatitude || null,
           checkOutLongitude: checkOutLongitude || null,
@@ -177,8 +177,8 @@ export default async function handler(
         message: "Check-out recorded",
         data: {
           ...updated,
-          checkInTime: Number(updated.checkInTime),
-          checkOutTime: Number(updated.checkOutTime),
+          checkInTime: updated.checkInTime.getTime(),
+          checkOutTime: updated.checkOutTime?.getTime(),
         },
       });
     } catch (error: any) {

@@ -120,8 +120,28 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.RoleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PermissionScalarFieldEnum = {
+  id: 'id',
+  roleId: 'roleId',
+  module: 'module',
+  canRead: 'canRead',
+  canCreate: 'canCreate',
+  canUpdate: 'canUpdate',
+  canDelete: 'canDelete'
+};
+
 exports.Prisma.BranchScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   name: 'name',
   address: 'address',
   phone: 'phone',
@@ -129,17 +149,23 @@ exports.Prisma.BranchScalarFieldEnum = {
   longitude: 'longitude',
   radiusMeters: 'radiusMeters',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   name: 'name',
   email: 'email',
   password: 'password',
-  role: 'role',
+  roleId: 'roleId',
   createdAt: 'createdAt',
+  joinDate: 'joinDate',
   updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy',
   branchId: 'branchId',
   wageType: 'wageType',
   wageRate: 'wageRate',
@@ -151,45 +177,61 @@ exports.Prisma.UserScalarFieldEnum = {
   phone: 'phone',
   address: 'address',
   incentiveRate: 'incentiveRate',
-  incentiveType: 'incentiveType'
+  incentiveType: 'incentiveType',
+  incentiveMode: 'incentiveMode'
 };
 
 exports.Prisma.ShiftScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   name: 'name',
   startTime: 'startTime',
   endTime: 'endTime',
-  branchId: 'branchId'
+  branchId: 'branchId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.CashAdvanceScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   employeeId: 'employeeId',
   date: 'date',
   amount: 'amount',
   reason: 'reason',
   status: 'status',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.LeaveRequestScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   employeeId: 'employeeId',
   startDate: 'startDate',
   endDate: 'endDate',
   type: 'type',
   reason: 'reason',
   status: 'status',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.CategoryScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   name: 'name'
 };
 
 exports.Prisma.InventoryItemScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   name: 'name',
   sku: 'sku',
   categoryId: 'categoryId',
@@ -200,20 +242,28 @@ exports.Prisma.InventoryItemScalarFieldEnum = {
   image: 'image',
   showInPos: 'showInPos',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.StockScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   itemId: 'itemId',
   branchId: 'branchId',
   quantity: 'quantity',
   reservedQty: 'reservedQty',
-  minStock: 'minStock'
+  minStock: 'minStock',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.TransactionScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   date: 'date',
   branchId: 'branchId',
   cashierId: 'cashierId',
@@ -231,11 +281,14 @@ exports.Prisma.TransactionScalarFieldEnum = {
   status: 'status',
   notes: 'notes',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.TransactionItemScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   transactionId: 'transactionId',
   itemId: 'itemId',
   name: 'name',
@@ -249,6 +302,7 @@ exports.Prisma.TransactionItemScalarFieldEnum = {
 
 exports.Prisma.ServiceTicketScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   dateOpened: 'dateOpened',
   dateClosed: 'dateClosed',
   customerName: 'customerName',
@@ -263,20 +317,30 @@ exports.Prisma.ServiceTicketScalarFieldEnum = {
   status: 'status',
   technicianId: 'technicianId',
   branchId: 'branchId',
+  incentiveType: 'incentiveType',
+  incentiveValue: 'incentiveValue',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.ServiceSparepartScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   ticketId: 'ticketId',
   itemId: 'itemId',
   quantity: 'quantity',
-  price: 'price'
+  price: 'price',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.AttendanceScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   employeeId: 'employeeId',
   employeeName: 'employeeName',
   branchId: 'branchId',
@@ -293,11 +357,15 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   checkOutLatitude: 'checkOutLatitude',
   checkOutLongitude: 'checkOutLongitude',
   workDurationMinutes: 'workDurationMinutes',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.StoreProfileScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   name: 'name',
   address: 'address',
   phone: 'phone',
@@ -313,48 +381,69 @@ exports.Prisma.StoreProfileScalarFieldEnum = {
   baseSalary: 'baseSalary',
   overtimeRate: 'overtimeRate',
   serviceIncentive: 'serviceIncentive',
-  updatedAt: 'updatedAt'
+  payDay: 'payDay',
+  thrMonth: 'thrMonth',
+  thrMinWorkMonths: 'thrMinWorkMonths',
+  thrMultiplier: 'thrMultiplier',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.ServiceTypeScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   name: 'name',
   price: 'price',
   category: 'category',
+  incentiveType: 'incentiveType',
+  incentiveValue: 'incentiveValue',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.OvertimeScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   employeeId: 'employeeId',
   hours: 'hours',
   date: 'date',
   reason: 'reason',
   status: 'status',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.DeviceModelScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   name: 'name',
   brand: 'brand',
   type: 'type',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.StockTransferScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   fromBranchId: 'fromBranchId',
   toBranchId: 'toBranchId',
   status: 'status',
   notes: 'notes',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
 };
 
 exports.Prisma.StockTransferItemScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   transferId: 'transferId',
   itemId: 'itemId',
   quantity: 'quantity'
@@ -362,13 +451,32 @@ exports.Prisma.StockTransferItemScalarFieldEnum = {
 
 exports.Prisma.InventoryUnitScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   itemId: 'itemId',
   branchId: 'branchId',
   serialNumber: 'serialNumber',
   status: 'status',
   costPrice: 'costPrice',
   entryDate: 'entryDate',
-  soldDate: 'soldDate'
+  soldDate: 'soldDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.BonusPoolScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  amount: 'amount',
+  month: 'month',
+  year: 'year',
+  roleId: 'roleId',
+  branchId: 'branchId',
+  employeeId: 'employeeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -385,9 +493,74 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.RequestStatus = exports.$Enums.RequestStatus = {
+  Pending: 'Pending',
+  Approved: 'Approved',
+  Rejected: 'Rejected'
+};
 
+exports.TransactionSource = exports.$Enums.TransactionSource = {
+  POS: 'POS',
+  SERVICE: 'SERVICE'
+};
+
+exports.PaymentMethod = exports.$Enums.PaymentMethod = {
+  CASH: 'CASH',
+  QRIS: 'QRIS',
+  TRANSFER: 'TRANSFER',
+  E_WALLET: 'E_WALLET'
+};
+
+exports.TransactionStatus = exports.$Enums.TransactionStatus = {
+  SUCCESS: 'SUCCESS',
+  CANCELLED: 'CANCELLED',
+  PENDING: 'PENDING',
+  Paid: 'Paid',
+  Unpaid: 'Unpaid',
+  Canceled: 'Canceled'
+};
+
+exports.ServiceStatus = exports.$Enums.ServiceStatus = {
+  Pending: 'Pending',
+  Diagnosed: 'Diagnosed',
+  WaitingApproval: 'WaitingApproval',
+  Approved: 'Approved',
+  InProgress: 'InProgress',
+  ReadyToPay: 'ReadyToPay',
+  Paid: 'Paid',
+  Completed: 'Completed',
+  Delivered: 'Delivered',
+  Cancelled: 'Cancelled'
+};
+
+exports.AttendanceStatus = exports.$Enums.AttendanceStatus = {
+  PRESENT: 'PRESENT',
+  LATE: 'LATE',
+  ABSENT: 'ABSENT',
+  LEAVE: 'LEAVE',
+  hadir: 'hadir',
+  terlambat: 'terlambat',
+  izin: 'izin',
+  sakit: 'sakit'
+};
+
+exports.StockTransferStatus = exports.$Enums.StockTransferStatus = {
+  Pending: 'Pending',
+  Approved: 'Approved',
+  Completed: 'Completed',
+  Rejected: 'Rejected',
+  Cancelled: 'Cancelled'
+};
+
+exports.InventoryUnitStatus = exports.$Enums.InventoryUnitStatus = {
+  Available: 'Available',
+  Sold: 'Sold',
+  Defective: 'Defective'
+};
 
 exports.Prisma.ModelName = {
+  Role: 'Role',
+  Permission: 'Permission',
   Branch: 'Branch',
   User: 'User',
   Shift: 'Shift',
@@ -407,7 +580,8 @@ exports.Prisma.ModelName = {
   DeviceModel: 'DeviceModel',
   StockTransfer: 'StockTransfer',
   StockTransferItem: 'StockTransferItem',
-  InventoryUnit: 'InventoryUnit'
+  InventoryUnit: 'InventoryUnit',
+  BonusPool: 'BonusPool'
 };
 
 /**

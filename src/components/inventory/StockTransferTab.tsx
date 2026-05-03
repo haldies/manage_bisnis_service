@@ -38,7 +38,7 @@ export default function StockTransferTab() {
     }
   };
 
-  const isAdmin = currentUser?.role === 'Admin';
+  const isAdmin = currentUser?.role?.name === 'Owner' || currentUser?.role?.name === 'Admin' || currentUser?.roleId === 'owner-role-id';
 
   const handleCreate = async () => {
     const finalToBranchId = isAdmin ? requestingBranchId : currentBranch?.id;
@@ -178,7 +178,7 @@ export default function StockTransferTab() {
                        {/* Contextual Cancellation/Rejection */}
                        {t.status === 'Pending' && (
                          <>
-                           {currentBranch?.id === t.fromBranchId || currentUser?.role === 'Admin' ? (
+                           {currentBranch?.id === t.fromBranchId || currentUser?.role?.name === 'Owner' || currentUser?.role?.name === 'Admin' ? (
                              <Button 
                                variant="ghost" 
                                size="sm" 
@@ -228,22 +228,28 @@ export default function StockTransferTab() {
             <DialogDescription className="ui-meta mt-1">Pilih cabang sumber dan item yang Anda butuhkan.</DialogDescription>
           </div>
           <div className="p-8 space-y-6">
-              {isAdmin && (
-                <div className="space-y-2">
-                   <Label className="ui-label uppercase tracking-widest text-primary font-black">Cabang Peminta (Tujuan)</Label>
-                   <Select value={requestingBranchId} onValueChange={setRequestingBranchId}>
-                      <SelectTrigger className="h-12 rounded-xl bg-primary/5 border-primary/20 font-bold">
-                         <SelectValue placeholder="Cabang yang membutuhkan stok" />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-xl">
-                         {branches.map(b => (
-                           <SelectItem key={b.id} value={b.id} className="py-3 font-bold">{b.name}</SelectItem>
-                         ))}
-                      </SelectContent>
-                   </Select>
-                   <p className="text-[9px] text-muted-foreground font-medium uppercase tracking-tight">Admin dapat membuat permintaan atas nama cabang mana pun.</p>
-                </div>
-              )}
+              <div className="bg-muted/10 p-4 rounded-2xl border border-border/5 space-y-4">
+                {isAdmin ? (
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-primary">Cabang Peminta (Tujuan)</Label>
+                    <Select value={requestingBranchId} onValueChange={setRequestingBranchId}>
+                        <SelectTrigger className="h-12 rounded-xl bg-background border-border/40 font-bold">
+                          <SelectValue placeholder="Cabang yang membutuhkan stok" />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-xl">
+                          {branches.map(b => (
+                            <SelectItem key={b.id} value={b.id} className="py-3 font-bold">{b.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                    </Select>
+                  </div>
+                ) : (
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Cabang Peminta (Tujuan)</span>
+                    <span className="text-sm font-black text-foreground">{currentBranch?.name}</span>
+                  </div>
+                )}
+              </div>
 
               <div className="space-y-2">
                 <Label className="ui-label uppercase tracking-widest opacity-50">1. Pilih Item Produk</Label>

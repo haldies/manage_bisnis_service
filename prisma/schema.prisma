@@ -7,16 +7,99 @@ datasource db {
   provider = "postgresql"
 }
 
+model Role {
+  id          String       @id @default(cuid())
+  tenantId    String       @default("default")
+  name        String
+  description String?
+  permissions Permission[]
+  users       User[]
+  bonusPools  BonusPool[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now()) @updatedAt
+
+  @@unique([name, tenantId])
+  @@index([tenantId])
+}
+
+model Permission {
+  id        String   @id @default(cuid())
+  roleId    String
+  module    String   // e.g. "Cashier", "Inventory", "Staff"
+  canRead   Boolean  @default(false)
+  canCreate Boolean  @default(false)
+  canUpdate Boolean  @default(false)
+  canDelete Boolean  @default(false)
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, module])
+}
+
+enum RequestStatus {
+  Pending
+  Approved
+  Rejected
+}
+
+enum PaymentMethod {
+  CASH
+  QRIS
+  TRANSFER
+  E_WALLET
+}
+
+enum AttendanceStatus {
+  PRESENT
+  LATE
+  ABSENT
+  LEAVE
+  hadir
+  terlambat
+  izin
+  sakit
+}
+
+enum StockTransferStatus {
+  Pending
+  Approved
+  Completed
+  Rejected
+  Cancelled
+}
+
+enum InventoryUnitStatus {
+  Available
+  Sold
+  Defective
+}
+
+enum TransactionSource {
+  POS
+  SERVICE
+}
+
+enum TransactionStatus {
+  SUCCESS
+  CANCELLED
+  PENDING
+  Paid
+  Unpaid
+  Canceled
+}
+
 model Branch {
   id             String          @id @default(cuid())
+  tenantId       String          @default("default")
   name           String
   address        String
   phone          String
   latitude       Float
   longitude      Float
-  radiusMeters   Int            @default(50)
+  radiusMeters   Int             @default(50)
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
+  deletedAt      DateTime?
+  updatedBy      String?
   serviceTickets ServiceTicket[]
   shifts         Shift[]
   stocks         Stock[]
@@ -25,204 +108,287 @@ model Branch {
   transfersFrom  StockTransfer[] @relation("FromBranch")
   transfersTo    StockTransfer[] @relation("ToBranch")
   units          InventoryUnit[]
+
+  @@index([tenantId])
 }
-
-
 
 model User {
   id             String          @id @default(cuid())
+  tenantId       String          @default("default")
   name           String?
   email          String          @unique
   password       String?
-  role           String          @default("USER")
+  roleId         String
+  role           Role            @relation(fields: [roleId], references: [id])
   createdAt      DateTime        @default(now())
+  joinDate       DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
-  branchId       String?
+  deletedAt      DateTime?
+  updatedBy      String?
+  branchId       String
   wageType       String?         @default("Monthly")
-  wageRate       Float?          @default(0)
-  allowance      Float?          @default(0)
-  insuranceDed   Float?          @default(0)
+  wageRate       Decimal?        @default(0) @db.Decimal(18, 2)
+  allowance      Decimal?        @default(0) @db.Decimal(18, 2)
+  insuranceDed   Decimal?        @default(0) @db.Decimal(18, 2)
   shiftId        String?
-  baseSalary     Float?          @default(0)
+  baseSalary     Decimal?        @default(0) @db.Decimal(18, 2)
   leaveQuota     Int?            @default(12)
   phone          String?
   address        String?
-  incentiveRate  Float?          @default(0)
-  incentiveType  String?         @default("None") // None, Service, Retail, All
+  incentiveRate  Decimal?        @default(0) @db.Decimal(18, 2)
+  incentiveType  String?         @default("None") // Retail, Service, Profit, All, None
+  incentiveMode  String?         @default("Percentage") // Percentage or Flat
   cashAdvances   CashAdvance[]
   leaveRequests  LeaveRequest[]
   serviceTickets ServiceTicket[]
   transactions   Transaction[]
-  attendances     Attendance[]
+  attendances    Attendance[]
   overtimes      Overtime[]
-  branch         Branch?         @relation(fields: [branchId], references: [id])
+  branch         Branch          @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@index([branchId])
+  @@index([tenantId])
 }
 
 model Shift {
-  id        String @id @default(cuid())
+  id        String    @id @default(cuid())
+  tenantId  String        @default("default")
   name      String
-  startTime String
-  endTime   String
+  startTime DateTime
+  endTime   DateTime
   branchId  String
-  branch    Branch @relation(fields: [branchId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  updatedBy String?
+  branch    Branch    @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@index([branchId])
+  @@index([tenantId])
 }
 
 model CashAdvance {
-  id         String   @id @default(cuid())
+  id         String        @id @default(cuid())
+  tenantId   String        @default("default")
   employeeId String
-  date       DateTime @default(now())
-  amount     Float
+  date       DateTime      @default(now())
+  amount     Decimal       @db.Decimal(18, 2)
   reason     String
-  status     String   @default("Pending")
-  createdAt  DateTime @default(now())
-  employee   User     @relation(fields: [employeeId], references: [id])
+  status     RequestStatus @default(Pending)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  deletedAt  DateTime?
+  updatedBy  String?
+  employee   User          @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([employeeId])
+  @@index([date])
+  @@index([tenantId])
 }
 
 model LeaveRequest {
-  id         String   @id @default(cuid())
+  id         String        @id @default(cuid())
+  tenantId   String        @default("default")
   employeeId String
   startDate  DateTime
   endDate    DateTime
   type       String
   reason     String
-  status     String   @default("Pending")
-  createdAt  DateTime @default(now())
-  employee   User     @relation(fields: [employeeId], references: [id])
+  status     RequestStatus @default(Pending)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  deletedAt  DateTime?
+  updatedBy  String?
+  employee   User          @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([employeeId])
+  @@index([tenantId])
 }
 
 model Category {
   id             String          @id @default(cuid())
+  tenantId       String          @default("default")
   name           String          @unique
   inventoryItems InventoryItem[]
+
+  @@index([tenantId])
 }
 
 model InventoryItem {
-  id                String             @id @default(cuid())
+  id                String              @id @default(cuid())
+  tenantId          String              @default("default")
   name              String
-  sku               String             @unique
+  sku               String              @unique
   categoryId        String
-  category          Category           @relation(fields: [categoryId], references: [id])
-  costPrice         Float
-  basePrice         Float
+  category          Category            @relation(fields: [categoryId], references: [id])
+  costPrice         Decimal             @db.Decimal(18, 2)
+  basePrice         Decimal             @db.Decimal(18, 2)
   unit              String
   rack              String?
   image             String?
-  showInPos         Boolean            @default(true)
-  createdAt         DateTime           @default(now())
-
-  updatedAt         DateTime           @updatedAt
+  showInPos         Boolean             @default(true)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  deletedAt         DateTime?
+  updatedBy         String?
   serviceSpareparts ServiceSparepart[]
   stocks            Stock[]
   transactionItems  TransactionItem[]
   transferItems     StockTransferItem[]
   units             InventoryUnit[]
+
+  @@index([categoryId])
+  @@index([tenantId])
 }
-
-
 
 model Stock {
   id          String        @id @default(cuid())
+  tenantId    String        @default("default")
   itemId      String
   branchId    String
   quantity    Int           @default(0)
   reservedQty Int           @default(0)
   minStock    Int           @default(0)
-  branch      Branch        @relation(fields: [branchId], references: [id])
-  item        InventoryItem @relation(fields: [itemId], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
+  deletedAt   DateTime?
+  updatedBy   String?
+  branch      Branch        @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  item        InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
   @@unique([itemId, branchId])
+  @@index([branchId])
+  @@index([itemId])
+  @@index([tenantId])
 }
 
 model Transaction {
   id              String            @id @default(cuid())
+  tenantId        String            @default("default")
   date            DateTime          @default(now())
   branchId        String
   cashierId       String
-  source          String
+  source          TransactionSource
   serviceTicketId String?
-  total           Float
-  paymentMethod   String
-  amountPaid      Float
+  total           Decimal           @db.Decimal(18, 2)
+  paymentMethod   PaymentMethod
+  amountPaid      Decimal           @db.Decimal(18, 2)
   customerName    String?
   customerPhone   String?
   customerAddress String?
-  change          Float
-  tax             Float
-  discount        Float
-  status          String
+  change          Decimal           @db.Decimal(18, 2)
+  tax             Decimal           @db.Decimal(18, 2)
+  discount        Decimal           @db.Decimal(18, 2)
+  status          TransactionStatus
   notes           String?
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
-  branch          Branch            @relation(fields: [branchId], references: [id])
-  cashier         User              @relation(fields: [cashierId], references: [id])
+  deletedAt       DateTime?
+  updatedBy       String?
+  branch          Branch            @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  cashier         User              @relation(fields: [cashierId], references: [id], onDelete: Cascade)
   items           TransactionItem[]
+
+  @@index([branchId])
+  @@index([cashierId])
+  @@index([date])
+  @@index([tenantId])
 }
 
 model TransactionItem {
   id            String         @id @default(cuid())
+  tenantId      String         @default("default")
   transactionId String
   itemId        String?
   name          String
   category      String
-  price         Float
-  costPrice     Float
+  price         Decimal        @db.Decimal(18, 2)
+  costPrice     Decimal        @db.Decimal(18, 2)
   quantity      Int
-  discount      Float          @default(0)
+  discount      Decimal        @default(0) @db.Decimal(18, 2)
   technicianId  String?
   item          InventoryItem? @relation(fields: [itemId], references: [id])
   transaction   Transaction    @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@index([transactionId])
+  @@index([itemId])
+  @@index([tenantId])
 }
 
 enum ServiceStatus {
-  Pending           // Antrian
-  InProgress        // Mengerjakan
-  ReadyToPay        // Menunggu Pembayaran
-  Paid              // Siap Diambil
-  Completed         // Sudah Diambil
-  Cancelled         // Batal
+  Pending
+  Diagnosed
+  WaitingApproval
+  Approved
+  InProgress
+  ReadyToPay
+  Paid
+  Completed
+  Delivered
+  Cancelled
 }
 
 model ServiceTicket {
-  id            String             @id @default(cuid())
-  dateOpened    DateTime           @default(now())
-  dateClosed    DateTime?
-  customerName  String
-  customerPhone String
+  id              String             @id @default(cuid())
+  tenantId        String             @default("default")
+  dateOpened      DateTime           @default(now())
+  dateClosed      DateTime?
+  customerName    String
+  customerPhone   String
   customerAddress String?
-  deviceModel   String
-  deviceSerial  String
-  issue         String
-  diagnosis     String?
-  estimatedCost Float
-  serviceFee    Float
-  status        ServiceStatus      @default(Pending)
-  technicianId  String?
-  branchId      String
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
-  spareparts    ServiceSparepart[]
-  branch        Branch             @relation(fields: [branchId], references: [id])
-  technician    User?              @relation(fields: [technicianId], references: [id])
+  deviceModel     String
+  deviceSerial    String
+  issue           String
+  diagnosis       String?
+  estimatedCost   Decimal            @db.Decimal(18, 2)
+  serviceFee      Decimal            @db.Decimal(18, 2)
+  status          ServiceStatus      @default(Pending)
+  technicianId    String?
+  branchId        String
+  incentiveType   String             @default("Percentage") // Percentage or Flat
+  incentiveValue  Decimal            @default(0) @db.Decimal(18, 2)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  deletedAt       DateTime?
+  updatedBy       String?
+  spareparts      ServiceSparepart[]
+  branch          Branch             @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  technician      User?              @relation(fields: [technicianId], references: [id])
+
+  @@index([branchId])
+  @@index([technicianId])
+  @@index([tenantId])
 }
 
 model ServiceSparepart {
-  id       String        @id @default(cuid())
-  ticketId String
-  itemId   String
-  quantity Int
-  price    Float
-  item     InventoryItem @relation(fields: [itemId], references: [id])
-  ticket   ServiceTicket @relation(fields: [ticketId], references: [id])
+  id        String        @id @default(cuid())
+  tenantId  String        @default("default")
+  ticketId  String
+  itemId    String
+  quantity  Int
+  price     Decimal       @db.Decimal(18, 2)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  deletedAt DateTime?
+  updatedBy String?
+  item      InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  ticket    ServiceTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+  @@index([itemId])
+  @@index([tenantId])
 }
+
 model Attendance {
-  id                  String   @id @default(cuid())
+  id                  String           @id @default(cuid())
+  tenantId            String          @default("default")
   employeeId          String
   employeeName        String
   branchId            String
-  date                String
-  checkInTime         BigInt
-  checkOutTime        BigInt?
-  status              String
+  date                DateTime
+  checkInTime         DateTime
+  checkOutTime        DateTime?
+  status              AttendanceStatus
   isInRadius          Boolean
   isMockGPS           Boolean
   latitude            Float?
@@ -232,92 +398,165 @@ model Attendance {
   checkOutLatitude    Float?
   checkOutLongitude   Float?
   workDurationMinutes Int?
-  createdAt           DateTime @default(now())
-  employee            User     @relation(fields: [employeeId], references: [id])
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  deletedAt           DateTime?
+  updatedBy           String?
+  employee            User             @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([branchId])
+  @@index([employeeId])
+  @@index([date])
+  @@index([tenantId])
 }
 
 model StoreProfile {
-  id                         String   @id @default("default")
-  name                       String   @default("Kasirai POS")
-  address                    String   @default("")
-  phone                      String   @default("")
-  taxPercentage              Float    @default(0)
-  enableTax                  Boolean  @default(false)
-  serviceIncentivePercentage Float    @default(10)
-  startTime                  String   @default("09:00")
-  endTime                    String   @default("18:00")
-  attendanceRate             Float    @default(0)
-  latePenalty                Float    @default(0)
-  absentPenalty              Float    @default(0)
-  totalWorkDays              Int      @default(26)
-  baseSalary                 Float    @default(0)
-  overtimeRate               Float    @default(0)
-  serviceIncentive           Float    @default(10)
-  updatedAt                  DateTime @updatedAt
+  id                         String    @id @default("default")
+  tenantId                   String    @default("default")
+  name                       String    @default("Kasirai POS")
+  address                    String    @default("")
+  phone                      String    @default("")
+  taxPercentage              Float     @default(0)
+  enableTax                  Boolean   @default(false)
+  serviceIncentivePercentage Float     @default(10)
+  startTime                  String    @default("09:00")
+  endTime                    String    @default("18:00")
+  attendanceRate             Float     @default(0)
+  latePenalty                Float     @default(0)
+  absentPenalty              Float     @default(0)
+  totalWorkDays              Int       @default(26)
+  baseSalary                 Decimal   @default(0) @db.Decimal(18, 2)
+  overtimeRate               Decimal   @default(0) @db.Decimal(18, 2)
+  serviceIncentive           Decimal   @default(10) @db.Decimal(18, 2)
+  payDay                     Int       @default(1)
+  thrMonth                   Int?      // 1-12, month to give THR
+  thrMinWorkMonths           Int       @default(12) // requirement to get full THR
+  thrMultiplier             Decimal   @default(1.0) @db.Decimal(18, 2)
+  updatedAt                  DateTime  @updatedAt
+  deletedAt                  DateTime?
+  updatedBy                  String?
+
+  @@index([tenantId])
 }
 
 model ServiceType {
-  id          String   @id @default(cuid())
-  name        String
-  price       Float
-  category    String?  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String    @id @default(cuid())
+  tenantId  String        @default("default")
+  name      String    @unique
+  price          Decimal   @db.Decimal(18, 2)
+  category       String?
+  incentiveType  String    @default("Percentage") // Percentage or Flat
+  incentiveValue Decimal   @default(0) @db.Decimal(18, 2)
+  createdAt      DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  updatedBy String?
+
+  @@index([tenantId])
 }
 
 model Overtime {
-  id          String   @id @default(cuid())
-  employeeId  String
-  hours       Float    @default(0)
-  date        DateTime @default(now())
-  reason      String   @default("")
-  status      String   @default("Pending") // Pending, Approved, Rejected
-  createdAt   DateTime @default(now())
-  employee    User     @relation(fields: [employeeId], references: [id])
-}
+  id         String        @id @default(cuid())
+  tenantId   String        @default("default")
+  employeeId String
+  hours      Float         @default(0)
+  date       DateTime      @default(now())
+  reason     String        @default("")
+  status     RequestStatus @default(Pending)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  deletedAt  DateTime?
+  updatedBy  String?
+  employee   User          @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 
+  @@index([employeeId])
+  @@index([date])
+  @@index([tenantId])
+}
 
 model DeviceModel {
   id        String   @id @default(cuid())
+  tenantId  String        @default("default")
   name      String   @unique
   brand     String   @default("Apple")
-  type      String   // Smartphone, Laptop, Tablet
+  type      String // Smartphone, Laptop, Tablet
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([tenantId])
 }
 
 model StockTransfer {
-  id            String              @id @default(cuid())
-  fromBranchId  String
-  toBranchId    String
-  status        String              @default("Pending") // Pending, Approved, Completed, Rejected, Cancelled
-  notes         String?
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
-  fromBranch    Branch              @relation("FromBranch", fields: [fromBranchId], references: [id])
-  toBranch      Branch              @relation("ToBranch", fields: [toBranchId], references: [id])
-  items         StockTransferItem[]
+  id           String              @id @default(cuid())
+  tenantId     String              @default("default")
+  fromBranchId String
+  toBranchId   String
+  status       StockTransferStatus @default(Pending)
+  notes        String?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  deletedAt    DateTime?
+  updatedBy    String?
+  fromBranch   Branch              @relation("FromBranch", fields: [fromBranchId], references: [id], onDelete: Cascade)
+  toBranch     Branch              @relation("ToBranch", fields: [toBranchId], references: [id], onDelete: Cascade)
+  items        StockTransferItem[]
+
+  @@index([fromBranchId])
+  @@index([toBranchId])
+  @@index([tenantId])
 }
 
 model StockTransferItem {
   id         String        @id @default(cuid())
+  tenantId   String        @default("default")
   transferId String
   itemId     String
   quantity   Int
-  item       InventoryItem @relation(fields: [itemId], references: [id])
-  transfer   StockTransfer @relation(fields: [transferId], references: [id])
+  item       InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  transfer   StockTransfer @relation(fields: [transferId], references: [id], onDelete: Cascade)
+
+  @@index([transferId])
+  @@index([itemId])
+  @@index([tenantId])
 }
 
 model InventoryUnit {
-  id           String        @id @default(cuid())
+  id           String              @id @default(cuid())
+  tenantId     String              @default("default")
   itemId       String
   branchId     String
-  serialNumber String?       @unique // IMEI / SN
-  status       String        @default("Available") // Available, Sold, Defective
-  costPrice    Float?        // In case cost changes per batch
-  entryDate    DateTime      @default(now())
+  serialNumber String?
+  status       InventoryUnitStatus @default(Available)
+  costPrice    Decimal?            @db.Decimal(18, 2)
+  entryDate    DateTime            @default(now())
   soldDate     DateTime?
-  item         InventoryItem @relation(fields: [itemId], references: [id])
-  branch       Branch        @relation(fields: [branchId], references: [id])
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  deletedAt    DateTime?
+  updatedBy    String?
+  item         InventoryItem       @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  branch       Branch              @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([serialNumber, branchId])
+  @@index([branchId])
+  @@index([itemId])
+  @@index([tenantId])
 }
 
+model BonusPool {
+  id         String   @id @default(cuid())
+  tenantId   String   @default("default")
+  name       String
+  amount     Decimal  @db.Decimal(18, 2)
+  month      Int      // 1-12
+  year       Int
+  roleId     String?  // Targeting specific division
+  branchId   String?  // Targeting specific branch
+  employeeId String?  // Targeting specific person
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  role       Role?    @relation(fields: [roleId], references: [id])
 
+  @@index([roleId])
+  @@index([tenantId])
+}

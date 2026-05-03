@@ -22,13 +22,21 @@ interface OperationalTabProps {
   updateLeaveRequest: (id: string, updates: any) => void;
   addOvertime: (overtime: any) => void;
   updateOvertime: (id: string, updates: any) => void;
+  bonusPools: any[];
+  addBonusPool: (pool: any) => void;
+  removeBonusPool: (id: string) => void;
+  roles: any[];
+  branches: any[];
 }
 
 export function OperationalTab({
   users, cashAdvances, leaveRequests, overtimes = [],
   addCashAdvance, updateCashAdvance,
   addLeaveRequest, updateLeaveRequest,
-  addOvertime, updateOvertime
+  addOvertime, updateOvertime,
+  bonusPools = [], addBonusPool, removeBonusPool,
+  roles = [],
+  branches = []
 }: OperationalTabProps) {
   // Dialog States
   const [isAdvanceOpen, setIsAdvanceOpen] = useState(false);
@@ -55,6 +63,18 @@ export function OperationalTab({
     reason: "",
     employeeId: "",
     date: new Date().toISOString().split('T')[0]
+  });
+
+  const [isBonusOpen, setIsBonusOpen] = useState(false);
+  const [bonusForm, setBonusForm] = useState({
+    name: "",
+    amount: "",
+    roleId: "",
+    branchId: "all",
+    employeeId: "",
+    month: (new Date().getMonth() + 1).toString(),
+    year: new Date().getFullYear().toString(),
+    targetType: "all" as "all" | "branch" | "role" | "employee"
   });
 
   const pendingAdvances = cashAdvances.filter(c => c.status === 'Pending');
@@ -112,6 +132,35 @@ export function OperationalTab({
     });
   };
 
+  const handleAddBonusPool = () => {
+    if (!bonusForm.amount) return;
+    addBonusPool({
+      name: bonusForm.name || "Bonus Sharing",
+      amount: parseInt(bonusForm.amount),
+      roleId: bonusForm.targetType === 'role' ? bonusForm.roleId : undefined,
+      branchId: bonusForm.targetType === 'branch' ? bonusForm.branchId : undefined,
+      employeeId: bonusForm.targetType === 'employee' ? bonusForm.employeeId : undefined,
+      month: parseInt(bonusForm.month),
+      year: parseInt(bonusForm.year)
+    });
+    setIsBonusOpen(false);
+    resetBonusForm();
+  };
+
+  const resetBonusForm = () => {
+    setBonusForm({
+      name: "",
+      amount: "",
+      roleId: "",
+      branchId: "all",
+      employeeId: "",
+      month: (new Date().getMonth() + 1).toString(),
+      year: new Date().getFullYear().toString(),
+      targetType: "all"
+    });
+  };
+
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
       {/* Summary Cards */}
@@ -139,6 +188,7 @@ export function OperationalTab({
             <TabsTrigger value="kasbon" className="rounded-lg px-6 font-bold text-[10px] uppercase tracking-widest shrink-0 whitespace-nowrap">Kasbon</TabsTrigger>
             <TabsTrigger value="cuti" className="rounded-lg px-6 font-bold text-[10px] uppercase tracking-widest shrink-0 whitespace-nowrap">Izin / Cuti</TabsTrigger>
             <TabsTrigger value="lembur" className="rounded-lg px-6 font-bold text-[10px] uppercase tracking-widest shrink-0 whitespace-nowrap">Lembur</TabsTrigger>
+            <TabsTrigger value="bonus" className="rounded-lg px-6 font-bold text-[10px] uppercase tracking-widest shrink-0 whitespace-nowrap">Bonus Sharing (Tim)</TabsTrigger>
           </TabsList>
         </div>
 
@@ -276,7 +326,132 @@ export function OperationalTab({
             </Table>
           </div>
         </TabsContent>
+
+        <TabsContent value="bonus" className="space-y-4">
+          <div className="flex justify-between items-center px-1">
+            <div className="flex flex-col">
+              <h4 className="font-bold text-[10px] uppercase tracking-wider text-muted-foreground/60">Log Bonus Sharing (Tim)</h4>
+            </div>
+            <Button variant="outline" size="sm" className="h-7 text-[9px] font-black uppercase tracking-widest px-4 border-border/40 hover:bg-muted rounded-lg" onClick={() => setIsBonusOpen(true)}>
+              Tambah
+            </Button>
+          </div>
+          <div className="bg-card border border-border/40 rounded-xl overflow-hidden">
+            <Table>
+              <TableBody>
+                {bonusPools.length === 0 ? (
+                  <TableRow><TableCell className="h-32 text-center opacity-20"><span className="text-[10px] font-bold uppercase tracking-widest">Belum ada data</span></TableCell></TableRow>
+                ) : (
+                  bonusPools.map((p) => (
+                    <TableRow key={p.id} className="hover:bg-muted/5 border-b border-border/10 last:border-0">
+                      <TableCell className="py-3 pl-6">
+                        <div className="flex flex-col">
+                          <span className="font-bold text-[11px]">{p.name}</span>
+                          <span className="text-[9px] text-muted-foreground opacity-60 uppercase font-bold tracking-tight">
+                            {roles.find(r => r.id === p.roleId)?.name || 'Role'} • {p.month}/{p.year}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-3 text-right">
+                        <span className="font-black text-[11px] text-emerald-600">{formatCurrency(p.amount)}</span>
+                      </TableCell>
+                      <TableCell className="py-3 text-right pr-6">
+                        <Button variant="ghost" className="h-6 px-2 text-[9px] font-black uppercase text-red-600 hover:bg-red-50 rounded-md" onClick={() => removeBonusPool(p.id)}>Hapus</Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </TabsContent>
       </Tabs>
+
+      <Dialog open={isBonusOpen} onOpenChange={setIsBonusOpen}>
+        <DialogContent className="sm:max-w-[425px] rounded-3xl p-0 overflow-hidden border-none shadow-2xl">
+          <DialogHeader className="p-8 bg-foreground text-background">
+            <DialogTitle className="text-xl font-bold uppercase tracking-widest">Input Bonus Sharing</DialogTitle>
+            <DialogDescription className="sr-only">Formulir untuk mengalokasikan bonus yang akan dibagi rata ke tim tertentu.</DialogDescription>
+          </DialogHeader>
+          <div className="p-8 space-y-4">
+            <div className="space-y-2">
+              <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">Nama Bonus / Keterangan</Label>
+              <Input className="h-12 rounded-2xl bg-muted/20 border-none px-6 font-bold" placeholder="Contoh: Bonus Target Kasir" value={bonusForm.name} onChange={(e) => setBonusForm({ ...bonusForm, name: e.target.value })} />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">Penerima Bonus</Label>
+              <Select value={bonusForm.targetType} onValueChange={(val: any) => setBonusForm({ ...bonusForm, targetType: val })}>
+                <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-none px-6 font-bold"><SelectValue /></SelectTrigger>
+                <SelectContent className="rounded-2xl">
+                  <SelectItem value="all">Semua Pegawai</SelectItem>
+                  <SelectItem value="branch">Per Cabang</SelectItem>
+                  <SelectItem value="role">Per Divisi (Role)</SelectItem>
+                  <SelectItem value="employee">Per Orang (Spesifik)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {bonusForm.targetType === 'branch' && (
+              <div className="space-y-2 animate-in slide-in-from-top-2 duration-300">
+                <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">Pilih Cabang</Label>
+                <Select value={bonusForm.branchId} onValueChange={(val) => setBonusForm({ ...bonusForm, branchId: val })}>
+                  <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-none px-6 font-bold"><SelectValue /></SelectTrigger>
+                  <SelectContent className="rounded-2xl">
+                    <SelectItem value="all">Semua Cabang</SelectItem>
+                    {branches.map(b => (<SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {bonusForm.targetType === 'role' && (
+              <div className="space-y-2 animate-in slide-in-from-top-2 duration-300">
+                <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">Pilih Divisi (Role)</Label>
+                <Select value={bonusForm.roleId} onValueChange={(val) => setBonusForm({ ...bonusForm, roleId: val })}>
+                  <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-none px-6 font-bold"><SelectValue /></SelectTrigger>
+                  <SelectContent className="rounded-2xl">{roles.map(r => (<SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>))}</SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {bonusForm.targetType === 'employee' && (
+              <div className="space-y-2 animate-in slide-in-from-top-2 duration-300">
+                <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">Pilih Pegawai</Label>
+                <Select value={bonusForm.employeeId} onValueChange={(val) => setBonusForm({ ...bonusForm, employeeId: val })}>
+                  <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-none px-6 font-bold"><SelectValue /></SelectTrigger>
+                  <SelectContent className="rounded-2xl">{users.map(u => (<SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>))}</SelectContent>
+                </Select>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">Total Bonus (Akan dibagi rata jika grup)</Label>
+              <Input type="number" className="h-12 rounded-2xl bg-muted/20 border-none px-6 font-black text-lg text-emerald-600" placeholder="0" value={bonusForm.amount} onChange={(e) => setBonusForm({ ...bonusForm, amount: e.target.value })} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">Bulan</Label>
+                <Select value={bonusForm.month} onValueChange={(val) => setBonusForm({ ...bonusForm, month: val })}>
+                  <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-none px-6 font-bold"><SelectValue /></SelectTrigger>
+                  <SelectContent className="rounded-2xl">
+                    {Array.from({length: 12}).map((_, i) => (
+                      <SelectItem key={i+1} value={(i+1).toString()}>{new Date(0, i).toLocaleString('id', {month: 'long'})}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">Tahun</Label>
+                <Input type="number" className="h-12 rounded-2xl bg-muted/20 border-none px-6 font-bold" value={bonusForm.year} onChange={(e) => setBonusForm({ ...bonusForm, year: e.target.value })} />
+              </div>
+            </div>
+          </div>
+          <DialogFooter className="p-8 pt-2 flex flex-col gap-3">
+            <Button onClick={handleAddBonusPool} className="h-12 rounded-2xl bg-emerald-600 text-white font-bold shadow-lg shadow-emerald-200 w-full hover:bg-emerald-700">Simpan Bonus</Button>
+            <Button variant="ghost" onClick={resetBonusForm} className="h-12 rounded-2xl font-bold opacity-40">Batal</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Cash Advance Dialog */}
       <Dialog open={isAdvanceOpen} onOpenChange={setIsAdvanceOpen}>

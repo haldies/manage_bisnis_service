@@ -38,7 +38,7 @@ export function Layout({ children, title, requiredModule, requiredLevel = 'Read'
         const latest = newTransfers[0];
         
         if (latest.id !== lastProcessedId && latest.status === 'Pending') {
-          const shouldNotify = currentUser.role === 'Admin' || latest.fromBranchId === currentBranch?.id;
+          const shouldNotify = currentUser.role?.name === 'Owner' || latest.fromBranchId === currentBranch?.id;
           
           if (shouldNotify) {
             setLastProcessedId(latest.id);
@@ -82,14 +82,14 @@ export function Layout({ children, title, requiredModule, requiredLevel = 'Read'
     );
   }
 
-  if (!currentUser || (!currentBranch && currentUser.role !== 'Admin')) {
+  if (!currentUser || (!currentBranch && currentUser.role?.name !== 'Owner')) {
     return <AuthScreen />;
   }
 
 
   // Permission Check
-  if (requiredModule && currentUser.role !== 'Admin') {
-    const permissions = rolePermissions[currentUser.role];
+  if (requiredModule && currentUser.role?.name !== 'Owner') {
+    const permissions = rolePermissions[currentUser.role?.name || ''];
     const userLevel = permissions?.[requiredModule] || 'None';
     
     const levels: AccessLevel[] = ['None', 'Read', 'Full'];
@@ -106,7 +106,7 @@ export function Layout({ children, title, requiredModule, requiredLevel = 'Read'
                     <ShieldAlert className="h-10 w-10 text-red-500" />
                   </div>
                   <h2 className="ui-title text-2xl">Akses Terbatas</h2>
-                  <p className="ui-meta text-muted-foreground">Maaf, akun Anda ({currentUser.role}) tidak memiliki izin untuk mengakses modul <strong>{requiredModule}</strong>.</p>
+                  <p className="ui-meta text-muted-foreground">Maaf, akun Anda ({currentUser.role?.name}) tidak memiliki izin untuk mengakses modul <strong>{requiredModule}</strong>.</p>
                   <Button variant="outline" className="rounded-xl px-8" onClick={() => window.location.href = '/'}>
                     Kembali ke Beranda
                   </Button>

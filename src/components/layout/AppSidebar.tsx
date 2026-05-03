@@ -49,8 +49,8 @@ export function AppSidebar() {
 
   const isModuleAllowed = (module: ModuleName, requiredLevel: AccessLevel = "Read") => {
     if (!currentUser) return false;
-    if (currentUser.role === "Admin") return true;
-    const permissions = rolePermissions[currentUser.role];
+    if (currentUser.role?.name === "Owner") return true;
+    const permissions = rolePermissions[currentUser.role?.name || ""];
     const userLevel = permissions?.[module] || "None";
     const levels: AccessLevel[] = ["None", "Read", "Full"];
     return levels.indexOf(userLevel) >= levels.indexOf(requiredLevel);
@@ -166,7 +166,7 @@ export function AppSidebar() {
                   {currentUser?.name || "User"}
                 </span>
                 <span className="text-[10px] text-sidebar-foreground/40 font-medium truncate">
-                  {currentUser?.role}
+                  {currentUser?.role?.name}
                 </span>
               </div>
             )}

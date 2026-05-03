@@ -1,30 +1,47 @@
-export type Role = string;
 export type ModuleName = 'Cashier' | 'Service' | 'Inventory' | 'Finance' | 'Staff' | 'Transactions' | 'Printers';
 export type AccessLevel = 'None' | 'Read' | 'Full';
-export type RolePermission = Record<ModuleName, AccessLevel>;
 
+export interface Permission {
+  id: string;
+  roleId: string;
+  module: ModuleName;
+  canRead: boolean;
+  canCreate: boolean;
+  canUpdate: boolean;
+  canDelete: boolean;
+}
+
+export interface Role {
+  id: string;
+  name: string;
+  description?: string;
+  permissions: Permission[];
+}
 
 export type WageType = 'Monthly' | 'Daily' | 'Hourly';
 
 export type User = {
   id: string;
   name: string;
-  role: Role;
-  email?: string;    // For Firebase Auth integration with Absensi app
-  branchId?: string; // If undefined, applies to all branches (Admin)
-  password?: string;      // For auth
+  roleId: string;
+  role?: Role;
+  joinDate?: string;
+  createdAt?: string;
+  email?: string;
+  branchId?: string;
+  password?: string;
   baseSalary?: number;
   allowance?: number;
   phone?: string;
   address?: string;
-  // --- New HR Fields ---
   wageType?: WageType;
-  wageRate?: number; // Nilai per jam/hari (jika bukan monthly)
-  insuranceDed?: number; // Potongan asuransi (BPJS, dll)
-  shiftId?: string; // Referensi ke Shift default
-  leaveQuota?: number; // Jatah cuti per tahun
+  wageRate?: number;
+  insuranceDed?: number;
+  shiftId?: string;
+  leaveQuota?: number;
   incentiveRate?: number;
-  incentiveType?: 'None' | 'Service' | 'Retail' | 'All';
+  incentiveType?: 'None' | 'Service' | 'Retail' | 'Profit' | 'All';
+  incentiveMode?: 'Percentage' | 'Flat';
 };
 
 export type Shift = {
@@ -33,6 +50,17 @@ export type Shift = {
   startTime: string; // e.g., "08:00"
   endTime: string; // e.g., "16:00"
   branchId: string;
+};
+
+export type BonusPool = {
+  id: string;
+  name: string;
+  amount: number;
+  month: number;
+  year: number;
+  roleId?: string;
+  branchId?: string;
+  employeeId?: string;
 };
 
 export type CashAdvance = {
@@ -111,7 +139,7 @@ export type InventoryUnit = {
 };
 
 
-export type PaymentMethod = 'Cash' | 'QRIS' | 'Transfer' | 'Kasbon';
+export type PaymentMethod = 'CASH' | 'QRIS' | 'TRANSFER' | 'E_WALLET' | 'Cash' | 'QRIS' | 'Transfer';
 
 export type CartItem = {
   id: string;
@@ -134,7 +162,7 @@ export type Transaction = {
   branchId: string;
   cashierId: string;
   source: 'Retail' | 'Service';
-  serviceTicketId?: string; 
+  serviceTicketId?: string;
   items: CartItem[];
   total: number;
   paymentMethod: PaymentMethod;
@@ -145,7 +173,7 @@ export type Transaction = {
   change: number;
   tax: number;
   discount: number;
-  status: 'Paid' | 'Unpaid' | 'Canceled';
+  status: 'SUCCESS' | 'CANCELLED' | 'PENDING' | 'Paid' | 'Unpaid' | 'Canceled';
   notes?: string;
   queueNumber?: string;
   cashierName?: string;
@@ -168,6 +196,8 @@ export type ServiceType = {
   name: string;
   price: number;
   category?: string;
+  incentiveType?: 'Percentage' | 'Flat';
+  incentiveValue?: number;
 };
 
 
@@ -196,6 +226,8 @@ export type ServiceTicket = {
   spareparts: CartItem[]; // Sparepart yang digunakan
   branchId: string;
   updatedAt?: number;
+  incentiveType?: 'Percentage' | 'Flat';
+  incentiveValue?: number;
 };
 
 // ─── SUPPLIER & PO ──────────────────────────────────────────────────────
@@ -261,7 +293,7 @@ export type Attendance = {
   branchId: string;
   date: string;
   checkInTime: number;
-  status: 'hadir' | 'terlambat' | 'izin' | 'sakit';
+  status: 'PRESENT' | 'LATE' | 'ABSENT' | 'LEAVE' | 'hadir' | 'terlambat' | 'izin' | 'sakit';
   isInRadius: boolean;
   isMockGPS: boolean;
   latitude?: number;
@@ -290,6 +322,10 @@ export type StoreProfile = {
   overtimeRate: number;
   totalWorkDays: number;
   serviceIncentive: number;
+  payDay: number;
+  thrMonth?: number;
+  thrMinWorkMonths: number;
+  thrMultiplier: number;
   updatedAt?: string;
 };
 

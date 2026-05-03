@@ -14,7 +14,7 @@ export function PayrollReport({ users, calculateTHP, handleDownloadPDF }: Payrol
   return (
     <div className="space-y-4">
       {users.map(user => {
-        const { base, attendanceBonus, incentive, deductions, thp, latePenalty, advances, insurance, alphaDays, absentPenalty, overtimePay, overtimeHours } = calculateTHP(user);
+        const { base, attendanceBonus, incentive, thr, deductions, thp, latePenalty, advances, insurance, alphaDays, absentPenalty, overtimePay, overtimeHours } = calculateTHP(user);
         return (
           <Card key={user.id} className="border border-border/40 overflow-hidden rounded-2xl">
             <CardContent className="p-0">
@@ -25,7 +25,7 @@ export function PayrollReport({ users, calculateTHP, handleDownloadPDF }: Payrol
                   </div>
                   <div>
                     <h4 className="font-bold text-[14px] text-foreground">{user.name}</h4>
-                    <p className="ui-label opacity-60">{user.role} • {user.branchId || 'Global'}</p>
+                    <p className="ui-label opacity-60">{user.role?.name || '-'} • {user.branchId || 'Global'}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -50,54 +50,77 @@ export function PayrollReport({ users, calculateTHP, handleDownloadPDF }: Payrol
                       <span className="ui-label opacity-60">Gaji Pokok</span>
                       <span className="ui-label font-bold">{formatCurrency(base)}</span>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="ui-label text-emerald-600/70">Uang Absensi</span>
-                      <span className="ui-label font-bold text-emerald-600">+{formatCurrency(attendanceBonus)}</span>
-                    </div>
                   </div>
                 </div>
                 
                 <div className="p-6 space-y-4">
-                  <h5 className="ui-label font-bold text-foreground/40 uppercase tracking-widest">Incentive & Bonus</h5>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="ui-label text-emerald-600/70">Servis Unit</span>
-                      <span className="ui-label font-bold text-emerald-600">{formatCurrency(incentive)}</span>
-                    </div>
-                    {overtimePay > 0 && (
-                      <div className="flex justify-between items-center">
-                        <div className="flex flex-col">
-                          <span className="ui-label text-emerald-600/70">Upah Lembur</span>
-                          <span className="text-[9px] text-emerald-500/60">({overtimeHours} Jam)</span>
-                        </div>
-                        <span className="ui-label font-bold text-emerald-600">+{formatCurrency(overtimePay)}</span>
+                  {(incentive > 0 || attendanceBonus > 0 || thr > 0 || overtimePay > 0) ? (
+                    <>
+                      <h5 className="ui-label font-bold text-foreground/40 uppercase tracking-widest">Incentive & Bonus</h5>
+                      <div className="space-y-3">
+                        {incentive > 0 && (
+                          <div className="flex justify-between items-center">
+                            <span className="ui-label text-emerald-600/70">Komisi Penjualan/Jasa</span>
+                            <span className="ui-label font-bold text-emerald-600">{formatCurrency(incentive)}</span>
+                          </div>
+                        )}
+                        {attendanceBonus > 0 && (
+                          <div className="flex justify-between items-center">
+                            <span className="ui-label text-emerald-600/70">Bonus Sharing (Tim)</span>
+                            <span className="ui-label font-bold text-emerald-600">+{formatCurrency(attendanceBonus)}</span>
+                          </div>
+                        )}
+                        {thr > 0 && (
+                          <div className="flex justify-between items-center">
+                            <span className="ui-label text-emerald-600/70 font-black underline decoration-emerald-200">THR (Tunjangan Hari Raya)</span>
+                            <span className="ui-label font-bold text-emerald-600">+{formatCurrency(thr)}</span>
+                          </div>
+                        )}
+                        {overtimePay > 0 && (
+                          <div className="flex justify-between items-center">
+                            <div className="flex flex-col">
+                              <span className="ui-label text-emerald-600/70">Upah Lembur</span>
+                              <span className="text-[9px] text-emerald-500/60">({overtimeHours} Jam)</span>
+                            </div>
+                            <span className="ui-label font-bold text-emerald-600">+{formatCurrency(overtimePay)}</span>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
+                    </>
+                  ) : (
+                    <div className="h-full flex items-center justify-center opacity-20 italic text-center">
+                      <span className="text-[10px] uppercase tracking-widest font-bold">Tidak ada bonus bulan ini</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-6 space-y-4">
                   <h5 className="ui-label font-bold text-foreground/40 uppercase tracking-widest">Potongan</h5>
                   <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="ui-label text-red-500/70">Kasbon / Advance</span>
-                      <span className="ui-label font-bold text-red-500">-{formatCurrency(advances)}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="ui-label text-red-500/70">Potongan Telat</span>
-                      <span className="ui-label font-bold text-red-500">-{formatCurrency(latePenalty)}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <div className="flex flex-col">
-                        <span className="ui-label text-red-500/70">Potongan Alpha</span>
-                        {alphaDays > 0 && <span className="text-[9px] text-red-400">({alphaDays} hari)</span>}
+                    {advances > 0 && (
+                      <div className="flex justify-between items-center">
+                        <span className="ui-label text-red-500/70">Kasbon / Advance</span>
+                        <span className="ui-label font-bold text-red-500">-{formatCurrency(advances)}</span>
                       </div>
-                      <span className="ui-label font-bold text-red-500">-{formatCurrency(absentPenalty)}</span>
-                    </div>
+                    )}
+                    {absentPenalty > 0 && (
+                      <div className="flex justify-between items-center">
+                        <div className="flex flex-col">
+                          <span className="ui-label text-red-500/70">Potongan Alpha</span>
+                          <span className="text-[9px] text-red-400/60">({alphaDays} Hari Kerja)</span>
+                        </div>
+                        <span className="ui-label font-bold text-red-500">-{formatCurrency(absentPenalty)}</span>
+                      </div>
+                    )}
                     {insurance > 0 && (
                       <div className="flex justify-between items-center">
-                        <span className="ui-label text-red-500/70">Asuransi/Lainnya</span>
+                        <span className="ui-label text-red-500/70">BPJS / Asuransi</span>
                         <span className="ui-label font-bold text-red-500">-{formatCurrency(insurance)}</span>
+                      </div>
+                    )}
+                    {(advances === 0 && absentPenalty === 0 && insurance === 0) && (
+                      <div className="h-full flex items-center justify-center opacity-20 italic text-center py-4">
+                        <span className="text-[10px] uppercase tracking-widest font-bold">Tidak ada potongan bulan ini</span>
                       </div>
                     )}
                   </div>

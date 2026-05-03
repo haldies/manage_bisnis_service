@@ -50,15 +50,15 @@ export function StaffRoster({ users, branches, storeProfile, onEdit, onDelete }:
                 </TableCell>
                 <TableCell className="py-4">
                   <span className="font-bold text-[12px] text-foreground">
-                    {formatCurrency(user.baseSalary || storeProfile.baseSalary || 0)}
+                    {formatCurrency(Number(user.baseSalary || storeProfile.baseSalary || 0))}
                   </span>
                 </TableCell>
-                <TableCell className="py-4 text-center">
+                 <TableCell className="py-4 text-center">
                   <span className={cn(
                     "ui-label font-black uppercase tracking-widest text-[10px]",
-                    user.role === 'Admin' ? "text-primary" : "text-muted-foreground"
+                    user.role?.name === 'Owner' ? "text-primary" : "text-muted-foreground"
                   )}>
-                    {user.role}
+                    {user.role?.name || '-'}
                   </span>
                 </TableCell>
                 <TableCell className="py-4 text-right pr-6">

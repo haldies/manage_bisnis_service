@@ -30,7 +30,7 @@ import { startOfMonth, endOfMonth, isWithinInterval, startOfDay, endOfDay } from
 
 export default function TransactionsPage() {
   const { transactions, users, currentUser, currentBranch, updateTransaction, deleteTransaction, rolePermissions } = usePosStore();
-  const hasFullAccess = currentUser && rolePermissions[currentUser.role]?.Transactions === 'Full';
+  const hasFullAccess = currentUser?.role?.name ? rolePermissions[currentUser.role.name]?.Transactions === 'Full' : false;
   const [search, setSearch] = useState("");
   const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
   const [editTx, setEditTx] = useState<Transaction | null>(null);
@@ -47,7 +47,7 @@ export default function TransactionsPage() {
     notes: "",
   });
 
-  const isAdmin = currentUser?.role === 'Admin';
+  const isAdmin = currentUser?.role?.name === 'Owner' || currentUser?.role?.name === 'Admin' || currentUser?.roleId === 'owner-role-id';
 
   const filtered = useMemo(() => {
     let list = transactions;

@@ -27,6 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // 1. Create the transaction record
       const newTx = await tx.transaction.create({
         data: {
+          tenantId: 'default',
           branchId,
           cashierId,
           source,
@@ -43,6 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           notes,
           items: {
             create: items.map((item: any) => ({
+              tenantId: 'default',
               itemId: (item.id?.startsWith('svc-') || !item.id) ? null : item.id,
               name: item.name,
               category: item.categoryName || item.category || '',

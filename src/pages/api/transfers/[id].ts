@@ -24,12 +24,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (currentTransfer.status !== 'Pending' && status === 'Approved') {
         return res.status(400).json({ message: 'Mutasi ini sudah diproses oleh orang lain.' });
       }
-      if (currentTransfer.status === 'Completed') {
+      if ((currentTransfer.status as string) === 'Completed') {
         return res.status(400).json({ message: 'Mutasi ini sudah selesai dan tidak bisa diubah.' });
       }
 
       // 2. Stock Check (Only on Completion)
-      if (status === 'Completed' && currentTransfer.status !== 'Completed') {
+      if (status === 'Completed' && (currentTransfer.status as string) !== 'Completed') {
         for (const item of currentTransfer.items) {
            const sourceStock = await prisma.stock.findUnique({
               where: { itemId_branchId: { itemId: item.itemId, branchId: currentTransfer.fromBranchId } }

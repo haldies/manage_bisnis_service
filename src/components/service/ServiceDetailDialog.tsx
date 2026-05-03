@@ -8,6 +8,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter
 } from "@/components/ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Command,
   CommandEmpty,
@@ -168,7 +169,8 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
       status: ticketToSave.status,
       diagnosis: ticketToSave.diagnosis,
       serviceFee: ticketToSave.serviceFee,
-      spareparts: ticketToSave.spareparts
+      spareparts: ticketToSave.spareparts,
+      technicianId: ticketToSave.technicianId
     }).catch(console.error);
 
     // Auto-create transaction when service is Paid
@@ -358,20 +360,31 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                       <span className="text-[8px] sm:text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Antrian Hari Ini</span>
                       <span className="text-lg sm:text-xl font-black text-foreground leading-none">#{queueNumber || '-'}</span>
                     </div>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col min-w-[150px]">
                       <span className="text-[8px] sm:text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Teknisi Penanggung Jawab</span>
-                      <div className="flex flex-col">
-                        <span className="text-xs font-bold text-foreground truncate max-w-[150px]">{technician?.name || "Belum ditunjuk"}</span>
-                        {technician && (
-                          <span className="text-[9px] text-muted-foreground font-medium">
-                            {techWorkload > 0 ? (
-                              <>Menangani <span className="text-primary font-bold">{techWorkload}</span> servis aktif lainnya</>
-                            ) : (
-                              <span className="text-emerald-600 font-bold tracking-tight">Siap fokus pengerjaan</span>
-                            )}
-                          </span>
-                        )}
-                      </div>
+                      <Select 
+                        value={localTicket.technicianId || "unassigned"} 
+                        onValueChange={(val) => setLocalTicket({ ...localTicket, technicianId: val === "unassigned" ? undefined : val })}
+                      >
+                        <SelectTrigger className="h-8 border-none bg-transparent p-0 shadow-none focus:ring-0">
+                          <SelectValue placeholder="Pilih Teknisi" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="unassigned">Belum ditunjuk</SelectItem>
+                          {users.filter(u => u.role?.name === 'Technician' || u.roleId === 'tech-role-id').map(tech => (
+                            <SelectItem key={tech.id} value={tech.id}>{tech.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {technician && (
+                        <span className="text-[9px] text-muted-foreground font-medium">
+                          {techWorkload > 0 ? (
+                            <>Menangani <span className="text-primary font-bold">{techWorkload}</span> servis aktif lainnya</>
+                          ) : (
+                            <span className="text-emerald-600 font-bold tracking-tight">Siap fokus pengerjaan</span>
+                          )}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
