@@ -11,8 +11,16 @@ export default async function handler(
       const { employeeId, date, branchId } = req.query;
       const where: any = {};
       if (employeeId) where.employeeId = employeeId as string;
-      if (date) where.date = date as string;
       if (branchId) where.branchId = branchId as string;
+      
+      if (date) {
+        const d = new Date(date as string);
+        const start = new Date(d);
+        start.setUTCHours(0, 0, 0, 0);
+        const end = new Date(d);
+        end.setUTCHours(23, 59, 59, 999);
+        where.date = { gte: start, lte: end };
+      }
 
       const attendances = await prisma.attendance.findMany({
         where,

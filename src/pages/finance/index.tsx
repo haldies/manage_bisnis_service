@@ -313,31 +313,7 @@ export default function LaporanDashboard() {
               </div>
            </Card>
 
-           <Card className="border border-border/40 bg-card p-6">
-              <h3 className="ui-label text-foreground font-bold mb-5 uppercase tracking-widest">Kesehatan Keuangan</h3>
-              <div className="grid grid-cols-2 gap-4">
-                 <div className="p-4 rounded-xl bg-muted/5 border border-border/10 text-center">
-                    <p className="text-[9px] font-bold uppercase text-muted-foreground mb-1">Efisiensi</p>
-                    <p className="text-xl font-bold tracking-tight">{stats.efficiency.toFixed(1)}%</p>
-                 </div>
-                 <div className="p-4 rounded-xl bg-muted/5 border border-border/10 text-center">
-                    <p className="text-[9px] font-bold uppercase text-muted-foreground mb-1">Laba / Transaksi</p>
-                    <p className="text-xl font-bold tracking-tight ">
-                       {formatCurrency(stats.profit / (stats.totalOrders || 1))}
-                    </p>
-                 </div>
-                 <div className="p-4 rounded-xl bg-muted/5 border border-border/10 text-center">
-                    <p className="text-[9px] font-bold uppercase text-muted-foreground mb-1">Pencapaian Target</p>
-                    <p className="text-xl font-bold tracking-tight">
-                       {((stats.revenue / 50000000) * 100).toFixed(1)}%
-                    </p>
-                 </div>
-                 <div className="p-4 rounded-xl bg-muted/5 border border-border/10 text-center">
-                    <p className="text-[9px] font-bold uppercase text-muted-foreground mb-1">ROI (Return)</p>
-                    <p className="text-xl font-bold tracking-tight">{stats.roi.toFixed(2)}x</p>
-                 </div>
-              </div>
-           </Card>
+
         </div>
 
       </div>
