@@ -129,7 +129,7 @@ export default function UnifiedAppleCashierPage() {
   }, [activeProducts, searchQuery, selectedCategoryId]);
 
   const readyToPickUp = useMemo(() => {
-    return services.filter(s => s.status === 'Completed' || s.status === 'Approved');
+    return services.filter(s => s.status === 'Completed' || s.status === 'ReadyForPickup');
   }, [services]);
 
   const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -174,7 +174,7 @@ export default function UnifiedAppleCashierPage() {
     });
 
     try {
-      await updateServiceTicket(ticket.id, { status: 'Delivered', dateClosed: Date.now() });
+      await updateServiceTicket(ticket.id, { status: 'Completed', dateClosed: Date.now() });
     } catch (e) {
       console.error("Failed to update service ticket status:", e);
     }

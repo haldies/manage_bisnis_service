@@ -152,8 +152,10 @@ export type CartItem = {
   technicianId?: string;
   discount?: number;
   serviceTicketId?: string;
-  itemId?: string; // Untuk data dari database (Prisma)
+  itemId?: string;
   warranty?: string;
+  needsOrder?: boolean;   // stok habis, perlu dipesan via PO
+  poReference?: string;   // nomor PO yang dibuat untuk item ini
 };
 
 export type Transaction = {
@@ -180,24 +182,39 @@ export type Transaction = {
 };
 
 export type ServiceStatus =
-  | 'Pending'           // Step 1: Terima Device
-  | 'Diagnosed'         // Step 2: Selesai Diagnosa
-  | 'WaitingApproval'   // Step 3: Menunggu ACC Customer
-  | 'Approved'          // Step 3: ACC Lanjut Pengerjaan
-  | 'InProgress'        // Sedang Dikerjakan
-  | 'ReadyToPay'        // Menunggu Pembayaran
-  | 'Paid'              // Sudah Bayar / Lunas
-  | 'Completed'         // Step 4: Selesai (Siap Masuk Kasir)
-  | 'Delivered'         // Sudah Diambil & Lunas (Selesai Kasir)
-  | 'Cancelled';
+  | 'Pending'           // Masuk — unit baru diterima
+  | 'InProgress'        // Proses — sedang dikerjakan
+  | 'OnHold'            // Ditunda — tunggu sparepart / apapun
+  | 'WaitingApproval'   // Konfirmasi Harga — menunggu persetujuan pelanggan
+  | 'ReadyForPickup'    // Siap Diambil — selesai, menunggu pengambilan
+  | 'Completed'         // Selesai — sudah diambil & lunas
+  | 'Returned'          // Return / klaim garansi
+  | 'Cancelled';        // Dibatalkan
+
+// Checklist item untuk teknisi
+export type ChecklistItem = {
+  id: string;
+  label: string;
+  checked: boolean;
+  note?: string;
+};
+
+export type ChecklistData = {
+  items: ChecklistItem[];
+  completedAt?: number;
+  completedBy?: string;
+};
 
 export type ServiceType = {
   id: string;
   name: string;
   price: number;
   category?: string;
+  feeType?: 'Flat' | 'Percentage';
+  feeValue?: number;
   incentiveType?: 'Percentage' | 'Flat';
   incentiveValue?: number;
+  deviceModels?: { deviceModelId: string; deviceModel: DeviceModel; price?: number }[];
 };
 
 
@@ -208,13 +225,15 @@ export type DeviceModel = {
   type: string;
 };
 
+export type ServicePaymentStatus = 'Unpaid' | 'DP' | 'Paid';
+
 export type ServiceTicket = {
   id: string;
   dateOpened: number;
   dateClosed?: number;
   customerName: string;
   customerPhone: string;
-  customerAddress?: string; // New field added
+  customerAddress?: string;
   deviceModel: string;
   deviceSerial: string;
   issue: string;
@@ -223,30 +242,152 @@ export type ServiceTicket = {
   serviceFee: number;
   status: ServiceStatus;
   technicianId?: string;
-  spareparts: CartItem[]; // Sparepart yang digunakan
+  spareparts: CartItem[];
   branchId: string;
   updatedAt?: number;
   incentiveType?: 'Percentage' | 'Flat';
   incentiveValue?: number;
+  // Garansi
+  warrantyDays?: number;
+  warrantyExpiry?: number;
+  // Pengambilan unit
+  pickupCode?: string;
+  pickedUpAt?: number;
+  pickedUpBy?: string;
+  // Return / klaim garansi
+  returnReason?: string;
+  returnedAt?: number;
+  returnTxId?: string;
+  // Checklist teknisi
+  preCheckData?: ChecklistData;
+  postCheckData?: ChecklistData;
+  // Pembayaran
+  paymentStatus?: ServicePaymentStatus;
+  dpAmount?: number;        // jumlah DP yang sudah dibayar
+  readyAt?: number;         // timestamp saat masuk ReadyForPickup (untuk aging)
 };
 
 // ─── SUPPLIER & PO ──────────────────────────────────────────────────────
 export type Supplier = {
   id: string;
+  code: string;
   name: string;
-  contact: string;
-  address: string;
-  items: string[]; // List of inventory item IDs they provide
+  phone?: string;
+  email?: string;
+  address?: string;
+  notes?: string;
+  isActive: boolean;
 };
+
+export type PurchaseOrderStatus = 'Draft' | 'Sent' | 'Partial' | 'Received' | 'Cancelled';
 
 export type PurchaseOrder = {
   id: string;
+  poNumber: string;
   supplierId: string;
-  date: number;
-  items: { itemId: string, quantity: number, costPrice: number }[];
-  total: number;
-  status: 'Pending' | 'Ordered' | 'Received' | 'Canceled';
+  supplier?: Supplier;
   branchId: string;
+  status: PurchaseOrderStatus;
+  orderDate: string;
+  expectedDate?: string;
+  notes?: string;
+  totalAmount: number;
+  items: PurchaseOrderItem[];
+};
+
+export type PurchaseOrderItem = {
+  id: string;
+  itemId: string;
+  item?: InventoryItem;
+  quantity: number;
+  receivedQty: number;
+  unitPrice: number;
+};
+
+export type GoodsReceipt = {
+  id: string;
+  grNumber: string;
+  poId: string;
+  po?: PurchaseOrder;
+  branchId: string;
+  receiptDate: string;
+  notes?: string;
+  items: GoodsReceiptItem[];
+};
+
+export type GoodsReceiptItem = {
+  id: string;
+  itemId: string;
+  item?: InventoryItem;
+  quantity: number;
+  unitPrice: number;
+};
+
+export type StockOutType = 'InternalUse' | 'Damaged' | 'Lost' | 'Adjustment';
+
+export type StockOut = {
+  id: string;
+  soNumber: string;
+  branchId: string;
+  type: StockOutType;
+  date: string;
+  reason: string;
+  notes?: string;
+  items: StockOutItem[];
+};
+
+export type StockOutItem = {
+  id: string;
+  itemId: string;
+  item?: InventoryItem;
+  quantity: number;
+};
+
+export type SupplierReturnStatus = 'Draft' | 'Sent' | 'Completed';
+export type SupplierReturnReason = 'Defective' | 'WrongItem' | 'Overstock' | 'Other';
+
+export type SupplierReturn = {
+  id: string;
+  srNumber: string;
+  supplierId: string;
+  supplier?: Supplier;
+  branchId: string;
+  grId?: string;
+  status: SupplierReturnStatus;
+  returnDate: string;
+  notes?: string;
+  items: SupplierReturnItem[];
+};
+
+export type SupplierReturnItem = {
+  id: string;
+  itemId: string;
+  item?: InventoryItem;
+  quantity: number;
+  reason: SupplierReturnReason;
+};
+
+export type StockAuditStatus = 'Open' | 'InProgress' | 'Completed';
+
+export type StockAudit = {
+  id: string;
+  auditNumber: string;
+  branchId: string;
+  branch?: Branch;
+  status: StockAuditStatus;
+  auditDate: string;
+  completedAt?: string;
+  notes?: string;
+  items: StockAuditItem[];
+};
+
+export type StockAuditItem = {
+  id: string;
+  itemId: string;
+  item?: InventoryItem;
+  systemQty: number;
+  physicalQty?: number;
+  discrepancy?: number;
 };
 
 // ─── MUTASI & TRANSFER ──────────────────────────────────────────────────
@@ -339,4 +480,20 @@ export type ReceiptSettings = {
   showTax: boolean;
   showDiscount: boolean;
   receiptFooter: string;
+};
+
+export type ServiceReceiptSettings = {
+  paperWidth: '58mm' | '80mm' | '58mm-on-80mm';
+  // Tanda Terima (saat unit masuk)
+  showIntakeCustomerPhone: boolean;
+  showIntakeDeviceSerial: boolean;
+  showIntakeEstimatedCost: boolean;
+  showIntakePickupCode: boolean;
+  intakeFooter: string;
+  // Nota Selesai (invoice)
+  showInvoiceSpareparts: boolean;
+  showInvoiceServiceFee: boolean;
+  showInvoiceWarranty: boolean;
+  showInvoiceTechnician: boolean;
+  invoiceFooter: string;
 };

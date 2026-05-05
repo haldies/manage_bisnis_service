@@ -6,11 +6,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === 'PUT') {
     try {
-      const { name, sku, categoryId, costPrice, basePrice, unit, rack, image } = req.body;
+      const { name, sku, categoryId, costPrice, basePrice, unit, rack, image, warranty, showInPos } = req.body;
       const updated = await prisma.inventoryItem.update({
         where: { id: String(id) },
         data: { 
           name, sku, costPrice, basePrice, unit, rack, image,
+          warranty: warranty !== undefined ? (warranty || null) : undefined,
+          showInPos: showInPos !== undefined ? showInPos : undefined,
           category: categoryId ? { connect: { id: categoryId } } : undefined
         },
         include: { stocks: true, category: true }

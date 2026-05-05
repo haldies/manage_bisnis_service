@@ -49,3 +49,33 @@ export function formatRelativeDate(dateString: string): string {
 export function truncate(str: string, length = 20): string {
   return str.length > length ? `${str.slice(0, length)}...` : str;
 }
+
+/**
+ * Parse a warranty string (e.g. "30 Hari", "3 Bulan", "1 Tahun") into days.
+ * Returns 0 if the string cannot be parsed.
+ */
+export function parseWarrantyToDays(warranty: string | undefined | null): number {
+  if (!warranty) return 0;
+  const normalized = warranty.trim().toLowerCase();
+  const match = normalized.match(/^(\d+)\s*(hari|day|bulan|month|tahun|year)/);
+  if (!match) return 0;
+  const value = parseInt(match[1], 10);
+  const unit = match[2];
+  if (unit.startsWith('hari') || unit.startsWith('day')) return value;
+  if (unit.startsWith('bulan') || unit.startsWith('month')) return value * 30;
+  if (unit.startsWith('tahun') || unit.startsWith('year')) return value * 365;
+  return 0;
+}
+
+/**
+ * Given a list of spareparts (CartItem with optional warranty string),
+ * return the maximum warrantyDays across all items.
+ */
+export function maxWarrantyDaysFromSpareparts(
+  spareparts: Array<{ warranty?: string }>
+): number {
+  return spareparts.reduce((max, sp) => {
+    const days = parseWarrantyToDays(sp.warranty);
+    return days > max ? days : max;
+  }, 0);
+}

@@ -1,6 +1,6 @@
 /// <reference types="web-bluetooth" />
 
-import { Transaction, StoreProfile, ReceiptSettings } from './types';
+import { Transaction, StoreProfile, ReceiptSettings, ServiceReceiptSettings, ServiceTicket } from './types';
 import { ReceiptFormatter } from './ReceiptFormatter';
 
 export class PrinterService {
@@ -139,6 +139,16 @@ export class PrinterService {
             console.error('Write error:', error);
             throw new Error(`Gagal mengirim data ke printer: ${error.message}`);
         }
+    }
+
+    static async printServiceIntakeReceipt(ticket: ServiceTicket, store: StoreProfile, settings: ServiceReceiptSettings, technicianName?: string): Promise<void> {
+        const formatted = ReceiptFormatter.formatServiceIntakeReceipt(ticket, store, settings, technicianName);
+        await this.printRaw(formatted);
+    }
+
+    static async printServiceInvoice(ticket: ServiceTicket, store: StoreProfile, settings: ServiceReceiptSettings, technicianName?: string): Promise<void> {
+        const formatted = ReceiptFormatter.formatServiceInvoice(ticket, store, settings, technicianName);
+        await this.printRaw(formatted);
     }
 
     static formatReceiptPlain(transaction: Transaction, store: StoreProfile, settings: ReceiptSettings): string {

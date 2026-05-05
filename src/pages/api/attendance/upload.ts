@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import fs from "fs";
-import path from "path";
+import { getSupabaseClient } from "@/lib/supabase";
 
-// Disable default body parser to handle raw base64
 export const config = {
   api: {
     bodyParser: {
@@ -26,28 +24,45 @@ export default async function handler(
       return res.status(400).json({ error: "Missing base64 or employeeId" });
     }
 
-    // Strip the data URL prefix if present (e.g., "data:image/jpeg;base64,...")
+    // Strip data URL prefix jika ada
     const base64Data = base64.replace(/^data:image\/\w+;base64,/, "");
     const buffer = Buffer.from(base64Data, "base64");
 
-    // Create employee-specific directory
-    const uploadDir = path.join(process.cwd(), "public", "uploads", "attendance", employeeId);
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
+    const supabase = getSupabaseClient();
+
+    // ── Supabase Storage ──────────────────────────────────────
+    if (supabase) {
+      const filename = `attendance/${employeeId}/${type || "checkin"}_${Date.now()}.jpg`;
+
+      const { data, error } = await supabase.storage
+        .from("attendance-photos")
+        .upload(filename, buffer, {
+          contentType: "image/jpeg",
+          upsert: false,
+        });
+
+      if (error) {
+        console.error("[Upload] Supabase storage error:", error.message);
+        // Fallback ke base64 data URL jika storage gagal
+        const dataUrl = `data:image/jpeg;base64,${base64Data}`;
+        return res.status(200).json({ url: dataUrl });
+      }
+
+      const { data: publicData } = supabase.storage
+        .from("attendance-photos")
+        .getPublicUrl(filename);
+
+      return res.status(200).json({ url: publicData.publicUrl });
     }
 
-    // Generate unique filename: type (checkin|checkout) + timestamp
-    const filename = `${type || "checkin"}_${Date.now()}.jpg`;
-    const filePath = path.join(uploadDir, filename);
+    // ── Fallback: kembalikan base64 data URL ──────────────────
+    // Dipakai jika Supabase belum dikonfigurasi
+    console.warn("[Upload] Supabase not configured, returning base64 data URL");
+    const dataUrl = `data:image/jpeg;base64,${base64Data}`;
+    return res.status(200).json({ url: dataUrl });
 
-    fs.writeFileSync(filePath, buffer);
-
-    // Return public URL (accessible via Cloudflare tunnel or local)
-    const publicUrl = `/uploads/attendance/${employeeId}/${filename}`;
-
-    return res.status(200).json({ url: publicUrl });
   } catch (error: any) {
-    console.error("Upload error:", error);
+    console.error("[Upload] Error:", error);
     return res.status(500).json({ error: "Failed to upload photo", detail: error.message });
   }
 }

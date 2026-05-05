@@ -164,7 +164,7 @@ export default function StaffManagementPage() {
     if (userIncentiveSource === 'Service' || userIncentiveSource === 'All') {
       const techTickets = (services || []).filter(s => 
         s.technicianId === user.id && 
-        (s.status === 'Paid' || s.status === 'Completed' || s.status === 'Delivered') &&
+        (s.status === 'Completed' || s.status === 'Returned') &&
         isInPeriod(s.updatedAt || s.dateOpened)
       );
       
@@ -566,11 +566,10 @@ export default function StaffManagementPage() {
                 { id: 'operasional', label: 'Kasbon & Cuti' },
                 { id: 'payroll', label: 'Laporan Gaji' },
                 { id: 'payroll-settings', label: 'Pengaturan Gaji' },
-                { id: 'access', label: 'Hak Akses', adminOnly: true }
-              ].filter(t => !t.adminOnly || currentUser?.role?.name === 'Owner').map(tab => (
-                <TabsTrigger 
+              ].map(tab => (
+                <TabsTrigger
                   key={tab.id}
-                  value={tab.id} 
+                  value={tab.id}
                   className="rounded-md px-5 ui-label data-[state=active]:bg-foreground data-[state=active]:text-background shrink-0 whitespace-nowrap"
                 >
                   {tab.label}
@@ -628,12 +627,6 @@ export default function StaffManagementPage() {
                 />
               </TabsContent>
 
-              <TabsContent value="access" className="m-0">
-                <RolePermissionTable 
-                  rolePermissions={rolePermissions} 
-                  updateRolePermission={(role: any, module, level) => updateRolePermission(typeof role === 'string' ? role : role.name, module, level)} 
-                />
-              </TabsContent>
             </Tabs>
 
         <StaffDialog 

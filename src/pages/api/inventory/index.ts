@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === 'POST') {
     try {
-      const { name, sku, categoryId, costPrice, basePrice, unit, rack, image, branchId, initialStock } = req.body;
+      const { name, sku, categoryId, costPrice, basePrice, unit, rack, image, warranty, showInPos, branchId, initialStock } = req.body;
 
       // Validate required fields
       if (!name || !sku || !categoryId || costPrice == null || basePrice == null || !unit) {
@@ -40,6 +40,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           unit,
           rack,
           image,
+          warranty: warranty || null,
+          showInPos: showInPos !== undefined ? showInPos : true,
           category: {
             connect: { id: categoryId }
           },

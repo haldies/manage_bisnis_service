@@ -3,19 +3,31 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import {
   ReceiptText, Package, Wrench, LineChart,
-  Smartphone, Users, LogOut, MapPin, Printer,
-  ChevronLeft, ChevronRight
+  Smartphone, Users, LogOut, MapPin, Settings,
+  ChevronLeft, ChevronRight, Truck, ChevronDown,
+  UserCircle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePosStore } from "@/lib/store";
 import { ModuleName, AccessLevel } from "@/lib/types";
 import { useSidebar } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
-const NAV_GROUPS: {
+type NavItem = {
   label: string;
-  items: { label: string; href: string; icon: any; module: ModuleName; requiredLevel?: AccessLevel }[];
-}[] = [
+  href: string;
+  icon: any;
+  module: ModuleName;
+  requiredLevel?: AccessLevel;
+};
+
+type NavGroup = {
+  label: string;
+  collapsible?: boolean;
+  items: NavItem[];
+};
+
+const NAV_GROUPS: NavGroup[] = [
   {
     label: "Monitoring",
     items: [
@@ -32,12 +44,14 @@ const NAV_GROUPS: {
   },
   {
     label: "Manajemen",
+    collapsible: true,
     items: [
       { label: "Inventori", href: "/inventory", icon: Package, module: "Inventory", requiredLevel: "Read" },
+      { label: "Supplier & PO", href: "/suppliers", icon: Truck, module: "Inventory", requiredLevel: "Read" },
       { label: "Staf & Payroll", href: "/staff", icon: Users, module: "Staff", requiredLevel: "Read" },
       { label: "Cabang", href: "/branches", icon: MapPin, module: "Staff", requiredLevel: "Full" },
       { label: "Laporan", href: "/finance", icon: LineChart, module: "Finance", requiredLevel: "Read" },
-      { label: "Printer", href: "/manage-printers", icon: Printer, module: "Printers", requiredLevel: "Full" },
+      { label: "Pengaturan", href: "/settings", icon: Settings, module: "Staff", requiredLevel: "Read" },
     ],
   },
 ];
@@ -47,19 +61,25 @@ export function AppSidebar() {
   const { open, setOpen, openMobile, setOpenMobile, isMobile } = useSidebar();
   const { currentUser, currentBranch, logout, rolePermissions } = usePosStore();
 
+  // Track collapsed state per group label
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+
+  const toggleGroup = (label: string) => {
+    setCollapsed(prev => ({ ...prev, [label]: !prev[label] }));
+  };
+
   const isModuleAllowed = (module: ModuleName, requiredLevel: AccessLevel = "Read") => {
     if (!currentUser) return false;
     if (currentUser.role?.name === "Owner") return true;
 
-    // 1. Check store rolePermissions (populated after fetchRoles)
+    const levels: AccessLevel[] = ["None", "Read", "Full"];
+
     const storePerms = rolePermissions[currentUser.role?.name || ""];
-    if (storePerms?.[module]) {
+    if (storePerms && module in storePerms) {
       const userLevel = storePerms[module];
-      const levels: AccessLevel[] = ["None", "Read", "Full"];
       return levels.indexOf(userLevel) >= levels.indexOf(requiredLevel);
     }
 
-    // 2. Fallback: derive from granular permissions on the user object
     const rolePerm = (currentUser.role as any)?.permissions;
     if (Array.isArray(rolePerm) && rolePerm.length > 0) {
       const p = rolePerm.find((p: any) => p.module === module);
@@ -67,21 +87,19 @@ export function AppSidebar() {
         let userLevel: AccessLevel = "None";
         if (p.canCreate || p.canUpdate || p.canDelete) userLevel = "Full";
         else if (p.canRead) userLevel = "Read";
-        const levels: AccessLevel[] = ["None", "Read", "Full"];
         return levels.indexOf(userLevel) >= levels.indexOf(requiredLevel);
       }
+      return false;
     }
 
     return false;
   };
 
-  // Determine current effective open state
   const isOpen = isMobile ? openMobile : open;
   const setIsOpen = isMobile ? setOpenMobile : setOpen;
 
   return (
     <>
-      {/* Mobile overlay */}
       {isMobile && openMobile && (
         <div
           className="fixed inset-0 z-[60] bg-black/30 backdrop-blur-sm md:hidden"
@@ -124,55 +142,100 @@ export function AppSidebar() {
             );
             if (allowedItems.length === 0) return null;
 
+            const isGroupCollapsed = group.collapsible && collapsed[group.label];
+            // Auto-expand if any item in group is active
+            const hasActiveItem = allowedItems.some(item =>
+              item.href === "/" ? router.pathname === "/" : router.pathname.startsWith(item.href)
+            );
+
             return (
               <div key={group.label}>
                 {isOpen && (
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-sidebar-foreground/30 px-3 mb-1">
-                    {group.label}
-                  </p>
-                )}
-                <div className="space-y-0.5">
-                  {allowedItems.map((item) => {
-                    const isActive =
-                      item.href === "/"
-                        ? router.pathname === "/"
-                        : router.pathname.startsWith(item.href);
-                    const Icon = item.icon;
-
-                    return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        title={!isOpen ? item.label : undefined}
+                  group.collapsible ? (
+                    <button
+                      onClick={() => toggleGroup(group.label)}
+                      className="w-full flex items-center justify-between px-3 mb-1 group"
+                    >
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-sidebar-foreground/30 group-hover:text-sidebar-foreground/50 transition-colors">
+                        {group.label}
+                      </p>
+                      <ChevronDown
                         className={cn(
-                          "flex items-center gap-3 h-9 px-3 rounded-lg",
-                          "transition-all duration-150 group",
-                          isActive
-                            ? "bg-sidebar-primary text-sidebar-primary-foreground font-bold"
-                            : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"
+                          "h-3 w-3 text-sidebar-foreground/20 transition-transform duration-200",
+                          isGroupCollapsed && !hasActiveItem ? "" : "rotate-180"
                         )}
-                      >
-                        <Icon
+                      />
+                    </button>
+                  ) : (
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-sidebar-foreground/30 px-3 mb-1">
+                      {group.label}
+                    </p>
+                  )
+                )}
+
+                {/* Items — hidden when collapsed (unless has active item) */}
+                {(!isGroupCollapsed || hasActiveItem || !isOpen) && (
+                  <div className="space-y-0.5">
+                    {allowedItems.map((item) => {
+                      const isActive =
+                        item.href === "/"
+                          ? router.pathname === "/"
+                          : router.pathname.startsWith(item.href);
+                      const Icon = item.icon;
+
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          title={!isOpen ? item.label : undefined}
                           className={cn(
-                            "shrink-0 transition-transform duration-150",
-                            isOpen ? "h-4 w-4" : "h-4 w-4 mx-auto",
-                            isActive ? "opacity-100" : "opacity-60 group-hover:opacity-100"
+                            "flex items-center gap-3 h-9 px-3 rounded-lg",
+                            "transition-all duration-150 group",
+                            isActive
+                              ? "bg-sidebar-primary text-sidebar-primary-foreground font-bold"
+                              : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"
                           )}
-                        />
-                        {isOpen && (
-                          <span className="text-sm truncate">{item.label}</span>
-                        )}
-                      </Link>
-                    );
-                  })}
-                </div>
+                        >
+                          <Icon
+                            className={cn(
+                              "shrink-0 transition-transform duration-150",
+                              isOpen ? "h-4 w-4" : "h-4 w-4 mx-auto",
+                              isActive ? "opacity-100" : "opacity-60 group-hover:opacity-100"
+                            )}
+                          />
+                          {isOpen && (
+                            <span className="text-sm truncate">{item.label}</span>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             );
           })}
         </nav>
 
-        {/* Footer — user info + logout */}
-        <div className="shrink-0 border-t border-sidebar-border/50 p-2">
+        {/* Footer */}
+        <div className="shrink-0 border-t border-sidebar-border/50 p-2 space-y-0.5">
+          {/* Portal Saya — untuk semua pegawai */}
+          {currentUser && (
+            <Link
+              href="/my"
+              title={!isOpen ? "Portal Saya" : undefined}
+              className={cn(
+                "flex items-center gap-3 h-9 px-3 rounded-lg transition-all duration-150 group",
+                router.pathname.startsWith("/my")
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground font-bold"
+                  : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground font-medium"
+              )}
+            >
+              <UserCircle className={cn("h-4 w-4 shrink-0 opacity-60 group-hover:opacity-100", !isOpen && "mx-auto")} />
+              {isOpen && <span className="text-sm truncate">Portal Saya</span>}
+            </Link>
+          )}
+
+          {/* User info + logout */}
           <div
             className={cn(
               "flex items-center gap-3 px-3 py-2 rounded-lg",

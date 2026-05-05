@@ -1,14 +1,26 @@
 "use client";
 import { useState, useMemo } from "react";
 import { Layout } from "@/components/layout/Layout";
-import { Search } from "lucide-react";
+import { 
+  Plus, Search, Settings2, MoreVertical, 
+  Eye, Edit2, CheckCircle2, Clock, 
+  Activity, X, ChevronRight, Filter
+} from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { 
+  DropdownMenu, 
+  DropdownMenuCheckboxItem, 
+  DropdownMenuContent, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 import { usePosStore } from "@/lib/store";
-import { ServiceStatus, ServiceTicket } from "@/lib/types";
+import { ServiceTicket } from "@/lib/types";
 
 // Components
 import RegisterServiceDialog from "../../components/service/RegisterServiceDialog";
@@ -16,91 +28,238 @@ import ServiceDetailDialog from "../../components/service/ServiceDetailDialog";
 import ServiceTypeDialog from "../../components/service/ServiceTypeDialog";
 import ServiceTable from "../../components/service/ServiceTable";
 import ServiceTypeTable from "../../components/service/ServiceTypeTable";
+import PickupDialog from "../../components/service/PickupDialog";
+
+const STATUS_TABS = [
+  { value: 'masuk',      label: 'Masuk',        statuses: ['Pending'],                   color: 'bg-amber-500' },
+  { value: 'proses',     label: 'Proses',        statuses: ['InProgress'],                color: 'bg-blue-500' },
+  { value: 'tertunda',   label: 'Tertunda',      statuses: ['OnHold'],                    color: 'bg-orange-500' },
+  { value: 'siap-ambil', label: 'Siap Diambil',  statuses: ['ReadyForPickup'],            color: 'bg-emerald-500' },
+  { value: 'selesai',    label: 'Selesai',       statuses: ['Completed'],                 color: 'bg-violet-500' },
+  { value: 'riwayat',    label: 'Return/Batal',  statuses: ['Returned', 'Cancelled'],     color: 'bg-muted-foreground/30' },
+] as const;
+
+// Tab khusus teknisi
+const TECHNICIAN_TABS = [
+  { value: 'proses',     label: 'Pengerjaan',    statuses: ['InProgress'],                color: 'bg-blue-500' },
+  { value: 'tertunda',   label: 'Tunggu Sparepart', statuses: ['OnHold'],                 color: 'bg-orange-500' },
+  { value: 'siap-ambil', label: 'Selesai',       statuses: ['ReadyForPickup', 'Completed'], color: 'bg-emerald-500' },
+] as const;
+
+type StatusTab = typeof STATUS_TABS[number]['value'];
+
+const TABLE_COLUMNS = [
+  { id: 'no', label: 'No' },
+  { id: 'date', label: 'Tanggal' },
+  { id: 'customer', label: 'Pelanggan' },
+  { id: 'device', label: 'Device' },
+  { id: 'issue', label: 'Keluhan' },
+  { id: 'technician', label: 'Teknisi' },
+  { id: 'status', label: 'Status' },
+  { id: 'billing', label: 'Tagihan' },
+];
 
 export default function ServiceManagementPage() {
-  const { services, serviceTypes } = usePosStore();
+  const { services, currentUser, updateServiceTicket, fetchTransactions } = usePosStore();
+  const isTechnician = currentUser?.role?.name === 'Technician';
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<ServiceStatus | 'All'>('All');
-  const [activeView, setActiveView] = useState("tickets");
+  const [activeTab, setActiveTab] = useState<string>(isTechnician ? "proses" : "masuk");
 
   // Dialog States
   const [isRegOpen, setIsRegOpen] = useState(false);
+  const [isPickupOpen, setIsPickupOpen] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<ServiceTicket | null>(null);
   const [isTypeDialogOpen, setIsTypeDialogOpen] = useState(false);
+  const [showOnlyMyTasks, setShowOnlyMyTasks] = useState(true);
   const [editingType, setEditingType] = useState<any>(null);
 
+  const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>({
+    no: true,
+    date: true,
+    customer: true,
+    device: true,
+    issue: true,
+    technician: true,
+    status: true,
+    billing: true,
+  });
+
+  // Tabs yang aktif sesuai role
+  const activeTabs = isTechnician ? TECHNICIAN_TABS : STATUS_TABS;
+
+  // Count per status tab
+  const tabCounts = useMemo(() => {
+    const base = isTechnician
+      ? services.filter(t => t.technicianId === currentUser?.id)
+      : services;
+    const allTabs = [...STATUS_TABS, ...TECHNICIAN_TABS];
+    return Object.fromEntries(
+      allTabs.map(tab => [
+        tab.value,
+        base.filter(t => (tab.statuses as readonly string[]).includes(t.status)).length,
+      ])
+    ) as Record<string, number>;
+  }, [services, isTechnician, currentUser?.id]);
+
   const filteredServices = useMemo(() => {
+    // Cari tab dari daftar yang sesuai role
+    const tab = activeTabs.find(t => t.value === activeTab);
+    if (!tab) return [];
     return services.filter(t => {
-      const matchesSearch = t.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        t.deviceModel.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        t.id.toLowerCase().includes(searchQuery.toLowerCase());
-      const isNotCancelled = t.status !== 'Cancelled' && t.status !== 'Delivered';
-      const matchesStatus = statusFilter === 'All' ? isNotCancelled : t.status === statusFilter;
-      return matchesSearch && matchesStatus;
+      if (isTechnician && t.technicianId !== currentUser?.id) return false;
+      if (!(tab.statuses as readonly string[]).includes(t.status)) return false;
+      if (!searchQuery) return true;
+      const q = searchQuery.toLowerCase();
+      return (
+        t.customerName.toLowerCase().includes(q) ||
+        t.deviceModel.toLowerCase().includes(q) ||
+        t.id.toLowerCase().includes(q) ||
+        (t.pickupCode?.toLowerCase().includes(q) ?? false)
+      );
     }).sort((a, b) => b.dateOpened - a.dateOpened);
-  }, [services, searchQuery, statusFilter]);
+  }, [services, searchQuery, activeTab, activeTabs, isTechnician, currentUser?.id]);
+
+  const handlePickupConfirm = (
+    updatedTicket: ServiceTicket,
+    _pickedUpBy: string,
+    _paymentMethod: string,
+    _amountPaid: number
+  ) => {
+    updateServiceTicket(updatedTicket.id, {
+      status: updatedTicket.status,
+      pickedUpAt: updatedTicket.pickedUpAt,
+      pickedUpBy: updatedTicket.pickedUpBy,
+      dateClosed: updatedTicket.dateClosed,
+    }).catch(console.error);
+    fetchTransactions().catch(console.error);
+  };
+
+  const isServiceTab = STATUS_TABS.some(t => t.value === activeTab);
 
   return (
     <Layout title="Manajemen Servis" requiredModule="Service" requiredLevel="Read">
       <div className="h-full flex flex-col overflow-hidden animate-in fade-in duration-500">
         <div className="flex-1 overflow-y-auto no-scrollbar pb-24 px-1">
-          <Tabs value={activeView} onValueChange={setActiveView} className="space-y-8">
-            <div className="flex justify-between items-center">
-              <TabsList className="bg-muted/20 p-1 rounded-xl">
-                <TabsTrigger value="tickets" className="rounded-lg px-6 py-2 text-xs font-bold data-[state=active]:bg-background">Daftar Servis</TabsTrigger>
-                <TabsTrigger value="types" className="rounded-lg px-6 py-2 text-xs font-bold data-[state=active]:bg-background">Jenis Jasa</TabsTrigger>
-              </TabsList>
 
-              {activeView === 'types' && (
-                <Button onClick={() => { setEditingType(null); setIsTypeDialogOpen(true); }} className="h-9 text-xs">
-                  Tambah Data Jasa
-                </Button>
-              )}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-5">
+
+            {/* ── Single tab bar: service stages + Jenis Jasa ── */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-border">
+              {/* Scrollable tab list */}
+              <div className="overflow-x-auto no-scrollbar flex-1 min-w-0">
+                <TabsList className="bg-transparent p-0 h-auto gap-0 flex w-max min-w-full rounded-none border-none">
+
+                  {/* Service stage tabs — loop dari activeTabs (berbeda untuk teknisi vs kasir) */}
+                  {activeTabs.map(tab => (
+                    <TabsTrigger
+                      key={tab.value}
+                      value={tab.value}
+                      className="
+relative bg-transparent rounded-none px-4 py-2.5 text-xs font-semibold text-muted-foreground
+border-b-2 border-transparent
+data-[state=active]:border-primary
+data-[state=active]:text-foreground
+data-[state=active]:bg-transparent
+data-[state=active]:shadow-none
+flex items-center gap-1.5 shrink-0 whitespace-nowrap
+"
+                    >
+                      {tab.label}
+                      {tabCounts[tab.value] > 0 && (
+                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full min-w-[18px] text-center leading-none text-white ${tab.color}`}>
+                          {tabCounts[tab.value]}
+                        </span>
+                      )}
+                    </TabsTrigger>
+                  ))}
+
+                  {/* Divider & Jenis Jasa — dihapus, dipindah ke Pengaturan */}
+                </TabsList>
+              </div>
+
+
             </div>
+            <div className="flex w-full justify-between">
 
-            <TabsContent value="tickets" className="m-0 space-y-8">
-              {/* Header / Filter */}
-              <div className="flex flex-row items-center gap-3 w-full">
-                <div className="relative flex-1">
+              {/* ── Search bar — only shown on service tabs ── */}
+              {isServiceTab && (
+                <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground/30" />
                   <Input
-                    placeholder="Cari pelanggan, device, atau ID..."
+                    placeholder="Cari nama pelanggan, device, ID, atau kode ambil..."
                     className="pl-9 h-10 w-full"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
+              )}
+              {/* Context-aware action buttons */}
+              <div className="flex items-center gap-2 shrink-0 pb-1">
+                {activeTab === 'masuk' && !isTechnician && (
+                  <Button onClick={() => setIsRegOpen(true)} className="h-9 text-xs gap-1.5">
+                    <Plus className="h-3.5 w-3.5" />
+                    Registrasi Servis
+                  </Button>
+                )}
+                {activeTab === 'siap-ambil' && !isTechnician && (
+                  <Button variant="outline" onClick={() => setIsPickupOpen(true)} className="h-9 text-xs">
+                    Pengambilan
+                  </Button>
+                )}
 
-                <div className="min-w-[140px]">
-                  <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as any)}>
-                    <SelectTrigger className="h-10">
-                      <SelectValue placeholder="Semua Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="All">Semua Status</SelectItem>
-                      <SelectItem value="Pending">Antrian</SelectItem>
-                      <SelectItem value="InProgress">Mengerjakan</SelectItem>
-                      <SelectItem value="ReadyToPay">Menunggu Pembayaran</SelectItem>
-                      <SelectItem value="Paid">Siap Diambil</SelectItem>
-                      <SelectItem value="Completed">Sudah Diambil</SelectItem>
-                      <SelectItem value="Delivered">Selesai</SelectItem>
-                      <SelectItem value="Cancelled">Dibatalkan</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <Button onClick={() => setIsRegOpen(true)} className="h-10 px-6 rounded-md">
-                  Registrasi Servis
-                </Button>
+                {/* Column Visibility Filter */}
+                {isServiceTab && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="icon" className="h-9 w-9">
+                        <Settings2 className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuLabel className="text-[10px] font-bold uppercase text-muted-foreground/60">
+                        Atur Kolom
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {TABLE_COLUMNS.map((col) => {
+                        // Skip billing column for technicians
+                        if (col.id === 'billing' && isTechnician) return null;
+                        
+                        return (
+                          <DropdownMenuCheckboxItem
+                            key={col.id}
+                            checked={visibleColumns[col.id]}
+                            onCheckedChange={(checked) =>
+                              setVisibleColumns((prev) => ({ ...prev, [col.id]: !!checked }))
+                            }
+                            className="text-xs"
+                          >
+                            {col.label}
+                          </DropdownMenuCheckboxItem>
+                        );
+                      })}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
               </div>
 
-              <ServiceTable services={filteredServices} onSelect={setSelectedTicket} />
-            </TabsContent>
+            </div>
 
-            <TabsContent value="types" className="m-0">
-              <ServiceTypeTable onEdit={(type) => { setEditingType(type); setIsTypeDialogOpen(true); }} />
-            </TabsContent>
+            {/* ── Tab contents — loop dari activeTabs ── */}
+            {activeTabs.map(tab => (
+              <TabsContent key={tab.value} value={tab.value} className="m-0">
+                <ServiceTable
+                  services={filteredServices}
+                  onSelect={setSelectedTicket}
+                  hideStatusColumn={!isTechnician}
+                  showIssueColumn={tab.value === 'masuk' || visibleColumns.issue}
+                  visibleColumns={visibleColumns}
+                />
+              </TabsContent>
+            ))}
+
+            {/* ── Jenis Jasa tab content — dipindah ke Pengaturan ── */}
+
           </Tabs>
         </div>
       </div>
@@ -108,16 +267,16 @@ export default function ServiceManagementPage() {
       {/* Dialogs */}
       <RegisterServiceDialog open={isRegOpen} onOpenChange={setIsRegOpen} />
 
+      <PickupDialog
+        open={isPickupOpen}
+        onOpenChange={setIsPickupOpen}
+        onConfirm={handlePickupConfirm}
+      />
+
       <ServiceDetailDialog
         ticket={selectedTicket}
         onClose={() => setSelectedTicket(null)}
         onUpdate={(updated) => setSelectedTicket(updated)}
-      />
-
-      <ServiceTypeDialog
-        open={isTypeDialogOpen}
-        onOpenChange={setIsTypeDialogOpen}
-        editingType={editingType}
       />
     </Layout>
   );

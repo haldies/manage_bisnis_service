@@ -241,6 +241,7 @@ exports.Prisma.InventoryItemScalarFieldEnum = {
   rack: 'rack',
   image: 'image',
   showInPos: 'showInPos',
+  warranty: 'warranty',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
@@ -319,6 +320,19 @@ exports.Prisma.ServiceTicketScalarFieldEnum = {
   branchId: 'branchId',
   incentiveType: 'incentiveType',
   incentiveValue: 'incentiveValue',
+  warrantyDays: 'warrantyDays',
+  warrantyExpiry: 'warrantyExpiry',
+  pickupCode: 'pickupCode',
+  pickedUpAt: 'pickedUpAt',
+  pickedUpBy: 'pickedUpBy',
+  returnReason: 'returnReason',
+  returnedAt: 'returnedAt',
+  returnTxId: 'returnTxId',
+  preCheckData: 'preCheckData',
+  postCheckData: 'postCheckData',
+  paymentStatus: 'paymentStatus',
+  dpAmount: 'dpAmount',
+  readyAt: 'readyAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
@@ -396,12 +410,21 @@ exports.Prisma.ServiceTypeScalarFieldEnum = {
   name: 'name',
   price: 'price',
   category: 'category',
+  feeType: 'feeType',
+  feeValue: 'feeValue',
   incentiveType: 'incentiveType',
   incentiveValue: 'incentiveValue',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
   updatedBy: 'updatedBy'
+};
+
+exports.Prisma.ServiceTypeDeviceModelScalarFieldEnum = {
+  id: 'id',
+  serviceTypeId: 'serviceTypeId',
+  deviceModelId: 'deviceModelId',
+  price: 'price'
 };
 
 exports.Prisma.OvertimeScalarFieldEnum = {
@@ -479,9 +502,148 @@ exports.Prisma.BonusPoolScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SupplierScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  phone: 'phone',
+  email: 'email',
+  address: 'address',
+  notes: 'notes',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.PurchaseOrderScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  poNumber: 'poNumber',
+  supplierId: 'supplierId',
+  branchId: 'branchId',
+  status: 'status',
+  orderDate: 'orderDate',
+  expectedDate: 'expectedDate',
+  notes: 'notes',
+  totalAmount: 'totalAmount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.PurchaseOrderItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  poId: 'poId',
+  itemId: 'itemId',
+  quantity: 'quantity',
+  receivedQty: 'receivedQty',
+  unitPrice: 'unitPrice'
+};
+
+exports.Prisma.GoodsReceiptScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  grNumber: 'grNumber',
+  poId: 'poId',
+  branchId: 'branchId',
+  receiptDate: 'receiptDate',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.GoodsReceiptItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  grId: 'grId',
+  itemId: 'itemId',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice'
+};
+
+exports.Prisma.StockOutScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  soNumber: 'soNumber',
+  branchId: 'branchId',
+  type: 'type',
+  date: 'date',
+  reason: 'reason',
+  notes: 'notes',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StockOutItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  soId: 'soId',
+  itemId: 'itemId',
+  quantity: 'quantity'
+};
+
+exports.Prisma.SupplierReturnScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  srNumber: 'srNumber',
+  supplierId: 'supplierId',
+  branchId: 'branchId',
+  grId: 'grId',
+  status: 'status',
+  returnDate: 'returnDate',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.SupplierReturnItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  srId: 'srId',
+  itemId: 'itemId',
+  quantity: 'quantity',
+  reason: 'reason'
+};
+
+exports.Prisma.StockAuditScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  auditNumber: 'auditNumber',
+  branchId: 'branchId',
+  status: 'status',
+  auditDate: 'auditDate',
+  completedAt: 'completedAt',
+  completedBy: 'completedBy',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StockAuditItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  auditId: 'auditId',
+  itemId: 'itemId',
+  systemQty: 'systemQty',
+  physicalQty: 'physicalQty',
+  discrepancy: 'discrepancy'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -492,6 +654,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.RequestStatus = exports.$Enums.RequestStatus = {
   Pending: 'Pending',
@@ -522,15 +690,19 @@ exports.TransactionStatus = exports.$Enums.TransactionStatus = {
 
 exports.ServiceStatus = exports.$Enums.ServiceStatus = {
   Pending: 'Pending',
-  Diagnosed: 'Diagnosed',
-  WaitingApproval: 'WaitingApproval',
-  Approved: 'Approved',
   InProgress: 'InProgress',
-  ReadyToPay: 'ReadyToPay',
-  Paid: 'Paid',
+  OnHold: 'OnHold',
+  WaitingApproval: 'WaitingApproval',
+  ReadyForPickup: 'ReadyForPickup',
   Completed: 'Completed',
-  Delivered: 'Delivered',
+  Returned: 'Returned',
   Cancelled: 'Cancelled'
+};
+
+exports.ServicePaymentStatus = exports.$Enums.ServicePaymentStatus = {
+  Unpaid: 'Unpaid',
+  DP: 'DP',
+  Paid: 'Paid'
 };
 
 exports.AttendanceStatus = exports.$Enums.AttendanceStatus = {
@@ -558,6 +730,40 @@ exports.InventoryUnitStatus = exports.$Enums.InventoryUnitStatus = {
   Defective: 'Defective'
 };
 
+exports.PurchaseOrderStatus = exports.$Enums.PurchaseOrderStatus = {
+  Draft: 'Draft',
+  Sent: 'Sent',
+  Partial: 'Partial',
+  Received: 'Received',
+  Cancelled: 'Cancelled'
+};
+
+exports.StockOutType = exports.$Enums.StockOutType = {
+  InternalUse: 'InternalUse',
+  Damaged: 'Damaged',
+  Lost: 'Lost',
+  Adjustment: 'Adjustment'
+};
+
+exports.SupplierReturnStatus = exports.$Enums.SupplierReturnStatus = {
+  Draft: 'Draft',
+  Sent: 'Sent',
+  Completed: 'Completed'
+};
+
+exports.SupplierReturnReason = exports.$Enums.SupplierReturnReason = {
+  Defective: 'Defective',
+  WrongItem: 'WrongItem',
+  Overstock: 'Overstock',
+  Other: 'Other'
+};
+
+exports.StockAuditStatus = exports.$Enums.StockAuditStatus = {
+  Open: 'Open',
+  InProgress: 'InProgress',
+  Completed: 'Completed'
+};
+
 exports.Prisma.ModelName = {
   Role: 'Role',
   Permission: 'Permission',
@@ -576,12 +782,24 @@ exports.Prisma.ModelName = {
   Attendance: 'Attendance',
   StoreProfile: 'StoreProfile',
   ServiceType: 'ServiceType',
+  ServiceTypeDeviceModel: 'ServiceTypeDeviceModel',
   Overtime: 'Overtime',
   DeviceModel: 'DeviceModel',
   StockTransfer: 'StockTransfer',
   StockTransferItem: 'StockTransferItem',
   InventoryUnit: 'InventoryUnit',
-  BonusPool: 'BonusPool'
+  BonusPool: 'BonusPool',
+  Supplier: 'Supplier',
+  PurchaseOrder: 'PurchaseOrder',
+  PurchaseOrderItem: 'PurchaseOrderItem',
+  GoodsReceipt: 'GoodsReceipt',
+  GoodsReceiptItem: 'GoodsReceiptItem',
+  StockOut: 'StockOut',
+  StockOutItem: 'StockOutItem',
+  SupplierReturn: 'SupplierReturn',
+  SupplierReturnItem: 'SupplierReturnItem',
+  StockAudit: 'StockAudit',
+  StockAuditItem: 'StockAuditItem'
 };
 
 /**

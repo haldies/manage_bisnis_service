@@ -2,17 +2,14 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { 
   User, Branch, InventoryItem, Stock, ServiceTicket, 
-  Supplier, PurchaseOrder, StockTransfer, FinanceLog,
-  Transaction, CartItem, PaymentMethod, StoreProfile, ReceiptSettings,
+  Supplier, PurchaseOrder, GoodsReceipt, StockOut, SupplierReturn, StockAudit,
+  StockTransfer, FinanceLog,
+  Transaction, CartItem, PaymentMethod, StoreProfile, ReceiptSettings, ServiceReceiptSettings,
   Shift, CashAdvance, LeaveRequest, ModuleName, Role, Category, AccessLevel, Attendance, DeviceModel, ServiceType,
   InventoryUnit, StockTransferStatus, BonusPool
 } from './types';
 
-/**
- * Resolve a user's access level for a given module.
- * Checks store rolePermissions first, then falls back to the granular
- * permissions embedded in the user's role object (from login response).
- */
+
 export function getUserAccessLevel(
   user: User | null,
   module: ModuleName,
@@ -88,6 +85,10 @@ interface PosState {
   services: ServiceTicket[];
   suppliers: Supplier[];
   purchaseOrders: PurchaseOrder[];
+  goodsReceipts: GoodsReceipt[];
+  stockOuts: StockOut[];
+  supplierReturns: SupplierReturn[];
+  stockAudits: StockAudit[];
   financeLogs: FinanceLog[];
   stockTransfers: StockTransfer[];
   inventoryUnits: InventoryUnit[];
@@ -114,6 +115,7 @@ interface PosState {
   selectedPrinter: PrinterConfig | null;
 
   receiptSettings: ReceiptSettings;
+  serviceReceiptSettings: ServiceReceiptSettings;
   _hasHydrated: boolean;
   setHasHydrated: (state: boolean) => void;
   lastFetched: number | null;
@@ -143,6 +145,7 @@ interface PosState {
   
   updatePrinterConfig: (config: PrinterConfig | null) => void;
   updateReceiptSettings: (settings: Partial<ReceiptSettings>) => void;
+  updateServiceReceiptSettings: (settings: Partial<ServiceReceiptSettings>) => void;
   
   updateStoreProfile: (updates: Partial<StoreProfile>) => void;
   resetAllData: () => void;
@@ -196,6 +199,7 @@ interface PosState {
   addRole: (role: string) => Promise<void>;
   deleteRole: (role: string) => Promise<void>;
   renameRole: (oldRole: string, newRole: string) => Promise<void>;
+  resetRoles: (force?: boolean) => Promise<void>;
   
   addServiceType: (type: Omit<ServiceType, 'id'>) => Promise<void>;
   updateServiceType: (id: string, updates: Partial<ServiceType>) => Promise<void>;
@@ -209,6 +213,37 @@ interface PosState {
   fetchBranches: () => Promise<void>;
   fetchSettings: () => Promise<void>;
   fetchStaffOperasional: () => Promise<void>;
+
+  // Supplier Actions
+  fetchSuppliers: () => Promise<void>;
+  addSupplier: (s: Omit<Supplier, 'id'>) => Promise<void>;
+  updateSupplier: (id: string, updates: Partial<Supplier>) => Promise<void>;
+  deleteSupplier: (id: string) => Promise<void>;
+
+  // Purchase Order Actions
+  fetchPurchaseOrders: () => Promise<void>;
+  createPurchaseOrder: (po: { supplierId: string; branchId: string; expectedDate?: string; notes?: string; items: { itemId: string; quantity: number; unitPrice: number }[] }) => Promise<string>;
+  sendPurchaseOrder: (id: string) => Promise<void>;
+  cancelPurchaseOrder: (id: string) => Promise<void>;
+
+  // Goods Receipt Actions
+  fetchGoodsReceipts: () => Promise<void>;
+  createGoodsReceipt: (gr: { poId: string; branchId: string; receiptDate?: string; notes?: string; items: { itemId: string; quantity: number; unitPrice: number }[] }) => Promise<void>;
+
+  // Stock Out Actions
+  fetchStockOuts: () => Promise<void>;
+  createStockOut: (so: { branchId: string; type: import('./types').StockOutType; date?: string; reason: string; notes?: string; items: { itemId: string; quantity: number }[] }) => Promise<void>;
+
+  // Supplier Return Actions
+  fetchSupplierReturns: () => Promise<void>;
+  createSupplierReturn: (sr: { supplierId: string; branchId: string; grId?: string; returnDate?: string; notes?: string; items: { itemId: string; quantity: number; reason: import('./types').SupplierReturnReason }[] }) => Promise<string>;
+  sendSupplierReturn: (id: string) => Promise<void>;
+
+  // Stock Audit Actions
+  fetchStockAudits: () => Promise<void>;
+  createStockAudit: (branchId: string, notes?: string) => Promise<string>;
+  updateStockAuditItems: (auditId: string, items: { id: string; physicalQty: number }[]) => Promise<void>;
+  applyStockAudit: (auditId: string) => Promise<void>;
 }
 
 export const usePosStore = create<PosState>()(
@@ -254,6 +289,19 @@ export const usePosStore = create<PosState>()(
         showDiscount: true,
         receiptFooter: 'Terima Kasih!\nBarang yang sudah dibeli\ntidak dapat ditukar/dikembalikan.',
       },
+      serviceReceiptSettings: {
+        paperWidth: '58mm',
+        showIntakeCustomerPhone: true,
+        showIntakeDeviceSerial: true,
+        showIntakeEstimatedCost: false,
+        showIntakePickupCode: true,
+        intakeFooter: 'Simpan struk ini untuk pengambilan unit.',
+        showInvoiceSpareparts: true,
+        showInvoiceServiceFee: true,
+        showInvoiceWarranty: true,
+        showInvoiceTechnician: true,
+        invoiceFooter: 'Terima kasih atas kepercayaan Anda!\nGaransi berlaku sesuai ketentuan.',
+      },
       _hasHydrated: false,
       setHasHydrated: (state) => set({ _hasHydrated: state }),
       lastFetched: null,
@@ -269,6 +317,10 @@ export const usePosStore = create<PosState>()(
       services: [],
       suppliers: [],
       purchaseOrders: [],
+      goodsReceipts: [],
+      stockOuts: [],
+      supplierReturns: [],
+      stockAudits: [],
       financeLogs: [],
       shifts: [],
       stockTransfers: [],
@@ -282,6 +334,7 @@ export const usePosStore = create<PosState>()(
       rolePermissions: {
         'Owner':  { 'Cashier': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Full', 'Staff': 'Full', 'Transactions': 'Full', 'Printers': 'Full' },
         'Editor': { 'Cashier': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Read', 'Staff': 'Full', 'Transactions': 'Full', 'Printers': 'Full' },
+        'Technician': { 'Cashier': 'None', 'Service': 'Full', 'Inventory': 'Read', 'Finance': 'None', 'Staff': 'None', 'Transactions': 'Read', 'Printers': 'None' },
         'Viewer': { 'Cashier': 'Read', 'Service': 'Read', 'Inventory': 'Read', 'Finance': 'Read', 'Staff': 'Read', 'Transactions': 'Read', 'Printers': 'None' }
       },
 
@@ -473,7 +526,6 @@ export const usePosStore = create<PosState>()(
           });
           if (res.ok) {
             const data = await res.json();
-            if (data.user.role?.name === 'Technician') return false;
             
             // Auto-select branch if user has one assigned
             const branch = data.user.branchId 
@@ -1058,6 +1110,32 @@ export const usePosStore = create<PosState>()(
         }
       },
 
+      resetRoles: async (force = false) => {
+        const url = force ? '/api/roles/reset?force=true' : '/api/roles/reset';
+        const res = await fetch(url, { method: 'POST' });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.message || 'Failed to reset roles');
+        }
+        const { roles } = await res.json();
+
+        // Rebuild rolePermissions from fresh data
+        const MODULES: ModuleName[] = ['Cashier', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Printers'];
+        const built: Record<string, Record<ModuleName, AccessLevel>> = {};
+        for (const role of roles) {
+          const perms: Record<ModuleName, AccessLevel> = {} as any;
+          for (const mod of MODULES) {
+            const p = role.permissions?.find((p: any) => p.module === mod);
+            if (!p) { perms[mod] = 'None'; }
+            else if (p.canCreate || p.canUpdate || p.canDelete) { perms[mod] = 'Full'; }
+            else if (p.canRead) { perms[mod] = 'Read'; }
+            else { perms[mod] = 'None'; }
+          }
+          built[role.name] = perms;
+        }
+        set({ roles, rolePermissions: built });
+      },
+
       addStock: async (stock) => {
         try {
           const res = await fetch('/api/inventory/stocks', {
@@ -1244,6 +1322,9 @@ export const usePosStore = create<PosState>()(
       updateReceiptSettings: (settings) => set((state) => ({
         receiptSettings: { ...state.receiptSettings, ...settings }
       })),
+      updateServiceReceiptSettings: (settings) => set((state) => ({
+        serviceReceiptSettings: { ...state.serviceReceiptSettings, ...settings }
+      })),
       
       updateStoreProfile: async (updates) => {
         const current = get().storeProfile;
@@ -1401,6 +1482,336 @@ export const usePosStore = create<PosState>()(
           }));
         } catch (error) {
           console.error("Error deleting service type:", error);
+          throw error;
+        }
+      },
+
+      // --- SUPPLIER ACTIONS ---
+      fetchSuppliers: async () => {
+        try {
+          const res = await fetch('/api/suppliers');
+          if (!res.ok) throw new Error("Fetch suppliers failed");
+          const data = await res.json();
+          set({ suppliers: data });
+        } catch (error) {
+          console.error("Error fetching suppliers:", error);
+          throw error;
+        }
+      },
+
+      addSupplier: async (s: Omit<Supplier, 'id'>) => {
+        try {
+          const res = await fetch('/api/suppliers', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(s)
+          });
+          if (!res.ok) throw new Error("Add supplier failed");
+          const newSupplier = await res.json();
+          set((state) => ({ suppliers: [...state.suppliers, newSupplier] }));
+        } catch (error) {
+          console.error("Error adding supplier:", error);
+          throw error;
+        }
+      },
+
+      updateSupplier: async (id: string, updates: Partial<Supplier>) => {
+        try {
+          const res = await fetch(`/api/suppliers/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updates)
+          });
+          if (!res.ok) throw new Error("Update supplier failed");
+          const updated = await res.json();
+          set((state) => ({
+            suppliers: state.suppliers.map(s => s.id === id ? { ...s, ...updated } : s)
+          }));
+        } catch (error) {
+          console.error("Error updating supplier:", error);
+          throw error;
+        }
+      },
+
+      deleteSupplier: async (id: string) => {
+        try {
+          const res = await fetch(`/api/suppliers/${id}`, { method: 'DELETE' });
+          if (!res.ok) throw new Error("Delete supplier failed");
+          set((state) => ({
+            suppliers: state.suppliers.filter(s => s.id !== id)
+          }));
+        } catch (error) {
+          console.error("Error deleting supplier:", error);
+          throw error;
+        }
+      },
+
+      // --- PURCHASE ORDER ACTIONS ---
+      fetchPurchaseOrders: async () => {
+        try {
+          const res = await fetch('/api/purchase-orders');
+          if (!res.ok) throw new Error("Fetch purchase orders failed");
+          const data = await res.json();
+          set({ purchaseOrders: data });
+        } catch (error) {
+          console.error("Error fetching purchase orders:", error);
+          throw error;
+        }
+      },
+
+      createPurchaseOrder: async (po) => {
+        try {
+          const res = await fetch('/api/purchase-orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(po)
+          });
+          if (!res.ok) throw new Error("Create purchase order failed");
+          const newPO = await res.json();
+          set((state) => ({ purchaseOrders: [newPO, ...state.purchaseOrders] }));
+          return newPO.id;
+        } catch (error) {
+          console.error("Error creating purchase order:", error);
+          throw error;
+        }
+      },
+
+      sendPurchaseOrder: async (id: string) => {
+        try {
+          const res = await fetch(`/api/purchase-orders/${id}/send`, { method: 'POST' });
+          if (!res.ok) throw new Error("Send purchase order failed");
+          set((state) => ({
+            purchaseOrders: state.purchaseOrders.map(po =>
+              po.id === id ? { ...po, status: 'Sent' as const } : po
+            )
+          }));
+        } catch (error) {
+          console.error("Error sending purchase order:", error);
+          throw error;
+        }
+      },
+
+      cancelPurchaseOrder: async (id: string) => {
+        try {
+          const res = await fetch(`/api/purchase-orders/${id}/cancel`, { method: 'POST' });
+          if (!res.ok) throw new Error("Cancel purchase order failed");
+          set((state) => ({
+            purchaseOrders: state.purchaseOrders.map(po =>
+              po.id === id ? { ...po, status: 'Cancelled' as const } : po
+            )
+          }));
+        } catch (error) {
+          console.error("Error cancelling purchase order:", error);
+          throw error;
+        }
+      },
+
+      // --- GOODS RECEIPT ACTIONS ---
+      fetchGoodsReceipts: async () => {
+        try {
+          const res = await fetch('/api/goods-receipts');
+          if (!res.ok) throw new Error("Fetch goods receipts failed");
+          const data = await res.json();
+          set({ goodsReceipts: data });
+        } catch (error) {
+          console.error("Error fetching goods receipts:", error);
+          throw error;
+        }
+      },
+
+      createGoodsReceipt: async (gr) => {
+        try {
+          const res = await fetch('/api/goods-receipts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(gr)
+          });
+          if (!res.ok) throw new Error("Create goods receipt failed");
+          const newGR = await res.json();
+          set((state) => ({
+            goodsReceipts: [newGR, ...state.goodsReceipts],
+            stocks: state.stocks.map(s => {
+              const receivedItem = gr.items.find(i => i.itemId === s.itemId && s.branchId === gr.branchId);
+              return receivedItem ? { ...s, quantity: s.quantity + receivedItem.quantity } : s;
+            }),
+            // Also update PO status in local state if returned by API
+            purchaseOrders: state.purchaseOrders.map(po =>
+              po.id === gr.poId ? { ...po, status: newGR.po?.status ?? po.status } : po
+            )
+          }));
+        } catch (error) {
+          console.error("Error creating goods receipt:", error);
+          throw error;
+        }
+      },
+
+      // --- STOCK OUT ACTIONS ---
+      fetchStockOuts: async () => {
+        try {
+          const res = await fetch('/api/stock-out');
+          if (!res.ok) throw new Error("Fetch stock outs failed");
+          const data = await res.json();
+          set({ stockOuts: data });
+        } catch (error) {
+          console.error("Error fetching stock outs:", error);
+          throw error;
+        }
+      },
+
+      createStockOut: async (so) => {
+        try {
+          const res = await fetch('/api/stock-out', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(so)
+          });
+          if (!res.ok) throw new Error("Create stock out failed");
+          const newSO = await res.json();
+          set((state) => ({
+            stockOuts: [newSO, ...state.stockOuts],
+            stocks: state.stocks.map(s => {
+              const outItem = so.items.find(i => i.itemId === s.itemId && s.branchId === so.branchId);
+              return outItem ? { ...s, quantity: Math.max(0, s.quantity - outItem.quantity) } : s;
+            })
+          }));
+        } catch (error) {
+          console.error("Error creating stock out:", error);
+          throw error;
+        }
+      },
+
+      // --- SUPPLIER RETURN ACTIONS ---
+      fetchSupplierReturns: async () => {
+        try {
+          const res = await fetch('/api/supplier-returns');
+          if (!res.ok) throw new Error("Fetch supplier returns failed");
+          const data = await res.json();
+          set({ supplierReturns: data });
+        } catch (error) {
+          console.error("Error fetching supplier returns:", error);
+          throw error;
+        }
+      },
+
+      createSupplierReturn: async (sr) => {
+        try {
+          const res = await fetch('/api/supplier-returns', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(sr)
+          });
+          if (!res.ok) throw new Error("Create supplier return failed");
+          const newSR = await res.json();
+          set((state) => ({
+            supplierReturns: [newSR, ...state.supplierReturns]
+          }));
+          return newSR.id;
+        } catch (error) {
+          console.error("Error creating supplier return:", error);
+          throw error;
+        }
+      },
+
+      sendSupplierReturn: async (id) => {
+        try {
+          const res = await fetch(`/api/supplier-returns/${id}/send`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+          });
+          if (!res.ok) throw new Error("Send supplier return failed");
+          set((state) => {
+            const sr = state.supplierReturns.find(r => r.id === id);
+            return {
+              supplierReturns: state.supplierReturns.map(r =>
+                r.id === id ? { ...r, status: 'Sent' as const } : r
+              ),
+              stocks: sr ? state.stocks.map(s => {
+                const returnItem = sr.items.find(i => i.itemId === s.itemId && s.branchId === sr.branchId);
+                return returnItem ? { ...s, quantity: Math.max(0, s.quantity - returnItem.quantity) } : s;
+              }) : state.stocks
+            };
+          });
+        } catch (error) {
+          console.error("Error sending supplier return:", error);
+          throw error;
+        }
+      },
+
+      // --- STOCK AUDIT ACTIONS ---
+      fetchStockAudits: async () => {
+        try {
+          const res = await fetch('/api/stock-audits');
+          if (!res.ok) throw new Error("Fetch stock audits failed");
+          const data = await res.json();
+          set({ stockAudits: data });
+        } catch (error) {
+          console.error("Error fetching stock audits:", error);
+          throw error;
+        }
+      },
+
+      createStockAudit: async (branchId: string, notes?: string) => {
+        try {
+          const res = await fetch('/api/stock-audits', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ branchId, notes })
+          });
+          if (!res.ok) throw new Error("Create stock audit failed");
+          const newAudit = await res.json();
+          set((state) => ({
+            stockAudits: [newAudit, ...state.stockAudits]
+          }));
+          return newAudit.id;
+        } catch (error) {
+          console.error("Error creating stock audit:", error);
+          throw error;
+        }
+      },
+
+      updateStockAuditItems: async (auditId: string, items: { id: string; physicalQty: number }[]) => {
+        try {
+          const res = await fetch(`/api/stock-audits/${auditId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items })
+          });
+          if (!res.ok) throw new Error("Update stock audit items failed");
+          const updatedAudit = await res.json();
+          set((state) => ({
+            stockAudits: state.stockAudits.map(a =>
+              a.id === auditId ? { ...updatedAudit, status: a.status === 'Open' ? 'InProgress' as const : a.status } : a
+            )
+          }));
+        } catch (error) {
+          console.error("Error updating stock audit items:", error);
+          throw error;
+        }
+      },
+
+      applyStockAudit: async (auditId: string) => {
+        try {
+          const res = await fetch(`/api/stock-audits/${auditId}/apply`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+          });
+          if (!res.ok) throw new Error("Apply stock audit failed");
+          set((state) => {
+            const audit = state.stockAudits.find(a => a.id === auditId);
+            return {
+              stockAudits: state.stockAudits.map(a =>
+                a.id === auditId ? { ...a, status: 'Completed' as const } : a
+              ),
+              stocks: audit ? state.stocks.map(s => {
+                const auditItem = audit.items.find(i => i.itemId === s.itemId && s.branchId === audit.branchId);
+                return auditItem?.physicalQty !== undefined
+                  ? { ...s, quantity: auditItem.physicalQty }
+                  : s;
+              }) : state.stocks
+            };
+          });
+        } catch (error) {
+          console.error("Error applying stock audit:", error);
           throw error;
         }
       },

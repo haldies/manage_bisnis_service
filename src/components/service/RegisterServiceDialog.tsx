@@ -35,7 +35,7 @@ export default function RegisterServiceDialog({ open, onOpenChange }: RegisterSe
     deviceModel: "",
     deviceSerial: "",
     issue: "",
-    technicianId: ""
+    technicianId: "",
   });
 
 
@@ -52,7 +52,8 @@ export default function RegisterServiceDialog({ open, onOpenChange }: RegisterSe
       estimatedCost: 0,
       serviceFee: 0,
       spareparts: [],
-      branchId: currentBranch?.id || 'b1'
+      branchId: currentBranch?.id ?? '',
+      // warrantyDays is derived from spareparts when technician adds them in ServiceDetailDialog
     };
 
     await addServiceTicket(ticket);
@@ -64,7 +65,7 @@ export default function RegisterServiceDialog({ open, onOpenChange }: RegisterSe
       deviceModel: "",
       deviceSerial: "",
       issue: "",
-      technicianId: ""
+      technicianId: "",
     });
   };
 

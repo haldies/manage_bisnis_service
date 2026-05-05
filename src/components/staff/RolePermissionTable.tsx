@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Role, ModuleName, AccessLevel } from "@/lib/types";
 import { useState } from "react";
-import { Trash2, Plus, Loader2 } from "lucide-react";
+import { Trash2, Plus, Loader2, RotateCcw } from "lucide-react";
 import { usePosStore } from "@/lib/store";
 
 interface RolePermissionTableProps {
@@ -16,14 +16,15 @@ interface RolePermissionTableProps {
 const MODULES: ModuleName[] = ['Cashier', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Printers'];
 
 export function RolePermissionTable({ rolePermissions, updateRolePermission }: RolePermissionTableProps) {
-  const { addRole, deleteRole, renameRole } = usePosStore();
+  const { addRole, deleteRole, renameRole, resetRoles } = usePosStore();
 
   const [newRoleName, setNewRoleName] = useState("");
   const [editingRole, setEditingRole] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
-  const [savingCell, setSavingCell] = useState<string | null>(null); // "roleName:module"
+  const [savingCell, setSavingCell] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
 
   const allRoles = Object.keys(rolePermissions || {}).filter(roleName => roleName !== 'Admin');
 
@@ -49,6 +50,19 @@ export function RolePermissionTable({ rolePermissions, updateRolePermission }: R
       await deleteRole(role);
     } catch (e: any) {
       setError(e.message || 'Gagal menghapus role');
+    }
+  };
+
+  const handleResetRoles = async () => {
+    if (!confirm('Reset semua role ke default? Semua role kustom akan dihapus dan dibuat ulang dengan Owner, Kasir, Teknisi, Admin.\n\nLanjutkan?')) return;
+    setIsResetting(true);
+    setError(null);
+    try {
+      await resetRoles(true);
+    } catch (e: any) {
+      setError(e.message || 'Gagal mereset role');
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -92,8 +106,8 @@ export function RolePermissionTable({ rolePermissions, updateRolePermission }: R
 
   return (
     <div className="space-y-4">
-      {/* Add Custom Role */}
-      <div className="flex items-center gap-2">
+      {/* Add Custom Role + Reset */}
+      <div className="flex items-center gap-2 flex-wrap">
         <Input
           placeholder="Nama role baru (cth: Supervisor)"
           className="h-9 max-w-xs bg-muted/20 border-none text-sm"
@@ -105,6 +119,16 @@ export function RolePermissionTable({ rolePermissions, updateRolePermission }: R
         <Button onClick={handleAddRole} size="sm" className="h-9 gap-1.5 rounded-lg text-xs" disabled={isAdding}>
           {isAdding ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
           Tambah Role
+        </Button>
+        <Button
+          onClick={handleResetRoles}
+          size="sm"
+          variant="outline"
+          className="h-9 gap-1.5 rounded-lg text-xs text-muted-foreground ml-auto"
+          disabled={isResetting}
+        >
+          {isResetting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RotateCcw className="h-3.5 w-3.5" />}
+          Reset ke Default
         </Button>
       </div>
 

@@ -1,4 +1,4 @@
-import { StoreProfile, ReceiptSettings, Transaction } from './types';
+import { StoreProfile, ReceiptSettings, ServiceReceiptSettings, Transaction, ServiceTicket } from './types';
 
 const ESC = '\x1B';
 const GS  = '\x1D';
@@ -325,6 +325,253 @@ export class ReceiptFormatter {
         add();
 
         const footer = settings.receiptFooter || 'Terima Kasih!';
+        wordWrap(footer, w).forEach(l => add(centerText(l.trim(), w)));
+
+        return lines.join(LF) + LF;
+    }
+
+    // ── Service: Tanda Terima Masuk ──────────────────────────────────────────
+    static formatServiceIntakeReceipt(
+        ticket: ServiceTicket,
+        store: StoreProfile,
+        settings: ServiceReceiptSettings,
+        technicianName?: string,
+    ): string {
+        const w = PAPER_CHAR_WIDTH[settings.paperWidth] ?? 32;
+        const margin = settings.paperWidth === '58mm-on-80mm' ? ' '.repeat(16) : '';
+        const r = new ReceiptBuilder(margin);
+
+        r.center(store.name.toUpperCase(), w, true);
+        r.center('TANDA TERIMA SERVIS', w);
+        if (store.address) wordWrap(store.address, w).forEach(l => r.center(l, w));
+        if (store.phone) r.center(store.phone, w);
+        r.rule(w);
+
+        r.colLine('Tgl Masuk', fmtDateTime(ticket.dateOpened), w);
+        r.colLine('No Tiket', `#${ticket.id.slice(-8).toUpperCase()}`, w);
+        r.rule(w);
+
+        r.line('PELANGGAN:', COMMANDS.BOLD_ON, COMMANDS.BOLD_OFF);
+        r.line(`  ${ticket.customerName}`);
+        if (settings.showIntakeCustomerPhone && ticket.customerPhone) {
+            r.line(`  ${ticket.customerPhone}`);
+        }
+        r.blank();
+
+        r.line('PERANGKAT:', COMMANDS.BOLD_ON, COMMANDS.BOLD_OFF);
+        r.line(`  ${ticket.deviceModel}`);
+        if (settings.showIntakeDeviceSerial && ticket.deviceSerial) {
+            r.line(`  SN: ${ticket.deviceSerial}`);
+        }
+        r.blank();
+
+        r.line('KELUHAN:', COMMANDS.BOLD_ON, COMMANDS.BOLD_OFF);
+        wordWrap(ticket.issue, w - 2).forEach(l => r.line(`  ${l}`));
+
+        if (technicianName) {
+            r.blank();
+            r.colLine('Teknisi', technicianName, w);
+        }
+
+        if (settings.showIntakeEstimatedCost && ticket.estimatedCost > 0) {
+            r.blank();
+            r.colLine('Est. Biaya', `Rp ${fmtRp(ticket.estimatedCost)}`, w);
+        }
+
+        if (settings.showIntakePickupCode && ticket.pickupCode) {
+            r.rule(w);
+            r.center('KODE AMBIL', w);
+            r.cmd(COMMANDS.ALIGN_LEFT + COMMANDS.FONT_SIZE_DOUBLE + COMMANDS.BOLD_ON);
+            r.raw(margin + centerText(ticket.pickupCode, Math.floor(w / 2)) + LF);
+            r.cmd(COMMANDS.BOLD_OFF + COMMANDS.FONT_SIZE_NORMAL);
+        }
+
+        r.rule(w);
+        const footer = settings.intakeFooter || 'Simpan struk ini untuk pengambilan unit.';
+        wordWrap(footer, w).forEach(l => r.center(l.trim(), w));
+        r.cmd(LF + LF + LF + COMMANDS.CUT);
+
+        return r.build();
+    }
+
+    static formatServiceIntakePlain(
+        ticket: ServiceTicket,
+        store: StoreProfile,
+        settings: ServiceReceiptSettings,
+        technicianName?: string,
+    ): string {
+        const w = PAPER_CHAR_WIDTH[settings.paperWidth] ?? 32;
+        const margin = settings.paperWidth === '58mm-on-80mm' ? ' '.repeat(16) : '';
+        const lines: string[] = [];
+        const add = (t = '') => lines.push(margin + t);
+        const rule = () => add('-'.repeat(w));
+
+        add(centerText(store.name.toUpperCase(), w));
+        add(centerText('TANDA TERIMA SERVIS', w));
+        if (store.address) wordWrap(store.address, w).forEach(l => add(centerText(l, w)));
+        if (store.phone) add(centerText(store.phone, w));
+        rule();
+
+        buildTwoCol('Tgl Masuk', fmtDateTime(ticket.dateOpened), w).forEach(l => add(l));
+        buildTwoCol('No Tiket', `#${ticket.id.slice(-8).toUpperCase()}`, w).forEach(l => add(l));
+        rule();
+
+        add('PELANGGAN:');
+        add(`  ${ticket.customerName}`);
+        if (settings.showIntakeCustomerPhone && ticket.customerPhone) add(`  ${ticket.customerPhone}`);
+        add();
+
+        add('PERANGKAT:');
+        add(`  ${ticket.deviceModel}`);
+        if (settings.showIntakeDeviceSerial && ticket.deviceSerial) add(`  SN: ${ticket.deviceSerial}`);
+        add();
+
+        add('KELUHAN:');
+        wordWrap(ticket.issue, w - 2).forEach(l => add(`  ${l}`));
+
+        if (technicianName) { add(); buildTwoCol('Teknisi', technicianName, w).forEach(l => add(l)); }
+        if (settings.showIntakeEstimatedCost && ticket.estimatedCost > 0) {
+            add(); buildTwoCol('Est. Biaya', `Rp ${fmtRp(ticket.estimatedCost)}`, w).forEach(l => add(l));
+        }
+        if (settings.showIntakePickupCode && ticket.pickupCode) {
+            rule(); add(centerText('KODE AMBIL', w)); add(centerText(ticket.pickupCode, w));
+        }
+
+        rule();
+        const footer = settings.intakeFooter || 'Simpan struk ini untuk pengambilan unit.';
+        wordWrap(footer, w).forEach(l => add(centerText(l.trim(), w)));
+
+        return lines.join(LF) + LF;
+    }
+
+    // ── Service: Nota Selesai / Invoice ──────────────────────────────────────
+    static formatServiceInvoice(
+        ticket: ServiceTicket,
+        store: StoreProfile,
+        settings: ServiceReceiptSettings,
+        technicianName?: string,
+    ): string {
+        const w = PAPER_CHAR_WIDTH[settings.paperWidth] ?? 32;
+        const margin = settings.paperWidth === '58mm-on-80mm' ? ' '.repeat(16) : '';
+        const r = new ReceiptBuilder(margin);
+
+        r.center(store.name.toUpperCase(), w, true);
+        r.center('NOTA SERVIS', w);
+        if (store.address) wordWrap(store.address, w).forEach(l => r.center(l, w));
+        if (store.phone) r.center(store.phone, w);
+        r.rule(w);
+
+        r.colLine('Tgl Selesai', fmtDateTime(ticket.dateClosed ?? Date.now()), w);
+        r.colLine('No Tiket', `#${ticket.id.slice(-8).toUpperCase()}`, w);
+        r.rule(w);
+
+        r.line(`Pelanggan : ${ticket.customerName}`);
+        r.line(`Perangkat : ${ticket.deviceModel}`);
+        if (settings.showInvoiceTechnician && technicianName) {
+            r.line(`Teknisi   : ${technicianName}`);
+        }
+        r.rule(w);
+
+        // Spareparts
+        if (settings.showInvoiceSpareparts && ticket.spareparts?.length > 0) {
+            r.line('SPAREPART:', COMMANDS.BOLD_ON, COMMANDS.BOLD_OFF);
+            ticket.spareparts.forEach((p: any) => {
+                const name = p.name || 'Item';
+                const qty = p.quantity || 1;
+                const price = Number(p.price) || 0;
+                wordWrap(name, w).forEach(l => r.line(l));
+                r.colLine(`  ${qty}x @Rp${fmtRp(price)}`, `Rp ${fmtRp(qty * price)}`, w);
+            });
+        }
+
+        // Service fee
+        if (settings.showInvoiceServiceFee) {
+            r.colLine('Jasa Servis', `Rp ${fmtRp(ticket.serviceFee || 0)}`, w);
+        }
+
+        r.rule(w);
+        const total = (ticket.spareparts?.reduce((s: number, p: any) => s + (Number(p.price) || 0) * (p.quantity || 1), 0) || 0) + (ticket.serviceFee || 0);
+        r.totalLine('TOTAL', `Rp ${fmtRp(total)}`, w);
+
+        if (ticket.paymentStatus === 'DP' && ticket.dpAmount) {
+            r.colLine('DP Dibayar', `Rp ${fmtRp(ticket.dpAmount)}`, w);
+            r.colLine('Sisa', `Rp ${fmtRp(total - ticket.dpAmount)}`, w);
+        }
+
+        if (settings.showInvoiceWarranty && ticket.warrantyDays && ticket.warrantyDays > 0) {
+            r.rule(w);
+            r.center(`Garansi ${ticket.warrantyDays} hari`, w);
+            if (ticket.warrantyExpiry) {
+                r.center(`s/d ${fmtDate(ticket.warrantyExpiry)}`, w);
+            }
+        }
+
+        r.rule(w);
+        const footer = settings.invoiceFooter || 'Terima kasih atas kepercayaan Anda!';
+        wordWrap(footer, w).forEach(l => r.center(l.trim(), w));
+        r.cmd(LF + LF + LF + COMMANDS.CUT);
+
+        return r.build();
+    }
+
+    static formatServiceInvoicePlain(
+        ticket: ServiceTicket,
+        store: StoreProfile,
+        settings: ServiceReceiptSettings,
+        technicianName?: string,
+    ): string {
+        const w = PAPER_CHAR_WIDTH[settings.paperWidth] ?? 32;
+        const margin = settings.paperWidth === '58mm-on-80mm' ? ' '.repeat(16) : '';
+        const lines: string[] = [];
+        const add = (t = '') => lines.push(margin + t);
+        const rule = () => add('-'.repeat(w));
+
+        add(centerText(store.name.toUpperCase(), w));
+        add(centerText('NOTA SERVIS', w));
+        if (store.address) wordWrap(store.address, w).forEach(l => add(centerText(l, w)));
+        if (store.phone) add(centerText(store.phone, w));
+        rule();
+
+        buildTwoCol('Tgl Selesai', fmtDateTime(ticket.dateClosed ?? Date.now()), w).forEach(l => add(l));
+        buildTwoCol('No Tiket', `#${ticket.id.slice(-8).toUpperCase()}`, w).forEach(l => add(l));
+        rule();
+
+        add(`Pelanggan : ${ticket.customerName}`);
+        add(`Perangkat : ${ticket.deviceModel}`);
+        if (settings.showInvoiceTechnician && technicianName) add(`Teknisi   : ${technicianName}`);
+        rule();
+
+        if (settings.showInvoiceSpareparts && ticket.spareparts?.length > 0) {
+            add('SPAREPART:');
+            ticket.spareparts.forEach((p: any) => {
+                const qty = p.quantity || 1;
+                const price = Number(p.price) || 0;
+                wordWrap(p.name || 'Item', w).forEach(l => add(l));
+                buildTwoCol(`  ${qty}x @Rp${fmtRp(price)}`, `Rp ${fmtRp(qty * price)}`, w).forEach(l => add(l));
+            });
+        }
+
+        if (settings.showInvoiceServiceFee) {
+            buildTwoCol('Jasa Servis', `Rp ${fmtRp(ticket.serviceFee || 0)}`, w).forEach(l => add(l));
+        }
+
+        rule();
+        const total = (ticket.spareparts?.reduce((s: number, p: any) => s + (Number(p.price) || 0) * (p.quantity || 1), 0) || 0) + (ticket.serviceFee || 0);
+        buildTwoCol('TOTAL', `Rp ${fmtRp(total)}`, w).forEach(l => add(l));
+
+        if (ticket.paymentStatus === 'DP' && ticket.dpAmount) {
+            buildTwoCol('DP Dibayar', `Rp ${fmtRp(ticket.dpAmount)}`, w).forEach(l => add(l));
+            buildTwoCol('Sisa', `Rp ${fmtRp(total - ticket.dpAmount)}`, w).forEach(l => add(l));
+        }
+
+        if (settings.showInvoiceWarranty && ticket.warrantyDays && ticket.warrantyDays > 0) {
+            rule();
+            add(centerText(`Garansi ${ticket.warrantyDays} hari`, w));
+            if (ticket.warrantyExpiry) add(centerText(`s/d ${fmtDate(ticket.warrantyExpiry)}`, w));
+        }
+
+        rule();
+        const footer = settings.invoiceFooter || 'Terima kasih atas kepercayaan Anda!';
         wordWrap(footer, w).forEach(l => add(centerText(l.trim(), w)));
 
         return lines.join(LF) + LF;

@@ -67,6 +67,40 @@ enum StockTransferStatus {
   Cancelled
 }
 
+enum PurchaseOrderStatus {
+  Draft
+  Sent
+  Partial
+  Received
+  Cancelled
+}
+
+enum StockOutType {
+  InternalUse
+  Damaged
+  Lost
+  Adjustment
+}
+
+enum SupplierReturnStatus {
+  Draft
+  Sent
+  Completed
+}
+
+enum SupplierReturnReason {
+  Defective
+  WrongItem
+  Overstock
+  Other
+}
+
+enum StockAuditStatus {
+  Open
+  InProgress
+  Completed
+}
+
 enum InventoryUnitStatus {
   Available
   Sold
@@ -100,14 +134,19 @@ model Branch {
   updatedAt      DateTime        @updatedAt
   deletedAt      DateTime?
   updatedBy      String?
-  serviceTickets ServiceTicket[]
-  shifts         Shift[]
-  stocks         Stock[]
-  transactions   Transaction[]
-  users          User[]
-  transfersFrom  StockTransfer[] @relation("FromBranch")
-  transfersTo    StockTransfer[] @relation("ToBranch")
-  units          InventoryUnit[]
+  serviceTickets  ServiceTicket[]
+  shifts          Shift[]
+  stocks          Stock[]
+  transactions    Transaction[]
+  users           User[]
+  transfersFrom   StockTransfer[]  @relation("FromBranch")
+  transfersTo     StockTransfer[]  @relation("ToBranch")
+  units           InventoryUnit[]
+  purchaseOrders  PurchaseOrder[]
+  goodsReceipts   GoodsReceipt[]
+  stockOuts       StockOut[]
+  supplierReturns SupplierReturn[]
+  stockAudits     StockAudit[]
 
   @@index([tenantId])
 }
@@ -227,15 +266,21 @@ model InventoryItem {
   rack              String?
   image             String?
   showInPos         Boolean             @default(true)
+  warranty          String?             // e.g. "30 Hari", "3 Bulan", "1 Tahun"
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
   deletedAt         DateTime?
   updatedBy         String?
-  serviceSpareparts ServiceSparepart[]
-  stocks            Stock[]
-  transactionItems  TransactionItem[]
-  transferItems     StockTransferItem[]
-  units             InventoryUnit[]
+  serviceSpareparts    ServiceSparepart[]
+  stocks               Stock[]
+  transactionItems     TransactionItem[]
+  transferItems        StockTransferItem[]
+  units                InventoryUnit[]
+  purchaseOrderItems   PurchaseOrderItem[]
+  goodsReceiptItems    GoodsReceiptItem[]
+  stockOutItems        StockOutItem[]
+  supplierReturnItems  SupplierReturnItem[]
+  stockAuditItems      StockAuditItem[]
 
   @@index([categoryId])
   @@index([tenantId])
@@ -317,15 +362,18 @@ model TransactionItem {
 
 enum ServiceStatus {
   Pending
-  Diagnosed
-  WaitingApproval
-  Approved
   InProgress
-  ReadyToPay
-  Paid
+  OnHold
+  ReadyForPickup
   Completed
-  Delivered
+  Returned
   Cancelled
+}
+
+enum ServicePaymentStatus {
+  Unpaid
+  DP
+  Paid
 }
 
 model ServiceTicket {
@@ -347,6 +395,24 @@ model ServiceTicket {
   branchId        String
   incentiveType   String             @default("Percentage") // Percentage or Flat
   incentiveValue  Decimal            @default(0) @db.Decimal(18, 2)
+  // Garansi
+  warrantyDays    Int                @default(0)
+  warrantyExpiry  DateTime?
+  // Pengambilan unit
+  pickupCode      String?            @unique
+  pickedUpAt      DateTime?
+  pickedUpBy      String?            // nama penerima
+  // Return / klaim garansi
+  returnReason    String?
+  returnedAt      DateTime?
+  returnTxId      String?            // ID transaksi koreksi (refund)
+  // Checklist teknisi (JSON array)
+  preCheckData    Json?              // checklist sebelum pengerjaan
+  postCheckData   Json?              // checklist setelah pengerjaan
+  // Pembayaran
+  paymentStatus   ServicePaymentStatus @default(Unpaid)
+  dpAmount        Decimal?           @db.Decimal(18, 2)
+  readyAt         DateTime?          // timestamp saat masuk ReadyForPickup
   createdAt       DateTime           @default(now())
   updatedAt       DateTime           @updatedAt
   deletedAt       DateTime?
@@ -358,6 +424,7 @@ model ServiceTicket {
   @@index([branchId])
   @@index([technicianId])
   @@index([tenantId])
+  @@index([pickupCode])
 }
 
 model ServiceSparepart {
@@ -440,19 +507,35 @@ model StoreProfile {
 }
 
 model ServiceType {
-  id        String    @id @default(cuid())
-  tenantId  String        @default("default")
-  name      String    @unique
-  price          Decimal   @db.Decimal(18, 2)
+  id             String                   @id @default(cuid())
+  tenantId       String                   @default("default")
+  name           String                   @unique
+  price          Decimal                  @db.Decimal(18, 2)
   category       String?
-  incentiveType  String    @default("Percentage") // Percentage or Flat
-  incentiveValue Decimal   @default(0) @db.Decimal(18, 2)
-  createdAt      DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  updatedBy String?
+  feeType        String                   @default("Flat") // Flat or Percentage
+  feeValue       Decimal                  @default(0) @db.Decimal(18, 2)
+  incentiveType  String                   @default("Percentage") // Percentage or Flat
+  incentiveValue Decimal                  @default(0) @db.Decimal(18, 2)
+  createdAt      DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
+  deletedAt      DateTime?
+  updatedBy      String?
+  deviceModels   ServiceTypeDeviceModel[]
 
   @@index([tenantId])
+}
+
+model ServiceTypeDeviceModel {
+  id            String      @id @default(cuid())
+  serviceTypeId String
+  deviceModelId String
+  price         Decimal     @default(0) @db.Decimal(18, 2)
+  serviceType   ServiceType @relation(fields: [serviceTypeId], references: [id], onDelete: Cascade)
+  deviceModel   DeviceModel @relation(fields: [deviceModelId], references: [id], onDelete: Cascade)
+
+  @@unique([serviceTypeId, deviceModelId])
+  @@index([serviceTypeId])
+  @@index([deviceModelId])
 }
 
 model Overtime {
@@ -475,13 +558,14 @@ model Overtime {
 }
 
 model DeviceModel {
-  id        String   @id @default(cuid())
-  tenantId  String        @default("default")
-  name      String   @unique
-  brand     String   @default("Apple")
-  type      String // Smartphone, Laptop, Tablet
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  id           String                   @id @default(cuid())
+  tenantId     String                   @default("default")
+  name         String                   @unique
+  brand        String                   @default("Apple")
+  type         String // Smartphone, Laptop, Tablet
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @default(now()) @updatedAt
+  serviceTypes ServiceTypeDeviceModel[]
 
   @@index([tenantId])
 }
@@ -559,4 +643,202 @@ model BonusPool {
 
   @@index([roleId])
   @@index([tenantId])
+}
+
+model Supplier {
+  id              String           @id @default(cuid())
+  tenantId        String           @default("default")
+  code            String
+  name            String
+  phone           String?
+  email           String?
+  address         String?
+  notes           String?
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  deletedAt       DateTime?
+  purchaseOrders  PurchaseOrder[]
+  supplierReturns SupplierReturn[]
+
+  @@unique([code, tenantId])
+  @@index([tenantId])
+}
+
+model PurchaseOrder {
+  id            String              @id @default(cuid())
+  tenantId      String              @default("default")
+  poNumber      String
+  supplierId    String
+  branchId      String
+  status        PurchaseOrderStatus @default(Draft)
+  orderDate     DateTime            @default(now())
+  expectedDate  DateTime?
+  notes         String?
+  totalAmount   Decimal             @db.Decimal(18, 2)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  deletedAt     DateTime?
+  updatedBy     String?
+  supplier      Supplier            @relation(fields: [supplierId], references: [id])
+  branch        Branch              @relation(fields: [branchId], references: [id])
+  items         PurchaseOrderItem[]
+  goodsReceipts GoodsReceipt[]
+
+  @@unique([poNumber, tenantId])
+  @@index([supplierId])
+  @@index([branchId])
+  @@index([tenantId])
+}
+
+model PurchaseOrderItem {
+  id          String        @id @default(cuid())
+  tenantId    String        @default("default")
+  poId        String
+  itemId      String
+  quantity    Int
+  receivedQty Int           @default(0)
+  unitPrice   Decimal       @db.Decimal(18, 2)
+  po          PurchaseOrder @relation(fields: [poId], references: [id], onDelete: Cascade)
+  item        InventoryItem @relation(fields: [itemId], references: [id])
+
+  @@index([poId])
+  @@index([itemId])
+}
+
+model GoodsReceipt {
+  id          String             @id @default(cuid())
+  tenantId    String             @default("default")
+  grNumber    String
+  poId        String
+  branchId    String
+  receiptDate DateTime           @default(now())
+  notes       String?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  updatedBy   String?
+  po          PurchaseOrder      @relation(fields: [poId], references: [id])
+  branch      Branch             @relation(fields: [branchId], references: [id])
+  items       GoodsReceiptItem[]
+
+  @@unique([grNumber, tenantId])
+  @@index([poId])
+  @@index([branchId])
+  @@index([tenantId])
+}
+
+model GoodsReceiptItem {
+  id        String        @id @default(cuid())
+  tenantId  String        @default("default")
+  grId      String
+  itemId    String
+  quantity  Int
+  unitPrice Decimal       @db.Decimal(18, 2)
+  gr        GoodsReceipt  @relation(fields: [grId], references: [id], onDelete: Cascade)
+  item      InventoryItem @relation(fields: [itemId], references: [id])
+
+  @@index([grId])
+  @@index([itemId])
+}
+
+model StockOut {
+  id        String         @id @default(cuid())
+  tenantId  String         @default("default")
+  soNumber  String
+  branchId  String
+  type      StockOutType
+  date      DateTime       @default(now())
+  reason    String
+  notes     String?
+  createdBy String?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  branch    Branch         @relation(fields: [branchId], references: [id])
+  items     StockOutItem[]
+
+  @@index([branchId])
+  @@index([tenantId])
+}
+
+model StockOutItem {
+  id       String        @id @default(cuid())
+  tenantId String        @default("default")
+  soId     String
+  itemId   String
+  quantity Int
+  stockOut StockOut      @relation(fields: [soId], references: [id], onDelete: Cascade)
+  item     InventoryItem @relation(fields: [itemId], references: [id])
+
+  @@index([soId])
+  @@index([itemId])
+}
+
+model SupplierReturn {
+  id         String               @id @default(cuid())
+  tenantId   String               @default("default")
+  srNumber   String
+  supplierId String
+  branchId   String
+  grId       String?
+  status     SupplierReturnStatus @default(Draft)
+  returnDate DateTime             @default(now())
+  notes      String?
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  updatedBy  String?
+  supplier   Supplier             @relation(fields: [supplierId], references: [id])
+  branch     Branch               @relation(fields: [branchId], references: [id])
+  items      SupplierReturnItem[]
+
+  @@index([supplierId])
+  @@index([branchId])
+  @@index([tenantId])
+}
+
+model SupplierReturnItem {
+  id       String               @id @default(cuid())
+  tenantId String               @default("default")
+  srId     String
+  itemId   String
+  quantity Int
+  reason   SupplierReturnReason
+  sr       SupplierReturn       @relation(fields: [srId], references: [id], onDelete: Cascade)
+  item     InventoryItem        @relation(fields: [itemId], references: [id])
+
+  @@index([srId])
+  @@index([itemId])
+}
+
+model StockAudit {
+  id          String           @id @default(cuid())
+  tenantId    String           @default("default")
+  auditNumber String
+  branchId    String
+  status      StockAuditStatus @default(Open)
+  auditDate   DateTime         @default(now())
+  completedAt DateTime?
+  completedBy String?
+  notes       String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  branch      Branch           @relation(fields: [branchId], references: [id])
+  items       StockAuditItem[]
+
+  @@index([branchId])
+  @@index([tenantId])
+}
+
+model StockAuditItem {
+  id          String        @id @default(cuid())
+  tenantId    String        @default("default")
+  auditId     String
+  itemId      String
+  systemQty   Int
+  physicalQty Int?
+  discrepancy Int?
+  audit       StockAudit    @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  item        InventoryItem @relation(fields: [itemId], references: [id])
+
+  @@index([auditId])
+  @@index([itemId])
 }

@@ -133,36 +133,52 @@ export default function LogisticsDashboard() {
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <div className="flex flex-col gap-6 mb-8">
-                {/* Header Row: Tabs + Add Button */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <TabsList className="bg-muted/10 p-1 h-10 rounded-xl">
-                    <TabsTrigger value="items" className="rounded-lg px-6 h-8 ui-label data-[state=active]:bg-foreground data-[state=active]:text-background">Produk</TabsTrigger>
-                    <TabsTrigger value="categories" className="rounded-lg px-6 h-8 ui-label data-[state=active]:bg-foreground data-[state=active]:text-background">Kategori</TabsTrigger>
-                    <TabsTrigger value="mutasi" className="rounded-lg px-6 h-8 ui-label data-[state=active]:bg-foreground data-[state=active]:text-background">Mutasi</TabsTrigger>
-                  </TabsList>
-
+                {/* Header Row: Tabs */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-border">
+                  <div className="overflow-x-auto no-scrollbar flex-1 min-w-0">
+                    <TabsList className="bg-transparent p-0 h-auto gap-0 flex w-max min-w-full rounded-none border-none">
+                      {[
+                        { value: "items", label: "Produk" },
+                        { value: "mutasi", label: "Mutasi" },
+                      ].map((tab) => (
+                        <TabsTrigger
+                          key={tab.value}
+                          value={tab.value}
+                          className="
+                            relative bg-transparent rounded-none px-4 py-2.5 text-xs font-semibold text-muted-foreground
+                            border-b-2 border-transparent
+                            data-[state=active]:border-primary
+                            data-[state=active]:text-foreground
+                            data-[state=active]:bg-transparent
+                            data-[state=active]:shadow-none
+                            flex items-center gap-1.5 shrink-0 whitespace-nowrap
+                          "
+                        >
+                          {tab.label}
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                  </div>
                 </div>
 
                 {/* Filter Row: Search + Selects */}
                 {activeTab === 'items' && (
                   <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 animate-in slide-in-from-top-2 duration-300">
                     <div className="relative flex-1 md:max-w-xs">
-                      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40" />
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/40" />
                       <Input
                         placeholder="Cari produk..."
-                        className="pl-10 h-10 rounded-xl border-border/40 bg-card focus:ring-2 focus:ring-foreground/5"
+                        className="pl-9 h-9 rounded-lg border-border/40 bg-card text-xs"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                       />
-
-
                     </div>
-                    {activeTab === 'items' && hasFullAccess && (
+                    {hasFullAccess && (
                       <Button
-                        className="h-10 px-6 bg-foreground text-background hover:bg-foreground/90 rounded-xl font-bold text-xs uppercase tracking-widest shadow-sm active:scale-95 transition-all"
+                        className="h-9 px-4 text-xs gap-1.5"
                         onClick={() => setAddOpen(true)}
                       >
-                        <Plus className="h-4 w-4 mr-2" />
+                        <Plus className="h-3.5 w-3.5" />
                         Tambah Unit
                       </Button>
                     )}
@@ -172,27 +188,26 @@ export default function LogisticsDashboard() {
                           value={currentBranch?.id || 'all'}
                           onValueChange={(val) => setCurrentBranch(val === 'all' ? null : val)}
                         >
-                          <SelectTrigger className="h-10 min-w-[180px] rounded-xl bg-card border border-border/40 ui-label uppercase tracking-widest focus:ring-0">
+                          <SelectTrigger className="h-9 min-w-[160px] rounded-lg bg-card border border-border/40 text-xs">
                             <div className="flex items-center gap-2">
-                              <MapPin className="h-3.5 w-3.5 text-primary" />
+                              <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
                               <SelectValue placeholder="Semua Cabang" />
                             </div>
                           </SelectTrigger>
-                          <SelectContent className="rounded-xl border-border/40 shadow-2xl">
-                            <SelectItem value="all" className="ui-label uppercase py-3">Semua Cabang</SelectItem>
-                            {branches.map(b => <SelectItem key={b.id} value={b.id} className="ui-label uppercase py-3">{b.name}</SelectItem>)}
+                          <SelectContent>
+                            <SelectItem value="all">Semua Cabang</SelectItem>
+                            {branches.map(b => <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>)}
                           </SelectContent>
                         </Select>
                       )}
-
                       <Select value={sortByStock} onValueChange={setSortByStock}>
-                        <SelectTrigger className="h-10 w-40 rounded-xl bg-card border border-border/40 ui-label uppercase tracking-widest focus:ring-0">
+                        <SelectTrigger className="h-9 w-36 rounded-lg bg-card border border-border/40 text-xs">
                           <SelectValue placeholder="Urutkan" />
                         </SelectTrigger>
-                        <SelectContent className="rounded-xl border-border/40 shadow-2xl">
-                          <SelectItem value="none" className="ui-label uppercase py-3">Default</SelectItem>
-                          <SelectItem value="most" className="ui-label uppercase py-3">Stok Terbanyak</SelectItem>
-                          <SelectItem value="least" className="ui-label uppercase py-3">Stok Terendah</SelectItem>
+                        <SelectContent>
+                          <SelectItem value="none">Default</SelectItem>
+                          <SelectItem value="most">Stok Terbanyak</SelectItem>
+                          <SelectItem value="least">Stok Terendah</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -361,28 +376,6 @@ export default function LogisticsDashboard() {
                       )}
                     </TableBody>
                   </Table>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="categories" className="m-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <Card className="border border-border/40 shadow-none">
-                    <CardContent className="p-6 space-y-4">
-                      <h3 className="ui-title">Kelola Kategori</h3>
-                      <div className="flex gap-2">
-                        <Input placeholder="Nama Kategori Baru..." value={newCatName} onChange={(e) => setNewCatName(e.target.value)} />
-                        <Button onClick={async () => { if (!newCatName) return; await addCategory(newCatName); setNewCatName(""); }}>Tambah</Button>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2 pt-4">
-                        {categories.map(cat => (
-                          <div key={cat.id} className="flex justify-between items-center p-3 rounded-lg bg-muted/10 border border-border/10 group">
-                            <span className="ui-label text-foreground font-bold">{cat.name}</span>
-                            <Button variant="ghost" size="sm" className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100" onClick={() => deleteCategory(cat.id)}><Trash2 className="h-3 w-3 text-red-500" /></Button>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
                 </div>
               </TabsContent>
 
