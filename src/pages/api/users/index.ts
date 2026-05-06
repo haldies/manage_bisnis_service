@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === 'POST') {
     try {
-      const { name, roleId, branchId, password, email, wageType, wageRate, allowance, insuranceDed, shiftId, baseSalary, phone, address, incentiveRate, incentiveType } = req.body;
+      const { name, roleId, branchId, password, username, wageType, wageRate, allowance, insuranceDed, shiftId, baseSalary, phone, address, incentiveRate, incentiveType } = req.body;
       
       const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
 
@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           roleId, // Gunakan roleId untuk relasi
           branchId, 
           password: hashedPassword,
-          email, 
+          username, 
           wageType, 
           wageRate: Number(wageRate) || 0,
           allowance: Number(allowance) || 0,

@@ -10,11 +10,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let [users, branches, categories, inventory, stocks, services, transactions, shifts, leaveRequests, cashAdvances, overtimes, serviceTypes, deviceModels, storeProfile, stockTransfers, inventoryUnits, attendances] = await Promise.all([
 
       prisma.user.findMany({
-        select: {
-          id: true, name: true, email: true, role: true, branchId: true,
-          phone: true, address: true, wageType: true, wageRate: true,
-          baseSalary: true, leaveQuota: true, allowance: true,
-          insuranceDed: true, incentiveRate: true, incentiveType: true,
+        include: {
+          role: {
+            include: { permissions: true }
+          }
         }
       }),
       prisma.branch.findMany(),

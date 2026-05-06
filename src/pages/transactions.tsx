@@ -115,7 +115,7 @@ export default function TransactionsPage() {
 
   const totalRevenue = filtered.reduce((sum, tx) => tx.status === 'Paid' ? sum + tx.total : sum, 0);
   const paidCount = filtered.filter(tx => tx.status === 'Paid').length;
-  const canceledCount = filtered.filter(tx => tx.status === 'Canceled').length;
+  const canceledCount = filtered.filter(tx => tx.status === 'Cancelled').length;
 
   const receiptRef = useRef<HTMLDivElement>(null);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
@@ -266,7 +266,7 @@ export default function TransactionsPage() {
                             tx.status === 'Unpaid' ? "bg-muted-foreground/40" :
                             "bg-muted-foreground/20"
                           )} />
-                          {tx.status === 'Paid' ? 'Lunas' : tx.status === 'Canceled' ? 'Batal' : 'Pending'}
+                          {tx.status === 'Paid' ? 'Lunas' : tx.status === 'Cancelled' ? 'Batal' : 'Pending'}
                         </div>
                       </TableCell>
                       <TableCell className="text-right py-4 ui-price">
@@ -584,7 +584,7 @@ export default function TransactionsPage() {
                   <SelectContent className="rounded-md">
                     <SelectItem value="Paid">Lunas</SelectItem>
                     <SelectItem value="Unpaid">Pending</SelectItem>
-                    <SelectItem value="Canceled">Batal</SelectItem>
+                    <SelectItem value="Cancelled">Batal</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

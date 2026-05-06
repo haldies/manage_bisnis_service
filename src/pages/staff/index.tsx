@@ -49,7 +49,7 @@ export default function StaffManagementPage() {
 
   const [newUser, setNewUser] = useState({
     name: "",
-    email: "",
+    username: "",
     phone: "",
     address: "",
     roleId: defaultRole,
@@ -69,7 +69,7 @@ export default function StaffManagementPage() {
     setEditingUser(user);
     setNewUser({
       name: user.name,
-      email: user.email || "",
+      username: user.username || "",
       phone: user.phone || "",
       address: user.address || "",
       roleId: user.roleId || "",
@@ -108,7 +108,7 @@ export default function StaffManagementPage() {
       } else {
         await addUser(userToSave);
       }
-      setNewUser({ name: "", email: "", phone: "", address: "", roleId: defaultRole, branchId: "all", password: "", baseSalary: "" as any, leaveQuota: "12", allowance: "" as any, wageType: "Monthly", wageRate: "" as any, insuranceDed: "" as any, incentiveRate: "" as any, incentiveType: "None" });
+      setNewUser({ name: "", username: "", phone: "", address: "", roleId: defaultRole, branchId: "all", password: "", baseSalary: "" as any, leaveQuota: "12", allowance: "" as any, wageType: "Monthly", wageRate: "" as any, insuranceDed: "" as any, incentiveRate: "" as any, incentiveType: "None" });
       setEditingUser(null);
       setIsDialogOpen(false);
     } catch (e) {
@@ -141,7 +141,7 @@ export default function StaffManagementPage() {
     };
 
     const logs = attendances.filter(a => a.employeeId === user.id && isInPeriod(a.date));
-    const presentCount = logs.filter(l => l.status === 'PRESENT' || l.status === 'LATE').length;
+    const presentCount = logs.filter(l => l.status === 'Present' || l.status === 'Late').length;
     
     const wageType = user.wageType || 'Monthly';
     const wageRate = Number(user.wageRate || 0);
@@ -186,7 +186,7 @@ export default function StaffManagementPage() {
     }
 
     if (userIncentiveSource === 'Retail' || userIncentiveSource === 'All') {
-      const userTransactions = (transactions || []).filter(t => t.cashierId === user.id && t.status === 'SUCCESS' && isInPeriod(t.date));
+      const userTransactions = (transactions || []).filter(t => t.cashierId === user.id && t.status === 'Success' && isInPeriod(t.date));
       if (userIncentiveMode === 'Flat') {
         totalIncentive += userTransactions.length * userIncentiveRate;
       } else {
@@ -196,7 +196,7 @@ export default function StaffManagementPage() {
 
     if (userIncentiveSource === 'Profit' || userIncentiveSource === 'All') {
       // Calculate Branch Profit for current period
-      const branchTransactions = transactions.filter(t => t.branchId === user.branchId && t.status === 'SUCCESS' && isInPeriod(t.date));
+      const branchTransactions = transactions.filter(t => t.branchId === user.branchId && t.status === 'Success' && isInPeriod(t.date));
       const totalRevenue = branchTransactions.reduce((sum, t) => sum + Number(t.total), 0);
       const totalCost = branchTransactions.reduce((sum, t) => {
         const itemCost = t.items.reduce((iSum, item) => iSum + (Number(item.costPrice || 0) * item.quantity), 0);
@@ -462,7 +462,7 @@ export default function StaffManagementPage() {
     return users.filter(u => {
       const matchBranch = !currentBranch || u.branchId === currentBranch.id;
       const matchSearch = u.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          (u.email || "").toLowerCase().includes(searchQuery.toLowerCase());
+                          (u.username || "").toLowerCase().includes(searchQuery.toLowerCase());
       return matchBranch && matchSearch;
     });
   }, [users, currentBranch, searchQuery]);
@@ -540,7 +540,7 @@ export default function StaffManagementPage() {
             <div className="relative flex-1 lg:w-[300px]">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/30" />
               <Input 
-                placeholder="Cari nama atau email..." 
+                placeholder="Cari nama atau username..." 
                 className="pl-12 h-11 rounded-xl bg-muted/20 border-none focus:ring-0" 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

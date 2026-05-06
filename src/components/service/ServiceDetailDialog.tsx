@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import {
   Plus, X, ArrowRight, Check,
-  Printer, Share2, RotateCcw, AlertTriangle, ShoppingCart, CreditCard
+  Printer, Share2, RotateCcw, AlertTriangle, ShoppingCart
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -26,10 +26,10 @@ import {
 } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { usePosStore } from "@/lib/store";
-import { formatCurrency, cn, maxWarrantyDaysFromSpareparts } from "@/lib/utils";
-import { ServiceStatus, ServiceTicket, ServicePaymentStatus } from "@/lib/types";
+import { formatCurrency, cn } from "@/lib/utils";
+import { ServiceStatus, ServiceTicket } from "@/lib/types";
 import PurchaseOrderDialog from "@/components/suppliers/PurchaseOrderDialog";
-import ServiceChecklist, { DEFAULT_PRE_CHECK, DEFAULT_POST_CHECK } from "@/components/service/ServiceChecklist";
+import ServiceChecklist, { DEFAULT_PRE_CHECK } from "@/components/service/ServiceChecklist";
 import ReturnDialog from "@/components/service/ReturnDialog";
 
 
@@ -41,8 +41,8 @@ interface ServiceDetailDialogProps {
 
 export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: ServiceDetailDialogProps) {
   const {
-    serviceTypes, updateServiceTicket, services, users,
-    currentUser,
+    updateServiceTicket, users,
+    currentUser, fetchServices, serviceTypes,
   } = usePosStore();
 
   const [localTicket, setLocalTicket] = useState<ServiceTicket | null>(null);
@@ -51,8 +51,13 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
   const [openSparepart, setOpenSparepart] = useState(false);
   const [openServiceType, setOpenServiceType] = useState(false);
   const [isReturnOpen, setIsReturnOpen] = useState(false);
-  const [showDpInput, setShowDpInput] = useState(false);
   const [isPODialogOpen, setIsPODialogOpen] = useState(false);
+
+  // Inline pickup payment state
+  const [pickupPayMethod, setPickupPayMethod] = useState<'Cash' | 'QRIS' | 'Transfer' | null>(null);
+  const [pickupCashInput, setPickupCashInput] = useState('');
+  const [pickupLoading, setPickupLoading] = useState(false);
+  const [pickupError, setPickupError] = useState('');
 
   // Fetch spareparts from dedicated API endpoint
   const fetchSpareparts = useCallback(async (branchId: string) => {
@@ -78,85 +83,38 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
       setLocalTicket(null);
       setSpareparts([]);
     }
+    // Reset pickup state when ticket changes
+    setPickupPayMethod(null);
+    setPickupCashInput('');
+    setPickupError('');
   }, [ticket, fetchSpareparts]);
 
   if (!localTicket) return null;
 
-  const isTechnician = currentUser?.role?.name === 'Technician';
+  const isTechnician = currentUser?.role?.name === 'Technician' || currentUser?.role?.name === 'Owner';
 
-  const handleAddSparepart = (item: any) => {
-    const updatedParts = [...(localTicket.spareparts || []), {
-      ...item,
-      price: item.basePrice || 0,
-      quantity: 1,
-      itemId: item.id,
-      warranty: item.warranty || '',
-    }];
-    const newWarrantyDays = maxWarrantyDaysFromSpareparts(updatedParts);
-    setLocalTicket({
-      ...localTicket,
-      spareparts: updatedParts,
-      warrantyDays: newWarrantyDays,
-    });
-  };
+  // Filter teknisi: prioritas role Technician, fallback semua user aktif
+  const technicianUsers = users.filter(u =>
+    u.role?.name === 'Technician' ||
+    (u.role as any)?.permissions?.some((p: any) => p.module === 'SERVICE' && (p.canCreate || p.canUpdate))
+  );
+  const techList = technicianUsers.length > 0 ? technicianUsers : users;
 
-  const handleRemoveSparepart = (index: number) => {
-    const updatedParts = [...(localTicket.spareparts || [])];
-    updatedParts.splice(index, 1);
-    const newWarrantyDays = maxWarrantyDaysFromSpareparts(updatedParts);
-    setLocalTicket({
-      ...localTicket,
-      spareparts: updatedParts,
-      warrantyDays: newWarrantyDays,
-    });
-  };
+  const totalCost = (localTicket.spareparts?.reduce((sum, p) => sum + (Number(p.price) || 0) * (Number(p.quantity) || 1), 0) ?? 0) + (Number(localTicket.serviceFee) || 0);
 
-  const handleApplyServiceType = (type: any) => {
-    setLocalTicket({ ...localTicket, serviceFee: type.price });
-  };
-
-  const dayOfTicket = new Date(localTicket.dateOpened).setHours(0, 0, 0, 0);
-  const queueNumber = services
-    .filter(s => s.branchId === localTicket.branchId && new Date(s.dateOpened).setHours(0, 0, 0, 0) === dayOfTicket)
-    .sort((a, b) => a.dateOpened - b.dateOpened)
-    .findIndex(s => s.id === localTicket.id) + 1;
-
-  const technician = users.find(u => u.id === localTicket.technicianId);
-  const techWorkload = services.filter(s =>
-    s.technicianId === localTicket.technicianId &&
-    s.status === 'InProgress' &&
-    s.id !== localTicket.id
-  ).length;
-
-  const totalCost = (localTicket.spareparts?.reduce((sum, p) => sum + ((Number(p.price) || 0) * (p.quantity || 1)), 0) || 0) + (localTicket.serviceFee || 0);
-
-  // 4.2: Only 5 steps in progress bar — no Cancelled/Returned
-  const progressSteps = [
-    { id: 'Pending',        label: 'Masuk',       color: 'bg-amber-500' },
-    { id: 'InProgress',     label: 'Proses',      color: 'bg-blue-500' },
-    { id: 'OnHold',         label: 'Tertunda',    color: 'bg-orange-500' },
-    { id: 'ReadyForPickup', label: 'Siap Ambil',  color: 'bg-emerald-500' },
-    { id: 'Completed',      label: 'Selesai',     color: 'bg-violet-500' },
-  ];
-
-  // For index calculations we still need all statuses
-  const allStatusOrder = ['Pending', 'InProgress', 'OnHold', 'ReadyForPickup', 'Completed', 'Returned', 'Cancelled'];
-  const currentStatusIndex = allStatusOrder.indexOf(localTicket.status);
-
-  // Post-check all-done check — tidak dipakai lagi, post-check dihapus
   // ── Read-only rules ──────────────────────────────────────────────────
-  // Pre-check: teknisi bisa edit saat Pending/InProgress/OnHold
+  // Pre-check: teknisi bisa edit saat PENDING/IN_PROGRESS/ON_HOLD
   const isPreCheckReadOnly = !isTechnician ||
     !['Pending', 'InProgress', 'OnHold'].includes(localTicket.status);
 
-  // Diagnosa: teknisi bisa edit saat InProgress/OnHold
+  // Diagnosa: teknisi bisa edit saat IN_PROGRESS/ON_HOLD
   const isDiagnosisReadOnly = localTicket.status === 'Completed' ||
     localTicket.status === 'ReadyForPickup' ||
     (!isTechnician && localTicket.status !== 'InProgress' && localTicket.status !== 'OnHold');
 
-  // 4.7: Return button visibility
-  const showReturnButton = localTicket.status === 'Completed' && !!localTicket.warrantyExpiry;
-  const isWarrantyExpired = localTicket.warrantyExpiry ? localTicket.warrantyExpiry <= Date.now() : false;
+  // Return button: muncul saat Completed, dengan atau tanpa garansi
+  const showReturnButton = localTicket.status === 'Completed';
+  const isWarrantyExpired = localTicket.warrantyExpiry ? localTicket.warrantyExpiry <= Date.now() : true;
 
   const handleNextAction = async () => {
     if (localTicket.status === 'Pending') {
@@ -181,7 +139,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
         .filter(p => (p as any).needsOrder)
         .map(p => p.name || 'Item')
         .join(', ');
-      alert(`Sparepart berikut stoknya habis dan perlu dipesan dulu:\n${names}\n\nTiket akan masuk Tertunda (OnHold).`);
+      alert(`Sparepart berikut stoknya habis dan perlu dipesan dulu:\n${names}\n\nTiket akan masuk Tertunda (ON_HOLD).`);
       performSave({ ...localTicket, status: 'OnHold' as ServiceStatus });
       return;
     }
@@ -202,7 +160,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
     onUpdate(ticketToSave);
     onClose();
 
-    // Process in background
+    // Process in background, then refresh store from server
     updateServiceTicket(ticketToSave.id, {
       status: ticketToSave.status,
       diagnosis: ticketToSave.diagnosis,
@@ -214,11 +172,50 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
       warrantyDays: ticketToSave.warrantyDays,
       paymentStatus: ticketToSave.paymentStatus,
       dpAmount: ticketToSave.dpAmount,
+    }).then(() => {
+      // Refresh agar field server-side (readyAt, pickupCode, dll) ikut terupdate
+      fetchServices().catch(console.error);
     }).catch(console.error);
   };
 
   const handleSaveOnly = () => {
     performSave(localTicket);
+  };
+
+  // ── Inline pickup: konfirmasi pembayaran langsung dari dialog ──────────────
+  const handleInlinePickup = async (method: 'Cash' | 'QRIS' | 'Transfer') => {
+    if (!localTicket) return;
+    const amountPaid = method === 'Cash' ? (Number(pickupCashInput) || 0) : totalCost;
+    if (method === 'Cash' && amountPaid < totalCost) {
+      setPickupError(`Uang kurang ${formatCurrency(totalCost - amountPaid)}`);
+      return;
+    }
+    setPickupLoading(true);
+    setPickupError('');
+    try {
+      const res = await fetch('/api/services/pickup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: localTicket.pickupCode,
+          confirm: true,
+          pickedUpBy: 'Pelanggan',
+          paymentMethod: method,
+          amountPaid,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPickupError(data.message || 'Gagal konfirmasi');
+        return;
+      }
+      onUpdate(data.ticket);
+      onClose();
+    } catch {
+      setPickupError('Gagal menghubungi server');
+    } finally {
+      setPickupLoading(false);
+    }
   };
 
   return (
@@ -268,7 +265,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                     }}>
                       <Share2 className="h-3.5 w-3.5" />
                     </Button>
-                    {/* Cetak Nota Selesai — hanya saat ReadyForPickup atau Completed */}
+                    {/* Cetak Nota Selesai — hanya saat READY_FOR_PICKUP atau COMPLETED */}
                     {(localTicket.status === 'ReadyForPickup' || localTicket.status === 'Completed') && (
                       <Button
                         variant="ghost"
@@ -289,7 +286,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                         }}
                       >
                         <Printer className="h-3 w-3" />
-                        Nota
+                        <span>Nota</span>
                       </Button>
                     )}
                   </div>
@@ -298,9 +295,9 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                   {localTicket.customerName} • {localTicket.customerPhone}
                 </p>
               </div>
-              {/* Total estimasi — semua user lihat */}
+              {/* Total tagihan di header */}
               <div className="flex flex-col items-start sm:items-end">
-                <p className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest">Total Estimasi</p>
+                <p className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest">Total Tagihan</p>
                 <p className="text-lg sm:text-xl font-black text-primary">{formatCurrency(totalCost)}</p>
               </div>
             </div>
@@ -308,8 +305,8 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
 
           <div className="flex-1 overflow-y-auto p-4 sm:p-5 custom-scrollbar space-y-4">
             <div className="pt-2">
-              <Tabs defaultValue={localTicket.status === 'InProgress' ? "work" : "summary"} className="w-full">
-              <TabsList className="grid w-full grid-cols-3 h-9 bg-muted/50 p-1">
+              <Tabs defaultValue={localTicket.status === 'InProgress' ? "work" : localTicket.status === 'ReadyForPickup' ? "billing" : "summary"} className="w-full">
+              <TabsList className="grid w-full grid-cols-3 h-9 p-1">
                 <TabsTrigger value="summary" className="text-[10px] uppercase font-bold">Ringkasan</TabsTrigger>
                 <TabsTrigger value="work" className="text-[10px] uppercase font-bold">Pengerjaan</TabsTrigger>
                 <TabsTrigger value="billing" className="text-[10px] uppercase font-bold">Biaya</TabsTrigger>
@@ -334,7 +331,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="unassigned">Belum ditunjuk</SelectItem>
-                                {users.filter(u => u.role?.name === 'Technician' || u.roleId === 'tech-role-id').map(tech => (
+                                {techList.map(tech => (
                                   <SelectItem key={tech.id} value={tech.id}>{tech.name}</SelectItem>
                                 ))}
                               </SelectContent>
@@ -364,7 +361,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
 
                   <div>
                     <p className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest mb-1">Keluhan Pelanggan:</p>
-                    <p className="text-xs font-medium text-foreground bg-muted/30 p-3 rounded-xl border border-border/20 italic">"{localTicket.issue}"</p>
+                    <p className="text-xs font-medium text-foreground  p-3  rounded-md border ">"{localTicket.issue}"</p>
                   </div>
                 </TabsContent>
 
@@ -385,7 +382,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                     <div>
                       <p className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest mb-2">Hasil Pengecekan & Diagnosa</p>
                       <textarea
-                        className="w-full border-solid border-2 min-h-[120px] p-4 text-xs bg-muted/20 border-none rounded-2xl focus:ring-1 focus:ring-primary/20 transition-all no-scrollbar"
+                        className="w-full min-h-[120px] p-4 text-xs bg-muted/20 rounded-2xl focus:outline-none focus:ring-1 focus:ring-primary/20 transition-all no-scrollbar resize-none"
                         placeholder="Tulis hasil pengecekan teknisi di sini..."
                         value={localTicket.diagnosis || ""}
                         onChange={(e) => setLocalTicket({ ...localTicket, diagnosis: e.target.value })}
@@ -401,70 +398,44 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                     <div className="space-y-3">
                       <div className="flex justify-between items-center px-1">
                         <span className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider">Daftar Sparepart & Jasa</span>
-                        <div className="px-2 py-0.5 rounded-full text-[9px] font-black bg-muted text-muted-foreground border">
+                        <div className="px-2 py-0.5 rounded-full text-[9px] font-black  text-muted-foreground">
                           {localTicket.spareparts?.length || 0} Item
                         </div>
                       </div>
 
                       {/* Banner info untuk teknisi — dihapus, teknisi input harga sendiri */}
 
-                      <div className="space-y-2 bg-muted/20 p-4 rounded-2xl border border-border/10">
+                      <div className="space-y-1 py-1">
                         {/* Jasa Servis Utama */}
-                        <div className="flex justify-between items-center group">
-                          <div className="flex flex-col">
-                            <span className="text-xs font-bold text-foreground">Jasa Perbaikan / Servis</span>
-                            <span className="text-[9px] text-muted-foreground">Biaya tenaga teknisi</span>
+                        {(localTicket.serviceFee || 0) > 0 && (
+                          <div className="flex justify-between items-center py-2">
+                            <div className="flex flex-col">
+                              <span className="text-xs font-medium text-foreground">Jasa Perbaikan / Servis</span>
+                              <span className="text-[9px] text-muted-foreground">Biaya tenaga teknisi</span>
+                            </div>
+                            <span className="text-xs font-semibold text-foreground">{formatCurrency(localTicket.serviceFee || 0)}</span>
                           </div>
-                          <div className="flex items-center gap-3">
-                            {/* Semua user bisa edit harga saat tiket masih aktif */}
-                            {['Pending', 'InProgress', 'OnHold', 'ReadyForPickup'].includes(localTicket.status) ? (
-                              <Input
-                                type="number"
-                                className="w-24 h-8 text-right text-xs font-bold bg-background rounded-lg"
-                                value={localTicket.serviceFee || 0}
-                                onChange={(e) => setLocalTicket({ ...localTicket, serviceFee: Number(e.target.value) })}
-                              />
-                            ) : (
-                              <span className="text-xs font-bold text-foreground">{formatCurrency(localTicket.serviceFee || 0)}</span>
-                            )}
-                          </div>
-                        </div>
+                        )}
 
                         {/* Rincian Sparepart */}
                         {localTicket.spareparts?.map((p, idx) => {
                           const item = spareparts.find(i => i.id === (p.itemId || (p as any).id));
-                          const canEdit = ['Pending', 'InProgress', 'OnHold', 'ReadyForPickup'].includes(localTicket.status);
-                          const canRemove = canEdit;
+                          const canRemove = ['Pending', 'InProgress', 'OnHold'].includes(localTicket.status);
                           return (
-                            <div key={idx} className="flex justify-between items-center pt-2 border-t border-border/5 group">
+                            <div key={idx} className="flex justify-between items-center py-2 border-t border-border/10">
                               <div className="flex flex-col">
                                 <span className="text-xs font-medium text-foreground">{item?.name || p.name || "Item Tidak Dikenal"}</span>
                                 <span className="text-[9px] text-muted-foreground">Qty: {p.quantity || 1}</span>
                               </div>
                               <div className="flex items-center gap-2">
-                                {canEdit ? (
-                                  <div className="flex items-center gap-2">
-                                    <Input
-                                      type="number"
-                                      className="w-20 h-8 text-right text-xs bg-background rounded-lg"
-                                      value={p.price || 0}
-                                      onChange={(e) => {
-                                        const newParts = [...(localTicket.spareparts || [])];
-                                        newParts[idx] = { ...newParts[idx], price: Number(e.target.value) };
-                                        setLocalTicket({ ...localTicket, spareparts: newParts });
-                                      }}
-                                    />
-                                    {canRemove && (
-                                      <button
-                                        onClick={() => setLocalTicket({ ...localTicket, spareparts: localTicket.spareparts?.filter((_, i) => i !== idx) })}
-                                        className="p-1.5 text-muted-foreground hover:text-red-500 transition-colors"
-                                      >
-                                        <X className="h-3 w-3" />
-                                      </button>
-                                    )}
-                                  </div>
-                                ) : (
-                                  <span className="text-xs font-bold text-foreground">{formatCurrency((p.price || 0) * (p.quantity || 1))}</span>
+                                <span className="text-xs font-semibold text-foreground">{formatCurrency((Number(p.price) || 0) * (p.quantity || 1))}</span>
+                                {canRemove && (
+                                  <button
+                                    onClick={() => setLocalTicket({ ...localTicket, spareparts: localTicket.spareparts?.filter((_, i) => i !== idx) })}
+                                    className="p-1.5 text-muted-foreground hover:text-red-500 transition-colors"
+                                  >
+                                    <X className="h-3 w-3" />
+                                  </button>
                                 )}
                               </div>
                             </div>
@@ -496,13 +467,66 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                         </div>
                       )}
 
-                      {/* Tombol Tambah Item — semua user bisa tambah saat tiket masih aktif */}
-                      {['Pending', 'InProgress', 'OnHold', 'ReadyForPickup'].includes(localTicket.status) && (
-                        <div className="grid grid-cols-2 gap-2 pt-2">
+                      {/* Tombol Tambah Jasa & Sparepart — hanya saat masih aktif dikerjakan */}
+                      {['Pending', 'InProgress', 'OnHold'].includes(localTicket.status) && (
+                        <div className="pt-2 flex gap-2">
+                          {/* ── Tambah Jasa ── */}
+                          <Popover open={openServiceType} onOpenChange={setOpenServiceType}>
+                            <PopoverTrigger asChild>
+                              <Button variant="outline" className="flex-1 h-9 border-dashed text-[10px] gap-2 rounded-lg">
+                                <Plus className="h-3 w-3" /><span>Tambah Jasa</span>
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="p-0 w-[280px]" align="start">
+                              <Command>
+                                <CommandInput placeholder="Cari jenis jasa..." className="h-8 text-xs" />
+                                <CommandList>
+                                  <CommandEmpty className="text-[10px] p-4">Jasa tidak ditemukan.</CommandEmpty>
+                                  <CommandGroup>
+                                    {serviceTypes.map(st => {
+                                      const price = Number(st.price) || 0;
+                                      return (
+                                        <CommandItem
+                                          key={st.id}
+                                          value={st.name}
+                                          onSelect={() => {
+                                            // Simpan jasa sebagai item sparepart dengan category 'Service'
+                                            setLocalTicket({
+                                              ...localTicket,
+                                              serviceFee: (Number(localTicket.serviceFee) || 0) + price,
+                                              spareparts: [
+                                                ...(localTicket.spareparts || []),
+                                                {
+                                                  id: `svc-${st.id}-${Date.now()}`,
+                                                  itemId: undefined,
+                                                  name: st.name,
+                                                  category: 'SERVICE',
+                                                  quantity: 1,
+                                                  price,
+                                                  costPrice: 0,
+                                                } as any,
+                                              ],
+                                            });
+                                            setOpenServiceType(false);
+                                          }}
+                                          className="text-xs flex justify-between items-center py-2"
+                                        >
+                                          <span>{st.name}</span>
+                                          <span className="text-[10px] font-bold text-primary">{formatCurrency(price)}</span>
+                                        </CommandItem>
+                                      );
+                                    })}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+
+                          {/* ── Tambah Sparepart ── */}
                           <Popover open={openSparepart} onOpenChange={setOpenSparepart}>
                             <PopoverTrigger asChild>
-                              <Button variant="outline" className="h-9 border-dashed text-[10px] gap-2 rounded-lg">
-                                <Plus className="h-3 w-3" /> Sparepart
+                              <Button variant="outline" className="flex-1 h-9 border-dashed text-[10px] gap-2 rounded-lg">
+                                <Plus className="h-3 w-3" /><span>Tambah Sparepart</span>
                               </Button>
                             </PopoverTrigger>
                             <PopoverContent className="p-0 w-[300px]" align="start">
@@ -519,7 +543,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                                           const existing = localTicket.spareparts?.find(p => (p.itemId || (p as any).id) === item.id);
                                           const outOfStock = (item.stock || 0) === 0;
                                           if (existing) {
-                                            const newParts = localTicket.spareparts?.map(p => 
+                                            const newParts = localTicket.spareparts?.map(p =>
                                               (p.itemId || (p as any).id) === item.id ? { ...p, quantity: (p.quantity || 1) + 1 } : p
                                             );
                                             setLocalTicket({ ...localTicket, spareparts: newParts });
@@ -550,41 +574,6 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                               </Command>
                             </PopoverContent>
                           </Popover>
-
-                          <Popover open={openServiceType} onOpenChange={setOpenServiceType}>
-                            <PopoverTrigger asChild>
-                              <Button variant="outline" className="h-9 border-dashed text-[10px] gap-2 rounded-lg">
-                                <Plus className="h-3 w-3" /> Tambah Jasa
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="p-0 w-[250px]" align="start">
-                              <Command>
-                                <CommandInput placeholder="Cari jasa..." className="h-8 text-xs" />
-                                <CommandList>
-                                  <CommandEmpty className="text-[10px] p-4">Jasa tidak ditemukan.</CommandEmpty>
-                                  <CommandGroup>
-                                    {serviceTypes.map(type => (
-                                      <CommandItem
-                                        key={type.id}
-                                        value={type.name}
-                                        onSelect={() => {
-                                          setLocalTicket({
-                                            ...localTicket,
-                                            serviceFee: (localTicket.serviceFee || 0) + (Number(type.price) || 0)
-                                          });
-                                          setOpenServiceType(false);
-                                        }}
-                                        className="text-xs flex justify-between items-center py-2"
-                                      >
-                                        <span>{type.name}</span>
-                                        <span className="text-[10px] font-bold text-primary">{formatCurrency(Number(type.price))}</span>
-                                      </CommandItem>
-                                    ))}
-                                  </CommandGroup>
-                                </CommandList>
-                              </Command>
-                            </PopoverContent>
-                          </Popover>
                         </div>
                       )}
 
@@ -595,194 +584,203 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                           <span className="text-lg font-black text-primary">{formatCurrency(totalCost)}</span>
                         </div>
 
-                          {/* Payment status — hanya tampil saat ReadyForPickup */}
-                          {localTicket.status === 'ReadyForPickup' && (
-                            <div className="space-y-2">
-                              <div className="flex items-center justify-between">
-                                <span className="text-[10px] font-bold uppercase text-muted-foreground">Status Pembayaran</span>
-                                <div className="flex gap-1.5">
-                                  {(['Unpaid', 'DP', 'Paid'] as ServicePaymentStatus[]).map(ps => (
-                                    <button
-                                      key={ps}
-                                      onClick={() => setLocalTicket({ ...localTicket, paymentStatus: ps, dpAmount: ps !== 'DP' ? 0 : localTicket.dpAmount })}
-                                      className={`text-[9px] font-bold px-2 py-1 rounded-full border transition-all ${
-                                        (localTicket.paymentStatus ?? 'Unpaid') === ps
-                                          ? ps === 'Paid' ? 'bg-emerald-500 text-white border-emerald-500'
-                                            : ps === 'DP' ? 'bg-blue-500 text-white border-blue-500'
-                                            : 'bg-red-500 text-white border-red-500'
-                                          : 'bg-background text-muted-foreground border-border hover:border-primary/40'
-                                      }`}
-                                    >
-                                      {ps === 'Unpaid' ? 'Belum Bayar' : ps === 'DP' ? 'DP / Cicil' : 'Lunas'}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-
-                              {/* DP amount input */}
-                              {localTicket.paymentStatus === 'DP' && (
-                                <div className="flex items-center gap-2 bg-blue-50 p-3 rounded-xl border border-blue-200">
-                                  <CreditCard className="h-4 w-4 text-blue-600 shrink-0" />
-                                  <div className="flex-1 space-y-1">
-                                    <p className="text-[9px] font-bold text-blue-700 uppercase">Jumlah DP Diterima</p>
-                                    <Input
-                                      type="number"
-                                      className="h-8 text-sm font-bold bg-white border-blue-200"
-                                      value={localTicket.dpAmount || ''}
-                                      onChange={(e) => setLocalTicket({ ...localTicket, dpAmount: Number(e.target.value) })}
-                                      placeholder="0"
-                                    />
-                                    {(localTicket.dpAmount || 0) > 0 && (
-                                      <p className="text-[9px] text-blue-600 font-semibold">
-                                        Sisa: {formatCurrency(totalCost - (localTicket.dpAmount || 0))}
-                                      </p>
+                        {/* ── Payment section — hanya saat READY_FOR_PICKUP & bukan teknisi ── */}
+                        {localTicket.status === 'ReadyForPickup' && !isTechnician && (
+                          <div className="space-y-3 pt-1">
+                            <div className="border-t pt-3">
+                              <p className="text-[10px] font-bold uppercase text-muted-foreground mb-2">Metode Pembayaran</p>
+                              <div className="grid grid-cols-3 gap-2">
+                                {(['Cash', 'QRIS', 'Transfer'] as const).map((m) => (
+                                  <button
+                                    key={m}
+                                    type="button"
+                                    onClick={() => {
+                                      setPickupPayMethod(m);
+                                      setPickupCashInput('');
+                                      setPickupError('');
+                                    }}
+                                    className={cn(
+                                      "flex flex-col items-center gap-1 py-2.5 rounded-xl border-2 text-xs font-semibold transition-all",
+                                      pickupPayMethod === m
+                                        ? "border-primary bg-primary/5 text-primary"
+                                        : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
                                     )}
-                                  </div>
-                                </div>
-                              )}
+                                  >
+                                    <span className="text-base leading-none">
+                                      {m === 'Cash' ? '💵' : m === 'QRIS' ? '📱' : '🏦'}
+                                    </span>
+                                    {m}
+                                  </button>
+                                ))}
+                              </div>
                             </div>
-                          )}
-                        </div>
+
+                            {/* Input nominal — hanya Cash */}
+                            {pickupPayMethod === 'Cash' && (
+                              <div className="space-y-1.5">
+                                <p className="text-[10px] font-bold uppercase text-muted-foreground">Uang Diterima</p>
+                                <Input
+                                  type="number"
+                                  autoFocus
+                                  placeholder={String(totalCost)}
+                                  className="h-9 text-sm font-mono"
+                                  value={pickupCashInput}
+                                  onChange={(e) => { setPickupCashInput(e.target.value); setPickupError(''); }}
+                                  onKeyDown={(e) => e.key === 'Enter' && handleInlinePickup('Cash')}
+                                />
+                                {Number(pickupCashInput) >= totalCost && (
+                                  <p className="text-[10px] text-muted-foreground font-medium">
+                                    Kembalian: <span className="font-bold text-foreground">{formatCurrency(Number(pickupCashInput) - totalCost)}</span>
+                                  </p>
+                                )}
+                              </div>
+                            )}
+
+                            {pickupError && (
+                              <p className="text-[10px] text-destructive font-semibold">{pickupError}</p>
+                            )}
+
+                            <Button
+                              className="w-full h-10 text-xs font-semibold gap-2"
+                              disabled={
+                                !pickupPayMethod ||
+                                pickupLoading ||
+                                (pickupPayMethod === 'Cash' && (!pickupCashInput || Number(pickupCashInput) < totalCost))
+                              }
+                              onClick={() => pickupPayMethod && handleInlinePickup(pickupPayMethod)}
+                            >
+                              {pickupLoading
+                                ? 'Memproses...'
+                                : <><Check className="h-4 w-4" /><span>Selesaikan Pembayaran</span></>
+                              }
+                            </Button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </TabsContent>
               </div>
             </Tabs>
           </div>
+          </div>
 
           {/* Action Footer */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 pb-4 border-t border-border/50 bg-background shrink-0 px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-3 pb-3 border-t border-border/50 bg-background shrink-0 px-4 sm:px-5">
 
-                {/* LEFT — Tombol Batal (hanya saat tiket masih aktif) */}
-                <div className="flex gap-2 w-full sm:w-auto order-2 sm:order-1">
-                  {['Pending', 'InProgress', 'OnHold'].includes(localTicket.status) && !isTechnician && (
-                    <Button
-                      variant="ghost"
-                      className="w-1/2 sm:w-auto border border-red-200 h-9 px-4 text-xs font-semibold uppercase text-red-600 hover:bg-red-50 rounded-lg"
-                      onClick={async () => {
-                        if (confirm("Batalkan servis ini?")) {
-                          await performSave({ ...localTicket, status: 'Cancelled' as ServiceStatus });
-                        }
-                      }}
-                    >
-                      Batal
-                    </Button>
-                  )}
-                </div>
+            {/* LEFT — Tombol Batal */}
+            <div className="flex gap-2 w-full sm:w-auto order-2 sm:order-1">
+              {['Pending', 'InProgress', 'OnHold'].includes(localTicket.status) && !isTechnician && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-destructive border-destructive/30 hover:bg-destructive/5 hover:text-destructive"
+                  onClick={async () => {
+                    if (confirm("Batalkan servis ini?")) {
+                      await performSave({ ...localTicket, status: 'Cancelled' as ServiceStatus });
+                    }
+                  }}
+                >
+                  Batalkan Servis
+                </Button>
+              )}
+            </div>
 
-                {/* RIGHT — Aksi utama sesuai status & role */}
-                <div className="w-full sm:w-auto order-1 sm:order-2 flex flex-col gap-2">
+            {/* RIGHT — Aksi utama sesuai status & role */}
+            <div className="w-full sm:w-auto order-1 sm:order-2 flex gap-2">
 
-                  {/* ── PENDING: Kasir mulai pengerjaan ── */}
-                  {localTicket.status === 'Pending' && !isTechnician && (
-                    <Button
-                      className="w-full sm:w-auto h-9 px-6 text-xs font-semibold uppercase flex items-center gap-2 rounded-lg"
-                      onClick={handleNextAction}
-                    >
-                      Mulai Pengerjaan <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  )}
+              {/* ── PENDING: Kasir mulai pengerjaan ── */}
+              {localTicket.status === 'Pending' && !isTechnician && (
+                <Button size="sm" className="w-full sm:w-auto gap-1.5" onClick={handleNextAction}>
+                  <span>Mulai Pengerjaan</span><ArrowRight className="h-3.5 w-3.5" />
+                </Button>
+              )}
 
-                  {/* ── IN PROGRESS: Aksi teknisi ── */}
-                  {localTicket.status === 'InProgress' && isTechnician && (
-                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                      <Button
-                        variant="outline"
-                        className="w-full sm:w-auto h-9 px-4 text-xs font-semibold uppercase rounded-lg border-orange-300 text-orange-600 hover:bg-orange-50"
-                        onClick={async () => performSave({ ...localTicket, status: 'OnHold' as ServiceStatus })}
-                      >
-                        Tunggu Sparepart
-                      </Button>
-                      <Button
-                        className={`w-full sm:w-auto h-9 px-6 text-xs font-semibold uppercase flex items-center gap-2 rounded-lg ${
-                          localTicket.spareparts?.some(p => (p as any).needsOrder)
-                            ? 'bg-orange-500 hover:bg-orange-600'
-                            : 'bg-blue-600 hover:bg-blue-700'
-                        }`}
-                        onClick={handleTechDone}
-                      >
-                        {localTicket.spareparts?.some(p => (p as any).needsOrder)
-                          ? <><AlertTriangle className="h-4 w-4" /> Selesai (Ada Sparepart Perlu PO)</>
-                          : <>Selesai Pengerjaan <Check className="h-4 w-4" /></>
-                        }
-                      </Button>
-                    </div>
-                  )}
+              {/* ── IN PROGRESS: Aksi teknisi ── */}
+              {localTicket.status === 'InProgress' && isTechnician && (
+                <>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full sm:w-auto"
+                    onClick={() => performSave({ ...localTicket, status: 'OnHold' as ServiceStatus })}
+                  >
+                    Tunggu Sparepart
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="w-full sm:w-auto gap-1.5"
+                    onClick={handleTechDone}
+                  >
+                    {localTicket.spareparts?.some(p => (p as any).needsOrder)
+                      ? <><AlertTriangle className="h-3.5 w-3.5" /><span>Selesai (Ada PO)</span></>
+                      : <><span>Selesai Pengerjaan</span><Check className="h-3.5 w-3.5" /></>
+                    }
+                  </Button>
+                </>
+              )}
 
-                  {/* ── IN PROGRESS: Kasir bisa set OnHold atau ReadyForPickup ── */}
-                  {localTicket.status === 'InProgress' && !isTechnician && (
-                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                      <Button
-                        variant="outline"
-                        className="w-full sm:w-auto h-9 px-4 text-xs font-semibold uppercase rounded-lg border-orange-300 text-orange-600 hover:bg-orange-50"
-                        onClick={async () => performSave({ ...localTicket, status: 'OnHold' as ServiceStatus })}
-                      >
-                        Tunda (OnHold)
-                      </Button>
-                      <Button
-                        className="w-full sm:w-auto h-9 px-6 text-xs font-semibold uppercase flex items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-700"
-                        onClick={handleCashierConfirm}
-                      >
-                        Konfirmasi Harga & Siap Ambil <Check className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  )}
+              {/* ── IN PROGRESS: Kasir ── */}
+              {localTicket.status === 'InProgress' && !isTechnician && (
+                <>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full sm:w-auto"
+                    onClick={() => performSave({ ...localTicket, status: 'OnHold' as ServiceStatus })}
+                  >
+                    Tunda
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="w-full sm:w-auto gap-1.5"
+                    onClick={handleCashierConfirm}
+                  >
+                    <span>Siap Diambil</span><Check className="h-3.5 w-3.5" />
+                  </Button>
+                </>
+              )}
 
-                  {/* ── ON HOLD: Lanjut pengerjaan (teknisi atau kasir) ── */}
-                  {localTicket.status === 'OnHold' && (
-                    <Button
-                      variant="outline"
-                      className="w-full sm:w-auto h-9 px-6 text-xs font-semibold uppercase flex items-center gap-2 rounded-lg border-blue-400 text-blue-600 hover:bg-blue-50"
-                      onClick={handleNextAction}
-                    >
-                      Lanjut Pengerjaan <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  )}
+              {/* ── ON HOLD: Lanjut pengerjaan ── */}
+              {localTicket.status === 'OnHold' && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full sm:w-auto gap-1.5"
+                  onClick={handleNextAction}
+                >
+                  <span>Lanjut Pengerjaan</span><ArrowRight className="h-3.5 w-3.5" />
+                </Button>
+              )}
 
-                  {/* ── READY FOR PICKUP: Kasir bisa edit harga, info status ── */}
-                  {localTicket.status === 'ReadyForPickup' && !isTechnician && (
-                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                      <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg border border-emerald-200 flex-1">
-                        <Check className="h-4 w-4 shrink-0" />
-                        <span className="text-xs font-semibold uppercase">Siap Diambil — Edit harga di tab Biaya</span>
-                      </div>
-                    </div>
-                  )}
+              {/* ── READY_FOR_PICKUP: info ── */}
+              {localTicket.status === 'ReadyForPickup' && !isTechnician && (
+                <p className="text-xs text-muted-foreground">
+                  Pilih metode pembayaran di tab <strong className="text-foreground">Biaya</strong>
+                </p>
+              )}
+              {localTicket.status === 'ReadyForPickup' && isTechnician && (
+                <p className="text-xs text-muted-foreground font-medium">Menunggu pengambilan pelanggan</p>
+              )}
 
-                  {/* ── READY FOR PICKUP: Teknisi view ── */}
-                  {localTicket.status === 'ReadyForPickup' && isTechnician && (
-                    <div className="flex items-center justify-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg border border-emerald-200 w-full">
-                      <Check className="h-4 w-4" />
-                      <span className="text-xs font-semibold uppercase">Pengerjaan Selesai — Menunggu Pengambilan</span>
-                    </div>
-                  )}
+              {/* ── COMPLETED ── */}
+              {localTicket.status === 'Completed' && !showReturnButton && (
+                <p className="text-xs text-muted-foreground font-medium">Servis selesai</p>
+              )}
 
-                  {/* ── COMPLETED ── */}
-                  {localTicket.status === 'Completed' && !showReturnButton && (
-                    <div className="flex items-center justify-center gap-2 bg-muted text-muted-foreground px-4 py-2 rounded-lg border w-full">
-                      <Check className="h-4 w-4" />
-                      <span className="text-xs font-semibold uppercase">Servis Selesai</span>
-                    </div>
-                  )}
-
-                  {/* ── RETURN / GARANSI ── */}
-                  {showReturnButton && (
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-full sm:w-auto h-9 px-4 text-xs font-semibold uppercase flex items-center gap-2 rounded-lg",
-                        isWarrantyExpired
-                          ? "border-amber-400 text-amber-700 hover:bg-amber-50"
-                          : "border-emerald-400 text-emerald-700 hover:bg-emerald-50"
-                      )}
-                      onClick={() => setIsReturnOpen(true)}
-                    >
-                      <RotateCcw className="h-3.5 w-3.5" />
-                      {isWarrantyExpired ? "Return (Garansi Habis)" : "Return / Klaim Garansi"}
-                      {isWarrantyExpired && <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />}
-                    </Button>
-                  )}
-              </div>
+              {/* ── RETURN / GARANSI ── */}
+              {showReturnButton && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full sm:w-auto gap-1.5"
+                  onClick={() => setIsReturnOpen(true)}
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  <span>{isWarrantyExpired ? "Return (Garansi Habis)" : "Klaim Garansi"}</span>
+                  {isWarrantyExpired && <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />}
+                </Button>
+              )}
             </div>
           </div>
         </DialogContent>

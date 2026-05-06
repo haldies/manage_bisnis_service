@@ -32,7 +32,7 @@ async function main() {
   }
 
   // 2. Roles
-  const modules = ['Cashier', 'Inventory', 'Service', 'Staff', 'Finance', 'Transactions', 'Printers'];
+  const modules = ['Dashboard', 'POS', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Settings'];
   const ownerRole = await prisma.role.upsert({
     where: { name_tenantId: { name: 'Owner', tenantId } },
     update: {},
@@ -59,20 +59,20 @@ async function main() {
 
   // 3. Users
   const usersData = [
-    { email: 'admin@kasirai.com', name: 'Super Admin', roleId: ownerRole.id, branchId: 'branch-jakarta', baseSalary: 10000000, joinDate: subDays(new Date(), 400) },
-    { email: 'budi@kasirai.com', name: 'Budi (Manager)', roleId: managerRole.id, branchId: 'branch-jakarta', baseSalary: 7000000, joinDate: subDays(new Date(), 365) },
-    { email: 'siti@kasirai.com', name: 'Siti (Kasir)', roleId: cashierRole.id, branchId: 'branch-jakarta', baseSalary: 3500000, joinDate: subDays(new Date(), 200) },
-    { email: 'agus@kasirai.com', name: 'Agus (Teknisi)', roleId: techRole.id, branchId: 'branch-jakarta', baseSalary: 4500000, joinDate: subDays(new Date(), 300) },
-    { email: 'dedi@kasirai.com', name: 'Dedi (Manager)', roleId: managerRole.id, branchId: 'branch-bandung', baseSalary: 6500000, joinDate: subDays(new Date(), 365) },
-    { email: 'lina@kasirai.com', name: 'Lina (Kasir)', roleId: cashierRole.id, branchId: 'branch-bandung', baseSalary: 3300000, joinDate: subDays(new Date(), 100) },
-    { email: 'rudi@kasirai.com', name: 'Rudi (Manager)', roleId: managerRole.id, branchId: 'branch-surabaya', baseSalary: 6500000, joinDate: subDays(new Date(), 450) },
-    { email: 'maya@kasirai.com', name: 'Maya (Kasir)', roleId: cashierRole.id, branchId: 'branch-surabaya', baseSalary: 3300000, joinDate: subDays(new Date(), 50) },
+    { username: 'admin', name: 'Super Admin', roleId: ownerRole.id, branchId: 'branch-jakarta', baseSalary: 10000000, joinDate: subDays(new Date(), 400) },
+    { username: 'budi', name: 'Budi (Manager)', roleId: managerRole.id, branchId: 'branch-jakarta', baseSalary: 7000000, joinDate: subDays(new Date(), 365) },
+    { username: 'siti', name: 'Siti (Kasir)', roleId: cashierRole.id, branchId: 'branch-jakarta', baseSalary: 3500000, joinDate: subDays(new Date(), 200) },
+    { username: 'agus', name: 'Agus (Teknisi)', roleId: techRole.id, branchId: 'branch-jakarta', baseSalary: 4500000, joinDate: subDays(new Date(), 300) },
+    { username: 'dedi', name: 'Dedi (Manager)', roleId: managerRole.id, branchId: 'branch-bandung', baseSalary: 6500000, joinDate: subDays(new Date(), 365) },
+    { username: 'lina', name: 'Lina (Kasir)', roleId: cashierRole.id, branchId: 'branch-bandung', baseSalary: 3300000, joinDate: subDays(new Date(), 100) },
+    { username: 'rudi', name: 'Rudi (Manager)', roleId: managerRole.id, branchId: 'branch-surabaya', baseSalary: 6500000, joinDate: subDays(new Date(), 450) },
+    { username: 'maya', name: 'Maya (Kasir)', roleId: cashierRole.id, branchId: 'branch-surabaya', baseSalary: 3300000, joinDate: subDays(new Date(), 50) },
   ];
 
   const users: any[] = [];
   for (const u of usersData) {
     const user = await prisma.user.upsert({
-      where: { email: u.email },
+      where: { username: u.username },
       update: { password: password6 },
       create: { ...u, password: password6, tenantId }
     });
@@ -181,7 +181,7 @@ async function main() {
           date: date,
           checkInTime: addHours(date, 8 + Math.random()),
           checkOutTime: addHours(date, 17 + Math.random()),
-          status: (Math.random() > 0.8 ? 'LATE' : 'PRESENT') as any,
+          status: (Math.random() > 0.8 ? 'Late' : 'Present') as any,
           isInRadius: true,
           isMockGPS: false,
         });
@@ -210,8 +210,8 @@ async function main() {
           total: total,
           amountPaid: total,
           change: 0,
-          paymentMethod: 'CASH',
-          status: 'SUCCESS',
+          paymentMethod: 'Cash',
+          status: 'Success',
           tax: 0,
           discount: 0,
           items: {

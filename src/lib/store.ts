@@ -332,10 +332,10 @@ export const usePosStore = create<PosState>()(
       deviceModels: [],
       roles: [],
       rolePermissions: {
-        'Owner':  { 'Cashier': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Full', 'Staff': 'Full', 'Transactions': 'Full', 'Printers': 'Full' },
-        'Editor': { 'Cashier': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Read', 'Staff': 'Full', 'Transactions': 'Full', 'Printers': 'Full' },
-        'Technician': { 'Cashier': 'None', 'Service': 'Full', 'Inventory': 'Read', 'Finance': 'None', 'Staff': 'None', 'Transactions': 'Read', 'Printers': 'None' },
-        'Viewer': { 'Cashier': 'Read', 'Service': 'Read', 'Inventory': 'Read', 'Finance': 'Read', 'Staff': 'Read', 'Transactions': 'Read', 'Printers': 'None' }
+        'Owner':  { 'Dashboard': 'Full', 'POS': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Full', 'Staff': 'Full', 'Transactions': 'Full', 'Settings': 'Full' },
+        'Admin':  { 'Dashboard': 'Full', 'POS': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Read', 'Staff': 'Full', 'Transactions': 'Full', 'Settings': 'Full' },
+        'Cashier': { 'Dashboard': 'Read', 'POS': 'Full', 'Service': 'Read', 'Inventory': 'Read', 'Finance': 'None', 'Staff': 'None', 'Transactions': 'Read', 'Settings': 'Full' },
+        'Technician': { 'Dashboard': 'Read', 'POS': 'None', 'Service': 'Full', 'Inventory': 'Read', 'Finance': 'None', 'Staff': 'None', 'Transactions': 'Read', 'Settings': 'None' }
       },
 
       // --- GENERAL ACTIONS ---
@@ -377,7 +377,7 @@ export const usePosStore = create<PosState>()(
 
             // Build rolePermissions from DB data so any role (Cashier, Technician, etc.)
             // is automatically registered — no more hardcoded role names needed.
-            const MODULES: ModuleName[] = ['Cashier', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Printers'];
+            const MODULES: ModuleName[] = ['Dashboard', 'POS', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Settings'];
             const built: Record<string, Record<ModuleName, AccessLevel>> = {};
 
             for (const role of data) {
@@ -451,15 +451,29 @@ export const usePosStore = create<PosState>()(
 
       fetchServices: async () => {
         try {
-          const res = await fetch('/api/services');
-          const typeRes = await fetch('/api/services/types');
+          const [res, typeRes, deviceRes] = await Promise.all([
+            fetch('/api/services'),
+            fetch('/api/services/types'),
+            fetch('/api/device-models'),
+          ]);
           if (res.ok) {
             const data = await res.json();
             set({ services: data });
           }
           if (typeRes.ok) {
             const types = await typeRes.json();
-            set({ serviceTypes: types });
+            set({
+              serviceTypes: types.map((t: any) => ({
+                ...t,
+                price: parseFloat(String(t.price)) || 0,
+                feeValue: parseFloat(String(t.feeValue)) || 0,
+                incentiveValue: parseFloat(String(t.incentiveValue)) || 0,
+              }))
+            });
+          }
+          if (deviceRes.ok) {
+            const models = await deviceRes.json();
+            set({ deviceModels: models });
           }
         } catch (error) {
           console.error("Failed to fetch services", error);
@@ -516,13 +530,13 @@ export const usePosStore = create<PosState>()(
       },
 
 
-      login: async (email: string, password: string) => {
+      login: async (username: string, password: string) => {
 
         try {
           const res = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ username, password })
           });
           if (res.ok) {
             const data = await res.json();
@@ -1051,8 +1065,8 @@ export const usePosStore = create<PosState>()(
             rolePermissions: {
               ...state.rolePermissions,
               [roleName]: {
-                'Cashier': 'None', 'Service': 'None', 'Inventory': 'None',
-                'Finance': 'None', 'Staff': 'None', 'Transactions': 'None', 'Printers': 'None'
+                'Dashboard': 'None', 'POS': 'None', 'Service': 'None', 'Inventory': 'None',
+                'Finance': 'None', 'Staff': 'None', 'Transactions': 'None', 'Settings': 'None'
               }
             }
           }));
@@ -1120,7 +1134,7 @@ export const usePosStore = create<PosState>()(
         const { roles } = await res.json();
 
         // Rebuild rolePermissions from fresh data
-        const MODULES: ModuleName[] = ['Cashier', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Printers'];
+        const MODULES: ModuleName[] = ['Dashboard', 'POS', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Settings'];
         const built: Record<string, Record<ModuleName, AccessLevel>> = {};
         for (const role of roles) {
           const perms: Record<ModuleName, AccessLevel> = {} as any;

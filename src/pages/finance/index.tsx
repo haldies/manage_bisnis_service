@@ -50,7 +50,7 @@ export default function LaporanDashboard() {
     const revenue = filteredTransactions.reduce((sum, tx) => sum + Number(tx.total), 0);
     let totalCost = 0;
     filteredTransactions.forEach(tx => {
-      if (tx.status !== 'SUCCESS') return;
+      if (tx.status !== 'Success') return;
       tx.items.forEach(item => {
         const invItem = inventory.find(i => i.id === (item.itemId || item.id));
         totalCost += Number(invItem?.costPrice || 0) * item.quantity;
@@ -65,7 +65,7 @@ export default function LaporanDashboard() {
       profit, 
       roi,
       efficiency,
-      totalOrders: filteredTransactions.filter(t => t.status === 'SUCCESS').length 
+      totalOrders: filteredTransactions.filter(t => t.status === 'Success').length 
     };
   }, [filteredTransactions, inventory]);
 
@@ -85,7 +85,7 @@ export default function LaporanDashboard() {
     }
     
     filteredTransactions.forEach(tx => {
-      if (tx.status !== 'SUCCESS') return;
+      if (tx.status !== 'Success') return;
       const day = new Date(tx.date).toISOString().split('T')[0];
       if (days[day] !== undefined) {
         days[day] += Number(tx.total);
@@ -102,7 +102,7 @@ export default function LaporanDashboard() {
   const categoryChartData = useMemo(() => {
     const data: Record<string, number> = {};
     filteredTransactions.forEach(tx => {
-      if (tx.status !== 'SUCCESS') return;
+      if (tx.status !== 'Success') return;
       tx.items.forEach(item => {
         const cat = item.category?.trim();
         if (!cat) return; // skip item tanpa kategori

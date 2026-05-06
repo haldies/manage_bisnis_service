@@ -13,7 +13,7 @@ interface RolePermissionTableProps {
   updateRolePermission: (role: Role | string, module: ModuleName, level: AccessLevel) => void;
 }
 
-const MODULES: ModuleName[] = ['Cashier', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Printers'];
+const MODULES: ModuleName[] = ['Dashboard', 'POS', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Settings'];
 
 export function RolePermissionTable({ rolePermissions, updateRolePermission }: RolePermissionTableProps) {
   const { addRole, deleteRole, renameRole, resetRoles } = usePosStore();

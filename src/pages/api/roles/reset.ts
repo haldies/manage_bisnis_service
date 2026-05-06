@@ -1,24 +1,24 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/lib/prisma';
 
-const MODULES = ['Cashier', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Printers'];
+const MODULES = ['Dashboard', 'POS', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Settings'];
 
 const DEFAULT_ROLES: Record<string, Record<string, 'Full' | 'Read' | 'None'>> = {
   Owner: {
-    Cashier: 'Full', Service: 'Full', Inventory: 'Full',
-    Finance: 'Full', Staff: 'Full', Transactions: 'Full', Printers: 'Full',
+    Dashboard: 'Full', POS: 'Full', Service: 'Full', Inventory: 'Full',
+    Finance: 'Full', Staff: 'Full', Transactions: 'Full', Settings: 'Full',
   },
-  Kasir: {
-    Cashier: 'Full', Service: 'Read', Inventory: 'Read',
-    Finance: 'None', Staff: 'None', Transactions: 'Read', Printers: 'Full',
+  Cashier: {
+    Dashboard: 'Read', POS: 'Full', Service: 'Read', Inventory: 'Read',
+    Finance: 'None', Staff: 'None', Transactions: 'Read', Settings: 'Full',
   },
-  Teknisi: {
-    Cashier: 'None', Service: 'Full', Inventory: 'Read',
-    Finance: 'None', Staff: 'None', Transactions: 'Read', Printers: 'None',
+  Technician: {
+    Dashboard: 'None', POS: 'None', Service: 'Full', Inventory: 'Read',
+    Finance: 'None', Staff: 'None', Transactions: 'Read', Settings: 'None',
   },
   Admin: {
-    Cashier: 'Full', Service: 'Full', Inventory: 'Full',
-    Finance: 'Read', Staff: 'Full', Transactions: 'Full', Printers: 'Full',
+    Dashboard: 'Full', POS: 'Full', Service: 'Full', Inventory: 'Full',
+    Finance: 'Read', Staff: 'Full', Transactions: 'Full', Settings: 'Full',
   },
 };
 

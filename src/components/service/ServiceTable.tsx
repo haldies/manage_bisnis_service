@@ -82,12 +82,14 @@ export default function ServiceTable({
   visibleColumns = {}
 }: ServiceTableProps) {
   const { users, currentUser } = usePosStore();
-  const isTechnician = currentUser?.role?.name === 'Technician';
+  const isTechnician = currentUser?.role?.name === 'Technician' ||
+    currentUser?.role?.name === 'Owner';
   const show = (col: string) => visibleColumns[col] !== false;
 
   return (
     <div className="rounded-lg overflow-hidden">
-      <Table>
+      <div className="overflow-x-auto w-full">
+      <Table className="min-w-[600px]">
         <TableHeader>
           <TableRow className="border-b border-border/40">
             {show('no') && <TableHead className="px-4 py-3 text-xs font-bold uppercase text-muted-foreground w-12">No</TableHead>}
@@ -245,6 +247,7 @@ export default function ServiceTable({
           )}
         </TableBody>
       </Table>
+      </div>
     </div>
   );
 }

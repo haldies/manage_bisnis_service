@@ -9,15 +9,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required' });
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username and password are required' });
   }
 
   try {
     const user = await prisma.user.findUnique({ 
-      where: { email },
+      where: { username },
       include: {
         role: {
           include: {
@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Gunakan nama role untuk token JWT (sebagai fallback)
-    const token = signToken({ userId: user.id, email: user.email, role: user.role?.name });
+    const token = signToken({ userId: user.id, username: user.username, role: user.role?.name });
 
     res.setHeader('Set-Cookie', serialize('token', token, {
       httpOnly: true,
@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       message: 'Logged in successfully',
       user: { 
         id: user.id, 
-        email: user.email, 
+        username: user.username, 
         name: user.name, 
         role: user.role, // Sekarang mengirimkan objek Role lengkap
         branchId: user.branchId 

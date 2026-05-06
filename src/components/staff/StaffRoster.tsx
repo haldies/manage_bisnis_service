@@ -41,7 +41,7 @@ export function StaffRoster({ users, branches, storeProfile, onEdit, onDelete }:
                   </div>
                 </TableCell>
                 <TableCell className="py-4">
-                  <span className="ui-meta">{user.email || "—"}</span>
+                  <span className="ui-meta">{user.username || "—"}</span>
                 </TableCell>
                 <TableCell className="py-4">
                   <div className="flex items-center gap-1.5">

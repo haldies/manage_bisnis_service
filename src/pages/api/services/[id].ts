@@ -11,13 +11,13 @@ function generatePickupCode(): string {
  * Any transition not listed here will be rejected with a 400 error.
  */
 const VALID_TRANSITIONS: Record<string, string[]> = {
-  Pending:        ['InProgress', 'Cancelled'],
-  InProgress:     ['ReadyForPickup', 'OnHold', 'Cancelled'],
-  OnHold:         ['InProgress', 'ReadyForPickup', 'Cancelled'],
+  Pending:          ['InProgress', 'Cancelled'],
+  InProgress:      ['ReadyForPickup', 'OnHold', 'Cancelled'],
+  OnHold:          ['InProgress', 'ReadyForPickup', 'Cancelled'],
   ReadyForPickup: ['Completed', 'InProgress'],
-  Completed:      ['Returned'],
-  Returned:       ['InProgress'],
-  Cancelled:      ['Pending'],
+  Completed:        ['Returned'],
+  Returned:         ['InProgress'],
+  Cancelled:        ['Pending'],
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -81,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       }
 
-      // Auto-generate pickup code when moving to ReadyForPickup
+      // Auto-generate pickup code when moving to READY_FOR_PICKUP
       let resolvedPickupCode = pickupCode;
       if (status === 'ReadyForPickup' && !pickupCode) {
         const existing = await prisma.serviceTicket.findUnique({ where: { id: String(id) } });
@@ -100,7 +100,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       }
 
-      // Set readyAt timestamp when moving to ReadyForPickup
+      // Set readyAt timestamp when moving to READY_FOR_PICKUP
       const readyAt = status === 'ReadyForPickup' ? new Date() : undefined;
 
       // Compute warrantyExpiry when completing

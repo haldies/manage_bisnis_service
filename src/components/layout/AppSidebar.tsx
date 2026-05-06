@@ -37,7 +37,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: "Operasional",
     items: [
-      { label: "Kasir", href: "/", icon: Smartphone, module: "Cashier", requiredLevel: "Read" },
+      { label: "Kasir", href: "/", icon: Smartphone, module: "POS", requiredLevel: "Read" },
       { label: "Servis", href: "/service", icon: Wrench, module: "Service", requiredLevel: "Read" },
       { label: "Transaksi", href: "/transactions", icon: ReceiptText, module: "Transactions", requiredLevel: "Read" },
     ],
@@ -51,7 +51,7 @@ const NAV_GROUPS: NavGroup[] = [
       { label: "Staf & Payroll", href: "/staff", icon: Users, module: "Staff", requiredLevel: "Read" },
       { label: "Cabang", href: "/branches", icon: MapPin, module: "Staff", requiredLevel: "Full" },
       { label: "Laporan", href: "/finance", icon: LineChart, module: "Finance", requiredLevel: "Read" },
-      { label: "Pengaturan", href: "/settings", icon: Settings, module: "Staff", requiredLevel: "Read" },
+      { label: "Pengaturan", href: "/settings", icon: Settings, module: "Settings", requiredLevel: "Read" },
     ],
   },
 ];

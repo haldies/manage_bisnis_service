@@ -7,14 +7,14 @@ import { Label } from "@/components/ui/label";
 
 export function AuthScreen() {
   const { login, setBranch, currentUser, currentBranch, branches } = usePosStore();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) return;
-    const success = await login(email, password);
+    if (!username || !password) return;
+    const success = await login(username, password);
     if (!success) {
       setError("Login gagal. Periksa kembali akses Anda.");
     } else {
@@ -47,14 +47,15 @@ export function AuthScreen() {
           
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="username">Username</Label>
               <Input
-                id="email"
-                type="email"
+                id="username"
+                type="text"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="rounded-md shadow-none focus-visible:ring-1"
+                placeholder="Username"
               />
             </div>
             <div className="space-y-2 rounded-md">

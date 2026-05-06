@@ -158,7 +158,7 @@ exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   name: 'name',
-  email: 'email',
+  username: 'username',
   password: 'password',
   roleId: 'roleId',
   createdAt: 'createdAt',
@@ -669,23 +669,21 @@ exports.RequestStatus = exports.$Enums.RequestStatus = {
 
 exports.TransactionSource = exports.$Enums.TransactionSource = {
   POS: 'POS',
-  SERVICE: 'SERVICE'
+  Service: 'Service'
 };
 
 exports.PaymentMethod = exports.$Enums.PaymentMethod = {
-  CASH: 'CASH',
+  Cash: 'Cash',
   QRIS: 'QRIS',
-  TRANSFER: 'TRANSFER',
-  E_WALLET: 'E_WALLET'
+  Transfer: 'Transfer',
+  EWallet: 'EWallet'
 };
 
 exports.TransactionStatus = exports.$Enums.TransactionStatus = {
-  SUCCESS: 'SUCCESS',
-  CANCELLED: 'CANCELLED',
-  PENDING: 'PENDING',
+  Success: 'Success',
   Paid: 'Paid',
   Unpaid: 'Unpaid',
-  Canceled: 'Canceled'
+  Cancelled: 'Cancelled'
 };
 
 exports.ServiceStatus = exports.$Enums.ServiceStatus = {
@@ -706,14 +704,10 @@ exports.ServicePaymentStatus = exports.$Enums.ServicePaymentStatus = {
 };
 
 exports.AttendanceStatus = exports.$Enums.AttendanceStatus = {
-  PRESENT: 'PRESENT',
-  LATE: 'LATE',
-  ABSENT: 'ABSENT',
-  LEAVE: 'LEAVE',
-  hadir: 'hadir',
-  terlambat: 'terlambat',
-  izin: 'izin',
-  sakit: 'sakit'
+  Present: 'Present',
+  Late: 'Late',
+  Absent: 'Absent',
+  Leave: 'Leave'
 };
 
 exports.StockTransferStatus = exports.$Enums.StockTransferStatus = {

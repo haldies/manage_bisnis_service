@@ -58,45 +58,45 @@ async function main() {
   });
 
   // 2. Roles
-  const modules = ['Cashier', 'Inventory', 'Service', 'Staff', 'Finance', 'Transactions', 'Printers'];
+  const modules = ['POS', 'SERVICE', 'INVENTORY', 'STAFF', 'FINANCE', 'TRANSACTIONS', 'SETTINGS'];
 
   const ownerRole = await prisma.role.upsert({
-    where: { name_tenantId: { name: 'Owner', tenantId: 'default' } },
+    where: { name_tenantId: { name: 'OWNER', tenantId: 'default' } },
     update: {},
     create: {
-      name: 'Owner',
+      name: 'OWNER',
       tenantId: 'default',
       permissions: { create: modules.map(m => ({ module: m, canRead: true, canCreate: true, canUpdate: true, canDelete: true })) }
     }
   });
 
   const managerRole = await prisma.role.upsert({
-    where: { name_tenantId: { name: 'Editor', tenantId: 'default' } },
-    update: { name: 'Manager' },
+    where: { name_tenantId: { name: 'MANAGER', tenantId: 'default' } },
+    update: {},
     create: {
-      name: 'Manager',
+      name: 'MANAGER',
       tenantId: 'default',
       permissions: { create: modules.map(m => ({ module: m, canRead: true, canCreate: true, canUpdate: true, canDelete: false })) }
     }
   });
 
   const cashierRole = await prisma.role.upsert({
-    where: { name_tenantId: { name: 'Cashier', tenantId: 'default' } },
+    where: { name_tenantId: { name: 'CASHIER', tenantId: 'default' } },
     update: {},
     create: {
-      name: 'Cashier',
+      name: 'CASHIER',
       tenantId: 'default',
-      permissions: { create: modules.map(m => ({ module: m, canRead: m === 'Cashier' || m === 'Inventory', canCreate: m === 'Cashier', canUpdate: false, canDelete: false })) }
+      permissions: { create: modules.map(m => ({ module: m, canRead: m === 'POS' || m === 'INVENTORY', canCreate: m === 'POS', canUpdate: false, canDelete: false })) }
     }
   });
 
   const techRole = await prisma.role.upsert({
-    where: { name_tenantId: { name: 'Technician', tenantId: 'default' } },
+    where: { name_tenantId: { name: 'TECHNICIAN', tenantId: 'default' } },
     update: {},
     create: {
-      name: 'Technician',
+      name: 'TECHNICIAN',
       tenantId: 'default',
-      permissions: { create: modules.map(m => ({ module: m, canRead: m === 'Service', canCreate: m === 'Service', canUpdate: true, canDelete: false })) }
+      permissions: { create: modules.map(m => ({ module: m, canRead: m === 'SERVICE', canCreate: m === 'SERVICE', canUpdate: true, canDelete: false })) }
     }
   });
 
@@ -117,24 +117,24 @@ async function main() {
   // 4. Users
   const usersToSeed = [
     // Global
-    { email: 'admin@kasirai.com', name: 'Super Admin', roleId: ownerRole.id, branchId: jakarta.id },
+    { username: 'admin', name: 'Super Admin', roleId: ownerRole.id, branchId: jakarta.id },
     // Jakarta
-    { email: 'budi@kasirai.com', name: 'Budi (Manager JKT)', roleId: managerRole.id, branchId: jakarta.id },
-    { email: 'siti@kasirai.com', name: 'Siti (Kasir JKT)', roleId: cashierRole.id, branchId: jakarta.id },
-    { email: 'agus@kasirai.com', name: 'Agus (Teknisi JKT)', roleId: techRole.id, branchId: jakarta.id },
+    { username: 'budi', name: 'Budi (Manager JKT)', roleId: managerRole.id, branchId: jakarta.id },
+    { username: 'siti', name: 'Siti (Kasir JKT)', roleId: cashierRole.id, branchId: jakarta.id },
+    { username: 'agus', name: 'Agus (Teknisi JKT)', roleId: techRole.id, branchId: jakarta.id },
     // Bandung
-    { email: 'dedi@kasirai.com', name: 'Dedi (Manager BDG)', roleId: managerRole.id, branchId: bandung.id },
-    { email: 'lina@kasirai.com', name: 'Lina (Kasir BDG)', roleId: cashierRole.id, branchId: bandung.id },
-    { email: 'sep@kasirai.com', name: 'Asep (Teknisi BDG)', roleId: techRole.id, branchId: bandung.id },
+    { username: 'dedi', name: 'Dedi (Manager BDG)', roleId: managerRole.id, branchId: bandung.id },
+    { username: 'lina', name: 'Lina (Kasir BDG)', roleId: cashierRole.id, branchId: bandung.id },
+    { username: 'sep', name: 'Asep (Teknisi BDG)', roleId: techRole.id, branchId: bandung.id },
     // Surabaya
-    { email: 'rudi@kasirai.com', name: 'Rudi (Manager SBY)', roleId: managerRole.id, branchId: surabaya.id },
-    { email: 'maya@kasirai.com', name: 'Maya (Kasir SBY)', roleId: cashierRole.id, branchId: surabaya.id },
-    { email: 'eko@kasirai.com', name: 'Eko (Teknisi SBY)', roleId: techRole.id, branchId: surabaya.id },
+    { username: 'rudi', name: 'Rudi (Manager SBY)', roleId: managerRole.id, branchId: surabaya.id },
+    { username: 'maya', name: 'Maya (Kasir SBY)', roleId: cashierRole.id, branchId: surabaya.id },
+    { username: 'eko', name: 'Eko (Teknisi SBY)', roleId: techRole.id, branchId: surabaya.id },
   ];
 
   for (const u of usersToSeed) {
     await prisma.user.upsert({
-      where: { email: u.email },
+      where: { username: u.username },
       update: { password: password6, branchId: u.branchId, roleId: u.roleId },
       create: { 
         ...u, 

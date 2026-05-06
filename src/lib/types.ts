@@ -1,5 +1,6 @@
-export type ModuleName = 'Cashier' | 'Service' | 'Inventory' | 'Finance' | 'Staff' | 'Transactions' | 'Printers';
+export type ModuleName = 'Dashboard' | 'POS' | 'Service' | 'Inventory' | 'Finance' | 'Staff' | 'Transactions' | 'Settings';
 export type AccessLevel = 'None' | 'Read' | 'Full';
+export type RoleName = 'Owner' | 'Admin' | 'Manager' | 'Cashier' | 'Technician';
 
 export interface Permission {
   id: string;
@@ -27,7 +28,7 @@ export type User = {
   role?: Role;
   joinDate?: string;
   createdAt?: string;
-  email?: string;
+  username?: string;
   branchId?: string;
   password?: string;
   baseSalary?: number;
@@ -139,7 +140,7 @@ export type InventoryUnit = {
 };
 
 
-export type PaymentMethod = 'CASH' | 'QRIS' | 'TRANSFER' | 'E_WALLET' | 'Cash' | 'QRIS' | 'Transfer';
+export type PaymentMethod = 'Cash' | 'QRIS' | 'Transfer' | 'E-Wallet';
 
 export type CartItem = {
   id: string;
@@ -175,21 +176,21 @@ export type Transaction = {
   change: number;
   tax: number;
   discount: number;
-  status: 'SUCCESS' | 'CANCELLED' | 'PENDING' | 'Paid' | 'Unpaid' | 'Canceled';
+  status: 'Success' | 'Paid' | 'Unpaid' | 'Cancelled';
   notes?: string;
   queueNumber?: string;
   cashierName?: string;
 };
 
 export type ServiceStatus =
-  | 'Pending'           // Masuk — unit baru diterima
-  | 'InProgress'        // Proses — sedang dikerjakan
-  | 'OnHold'            // Ditunda — tunggu sparepart / apapun
-  | 'WaitingApproval'   // Konfirmasi Harga — menunggu persetujuan pelanggan
-  | 'ReadyForPickup'    // Siap Diambil — selesai, menunggu pengambilan
-  | 'Completed'         // Selesai — sudah diambil & lunas
-  | 'Returned'          // Return / klaim garansi
-  | 'Cancelled';        // Dibatalkan
+  | 'Pending'
+  | 'InProgress'
+  | 'OnHold'
+  | 'WaitingApproval'
+  | 'ReadyForPickup'
+  | 'Completed'
+  | 'Returned'
+  | 'Cancelled';
 
 // Checklist item untuk teknisi
 export type ChecklistItem = {
@@ -434,7 +435,7 @@ export type Attendance = {
   branchId: string;
   date: string;
   checkInTime: number;
-  status: 'PRESENT' | 'LATE' | 'ABSENT' | 'LEAVE' | 'hadir' | 'terlambat' | 'izin' | 'sakit';
+  status: 'Present' | 'Late' | 'Absent' | 'Leave';
   isInRadius: boolean;
   isMockGPS: boolean;
   latitude?: number;

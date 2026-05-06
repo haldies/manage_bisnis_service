@@ -1,0 +1,9 @@
+UPDATE "CashAdvance" SET "status" = 'APPROVED' WHERE "status"::text = 'Approved';
+UPDATE "CashAdvance" SET "status" = 'PENDING' WHERE "status"::text = 'Pending';
+UPDATE "CashAdvance" SET "status" = 'REJECTED' WHERE "status"::text = 'Rejected';
+UPDATE "LeaveRequest" SET "status" = 'APPROVED' WHERE "status"::text = 'Approved';
+UPDATE "LeaveRequest" SET "status" = 'PENDING' WHERE "status"::text = 'Pending';
+UPDATE "LeaveRequest" SET "status" = 'REJECTED' WHERE "status"::text = 'Rejected';
+UPDATE "Overtime" SET "status" = 'APPROVED' WHERE "status"::text = 'Approved';
+UPDATE "Overtime" SET "status" = 'PENDING' WHERE "status"::text = 'Pending';
+UPDATE "Overtime" SET "status" = 'REJECTED' WHERE "status"::text = 'Rejected';

@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           tenantId: 'default',
           branchId: ticket.branchId,
           cashierId: cashierId || ticket.technicianId || ticket.branchId,
-          source: 'SERVICE',
+          source: 'Service',
           total: -Number(originalTx.total),
           paymentMethod: originalTx.paymentMethod,
           amountPaid: -Number(originalTx.total),
@@ -53,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           change: 0,
           tax: 0,
           discount: 0,
-          status: 'SUCCESS',
+          status: 'Success',
           notes: `return:${ticketId}`,
           items: {
             create: originalTx.items.map((item) => ({

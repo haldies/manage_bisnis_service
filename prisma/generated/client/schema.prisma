@@ -42,21 +42,17 @@ enum RequestStatus {
 }
 
 enum PaymentMethod {
-  CASH
+  Cash
   QRIS
-  TRANSFER
-  E_WALLET
+  Transfer
+  EWallet
 }
 
 enum AttendanceStatus {
-  PRESENT
-  LATE
-  ABSENT
-  LEAVE
-  hadir
-  terlambat
-  izin
-  sakit
+  Present
+  Late
+  Absent
+  Leave
 }
 
 enum StockTransferStatus {
@@ -109,16 +105,14 @@ enum InventoryUnitStatus {
 
 enum TransactionSource {
   POS
-  SERVICE
+  Service
 }
 
 enum TransactionStatus {
-  SUCCESS
-  CANCELLED
-  PENDING
+  Success
   Paid
   Unpaid
-  Canceled
+  Cancelled
 }
 
 model Branch {
@@ -155,7 +149,7 @@ model User {
   id             String          @id @default(cuid())
   tenantId       String          @default("default")
   name           String?
-  email          String          @unique
+  username       String          @unique
   password       String?
   roleId         String
   role           Role            @relation(fields: [roleId], references: [id])
@@ -361,14 +355,14 @@ model TransactionItem {
 }
 
 enum ServiceStatus {
-  Pending // Masuk — unit baru diterima
-  InProgress // Proses — sedang dikerjakan teknisi
-  OnHold // Tertunda — menunggu sparepart
-  WaitingApproval // Menunggu Kasir — teknisi selesai, kasir isi harga & konfirmasi
-  ReadyForPickup // Siap Diambil — selesai dikerjakan, menunggu pengambilan & pembayaran
-  Completed // Selesai — sudah diambil pelanggan & lunas
-  Returned // Return — dikembalikan pelanggan (klaim garansi)
-  Cancelled // Batal — dibatalkan
+  Pending
+  InProgress
+  OnHold
+  WaitingApproval
+  ReadyForPickup
+  Completed
+  Returned
+  Cancelled
 }
 
 enum ServicePaymentStatus {

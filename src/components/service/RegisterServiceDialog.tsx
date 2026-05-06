@@ -26,6 +26,13 @@ interface RegisterServiceDialogProps {
 export default function RegisterServiceDialog({ open, onOpenChange }: RegisterServiceDialogProps) {
   const { users, currentUser, currentBranch, addServiceTicket, deviceModels } = usePosStore();
 
+  // Filter teknisi: prioritas role Technician, fallback semua user aktif
+  const technicianUsers = users.filter(u =>
+    u.role?.name === 'Technician' ||
+    (u.role as any)?.permissions?.some((p: any) => p.module === 'SERVICE' && (p.canCreate || p.canUpdate))
+  );
+  const techList = technicianUsers.length > 0 ? technicianUsers : users;
+
   
   const [openDevice, setOpenDevice] = useState(false);
   const [regForm, setRegForm] = useState({
@@ -194,7 +201,7 @@ export default function RegisterServiceDialog({ open, onOpenChange }: RegisterSe
                 <SelectValue placeholder="Pilih Teknisi" />
               </SelectTrigger>
               <SelectContent>
-                {users.filter(u => (u.role?.name === 'Technician' || u.roleId === 'tech-role-id')).map(tech => (
+                {techList.map(tech => (
                   <SelectItem key={tech.id} value={tech.id}>{tech.name}</SelectItem>
                 ))}
               </SelectContent>

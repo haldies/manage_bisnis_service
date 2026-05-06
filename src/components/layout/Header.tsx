@@ -59,7 +59,7 @@ export function Header({
           <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2 shadow-2xl border-border/40">
             <DropdownMenuLabel className="px-3 py-2">
                <p className="text-xs font-bold uppercase tracking-widest opacity-40">Akun Saya</p>
-               <p className="text-sm font-bold mt-1">{currentUser?.email || 'No Email'}</p>
+               <p className="text-sm font-bold mt-1">{currentUser?.username || 'No Username'}</p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="my-2 opacity-50" />
             <DropdownMenuItem 
@@ -125,7 +125,7 @@ function AttendanceControl() {
           branchId: currentBranch.id,
           date: today,
           checkInTime: Date.now(),
-          status: 'hadir',
+          status: 'Present',
           isInRadius: true,
           isMockGPS: false,
           latitude: pos.coords.latitude,

@@ -60,8 +60,8 @@ const TABLE_COLUMNS = [
 ];
 
 export default function ServiceManagementPage() {
-  const { services, currentUser, updateServiceTicket, fetchTransactions } = usePosStore();
-  const isTechnician = currentUser?.role?.name === 'Technician';
+  const { services, currentUser, updateServiceTicket, fetchTransactions, fetchServices } = usePosStore();
+  const isTechnician = currentUser?.role?.name === 'Technician' || currentUser?.role?.name === 'Owner';
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<string>(isTechnician ? "proses" : "masuk");
@@ -88,19 +88,18 @@ export default function ServiceManagementPage() {
   // Tabs yang aktif sesuai role
   const activeTabs = isTechnician ? TECHNICIAN_TABS : STATUS_TABS;
 
-  // Count per status tab
+  // Count per status tab — gunakan activeTabs saja agar tidak ada duplikat key
   const tabCounts = useMemo(() => {
     const base = isTechnician
       ? services.filter(t => t.technicianId === currentUser?.id)
       : services;
-    const allTabs = [...STATUS_TABS, ...TECHNICIAN_TABS];
     return Object.fromEntries(
-      allTabs.map(tab => [
+      activeTabs.map(tab => [
         tab.value,
         base.filter(t => (tab.statuses as readonly string[]).includes(t.status)).length,
       ])
     ) as Record<string, number>;
-  }, [services, isTechnician, currentUser?.id]);
+  }, [services, isTechnician, currentUser?.id, activeTabs]);
 
   const filteredServices = useMemo(() => {
     // Cari tab dari daftar yang sesuai role
@@ -126,16 +125,12 @@ export default function ServiceManagementPage() {
     _paymentMethod: string,
     _amountPaid: number
   ) => {
-    updateServiceTicket(updatedTicket.id, {
-      status: updatedTicket.status,
-      pickedUpAt: updatedTicket.pickedUpAt,
-      pickedUpBy: updatedTicket.pickedUpBy,
-      dateClosed: updatedTicket.dateClosed,
-    }).catch(console.error);
+    // Pickup API sudah update DB — cukup sync store dari server
+    fetchServices().catch(console.error);
     fetchTransactions().catch(console.error);
   };
 
-  const isServiceTab = STATUS_TABS.some(t => t.value === activeTab);
+  const isServiceTab = activeTabs.some(t => t.value === activeTab);
 
   return (
     <Layout title="Manajemen Servis" requiredModule="Service" requiredLevel="Read">

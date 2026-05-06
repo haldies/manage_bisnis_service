@@ -75,12 +75,12 @@ export default function ServiceChecklist({
         <h4 className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider">
           {title}
         </h4>
-        <div className={cn("px-2 py-0.5 rounded-full text-[9px] font-black border", colors[accentColor])}>
+        <div className={cn("px-2 py-0.5 rounded-full text-[9px] font-black ")}>
           {checkedCount}/{items.length}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
         {items.map((item) => (
           <button
             key={item.id}
@@ -88,10 +88,10 @@ export default function ServiceChecklist({
             disabled={readOnly}
             onClick={() => toggleItem(item.id)}
             className={cn(
-              "flex items-center gap-2 p-2 rounded-lg border text-left transition-all",
+              "flex items-center gap-2 px-2 py-1.5 rounded-lg text-left transition-all",
               item.checked
-                ? "bg-muted/50 border-primary/20"
-                : "bg-background border-border/50",
+                ? "bg-muted/40"
+                : "hover:bg-muted/20",
               readOnly && "cursor-default"
             )}
           >

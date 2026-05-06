@@ -67,7 +67,7 @@ export default function AdminMonitoringDashboard() {
   }, [filteredAttendances, dateRange]);
 
   const stats = useMemo(() => {
-    const successTransactions = filteredTransactions.filter(tx => tx.status === 'SUCCESS');
+    const successTransactions = filteredTransactions.filter(tx => tx.status === 'Success');
     const revenue = successTransactions.reduce((sum, tx) => sum + Number(tx.total), 0);
     let totalCost = 0;
     successTransactions.forEach(tx => {
@@ -87,7 +87,7 @@ export default function AdminMonitoringDashboard() {
   const topCategories = useMemo(() => {
     const catData: Record<string, number> = {};
     filteredTransactions.forEach(tx => {
-      if (tx.status !== 'SUCCESS') return;
+      if (tx.status !== 'Success') return;
       tx.items.forEach(item => {
         const catName = item.category?.trim();
         if (!catName) return;
@@ -103,7 +103,7 @@ export default function AdminMonitoringDashboard() {
   const topProducts = useMemo(() => {
     const prodData: Record<string, number> = {};
     filteredTransactions.forEach(tx => {
-      if (tx.status !== 'SUCCESS') return;
+      if (tx.status !== 'Success') return;
       tx.items.forEach(item => {
         prodData[item.name] = (prodData[item.name] || 0) + (Number(item.price) * item.quantity);
       });
@@ -128,7 +128,7 @@ export default function AdminMonitoringDashboard() {
     }
 
     filteredTransactions.forEach(tx => {
-      if (tx.status !== 'SUCCESS') return;
+      if (tx.status !== 'Success') return;
       const date = new Date(tx.date).toISOString().split('T')[0];
       if (history[date] !== undefined) history[date] += Number(tx.total);
     });

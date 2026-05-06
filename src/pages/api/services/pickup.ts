@@ -48,8 +48,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Calculate total cost from spareparts + serviceFee
-    const sparepartTotal = ticket.spareparts.reduce(
-      (sum, sp) => sum + Number(sp.price) * Number(sp.quantity),
+    const sparepartTotal = (ticket as any).spareparts.reduce(
+      (sum: number, sp: any) => sum + Number(sp.price) * Number(sp.quantity),
       0
     );
     const totalCost = sparepartTotal + Number(ticket.serviceFee ?? 0);
@@ -84,7 +84,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             tenantId: 'default',
             branchId: ticket.branchId,
             cashierId: ticket.technicianId ?? ticket.branchId,
-            source: 'SERVICE',
+            source: 'Service',
             total: totalCost,
             paymentMethod: String(paymentMethod) as any,
             amountPaid: paid,
@@ -93,12 +93,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             customerPhone: ticket.customerPhone ?? '',
             tax: 0,
             discount: 0,
-            status: 'SUCCESS',
+            status: 'Success',
             notes: `service:${ticket.id}`,
             items: {
               create: [
                 // One line item per sparepart
-                ...ticket.spareparts.map((sp) => ({
+                ...(ticket as any).spareparts.map((sp: any) => ({
                   tenantId: 'default',
                   itemId: sp.itemId ?? sp.id,
                   name: sp.item?.name ?? 'Sparepart',

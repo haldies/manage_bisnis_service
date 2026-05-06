@@ -10,11 +10,11 @@ export default async function handler(
   }
 
   try {
-    const { email } = req.query;
+    const { username } = req.query;
 
     const where: any = {};
-    if (email && typeof email === "string") {
-      where.email = email;
+    if (username && typeof username === "string") {
+      where.username = username;
     }
 
     const users = await prisma.user.findMany({

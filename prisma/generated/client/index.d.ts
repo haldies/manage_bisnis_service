@@ -203,24 +203,20 @@ export type RequestStatus = (typeof RequestStatus)[keyof typeof RequestStatus]
 
 
 export const PaymentMethod: {
-  CASH: 'CASH',
+  Cash: 'Cash',
   QRIS: 'QRIS',
-  TRANSFER: 'TRANSFER',
-  E_WALLET: 'E_WALLET'
+  Transfer: 'Transfer',
+  EWallet: 'EWallet'
 };
 
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
 
 
 export const AttendanceStatus: {
-  PRESENT: 'PRESENT',
-  LATE: 'LATE',
-  ABSENT: 'ABSENT',
-  LEAVE: 'LEAVE',
-  hadir: 'hadir',
-  terlambat: 'terlambat',
-  izin: 'izin',
-  sakit: 'sakit'
+  Present: 'Present',
+  Late: 'Late',
+  Absent: 'Absent',
+  Leave: 'Leave'
 };
 
 export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus]
@@ -297,19 +293,17 @@ export type InventoryUnitStatus = (typeof InventoryUnitStatus)[keyof typeof Inve
 
 export const TransactionSource: {
   POS: 'POS',
-  SERVICE: 'SERVICE'
+  Service: 'Service'
 };
 
 export type TransactionSource = (typeof TransactionSource)[keyof typeof TransactionSource]
 
 
 export const TransactionStatus: {
-  SUCCESS: 'SUCCESS',
-  CANCELLED: 'CANCELLED',
-  PENDING: 'PENDING',
+  Success: 'Success',
   Paid: 'Paid',
   Unpaid: 'Unpaid',
-  Canceled: 'Canceled'
+  Cancelled: 'Cancelled'
 };
 
 export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
@@ -8742,7 +8736,7 @@ export namespace Prisma {
     id: string | null
     tenantId: string | null
     name: string | null
-    email: string | null
+    username: string | null
     password: string | null
     roleId: string | null
     createdAt: Date | null
@@ -8769,7 +8763,7 @@ export namespace Prisma {
     id: string | null
     tenantId: string | null
     name: string | null
-    email: string | null
+    username: string | null
     password: string | null
     roleId: string | null
     createdAt: Date | null
@@ -8796,7 +8790,7 @@ export namespace Prisma {
     id: number
     tenantId: number
     name: number
-    email: number
+    username: number
     password: number
     roleId: number
     createdAt: number
@@ -8843,7 +8837,7 @@ export namespace Prisma {
     id?: true
     tenantId?: true
     name?: true
-    email?: true
+    username?: true
     password?: true
     roleId?: true
     createdAt?: true
@@ -8870,7 +8864,7 @@ export namespace Prisma {
     id?: true
     tenantId?: true
     name?: true
-    email?: true
+    username?: true
     password?: true
     roleId?: true
     createdAt?: true
@@ -8897,7 +8891,7 @@ export namespace Prisma {
     id?: true
     tenantId?: true
     name?: true
-    email?: true
+    username?: true
     password?: true
     roleId?: true
     createdAt?: true
@@ -9011,7 +9005,7 @@ export namespace Prisma {
     id: string
     tenantId: string
     name: string | null
-    email: string
+    username: string
     password: string | null
     roleId: string
     createdAt: Date
@@ -9057,7 +9051,7 @@ export namespace Prisma {
     id?: boolean
     tenantId?: boolean
     name?: boolean
-    email?: boolean
+    username?: boolean
     password?: boolean
     roleId?: boolean
     createdAt?: boolean
@@ -9093,7 +9087,7 @@ export namespace Prisma {
     id?: boolean
     tenantId?: boolean
     name?: boolean
-    email?: boolean
+    username?: boolean
     password?: boolean
     roleId?: boolean
     createdAt?: boolean
@@ -9122,7 +9116,7 @@ export namespace Prisma {
     id?: boolean
     tenantId?: boolean
     name?: boolean
-    email?: boolean
+    username?: boolean
     password?: boolean
     roleId?: boolean
     createdAt?: boolean
@@ -9151,7 +9145,7 @@ export namespace Prisma {
     id?: boolean
     tenantId?: boolean
     name?: boolean
-    email?: boolean
+    username?: boolean
     password?: boolean
     roleId?: boolean
     createdAt?: boolean
@@ -9174,7 +9168,7 @@ export namespace Prisma {
     incentiveMode?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "email" | "password" | "roleId" | "createdAt" | "joinDate" | "updatedAt" | "deletedAt" | "updatedBy" | "branchId" | "wageType" | "wageRate" | "allowance" | "insuranceDed" | "shiftId" | "baseSalary" | "leaveQuota" | "phone" | "address" | "incentiveRate" | "incentiveType" | "incentiveMode", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "username" | "password" | "roleId" | "createdAt" | "joinDate" | "updatedAt" | "deletedAt" | "updatedBy" | "branchId" | "wageType" | "wageRate" | "allowance" | "insuranceDed" | "shiftId" | "baseSalary" | "leaveQuota" | "phone" | "address" | "incentiveRate" | "incentiveType" | "incentiveMode", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
     cashAdvances?: boolean | User$cashAdvancesArgs<ExtArgs>
@@ -9211,7 +9205,7 @@ export namespace Prisma {
       id: string
       tenantId: string
       name: string | null
-      email: string
+      username: string
       password: string | null
       roleId: string
       createdAt: Date
@@ -9666,7 +9660,7 @@ export namespace Prisma {
     readonly id: FieldRef<"User", 'String'>
     readonly tenantId: FieldRef<"User", 'String'>
     readonly name: FieldRef<"User", 'String'>
-    readonly email: FieldRef<"User", 'String'>
+    readonly username: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly roleId: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
@@ -47577,7 +47571,7 @@ export namespace Prisma {
     id: 'id',
     tenantId: 'tenantId',
     name: 'name',
-    email: 'email',
+    username: 'username',
     password: 'password',
     roleId: 'roleId',
     createdAt: 'createdAt',
@@ -48755,7 +48749,7 @@ export namespace Prisma {
     id?: StringFilter<"User"> | string
     tenantId?: StringFilter<"User"> | string
     name?: StringNullableFilter<"User"> | string | null
-    email?: StringFilter<"User"> | string
+    username?: StringFilter<"User"> | string
     password?: StringNullableFilter<"User"> | string | null
     roleId?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -48790,7 +48784,7 @@ export namespace Prisma {
     id?: SortOrder
     tenantId?: SortOrder
     name?: SortOrderInput | SortOrder
-    email?: SortOrder
+    username?: SortOrder
     password?: SortOrderInput | SortOrder
     roleId?: SortOrder
     createdAt?: SortOrder
@@ -48823,7 +48817,7 @@ export namespace Prisma {
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    email?: string
+    username?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -48857,13 +48851,13 @@ export namespace Prisma {
     attendances?: AttendanceListRelationFilter
     overtimes?: OvertimeListRelationFilter
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
-  }, "id" | "email">
+  }, "id" | "username">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     tenantId?: SortOrder
     name?: SortOrderInput | SortOrder
-    email?: SortOrder
+    username?: SortOrder
     password?: SortOrderInput | SortOrder
     roleId?: SortOrder
     createdAt?: SortOrder
@@ -48898,7 +48892,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"User"> | string
     tenantId?: StringWithAggregatesFilter<"User"> | string
     name?: StringNullableWithAggregatesFilter<"User"> | string | null
-    email?: StringWithAggregatesFilter<"User"> | string
+    username?: StringWithAggregatesFilter<"User"> | string
     password?: StringNullableWithAggregatesFilter<"User"> | string | null
     roleId?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -52122,7 +52116,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     createdAt?: Date | string
     joinDate?: Date | string
@@ -52155,7 +52149,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     roleId: string
     createdAt?: Date | string
@@ -52188,7 +52182,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52221,7 +52215,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52254,7 +52248,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     roleId: string
     createdAt?: Date | string
@@ -52281,7 +52275,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52306,7 +52300,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56095,7 +56089,7 @@ export namespace Prisma {
     id?: SortOrder
     tenantId?: SortOrder
     name?: SortOrder
-    email?: SortOrder
+    username?: SortOrder
     password?: SortOrder
     roleId?: SortOrder
     createdAt?: SortOrder
@@ -56131,7 +56125,7 @@ export namespace Prisma {
     id?: SortOrder
     tenantId?: SortOrder
     name?: SortOrder
-    email?: SortOrder
+    username?: SortOrder
     password?: SortOrder
     roleId?: SortOrder
     createdAt?: SortOrder
@@ -56158,7 +56152,7 @@ export namespace Prisma {
     id?: SortOrder
     tenantId?: SortOrder
     name?: SortOrder
-    email?: SortOrder
+    username?: SortOrder
     password?: SortOrder
     roleId?: SortOrder
     createdAt?: SortOrder
@@ -61673,7 +61667,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     createdAt?: Date | string
     joinDate?: Date | string
@@ -61705,7 +61699,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     createdAt?: Date | string
     joinDate?: Date | string
@@ -61831,7 +61825,7 @@ export namespace Prisma {
     id?: StringFilter<"User"> | string
     tenantId?: StringFilter<"User"> | string
     name?: StringNullableFilter<"User"> | string | null
-    email?: StringFilter<"User"> | string
+    username?: StringFilter<"User"> | string
     password?: StringNullableFilter<"User"> | string | null
     roleId?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -62167,7 +62161,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     createdAt?: Date | string
     joinDate?: Date | string
@@ -62199,7 +62193,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     roleId: string
     createdAt?: Date | string
@@ -63782,7 +63776,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     createdAt?: Date | string
     joinDate?: Date | string
@@ -63814,7 +63808,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     roleId: string
     createdAt?: Date | string
@@ -63862,7 +63856,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63894,7 +63888,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63926,7 +63920,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     createdAt?: Date | string
     joinDate?: Date | string
@@ -63958,7 +63952,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     roleId: string
     createdAt?: Date | string
@@ -64006,7 +64000,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64038,7 +64032,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -65092,7 +65086,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     createdAt?: Date | string
     joinDate?: Date | string
@@ -65124,7 +65118,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     roleId: string
     createdAt?: Date | string
@@ -65273,7 +65267,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -65305,7 +65299,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -65690,7 +65684,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     createdAt?: Date | string
     joinDate?: Date | string
@@ -65722,7 +65716,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     roleId: string
     createdAt?: Date | string
@@ -65851,7 +65845,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -65883,7 +65877,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66211,7 +66205,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     createdAt?: Date | string
     joinDate?: Date | string
@@ -66243,7 +66237,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     roleId: string
     createdAt?: Date | string
@@ -66291,7 +66285,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66323,7 +66317,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66539,7 +66533,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     createdAt?: Date | string
     joinDate?: Date | string
@@ -66571,7 +66565,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     roleId: string
     createdAt?: Date | string
@@ -66619,7 +66613,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66651,7 +66645,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -69792,7 +69786,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     createdAt?: Date | string
     joinDate?: Date | string
@@ -69858,7 +69852,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -69890,7 +69884,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -69922,7 +69916,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -70073,7 +70067,7 @@ export namespace Prisma {
     id?: string
     tenantId?: string
     name?: string | null
-    email: string
+    username: string
     password?: string | null
     roleId: string
     createdAt?: Date | string
@@ -70468,7 +70462,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -70500,7 +70494,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -70532,7 +70526,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

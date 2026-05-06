@@ -53,8 +53,8 @@ export function StaffDialog({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label className="ui-meta text-muted-foreground ml-1">Email</Label>
-              <Input value={newUser.email} onChange={(e) => setNewUser({...newUser, email: e.target.value})} className="h-12 rounded-xl" placeholder="Email" />
+              <Label className="ui-meta text-muted-foreground ml-1">Username</Label>
+              <Input value={newUser.username} onChange={(e) => setNewUser({...newUser, username: e.target.value})} className="h-12 rounded-xl" placeholder="Username untuk login" />
             </div>
             <div className="space-y-1.5">
               <Label className="ui-meta text-muted-foreground ml-1">Password</Label>

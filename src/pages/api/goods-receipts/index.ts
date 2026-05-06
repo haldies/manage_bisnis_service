@@ -96,7 +96,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(404).json({ message: 'Purchase Order tidak ditemukan' });
       }
 
-      // CP-4 / US-3.1: PO must be Sent or Partial
+      // CP-4 / US-3.1: PO must be SENT or PARTIAL
       if (po.status !== 'Sent' && po.status !== 'Partial') {
         return res.status(400).json({
           message: `Goods Receipt hanya dapat dibuat dari PO berstatus Sent atau Partial. Status PO saat ini: ${po.status}`,

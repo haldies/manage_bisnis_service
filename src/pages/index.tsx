@@ -208,7 +208,7 @@ export default function UnifiedAppleCashierPage() {
   };
 
   return (
-    <Layout title="Kasir" requiredModule="Cashier" requiredLevel="Read">
+    <Layout title="Kasir" requiredModule="POS" requiredLevel="Read">
       <div className="flex flex-col lg:flex-row gap-6 animate-in fade-in duration-500">
 
         {/* Main Content Area */}
