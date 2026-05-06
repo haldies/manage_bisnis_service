@@ -13,13 +13,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { usePosStore, hasModuleAccess } from "@/lib/store";
+import { usePosStore } from "@/lib/store";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   MapPin, Search
 } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
-import { Role } from "@/lib/types";
+import { Role, isSuperAdmin } from "@/lib/types";
+import { useAuth } from "@/hooks/useAuth";
 
 import { StaffRoster } from "@/components/staff/StaffRoster";
 import { AttendanceTable } from "@/components/staff/AttendanceTable";
@@ -32,20 +33,22 @@ import { DragScroll } from "@/components/ui/drag-scroll";
 
 export default function StaffManagementPage() {
   const { 
-    users, branches, addUser, removeUser, currentUser, currentBranch,
+    users, addUser, removeUser,
     cashAdvances, leaveRequests, overtimes, addCashAdvance, updateCashAdvance,
     addLeaveRequest, updateLeaveRequest, addOvertime, updateOvertime,
-    rolePermissions, updateRolePermission, updateUser, attendances, 
-    setBranch, storeProfile, updateStoreProfile, services, transactions,
+    updateRolePermission, updateUser, attendances, 
+    storeProfile, updateStoreProfile, services, transactions,
     roles, bonusPools, addBonusPool, removeBonusPool
   } = usePosStore();
+
+  const { user: currentUser, branch: currentBranch, branches, isSuperAdmin: isOwner, setBranch, canAccess } = useAuth();
 
   const [activeTab, setActiveTab] = useState("roster");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const defaultRole = roles.find((r: Role) => r.name !== 'Owner')?.id || roles[0]?.id || "";
+  const defaultRole = roles.find((r: Role) => !isSuperAdmin(r.name))?.id || roles[0]?.id || "";
 
   const [newUser, setNewUser] = useState({
     name: "",
@@ -517,7 +520,7 @@ export default function StaffManagementPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-            {currentUser?.role?.name === 'Owner' && (
+            {isOwner && (
               <Select 
                 value={currentBranch?.id || 'global'} 
                 onValueChange={(value) => setBranch(value === 'global' ? null : value)}
@@ -550,7 +553,7 @@ export default function StaffManagementPage() {
             <Button 
               className="h-11 px-8 rounded-xl bg-foreground text-background hover:bg-foreground/90 font-bold uppercase tracking-widest text-[10px]" 
               onClick={() => { setEditingUser(null); setIsDialogOpen(true); }}
-              disabled={!hasModuleAccess(currentUser, 'Staff', 'Full', rolePermissions)}
+              disabled={!canAccess('Staff', 'Full')}
             >
               Tambah Staf
             </Button>

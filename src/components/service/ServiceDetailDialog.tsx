@@ -31,6 +31,7 @@ import { ServiceStatus, ServiceTicket } from "@/lib/types";
 import PurchaseOrderDialog from "@/components/suppliers/PurchaseOrderDialog";
 import ServiceChecklist, { DEFAULT_PRE_CHECK } from "@/components/service/ServiceChecklist";
 import ReturnDialog from "@/components/service/ReturnDialog";
+import { useAuth } from "@/hooks/useAuth";
 
 
 interface ServiceDetailDialogProps {
@@ -44,6 +45,13 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
     updateServiceTicket, users,
     currentUser, fetchServices, serviceTypes,
   } = usePosStore();
+
+  // Fine-grained permission checks for Service module
+  const { can, isTechnician: userIsTechnician } = useAuth();
+  const canCreate  = can('Service', 'create');   // registrasi tiket baru
+  const canUpdate  = can('Service', 'update');   // edit status, diagnosa, sparepart
+  const canDelete  = can('Service', 'delete');   // hapus tiket / batalkan
+  const canViewBilling = !userIsTechnician;      // teknisi tidak lihat tagihan
 
   const [localTicket, setLocalTicket] = useState<ServiceTicket | null>(null);
   const [spareparts, setSpareparts] = useState<any[]>([]);
@@ -91,29 +99,29 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
 
   if (!localTicket) return null;
 
-  const isTechnician = currentUser?.role?.name === 'Technician' || currentUser?.role?.name === 'Owner';
+  // Use hook-based flag (replaces hardcoded role name check)
+  const isTechnician = userIsTechnician;
 
   // Filter teknisi: prioritas role Technician, fallback semua user aktif
   const technicianUsers = users.filter(u =>
-    u.role?.name === 'Technician' ||
-    (u.role as any)?.permissions?.some((p: any) => p.module === 'SERVICE' && (p.canCreate || p.canUpdate))
+    (u.role as any)?.permissions?.some((p: any) => p.module === 'Service' && (p.canCreate || p.canUpdate))
   );
   const techList = technicianUsers.length > 0 ? technicianUsers : users;
 
   const totalCost = (localTicket.spareparts?.reduce((sum, p) => sum + (Number(p.price) || 0) * (Number(p.quantity) || 1), 0) ?? 0) + (Number(localTicket.serviceFee) || 0);
 
   // ── Read-only rules ──────────────────────────────────────────────────
-  // Pre-check: teknisi bisa edit saat PENDING/IN_PROGRESS/ON_HOLD
-  const isPreCheckReadOnly = !isTechnician ||
+  // Pre-check: teknisi (atau siapapun yang punya canUpdate) bisa edit saat PENDING/IN_PROGRESS/ON_HOLD
+  const isPreCheckReadOnly = !canUpdate ||
     !['Pending', 'InProgress', 'OnHold'].includes(localTicket.status);
 
-  // Diagnosa: teknisi bisa edit saat IN_PROGRESS/ON_HOLD
-  const isDiagnosisReadOnly = localTicket.status === 'Completed' ||
-    localTicket.status === 'ReadyForPickup' ||
-    (!isTechnician && localTicket.status !== 'InProgress' && localTicket.status !== 'OnHold');
+  // Diagnosa: bisa edit jika punya canUpdate dan status masih aktif
+  const isDiagnosisReadOnly = !canUpdate ||
+    localTicket.status === 'Completed' ||
+    localTicket.status === 'ReadyForPickup';
 
-  // Return button: muncul saat Completed, dengan atau tanpa garansi
-  const showReturnButton = localTicket.status === 'Completed';
+  // Return button: muncul saat Completed, hanya untuk yang punya canUpdate
+  const showReturnButton = localTicket.status === 'Completed' && canUpdate;
   const isWarrantyExpired = localTicket.warrantyExpiry ? localTicket.warrantyExpiry <= Date.now() : true;
 
   const handleNextAction = async () => {
@@ -420,7 +428,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                         {/* Rincian Sparepart */}
                         {localTicket.spareparts?.map((p, idx) => {
                           const item = spareparts.find(i => i.id === (p.itemId || (p as any).id));
-                          const canRemove = ['Pending', 'InProgress', 'OnHold'].includes(localTicket.status);
+                          const canRemove = canUpdate && ['Pending', 'InProgress', 'OnHold'].includes(localTicket.status);
                           return (
                             <div key={idx} className="flex justify-between items-center py-2 border-t border-border/10">
                               <div className="flex flex-col">
@@ -452,7 +460,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                             <p className="text-[9px] text-purple-600 mt-0.5">
                               {localTicket.spareparts.filter(p => (p as any).needsOrder).map(p => p.name || 'Item').join(', ')} — stok habis
                             </p>
-                            {!isTechnician && (
+                            {!isTechnician && canCreate && (
                               <Button
                                 variant="ghost"
                                 size="sm"
@@ -467,8 +475,8 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                         </div>
                       )}
 
-                      {/* Tombol Tambah Jasa & Sparepart — hanya saat masih aktif dikerjakan */}
-                      {['Pending', 'InProgress', 'OnHold'].includes(localTicket.status) && (
+                      {/* Tombol Tambah Jasa & Sparepart — hanya jika canUpdate dan status masih aktif */}
+                      {['Pending', 'InProgress', 'OnHold'].includes(localTicket.status) && canUpdate && (
                         <div className="pt-2 flex gap-2">
                           {/* ── Tambah Jasa ── */}
                           <Popover open={openServiceType} onOpenChange={setOpenServiceType}>
@@ -500,7 +508,7 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                                                   id: `svc-${st.id}-${Date.now()}`,
                                                   itemId: undefined,
                                                   name: st.name,
-                                                  category: 'SERVICE',
+                                                  category: 'Service',
                                                   quantity: 1,
                                                   price,
                                                   costPrice: 0,
@@ -584,8 +592,8 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
                           <span className="text-lg font-black text-primary">{formatCurrency(totalCost)}</span>
                         </div>
 
-                        {/* ── Payment section — hanya saat READY_FOR_PICKUP & bukan teknisi ── */}
-                        {localTicket.status === 'ReadyForPickup' && !isTechnician && (
+                        {/* ── Payment section — hanya saat READY_FOR_PICKUP, punya canUpdate, dan bukan teknisi ── */}
+                        {localTicket.status === 'ReadyForPickup' && !isTechnician && canUpdate && (
                           <div className="space-y-3 pt-1">
                             <div className="border-t pt-3">
                               <p className="text-[10px] font-bold uppercase text-muted-foreground mb-2">Metode Pembayaran</p>
@@ -668,9 +676,9 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
           {/* Action Footer */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-3 pb-3 border-t border-border/50 bg-background shrink-0 px-4 sm:px-5">
 
-            {/* LEFT — Tombol Batal */}
+            {/* LEFT — Tombol Batal (hanya yang punya canDelete) */}
             <div className="flex gap-2 w-full sm:w-auto order-2 sm:order-1">
-              {['Pending', 'InProgress', 'OnHold'].includes(localTicket.status) && !isTechnician && (
+              {['Pending', 'InProgress', 'OnHold'].includes(localTicket.status) && canDelete && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -689,8 +697,8 @@ export default function ServiceDetailDialog({ ticket, onClose, onUpdate }: Servi
             {/* RIGHT — Aksi utama sesuai status & role */}
             <div className="w-full sm:w-auto order-1 sm:order-2 flex gap-2">
 
-              {/* ── PENDING: Kasir mulai pengerjaan ── */}
-              {localTicket.status === 'Pending' && !isTechnician && (
+              {/* ── PENDING: siapapun yang punya canUpdate bisa mulai pengerjaan ── */}
+              {localTicket.status === 'Pending' && !isTechnician && canUpdate && (
                 <Button size="sm" className="w-full sm:w-auto gap-1.5" onClick={handleNextAction}>
                   <span>Mulai Pengerjaan</span><ArrowRight className="h-3.5 w-3.5" />
                 </Button>

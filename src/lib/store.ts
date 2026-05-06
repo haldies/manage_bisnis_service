@@ -6,7 +6,8 @@ import {
   StockTransfer, FinanceLog,
   Transaction, CartItem, PaymentMethod, StoreProfile, ReceiptSettings, ServiceReceiptSettings,
   Shift, CashAdvance, LeaveRequest, ModuleName, Role, Category, AccessLevel, Attendance, DeviceModel, ServiceType,
-  InventoryUnit, StockTransferStatus, BonusPool
+  InventoryUnit, StockTransferStatus, BonusPool,
+  ROLES, isOwner, isSuperAdmin, isAdmin, isTechnician, isManager, isCashier
 } from './types';
 
 
@@ -16,19 +17,31 @@ export function getUserAccessLevel(
   rolePermissions: Record<string, Record<ModuleName, AccessLevel>>
 ): AccessLevel {
   if (!user) return 'None';
-  if (user.role?.name === 'Owner') return 'Full';
+  // Super Admin bypasses all permission checks
+  if (isSuperAdmin(user.role?.name)) return 'Full';
 
-  // 1. Store rolePermissions (populated after fetchRoles)
-  const storePerms = rolePermissions[user.role?.name || ''];
-  if (storePerms?.[module]) return storePerms[module];
+  // 1. Store rolePermissions — keys match DB role names (Title Case after fetchRoles)
+  //    Fallback: case-insensitive search for resilience against DB casing differences
+  const roleName = user.role?.name ?? '';
+  const storePerms =
+    rolePermissions[roleName] ??
+    Object.entries(rolePermissions).find(
+      ([k]) => k.toLowerCase() === roleName.toLowerCase()
+    )?.[1];
+
+  if (storePerms?.[module] != null) return storePerms[module];
 
   // 2. Granular permissions on the user object (from login API response)
+  //    Match module case-insensitively — DB may store 'SERVICE' while code uses 'Service'
   const rolePerm = (user.role as any)?.permissions;
   if (Array.isArray(rolePerm)) {
-    const p = rolePerm.find((p: any) => p.module === module);
+    const p = rolePerm.find(
+      (p: any) => p.module?.toLowerCase() === module.toLowerCase()
+    );
     if (p) {
       if (p.canCreate || p.canUpdate || p.canDelete) return 'Full';
       if (p.canRead) return 'Read';
+      return 'None';
     }
   }
 
@@ -332,10 +345,11 @@ export const usePosStore = create<PosState>()(
       deviceModels: [],
       roles: [],
       rolePermissions: {
-        'Owner':  { 'Dashboard': 'Full', 'POS': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Full', 'Staff': 'Full', 'Transactions': 'Full', 'Settings': 'Full' },
-        'Admin':  { 'Dashboard': 'Full', 'POS': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Read', 'Staff': 'Full', 'Transactions': 'Full', 'Settings': 'Full' },
-        'Cashier': { 'Dashboard': 'Read', 'POS': 'Full', 'Service': 'Read', 'Inventory': 'Read', 'Finance': 'None', 'Staff': 'None', 'Transactions': 'Read', 'Settings': 'Full' },
-        'Technician': { 'Dashboard': 'Read', 'POS': 'None', 'Service': 'Full', 'Inventory': 'Read', 'Finance': 'None', 'Staff': 'None', 'Transactions': 'Read', 'Settings': 'None' }
+        [ROLES.SUPER_ADMIN]: { 'Dashboard': 'Full', 'POS': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Full', 'Staff': 'Full', 'Transactions': 'Full', 'Settings': 'Full' },
+        [ROLES.ADMIN]:       { 'Dashboard': 'Full', 'POS': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Read', 'Staff': 'Full', 'Transactions': 'Full', 'Settings': 'Full' },
+        [ROLES.MANAGER]:     { 'Dashboard': 'Full', 'POS': 'Full', 'Service': 'Full', 'Inventory': 'Full', 'Finance': 'Read', 'Staff': 'Read', 'Transactions': 'Full', 'Settings': 'Read' },
+        [ROLES.CASHIER]:     { 'Dashboard': 'Read', 'POS': 'Full', 'Service': 'Read', 'Inventory': 'Read', 'Finance': 'None', 'Staff': 'None', 'Transactions': 'Read', 'Settings': 'Full' },
+        [ROLES.TECHNICIAN]:  { 'Dashboard': 'Read', 'POS': 'None', 'Service': 'Full', 'Inventory': 'Read', 'Finance': 'None', 'Staff': 'None', 'Transactions': 'Read', 'Settings': 'None' },
       },
 
       // --- GENERAL ACTIONS ---
@@ -375,15 +389,19 @@ export const usePosStore = create<PosState>()(
             const data = await res.json();
             set({ roles: data });
 
-            // Build rolePermissions from DB data so any role (Cashier, Technician, etc.)
-            // is automatically registered — no more hardcoded role names needed.
+            // Build rolePermissions from DB data.
+            // Match module names case-insensitively so old DB data ('SERVICE', 'POS')
+            // maps correctly to the canonical Title Case keys used in code.
             const MODULES: ModuleName[] = ['Dashboard', 'POS', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Settings'];
             const built: Record<string, Record<ModuleName, AccessLevel>> = {};
 
             for (const role of data) {
               const perms: Record<ModuleName, AccessLevel> = {} as any;
               for (const mod of MODULES) {
-                const p = role.permissions?.find((p: any) => p.module === mod);
+                // Case-insensitive find so 'SERVICE' matches 'Service'
+                const p = role.permissions?.find(
+                  (p: any) => p.module?.toLowerCase() === mod.toLowerCase()
+                );
                 if (!p) {
                   perms[mod] = 'None';
                 } else if (p.canCreate || p.canUpdate || p.canDelete) {
@@ -398,7 +416,6 @@ export const usePosStore = create<PosState>()(
             }
 
             // Merge: DB roles take priority, keep hardcoded defaults as fallback
-            // for roles that exist in store but not yet in DB
             set((state) => ({
               rolePermissions: { ...state.rolePermissions, ...built }
             }));
@@ -1133,13 +1150,15 @@ export const usePosStore = create<PosState>()(
         }
         const { roles } = await res.json();
 
-        // Rebuild rolePermissions from fresh data
+        // Rebuild rolePermissions from fresh data (case-insensitive module matching)
         const MODULES: ModuleName[] = ['Dashboard', 'POS', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Settings'];
         const built: Record<string, Record<ModuleName, AccessLevel>> = {};
         for (const role of roles) {
           const perms: Record<ModuleName, AccessLevel> = {} as any;
           for (const mod of MODULES) {
-            const p = role.permissions?.find((p: any) => p.module === mod);
+            const p = role.permissions?.find(
+              (p: any) => p.module?.toLowerCase() === mod.toLowerCase()
+            );
             if (!p) { perms[mod] = 'None'; }
             else if (p.canCreate || p.canUpdate || p.canDelete) { perms[mod] = 'Full'; }
             else if (p.canRead) { perms[mod] = 'Read'; }

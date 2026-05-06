@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { StockTransferStatus } from "@/lib/types";
+import { useAuth } from "@/hooks/useAuth";
 
 import { usePosStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
@@ -14,9 +15,10 @@ import { cn } from "@/lib/utils";
 
 export default function StockTransferTab() {
   const { 
-    stockTransfers, branches, inventory, stocks, createStockTransfer, updateStockTransferStatus, 
-    fetchTransfers, currentBranch, currentUser 
+    stockTransfers, inventory, stocks, createStockTransfer, updateStockTransferStatus, 
+    fetchTransfers
   } = usePosStore();
+  const { user: currentUser, branch: currentBranch, branches, isAdmin: isUserAdmin } = useAuth();
   const [open, setOpen] = useState(false);
   const [targetBranchId, setTargetBranchId] = useState("");
   const [requestingBranchId, setRequestingBranchId] = useState(currentBranch?.id || "");
@@ -38,7 +40,7 @@ export default function StockTransferTab() {
     }
   };
 
-  const isAdmin = currentUser?.role?.name === 'Owner' || currentUser?.role?.name === 'Admin' || currentUser?.roleId === 'owner-role-id';
+  const isAdmin = isUserAdmin || currentUser?.roleId === 'owner-role-id';
 
   const handleCreate = async () => {
     const finalToBranchId = isAdmin ? requestingBranchId : currentBranch?.id;
@@ -178,7 +180,7 @@ export default function StockTransferTab() {
                        {/* Contextual Cancellation/Rejection */}
                        {t.status === 'Pending' && (
                          <>
-                           {currentBranch?.id === t.fromBranchId || currentUser?.role?.name === 'Owner' || currentUser?.role?.name === 'Admin' ? (
+                           {currentBranch?.id === t.fromBranchId || isUserAdmin ? (
                              <Button 
                                variant="ghost" 
                                size="sm" 

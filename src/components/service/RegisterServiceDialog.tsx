@@ -28,8 +28,7 @@ export default function RegisterServiceDialog({ open, onOpenChange }: RegisterSe
 
   // Filter teknisi: prioritas role Technician, fallback semua user aktif
   const technicianUsers = users.filter(u =>
-    u.role?.name === 'Technician' ||
-    (u.role as any)?.permissions?.some((p: any) => p.module === 'SERVICE' && (p.canCreate || p.canUpdate))
+    (u.role as any)?.permissions?.some((p: any) => p.module === 'Service' && (p.canCreate || p.canUpdate))
   );
   const techList = technicianUsers.length > 0 ? technicianUsers : users;
 

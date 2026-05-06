@@ -58,45 +58,67 @@ async function main() {
   });
 
   // 2. Roles
-  const modules = ['POS', 'SERVICE', 'INVENTORY', 'STAFF', 'FINANCE', 'TRANSACTIONS', 'SETTINGS'];
+  const modules = ['Dashboard', 'POS', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Settings'];
 
-  const ownerRole = await prisma.role.upsert({
-    where: { name_tenantId: { name: 'OWNER', tenantId: 'default' } },
+  const superAdminRole = await prisma.role.upsert({
+    where: { name_tenantId: { name: 'Super Admin', tenantId: 'default' } },
     update: {},
     create: {
-      name: 'OWNER',
+      name: 'Super Admin',
       tenantId: 'default',
       permissions: { create: modules.map(m => ({ module: m, canRead: true, canCreate: true, canUpdate: true, canDelete: true })) }
     }
   });
 
-  const managerRole = await prisma.role.upsert({
-    where: { name_tenantId: { name: 'MANAGER', tenantId: 'default' } },
+  const adminRole = await prisma.role.upsert({
+    where: { name_tenantId: { name: 'Admin', tenantId: 'default' } },
     update: {},
     create: {
-      name: 'MANAGER',
+      name: 'Admin',
+      tenantId: 'default',
+      permissions: { create: modules.map(m => ({ module: m, canRead: true, canCreate: true, canUpdate: true, canDelete: m !== 'Finance' })) }
+    }
+  });
+
+  const managerRole = await prisma.role.upsert({
+    where: { name_tenantId: { name: 'Manager', tenantId: 'default' } },
+    update: {},
+    create: {
+      name: 'Manager',
       tenantId: 'default',
       permissions: { create: modules.map(m => ({ module: m, canRead: true, canCreate: true, canUpdate: true, canDelete: false })) }
     }
   });
 
   const cashierRole = await prisma.role.upsert({
-    where: { name_tenantId: { name: 'CASHIER', tenantId: 'default' } },
+    where: { name_tenantId: { name: 'Cashier', tenantId: 'default' } },
     update: {},
     create: {
-      name: 'CASHIER',
+      name: 'Cashier',
       tenantId: 'default',
-      permissions: { create: modules.map(m => ({ module: m, canRead: m === 'POS' || m === 'INVENTORY', canCreate: m === 'POS', canUpdate: false, canDelete: false })) }
+      permissions: { create: modules.map(m => ({
+        module: m,
+        canRead:   ['POS', 'Service', 'Inventory', 'Transactions', 'Dashboard'].includes(m),
+        canCreate: ['POS', 'Service'].includes(m),
+        canUpdate: ['POS', 'Service', 'Settings'].includes(m),
+        canDelete: m === 'POS',
+      })) }
     }
   });
 
   const techRole = await prisma.role.upsert({
-    where: { name_tenantId: { name: 'TECHNICIAN', tenantId: 'default' } },
+    where: { name_tenantId: { name: 'Technician', tenantId: 'default' } },
     update: {},
     create: {
-      name: 'TECHNICIAN',
+      name: 'Technician',
       tenantId: 'default',
-      permissions: { create: modules.map(m => ({ module: m, canRead: m === 'SERVICE', canCreate: m === 'SERVICE', canUpdate: true, canDelete: false })) }
+      permissions: { create: modules.map(m => ({
+        module: m,
+        canRead:   ['Service', 'Inventory', 'Transactions'].includes(m),
+        canCreate: false,
+        canUpdate: m === 'Service',
+        canDelete: false,
+      })) }
     }
   });
 
@@ -116,8 +138,9 @@ async function main() {
 
   // 4. Users
   const usersToSeed = [
-    // Global
-    { username: 'admin', name: 'Super Admin', roleId: ownerRole.id, branchId: jakarta.id },
+    // Global — Super Admin & Admin
+    { username: 'admin',  name: 'Super Admin',        roleId: superAdminRole.id, branchId: jakarta.id },
+    { username: 'admin2', name: 'Admin Operasional',   roleId: adminRole.id,      branchId: jakarta.id },
     // Jakarta
     { username: 'budi', name: 'Budi (Manager JKT)', roleId: managerRole.id, branchId: jakarta.id },
     { username: 'siti', name: 'Siti (Kasir JKT)', roleId: cashierRole.id, branchId: jakarta.id },

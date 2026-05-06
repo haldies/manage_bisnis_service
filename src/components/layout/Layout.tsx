@@ -9,6 +9,7 @@ import { AuthScreen } from "@/components/auth/AuthScreen";
 import { Button } from "@/components/ui/button";
 
 import { ModuleName, AccessLevel } from "@/lib/types";
+import { useAuth } from "@/hooks/useAuth";
 import { ShieldAlert, XCircle, Package } from "lucide-react";
 
 interface LayoutProps {
@@ -19,7 +20,8 @@ interface LayoutProps {
 }
 
 export function Layout({ children, title, requiredModule, requiredLevel = 'Read' }: LayoutProps) {
-  const { currentUser, currentBranch, rolePermissions, _hasHydrated, fetchTransfers, stockTransfers } = usePosStore();
+  const { fetchTransfers, stockTransfers, _hasHydrated } = usePosStore();
+  const { user: currentUser, branch: currentBranch, isSuperAdmin: userIsSuperAdmin, canAccess, logout } = useAuth();
   const router = useRouter();
 
   // --- GLOBAL REALTIME POLLING & NOTIFICATIONS ---
@@ -30,39 +32,36 @@ export function Layout({ children, title, requiredModule, requiredLevel = 'Read'
     if (!currentUser) return;
 
     const interval = setInterval(async () => {
-      const prevTransfers = usePosStore.getState().stockTransfers;
-      await fetchTransfers();
-      const newTransfers = usePosStore.getState().stockTransfers;
-      
-      if (newTransfers.length > 0) {
-        const latest = newTransfers[0];
+      try {
+        await fetchTransfers();
+        const newTransfers = usePosStore.getState().stockTransfers;
         
-        if (latest.id !== lastProcessedId && latest.status === 'Pending') {
-          const shouldNotify = currentUser.role?.name === 'Owner' || latest.fromBranchId === currentBranch?.id;
+        if (newTransfers.length > 0) {
+          const latest = newTransfers[0];
           
-          if (shouldNotify) {
-            setLastProcessedId(latest.id);
+          if (latest.id !== lastProcessedId && latest.status === 'Pending') {
+            const shouldNotify = userIsSuperAdmin || latest.fromBranchId === currentBranch?.id;
             
-            // 1. Internal In-App Toast
-            setToast({ 
-              id: latest.id, 
-              message: `Ada permintaan stok baru!` 
-            });
-            setTimeout(() => setToast(null), 8000); // Auto hide after 8s
+            if (shouldNotify) {
+              setLastProcessedId(latest.id);
+              
+              setToast({ id: latest.id, message: `Ada permintaan stok baru!` });
+              setTimeout(() => setToast(null), 8000);
 
-            // 2. Audio Alert
-            const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
-            audio.play().catch(() => {});
-            
-            // 3. System Notification (Attempt)
-            if ("Notification" in window && Notification.permission === "granted") {
-              new Notification("📦 Ada Permintaan Stok!", {
-                body: `Segera cek! Ada permintaan stok baru masuk.`,
-                icon: "/icon.png"
-              });
+              const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
+              audio.play().catch(() => {});
+              
+              if ("Notification" in window && Notification.permission === "granted") {
+                new Notification("📦 Ada Permintaan Stok!", {
+                  body: `Segera cek! Ada permintaan stok baru masuk.`,
+                  icon: "/icon.png"
+                });
+              }
             }
           }
         }
+      } catch {
+        // Silent fail — network hiccup, tidak perlu log ke console
       }
     }, 10000); 
 
@@ -82,39 +81,42 @@ export function Layout({ children, title, requiredModule, requiredLevel = 'Read'
     );
   }
 
-  if (!currentUser || (!currentBranch && currentUser.role?.name !== 'Owner')) {
+  if (!currentUser || (!currentBranch && !userIsSuperAdmin)) {
     return <AuthScreen />;
   }
 
-
   // Permission Check
-  if (requiredModule && currentUser.role?.name !== 'Owner') {
-    // Derive access level directly from the user's role permissions object
-    // (included in login response) — no dependency on async fetchRoles
-    const getLevel = (): AccessLevel => {
-      // 1. Check store rolePermissions (populated after fetchRoles)
-      const storePerms = rolePermissions[currentUser.role?.name || ''];
-      if (storePerms?.[requiredModule]) {
-        return storePerms[requiredModule];
-      }
+  if (requiredModule && !userIsSuperAdmin) {
+    const hasAccess = canAccess(requiredModule, requiredLevel);
 
-      // 2. Fallback: derive from granular permissions on the user object itself
-      const rolePerm = (currentUser.role as any)?.permissions;
-      if (Array.isArray(rolePerm) && rolePerm.length > 0) {
-        const p = rolePerm.find((p: any) => p.module === requiredModule);
-        if (p) {
-          if (p.canCreate || p.canUpdate || p.canDelete) return 'Full';
-          if (p.canRead) return 'Read';
-          return 'None';
-        }
-      }
+    // ── Debug: selalu log permission check agar mudah debug ──
+    const roleName   = currentUser?.role?.name ?? '(no role)';
+    const dbPerms    = (currentUser?.role as any)?.permissions ?? [];
+    const rawEntry   = dbPerms.find((p: any) =>
+      p.module?.toLowerCase() === requiredModule.toLowerCase()
+    );
+    const { rolePermissions } = usePosStore.getState();
+    const storeEntry =
+      rolePermissions[roleName] ??
+      Object.entries(rolePermissions).find(
+        ([k]) => k.toLowerCase() === roleName.toLowerCase()
+      )?.[1];
 
-      return 'None';
-    };
+    console.group(
+      `%c[Layout] Permission check — ${requiredModule} (need: ${requiredLevel})  →  ${hasAccess ? '✅ ALLOWED' : '❌ BLOCKED'}`,
+      hasAccess ? 'color:#22c55e;font-weight:bold' : 'color:#ef4444;font-weight:bold'
+    );
+    console.log('User          :', currentUser?.username, '|', roleName);
+    console.log('Module        :', requiredModule, '| Required level:', requiredLevel);
+    console.log('Store entry   :', storeEntry ?? '⚠️ NOT FOUND in rolePermissions');
+    console.log('DB perm entry :', rawEntry
+      ? `canRead=${rawEntry.canRead} canCreate=${rawEntry.canCreate} canUpdate=${rawEntry.canUpdate} canDelete=${rawEntry.canDelete}`
+      : '⚠️ NOT FOUND in user.role.permissions'
+    );
+    console.log('rolePermissions keys:', Object.keys(rolePermissions));
+    console.groupEnd();
 
-    const userLevel = getLevel();
-    const levels: AccessLevel[] = ['None', 'Read', 'Full'];
-    if (levels.indexOf(userLevel) < levels.indexOf(requiredLevel)) {
+    if (!hasAccess) {
       return (
         <SidebarProvider defaultOpen={true}>
           <div className="flex h-screen w-full overflow-hidden bg-background">

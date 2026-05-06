@@ -4,9 +4,11 @@ import { usePosStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/hooks/useAuth";
+import { isSuperAdmin } from "@/lib/types";
 
 export function AuthScreen() {
-  const { login, setBranch, currentUser, currentBranch, branches } = usePosStore();
+  const { login, user: currentUser, branch: currentBranch, branches, setBranch } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -20,7 +22,7 @@ export function AuthScreen() {
     } else {
       // Auto-assign branch based on role
       const loggedInUser = usePosStore.getState().currentUser;
-      if (loggedInUser?.role?.name === 'Owner') {
+      if (isSuperAdmin(loggedInUser?.role?.name)) {
         setBranch(null);
       } else if (loggedInUser?.branchId) {
         setBranch(loggedInUser.branchId);
@@ -29,7 +31,7 @@ export function AuthScreen() {
   };
 
   useEffect(() => {
-    if (currentUser && currentUser.role?.name !== 'Owner' && !currentBranch && branches.length > 0) {
+    if (currentUser && !isSuperAdmin(currentUser.role?.name) && !currentBranch && branches.length > 0) {
       if (currentUser.branchId) {
         setBranch(currentUser.branchId);
       }

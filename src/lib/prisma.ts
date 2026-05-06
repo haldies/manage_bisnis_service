@@ -6,7 +6,7 @@ const connectionString = process.env.DATABASE_URL
 
 const pool = new pg.Pool({
   connectionString,
-  max: 10,                // max connections in pool
+  max: 10,
   idleTimeoutMillis: 30000,   // close idle connections after 30s
   connectionTimeoutMillis: 10000, // fail fast if can't connect in 10s
   allowExitOnIdle: false,     // keep pool alive between requests

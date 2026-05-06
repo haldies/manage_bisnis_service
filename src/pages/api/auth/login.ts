@@ -52,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         id: user.id, 
         username: user.username, 
         name: user.name, 
-        role: user.role, // Sekarang mengirimkan objek Role lengkap
+        role: user.role, 
         branchId: user.branchId 
       },
     });

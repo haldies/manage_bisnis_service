@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { MapPin, Pencil, Trash2 } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
-import { usePosStore, hasModuleAccess } from "@/lib/store";
+import { useAuth } from "@/hooks/useAuth";
 
 interface StaffRosterProps {
   users: any[];
@@ -13,8 +13,8 @@ interface StaffRosterProps {
 }
 
 export function StaffRoster({ users, branches, storeProfile, onEdit, onDelete }: StaffRosterProps) {
-  const { currentUser, rolePermissions } = usePosStore();
-  const hasFullAccess = hasModuleAccess(currentUser, 'Staff', 'Full', rolePermissions);
+  const { canAccess } = useAuth();
+  const hasFullAccess = canAccess('Staff', 'Full');
   return (
     <div className="rounded-xl border border-border/40 bg-card overflow-hidden">
       <Table>
@@ -58,8 +58,8 @@ export function StaffRoster({ users, branches, storeProfile, onEdit, onDelete }:
                 </TableCell>
                  <TableCell className="py-4 text-center">
                   <span className={cn(
-                    "ui-label font-black uppercase tracking-widest text-[10px]",
-                    user.role?.name === 'Owner' ? "text-primary" : "text-muted-foreground"
+                     "ui-label font-black uppercase tracking-widest text-[10px]",
+                     user.role?.name === 'Super Admin' ? "text-primary" : "text-muted-foreground"
                   )}>
                     {user.role?.name || '-'}
                   </span>

@@ -15,7 +15,7 @@ import {
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
-import { usePosStore, hasModuleAccess } from "@/lib/store";
+import { usePosStore } from "@/lib/store";
 import {
   Search, Pencil, Trash2, MapPin, Package, Plus
 
@@ -26,15 +26,18 @@ import StockTransferTab from "../../components/inventory/StockTransferTab";
 import { formatCurrency, cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { id as localeId } from "date-fns/locale";
+import { useAuth } from "@/hooks/useAuth";
 
 
 export default function LogisticsDashboard() {
   const {
-    inventory, stocks, branches, categories, suppliers,
+    inventory, stocks, categories, suppliers,
     addInventoryItem, updateInventoryItem, deleteInventoryItem, updateStock,
-    addCategory, deleteCategory, currentBranch, setBranch: setCurrentBranch, currentUser, rolePermissions,
+    addCategory, deleteCategory,
     inventoryUnits, addInventoryUnit, deleteInventoryUnit
   } = usePosStore();
+
+  const { user: currentUser, branch: currentBranch, branches, isSuperAdmin: isOwner, setBranch: setCurrentBranch, canAccess } = useAuth();
 
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("items");
@@ -46,7 +49,7 @@ export default function LogisticsDashboard() {
     }
   }, [router.query]);
 
-  const hasFullAccess = hasModuleAccess(currentUser, 'Inventory', 'Full', rolePermissions);
+  const hasFullAccess = canAccess('Inventory', 'Full');
 
   const [searchQuery, setSearchQuery] = useState("");
   const [addOpen, setAddOpen] = useState(false);
@@ -183,7 +186,7 @@ export default function LogisticsDashboard() {
                       </Button>
                     )}
                     <div className="flex items-center gap-2">
-                      {currentUser?.role?.name === 'Owner' && (
+                      {isOwner && (
                         <Select
                           value={currentBranch?.id || 'all'}
                           onValueChange={(val) => setCurrentBranch(val === 'all' ? null : val)}

@@ -1,32 +1,52 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/lib/prisma';
+import { ROLES } from '@/lib/types';
 
 const MODULES = ['Dashboard', 'POS', 'Service', 'Inventory', 'Finance', 'Staff', 'Transactions', 'Settings'];
 
-const DEFAULT_ROLES: Record<string, Record<string, 'Full' | 'Read' | 'None'>> = {
-  Owner: {
+/**
+ * Default permission matrix.
+ * Each role maps to per-module CRUD flags.
+ *
+ * Naming convention:
+ *   Full   = canRead + canCreate + canUpdate + canDelete
+ *   Write  = canRead + canCreate + canUpdate  (no delete)
+ *   Update = canRead + canUpdate              (no create/delete)
+ *   Read   = canRead only
+ *   None   = no access
+ *
+ * We use a helper below to convert these to the 4 boolean flags Prisma expects.
+ */
+const DEFAULT_ROLES: Record<string, Record<string, 'Full' | 'Write' | 'Update' | 'Read' | 'None'>> = {
+  [ROLES.SUPER_ADMIN]: {
     Dashboard: 'Full', POS: 'Full', Service: 'Full', Inventory: 'Full',
     Finance: 'Full', Staff: 'Full', Transactions: 'Full', Settings: 'Full',
   },
-  Cashier: {
-    Dashboard: 'Read', POS: 'Full', Service: 'Read', Inventory: 'Read',
-    Finance: 'None', Staff: 'None', Transactions: 'Read', Settings: 'Full',
-  },
-  Technician: {
-    Dashboard: 'None', POS: 'None', Service: 'Full', Inventory: 'Read',
-    Finance: 'None', Staff: 'None', Transactions: 'Read', Settings: 'None',
-  },
-  Admin: {
+  [ROLES.ADMIN]: {
     Dashboard: 'Full', POS: 'Full', Service: 'Full', Inventory: 'Full',
     Finance: 'Read', Staff: 'Full', Transactions: 'Full', Settings: 'Full',
   },
+  [ROLES.MANAGER]: {
+    Dashboard: 'Full', POS: 'Write', Service: 'Write', Inventory: 'Write',
+    Finance: 'Read', Staff: 'Read', Transactions: 'Read', Settings: 'Read',
+  },
+  [ROLES.CASHIER]: {
+    // Kasir: bisa registrasi & update tiket servis, tapi tidak bisa hapus
+    Dashboard: 'Read', POS: 'Full', Service: 'Write', Inventory: 'Read',
+    Finance: 'None', Staff: 'None', Transactions: 'Read', Settings: 'Update',
+  },
+  [ROLES.TECHNICIAN]: {
+    // Teknisi: hanya bisa update tiket yang ditugaskan, tidak bisa buat/hapus
+    Dashboard: 'None', POS: 'None', Service: 'Update', Inventory: 'Read',
+    Finance: 'None', Staff: 'None', Transactions: 'Read', Settings: 'None',
+  },
 };
 
-function levelToFlags(level: 'Full' | 'Read' | 'None') {
+function levelToFlags(level: 'Full' | 'Write' | 'Update' | 'Read' | 'None') {
   return {
-    canRead:   level === 'Read' || level === 'Full',
-    canCreate: level === 'Full',
-    canUpdate: level === 'Full',
+    canRead:   level !== 'None',
+    canCreate: level === 'Full' || level === 'Write',
+    canUpdate: level === 'Full' || level === 'Write' || level === 'Update',
     canDelete: level === 'Full',
   };
 }
@@ -64,11 +84,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       newRoles.push({ ...role, finalName: roleName });
     }
 
-    // Step 2: Find the new Owner role and reassign ALL users to it
-    const newOwnerRole = newRoles.find(r => r.finalName === 'Owner');
-    if (newOwnerRole) {
+    // Step 2: Find the new Super Admin role and reassign ALL users to it
+    const newSuperAdminRole = newRoles.find(r => r.finalName === ROLES.SUPER_ADMIN);
+    if (newSuperAdminRole) {
       await prisma.user.updateMany({
-        data: { roleId: newOwnerRole.id },
+        data: { roleId: newSuperAdminRole.id },
       });
     }
 

@@ -14,7 +14,7 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { usePosStore, hasModuleAccess } from "@/lib/store";
+import { usePosStore } from "@/lib/store";
 import { formatCurrency, formatDate, cn } from "@/lib/utils";
 import { 
   Search, ReceiptText, Calendar, Eye, User, MapPin, Phone, ShoppingCart, Wrench,
@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Transaction } from "@/lib/types";
+import { useAuth } from "@/hooks/useAuth";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { useRef } from "react";
@@ -29,8 +30,9 @@ import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { startOfMonth, endOfMonth, isWithinInterval, startOfDay, endOfDay } from "date-fns";
 
 export default function TransactionsPage() {
-  const { transactions, users, currentUser, currentBranch, updateTransaction, deleteTransaction, rolePermissions } = usePosStore();
-  const hasFullAccess = hasModuleAccess(currentUser, 'Transactions', 'Full', rolePermissions);
+  const { transactions, users, updateTransaction, deleteTransaction } = usePosStore();
+  const { user: currentUser, branch: currentBranch, isSuperAdmin: isAdmin, canAccess } = useAuth();
+  const hasFullAccess = canAccess('Transactions', 'Full');
   const [search, setSearch] = useState("");
   const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
   const [editTx, setEditTx] = useState<Transaction | null>(null);
@@ -47,7 +49,6 @@ export default function TransactionsPage() {
     notes: "",
   });
 
-  const isAdmin = currentUser?.role?.name === 'Owner';
 
   const filtered = useMemo(() => {
     let list = transactions;

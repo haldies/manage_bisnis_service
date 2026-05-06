@@ -10,6 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { usePosStore } from "@/lib/store";
 import { ModuleName, AccessLevel } from "@/lib/types";
+import { useAuth } from "@/hooks/useAuth";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useState } from "react";
 
@@ -59,7 +60,8 @@ const NAV_GROUPS: NavGroup[] = [
 export function AppSidebar() {
   const router = useRouter();
   const { open, setOpen, openMobile, setOpenMobile, isMobile } = useSidebar();
-  const { currentUser, currentBranch, logout, rolePermissions } = usePosStore();
+  const { currentUser, currentBranch, logout } = usePosStore();
+  const { isSuperAdmin: userIsSuperAdmin, canAccess } = useAuth();
 
   // Track collapsed state per group label
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
@@ -70,29 +72,7 @@ export function AppSidebar() {
 
   const isModuleAllowed = (module: ModuleName, requiredLevel: AccessLevel = "Read") => {
     if (!currentUser) return false;
-    if (currentUser.role?.name === "Owner") return true;
-
-    const levels: AccessLevel[] = ["None", "Read", "Full"];
-
-    const storePerms = rolePermissions[currentUser.role?.name || ""];
-    if (storePerms && module in storePerms) {
-      const userLevel = storePerms[module];
-      return levels.indexOf(userLevel) >= levels.indexOf(requiredLevel);
-    }
-
-    const rolePerm = (currentUser.role as any)?.permissions;
-    if (Array.isArray(rolePerm) && rolePerm.length > 0) {
-      const p = rolePerm.find((p: any) => p.module === module);
-      if (p) {
-        let userLevel: AccessLevel = "None";
-        if (p.canCreate || p.canUpdate || p.canDelete) userLevel = "Full";
-        else if (p.canRead) userLevel = "Read";
-        return levels.indexOf(userLevel) >= levels.indexOf(requiredLevel);
-      }
-      return false;
-    }
-
-    return false;
+    return canAccess(module, requiredLevel);
   };
 
   const isOpen = isMobile ? openMobile : open;

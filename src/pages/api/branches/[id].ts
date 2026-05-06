@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/lib/prisma';
 import { verifyToken } from '@/lib/jwt';
+import { isAdmin as checkIsAdmin } from '@/lib/types';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
@@ -11,8 +12,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const decoded: any = verifyToken(token);
   if (!decoded) return res.status(401).json({ error: 'Invalid token' });
   
-  // Only Admin should be able to create/update branches
-  if (decoded.role !== 'Admin' && decoded.role !== 'Owner') {
+  // Only Admin/Owner should be able to create/update branches
+  if (!checkIsAdmin(decoded.role)) {
     return res.status(403).json({ error: 'Forbidden. Only Admin can manage branches.' });
   }
 

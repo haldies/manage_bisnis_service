@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { usePosStore } from "@/lib/store";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import { ServiceTicket } from "@/lib/types";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ServiceTableProps {
   services: ServiceTicket[];
@@ -81,9 +82,9 @@ export default function ServiceTable({
   showIssueColumn = false,
   visibleColumns = {}
 }: ServiceTableProps) {
-  const { users, currentUser } = usePosStore();
-  const isTechnician = currentUser?.role?.name === 'Technician' ||
-    currentUser?.role?.name === 'Owner';
+  const { users } = usePosStore();
+  const { can, isTechnician } = useAuth();
+  const canUpdate = can('Service', 'update');
   const show = (col: string) => visibleColumns[col] !== false;
 
   return (
@@ -236,9 +237,12 @@ export default function ServiceTable({
                           <MessageCircle className="h-4 w-4" />
                         </Button>
                       )}
-                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); onSelect(ticket); }}>
-                        <Edit className="h-4 w-4" />
-                      </Button>
+                      {/* Edit button — only shown if user has canUpdate on Service */}
+                      {canUpdate && (
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); onSelect(ticket); }}>
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      )}
                     </div>
                   </TableCell>
                 </TableRow>

@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/lib/prisma';
 import { verifyToken } from '@/lib/jwt';
+import { isSuperAdmin } from '@/lib/types';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // GET is public — needed before/during login to populate branch list
@@ -19,9 +20,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const decoded: any = verifyToken(token);
   if (!decoded) return res.status(401).json({ error: 'Invalid token' });
 
-  // Only Owner can create/update/delete branches
-  if (decoded.role !== 'Owner') {
-    return res.status(403).json({ error: 'Forbidden. Only Owner can manage branches.' });
+  // Only Super Admin can create/update/delete branches
+  if (!isSuperAdmin(decoded.role)) {
+    return res.status(403).json({ error: 'Forbidden. Only Super Admin can manage branches.' });
   }
 
   if (req.method === 'POST') {

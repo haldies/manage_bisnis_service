@@ -4,6 +4,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Card } from "@/components/ui/card";
 import { usePosStore } from "@/lib/store";
 import { formatCurrency, cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 import { TrendingUp, Users, ShoppingBag, Banknote, UserCheck, UserMinus } from "lucide-react";
 import {
   ResponsiveContainer, XAxis, YAxis, Tooltip,
@@ -16,7 +17,8 @@ import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { startOfMonth, endOfMonth, isWithinInterval, startOfDay, endOfDay } from "date-fns";
 
 export default function AdminMonitoringDashboard() {
-  const { transactions, inventory, users, branches, attendances, currentBranch, setBranch, currentUser } = usePosStore();
+  const { transactions, inventory, users, attendances, fetchTransfers } = usePosStore();
+  const { user: currentUser, branch: currentBranch, branches, isSuperAdmin: isOwner, setBranch } = useAuth();
 
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
     from: startOfMonth(new Date()),
@@ -152,7 +154,7 @@ export default function AdminMonitoringDashboard() {
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-2">
-          {(currentUser?.role?.name === 'Owner') && (
+          {isOwner && (
             <Select value={currentBranch?.id || "all"} onValueChange={(v) => setBranch(v === "all" ? null : v)}>
               <SelectTrigger className="w-full sm:w-48 h-10">
                 <SelectValue placeholder="Semua Cabang" />

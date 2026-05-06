@@ -4,6 +4,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { usePosStore } from "@/lib/store";
 import { formatCurrency, cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 import { 
  Package, 
   ArrowUpRight, Activity, Calendar as MapPin
@@ -23,7 +24,8 @@ import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { startOfMonth, endOfMonth, isWithinInterval, startOfDay, endOfDay } from "date-fns";
 
 export default function LaporanDashboard() {
-  const { transactions, inventory, currentBranch, branches, setBranch, currentUser } = usePosStore();
+  const { transactions, inventory } = usePosStore();
+  const { user: currentUser, branch: currentBranch, branches, isSuperAdmin: isOwner, setBranch } = useAuth();
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date } | undefined>({
     from: startOfMonth(new Date()),
     to: endOfMonth(new Date()),
@@ -132,7 +134,7 @@ export default function LaporanDashboard() {
         {/* Filter Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card/30 p-4 rounded-2xl border border-border/10">
           <div className="flex items-center gap-3">
-             { (currentUser?.role?.name === 'Owner') && (
+             {isOwner && (
                 <Select 
                   value={currentBranch?.id || 'global'} 
                   onValueChange={(value) => setBranch(value === 'global' ? null : value)}

@@ -1,6 +1,36 @@
+/**
+ * Role names as stored in the database (Title Case).
+ * These are the canonical values — always compare using these constants.
+ */
+export const ROLES = {
+  SUPER_ADMIN: 'Super Admin',
+  ADMIN:       'Admin',
+  MANAGER:     'Manager',
+  CASHIER:     'Cashier',
+  TECHNICIAN:  'Technician',
+} as const;
+
+export type RoleName = typeof ROLES[keyof typeof ROLES];
+
+// Helper: normalize before comparing so DB casing never matters
+const norm = (s?: string) => s?.trim().toLowerCase() ?? '';
+
+export const isSuperAdmin  = (roleName?: string) => {
+  const n = norm(roleName);
+  // Accept both new name ('super admin') and legacy DB values ('owner', 'OWNER')
+  return n === norm(ROLES.SUPER_ADMIN) || n === 'owner';
+};
+/** isAdmin returns true for both Admin AND Super Admin (backward-compat) */
+export const isAdmin       = (roleName?: string) => isSuperAdmin(roleName) || norm(roleName) === norm(ROLES.ADMIN);
+export const isManager     = (roleName?: string) => norm(roleName) === norm(ROLES.MANAGER);
+export const isCashier     = (roleName?: string) => norm(roleName) === norm(ROLES.CASHIER);
+export const isTechnician  = (roleName?: string) => norm(roleName) === norm(ROLES.TECHNICIAN);
+
+/** @deprecated use isSuperAdmin — kept for backward compatibility */
+export const isOwner = isSuperAdmin;
+
 export type ModuleName = 'Dashboard' | 'POS' | 'Service' | 'Inventory' | 'Finance' | 'Staff' | 'Transactions' | 'Settings';
 export type AccessLevel = 'None' | 'Read' | 'Full';
-export type RoleName = 'Owner' | 'Admin' | 'Manager' | 'Cashier' | 'Technician';
 
 export interface Permission {
   id: string;
